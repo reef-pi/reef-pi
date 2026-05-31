@@ -6,12 +6,12 @@ import { useTimeSeries } from '../hooks/useTimeSeries'
 
 const ALERT_BORDER_COLOR = {
   critical: 'var(--reefpi-color-error)',
-  warn:     'var(--reefpi-color-warn)'
+  warn: 'var(--reefpi-color-warn)'
 }
 
 function alertRelTime (ts) {
   const s = Math.floor((Date.now() - ts) / 1000)
-  if (s < 60)   return `${s}s`
+  if (s < 60) return `${s}s`
   if (s < 3600) return `${Math.floor(s / 60)}m`
   return `${Math.floor(s / 3600)}h`
 }
@@ -26,7 +26,7 @@ export default function MetricTile ({
   label,
   unit = '',
   band,
-  globalRange,       // lifted range from parent (optional)
+  globalRange, // lifted range from parent (optional)
   defaultRange = '1d',
   formatValue = v => v.toFixed(2),
   trendPrecision = 2,
@@ -57,6 +57,10 @@ export default function MetricTile ({
   const displayValue = hoverValue !== null ? hoverValue : latest
 
   const alertBorderColor = alert ? (ALERT_BORDER_COLOR[alert.severity] ?? ALERT_BORDER_COLOR.warn) : null
+  const hasPoints = points.length > 0
+  const showSkeleton = loading && !hasPoints
+  const showError = !loading && error && !hasPoints
+  const showEmpty = !loading && !error && !hasPoints
 
   return (
     <div
@@ -81,12 +85,16 @@ export default function MetricTile ({
         padding: '0.625rem 0.875rem',
         borderBottom: '1px solid var(--reefpi-color-border)',
         flexShrink: 0
-      }}>
+      }}
+      >
         <span style={{
-          fontSize: '0.75rem', fontWeight: 500,
-          textTransform: 'uppercase', letterSpacing: '0.06em',
+          fontSize: '0.75rem',
+          fontWeight: 500,
+          textTransform: 'uppercase',
+          letterSpacing: '0.06em',
           color: 'var(--reefpi-color-text-muted)'
-        }}>
+        }}
+        >
           {label}
         </span>
         <RangeSelector
@@ -99,23 +107,29 @@ export default function MetricTile ({
 
       {/* Body */}
       <div style={{
-        flex: '1 1 auto', display: 'flex', flexDirection: 'column',
-        padding: '0.75rem 0.875rem', gap: '0.5rem', minHeight: 0
-      }}>
-        {loading && !points.length ? (
-          <TileSkeleton />
-        ) : error && !points.length ? (
-          <TileError message={error} onRetry={refetch} />
-        ) : !points.length ? (
-          <TileEmpty label={label} />
-        ) : (
+        flex: '1 1 auto',
+        display: 'flex',
+        flexDirection: 'column',
+        padding: '0.75rem 0.875rem',
+        gap: '0.5rem',
+        minHeight: 0
+      }}
+      >
+        {showSkeleton && <TileSkeleton />}
+        {showError && <TileError message={error} onRetry={refetch} />}
+        {showEmpty && <TileEmpty label={label} />}
+        {hasPoints && (
           <>
             {/* Value row */}
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.35rem' }}>
               <span style={{
-                fontSize: '1.75rem', fontWeight: 500, lineHeight: 1,
-                color: 'var(--reefpi-color-text)', fontVariantNumeric: 'tabular-nums'
-              }}>
+                fontSize: '1.75rem',
+                fontWeight: 500,
+                lineHeight: 1,
+                color: 'var(--reefpi-color-text)',
+                fontVariantNumeric: 'tabular-nums'
+              }}
+              >
                 {displayValue !== null ? formatValue(displayValue) : '—'}
               </span>
               <span style={{ fontSize: '0.8rem', color: 'var(--reefpi-color-text-muted)' }}>
@@ -155,7 +169,6 @@ export default function MetricTile ({
             alignItems: 'center',
             gap: '0.4rem',
             padding: '0.35rem 0.875rem',
-            borderTop: '1px solid var(--reefpi-color-border)',
             background: 'none',
             border: 'none',
             borderTop: '1px solid var(--reefpi-color-border)',
@@ -174,7 +187,8 @@ export default function MetricTile ({
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
             flex: '1 1 auto'
-          }}>
+          }}
+          >
             {alert.message}
           </span>
           {alert.at && (
@@ -183,7 +197,8 @@ export default function MetricTile ({
               color: 'var(--reefpi-color-text-muted)',
               fontFamily: 'var(--reefpi-font-mono)',
               flexShrink: 0
-            }}>
+            }}
+            >
               {alertRelTime(alert.at)}
             </span>
           )}
@@ -210,9 +225,12 @@ function TrendArrow ({ trend, precision }) {
     <span style={{
       fontSize: '0.72rem',
       color: up ? 'var(--reefpi-color-warn)' : 'var(--reefpi-color-brand)',
-      display: 'inline-flex', alignItems: 'center', gap: '1px',
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: '1px',
       fontVariantNumeric: 'tabular-nums'
-    }}>
+    }}
+    >
       {up ? '▲' : '▼'} {Math.abs(trend).toFixed(precision)}
     </span>
   )
@@ -220,13 +238,16 @@ function TrendArrow ({ trend, precision }) {
 
 function TileSkeleton () {
   const bar = (h, w = '100%') => ({
-    height: h, width: w, borderRadius: 'var(--reefpi-radius-sm)',
+    height: h,
+    width: w,
+    borderRadius: 'var(--reefpi-radius-sm)',
     background: 'linear-gradient(90deg,var(--reefpi-color-surface) 25%,var(--reefpi-color-border) 50%,var(--reefpi-color-surface) 75%)',
-    backgroundSize: '200% 100%', animation: 'reefpi-shimmer 1.4s infinite'
+    backgroundSize: '200% 100%',
+    animation: 'reefpi-shimmer 1.4s infinite'
   })
   return (
     <>
-      <style>{`@keyframes reefpi-shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}`}</style>
+      <style>{'@keyframes reefpi-shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}'}</style>
       <div style={bar('1.75rem', '50%')} />
       <div style={{ ...bar('80px'), flex: '1 1 auto' }} />
     </>
@@ -236,23 +257,39 @@ function TileSkeleton () {
 function TileError ({ message, onRetry }) {
   return (
     <div style={{
-      flex: '1 1 auto', display: 'flex', flexDirection: 'column',
-      alignItems: 'center', justifyContent: 'center', gap: '0.5rem'
-    }}>
+      flex: '1 1 auto',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: '0.5rem'
+    }}
+    >
       <span style={{
-        fontSize: '0.75rem', color: 'var(--reefpi-color-error)',
+        fontSize: '0.75rem',
+        color: 'var(--reefpi-color-error)',
         background: 'var(--reefpi-color-error-bg)',
         border: '1px solid var(--reefpi-color-error-border)',
         borderRadius: 'var(--reefpi-radius-sm)',
         padding: '0.4rem 0.75rem'
-      }}>{message}</span>
+      }}
+      >{message}
+      </span>
       {onRetry && (
-        <button onClick={onRetry} style={{
-          background: 'none', border: '1px solid var(--reefpi-color-border-strong)',
-          borderRadius: 'var(--reefpi-radius-sm)', color: 'var(--reefpi-color-text)',
-          fontSize: '0.75rem', padding: '0 0.75rem', minHeight: '44px',
-          cursor: 'pointer', fontFamily: 'var(--reefpi-font-app)'
-        }}>Retry</button>
+        <button
+          onClick={onRetry} style={{
+            background: 'none',
+            border: '1px solid var(--reefpi-color-border-strong)',
+            borderRadius: 'var(--reefpi-radius-sm)',
+            color: 'var(--reefpi-color-text)',
+            fontSize: '0.75rem',
+            padding: '0 0.75rem',
+            minHeight: '44px',
+            cursor: 'pointer',
+            fontFamily: 'var(--reefpi-font-app)'
+          }}
+        >Retry
+        </button>
       )}
     </div>
   )
@@ -261,10 +298,14 @@ function TileError ({ message, onRetry }) {
 function TileEmpty ({ label }) {
   return (
     <div style={{
-      flex: '1 1 auto', display: 'flex', alignItems: 'center',
-      justifyContent: 'center', color: 'var(--reefpi-color-text-muted)',
+      flex: '1 1 auto',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: 'var(--reefpi-color-text-muted)',
       fontSize: '0.8rem'
-    }}>
+    }}
+    >
       No {label} data yet
     </div>
   )
