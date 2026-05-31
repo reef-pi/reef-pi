@@ -37,6 +37,7 @@
     }
 
     .rs-btn {
+      position: relative;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -50,6 +51,7 @@
       background: transparent;
       color: var(--reefpi-color-text);
       border: none;
+      user-select: none;
       transition: background-color 0.12s, color 0.12s;
     }
 
@@ -63,7 +65,14 @@
       font-weight: 500;
     }
 
-    .rs-btn:focus-visible {
+    .rs-radio {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .rs-btn:focus-within {
       outline: 2px solid var(--reefpi-color-focus);
       outline-offset: -2px;
       z-index: 1;
@@ -95,7 +104,7 @@
     <div class="card">
       <div class="card-header">Default — value="1d"</div>
       <div class="card-body">
-        <fieldset class="rs" id="rs-default" aria-label="Time range">
+        <fieldset class="rs" id="rs-default" role="radiogroup" aria-label="Time range">
           <legend style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Time range</legend>
         </fieldset>
         <p class="story-caption">options=['1h','6h','1d','7d','30d']</p>
@@ -107,7 +116,7 @@
     <div class="card">
       <div class="card-header">Compact — labels trimmed to digits</div>
       <div class="card-body">
-        <fieldset class="rs" id="rs-compact" aria-label="Time range compact">
+        <fieldset class="rs" id="rs-compact" role="radiogroup" aria-label="Time range compact">
           <legend style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Time range</legend>
         </fieldset>
         <p class="story-caption">compact — "1H" → "1"</p>
@@ -119,7 +128,7 @@
     <div class="card">
       <div class="card-header">Keyboard — tab in, arrow keys</div>
       <div class="card-body">
-        <fieldset class="rs" id="rs-keyboard" aria-label="Time range keyboard">
+        <fieldset class="rs" id="rs-keyboard" role="radiogroup" aria-label="Time range keyboard">
           <legend style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Time range</legend>
         </fieldset>
         <p class="story-caption">Tab → focus ring. ←/→ to step. Enter/Space to select.</p>
@@ -131,7 +140,7 @@
     <div class="card">
       <div class="card-header">Custom options — scope="dashboard"</div>
       <div class="card-body">
-        <fieldset class="rs" id="rs-custom" aria-label="Dashboard time range">
+        <fieldset class="rs" id="rs-custom" role="radiogroup" aria-label="Dashboard time range">
           <legend style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Dashboard time range</legend>
         </fieldset>
         <p class="story-caption">options=['1h','6h','1d'] scope="dashboard"</p>
@@ -162,21 +171,29 @@
 
           var label = compact ? opt.replace(/[a-z]/g, '') : opt.toUpperCase()
 
-          var btn = document.createElement('button')
-          btn.type = 'button'
-          btn.className = 'rs-btn' + (opt === current ? ' active' : '')
-          btn.textContent = label
-          btn.setAttribute('aria-pressed', opt === current ? 'true' : 'false')
-          btn.dataset.opt = opt
+          var input = document.createElement('input')
+          input.setAttribute('type', 'radio')
+          input.className = 'rs-radio'
+          input.name = name
+          input.id = name + '-' + opt
+          input.value = opt
+          input.checked = opt === current
 
-          btn.addEventListener('click', function () {
+          var radioLabel = document.createElement('label')
+          radioLabel.className = 'rs-btn' + (opt === current ? ' active' : '')
+          radioLabel.htmlFor = input.id
+          radioLabel.dataset.opt = opt
+          radioLabel.appendChild(input)
+          radioLabel.appendChild(document.createTextNode(label))
+
+          input.addEventListener('change', function () {
             current = opt
             render()
             if (logEl) logEl.textContent = 'onChange("' + opt + '")'
             try { localStorage.setItem('reefpi.range.' + (scope || 'global'), opt) } catch (e) {}
           })
 
-          fieldset.appendChild(btn)
+          fieldset.appendChild(radioLabel)
         })
       }
 
