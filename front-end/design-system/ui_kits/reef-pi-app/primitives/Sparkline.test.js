@@ -32,6 +32,30 @@ describe('design-system Sparkline', () => {
     expect(html).toContain('points="0,36 150,4 300,25.333333333333336"')
   })
 
+  it('reports keyboard-selected points through onHover', () => {
+    const onHover = jest.fn()
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+    const root = createRoot(container)
+
+    act(() => {
+      root.render(<Sparkline points={[{ t: 10, v: 1 }, { t: 20, v: 3 }, { t: 30, v: 2 }]} hover onHover={onHover} />)
+    })
+
+    const svg = container.querySelector('svg')
+
+    act(() => {
+      svg.focus()
+      svg.dispatchEvent(new KeyboardEvent('keydown', { key: 'End', bubbles: true }))
+    })
+
+    expect(onHover).toHaveBeenLastCalledWith({ t: 30, v: 2 })
+    expect(container.textContent).toContain('i=30: 2')
+
+    act(() => root.unmount())
+    container.remove()
+  })
+
   it('supports hover callbacks and keyboard navigation', () => {
     const onHover = jest.fn()
     const container = document.createElement('div')
