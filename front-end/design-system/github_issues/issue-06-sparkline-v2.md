@@ -29,6 +29,6 @@ Upgrade the current bare-polyline sparkline to a richer chart primitive.
 - Keyboard: focusable; ←/→ step through points, Home/End jump to bounds.
 
 ## Acceptance
-- [ ] Back-compat: if called with `points={[number, number, …]}`, it still renders (no time axis).
-- [ ] Storybook covers: no fill, gradient fill, band, band+hover, keyboard focus.
-- [ ] Bundle delta < 3KB gzipped (stay dependency-free; no recharts here).
+- [x] Back-compat: if called with `points={[number, number, …]}`, it still renders (no time axis).
+- [x] Storybook covers: no fill, gradient fill, band, band+hover, keyboard focus.
+- [x] Bundle delta < 3KB gzipped (stay dependency-free; no recharts here).

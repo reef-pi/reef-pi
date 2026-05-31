@@ -14,8 +14,8 @@ function normalise (points) {
 function project (pts, width, height, padX = 0, padY = 4) {
   const vs = pts.map(p => p.v)
   const ts = pts.map(p => p.t)
-  const minV = Math.min(...vs), maxV = Math.max(...vs)
-  const minT = Math.min(...ts), maxT = Math.max(...ts)
+  const minV = Math.min(...vs); const maxV = Math.max(...vs)
+  const minT = Math.min(...ts); const maxT = Math.max(...ts)
   const rangeV = maxV - minV || 1
   const rangeT = maxT - minT || 1
   const W = width - padX * 2
@@ -30,7 +30,7 @@ function project (pts, width, height, padX = 0, padY = 4) {
 /** Band y-range in SVG pixel space */
 function bandY (band, pts, height, padY = 4) {
   const vs = pts.map(p => p.v)
-  const minV = Math.min(...vs), maxV = Math.max(...vs)
+  const minV = Math.min(...vs); const maxV = Math.max(...vs)
   const rangeV = maxV - minV || 1
   const H = height - padY * 2
   const top = padY + (1 - (band[1] - minV) / rangeV) * H
@@ -60,7 +60,7 @@ export default function Sparkline ({
 }) {
   const uid = useId().replace(/:/g, '')
   const gradId = `sg-${uid}`
-  const clipId  = `sc-${uid}`
+  const clipId = `sc-${uid}`
 
   const svgRef = useRef(null)
   const [width, setWidth] = useState(300)
@@ -69,7 +69,7 @@ export default function Sparkline ({
   // Measure SVG width on mount and resize
   useEffect(() => {
     if (!svgRef.current) return
-    const ro = new ResizeObserver(entries => {
+    const ro = new window.ResizeObserver(entries => {
       const w = entries[0]?.contentRect.width
       if (w > 0) setWidth(w)
     })
@@ -83,19 +83,23 @@ export default function Sparkline ({
 
   const projected = project(normalised, width, height)
 
+  const activatePoint = useCallback((index) => {
+    setActiveIdx(index)
+    if (onHover) onHover(normalised[index])
+  }, [normalised, onHover])
+
   // Pointer move → nearest point by x distance
   const handlePointerMove = useCallback(e => {
     if (!hover || !svgRef.current) return
     const rect = svgRef.current.getBoundingClientRect()
     const mx = e.clientX - rect.left
-    let best = 0, bestD = Infinity
+    let best = 0; let bestD = Infinity
     projected.forEach((p, i) => {
       const d = Math.abs(p.x - mx)
       if (d < bestD) { bestD = d; best = i }
     })
-    setActiveIdx(best)
-    if (onHover) onHover(normalised[best])
-  }, [hover, projected, normalised, onHover])
+    activatePoint(best)
+  }, [hover, projected, activatePoint])
 
   const handlePointerLeave = useCallback(() => {
     setActiveIdx(null)
@@ -104,18 +108,18 @@ export default function Sparkline ({
   // Keyboard navigation
   const handleKeyDown = useCallback(e => {
     if (!hover) return
-    setActiveIdx(prev => {
-      const cur = prev ?? 0
-      if (e.key === 'ArrowRight') return Math.min(cur + 1, normalised.length - 1)
-      if (e.key === 'ArrowLeft')  return Math.max(cur - 1, 0)
-      if (e.key === 'Home')       return 0
-      if (e.key === 'End')        return normalised.length - 1
-      return prev
-    })
-    if (['ArrowRight', 'ArrowLeft', 'Home', 'End'].includes(e.key)) {
-      e.preventDefault()
-    }
-  }, [hover, normalised.length])
+    if (!['ArrowRight', 'ArrowLeft', 'Home', 'End'].includes(e.key)) return
+
+    const cur = activeIdx ?? 0
+    let next = cur
+    if (e.key === 'ArrowRight') next = Math.min(cur + 1, normalised.length - 1)
+    if (e.key === 'ArrowLeft') next = Math.max(cur - 1, 0)
+    if (e.key === 'Home') next = 0
+    if (e.key === 'End') next = normalised.length - 1
+
+    activatePoint(next)
+    e.preventDefault()
+  }, [hover, activeIdx, normalised.length, activatePoint])
 
   const linePath = `M ${projected.map(p => `${p.x} ${p.y}`).join(' L ')}`
   const areaPath = fill === 'gradient'
@@ -144,7 +148,7 @@ export default function Sparkline ({
       <defs>
         {fill === 'gradient' && (
           <linearGradient id={gradId} x1='0' y1='0' x2='0' y2='1'>
-            <stop offset='0%'   stopColor={stroke} stopOpacity='0.4' />
+            <stop offset='0%' stopColor={stroke} stopOpacity='0.4' />
             <stop offset='100%' stopColor={stroke} stopOpacity='0' />
           </linearGradient>
         )}
@@ -233,7 +237,7 @@ export default function Sparkline ({
 
 /** Small SVG tooltip that flips left/right to stay in bounds */
 function TooltipLabel ({ x, y, label, width, height }) {
-  const PAD = 6, H = 22, CHAR_W = 6.5
+  const PAD = 6; const H = 22; const CHAR_W = 6.5
   const tw = label.length * CHAR_W + PAD * 2
   const flipRight = x + tw + 8 > width
   const tx = flipRight ? x - tw - 8 : x + 8
