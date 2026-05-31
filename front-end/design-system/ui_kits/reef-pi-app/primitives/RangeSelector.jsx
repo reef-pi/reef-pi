@@ -11,6 +11,14 @@ function compactLabel (opt) {
   return opt.replace(/[a-z]/g, '')
 }
 
+function getStoredRange (scope) {
+  try { return globalThis.localStorage.getItem(storageKey(scope)) } catch { return null }
+}
+
+function setStoredRange (scope, opt) {
+  try { globalThis.localStorage.setItem(storageKey(scope), opt) } catch { /* storage unavailable */ }
+}
+
 export default function RangeSelector ({
   value: valueProp,
   options = DEFAULT_OPTIONS,
@@ -20,7 +28,7 @@ export default function RangeSelector ({
 }) {
   const [value, setValue] = useState(() => {
     if (valueProp !== undefined) return valueProp
-    try { return localStorage.getItem(storageKey(scope)) || options[0] } catch { return options[0] }
+    return getStoredRange(scope) || options[0]
   })
 
   // Sync when controlled prop changes
@@ -35,7 +43,7 @@ export default function RangeSelector ({
     if (onChange) onChange(opt)
     if (debounceRef.current) clearTimeout(debounceRef.current)
     debounceRef.current = setTimeout(() => {
-      try { localStorage.setItem(storageKey(scope), opt) } catch { /* storage unavailable */ }
+      setStoredRange(scope, opt)
     }, 250)
   }, [onChange, scope])
 
@@ -45,7 +53,6 @@ export default function RangeSelector ({
     <fieldset
       className='reefpi-range-selector'
       style={{
-        border: 'none',
         padding: 0,
         margin: 0,
         display: 'inline-flex',
@@ -67,11 +74,14 @@ export default function RangeSelector ({
         return (
           <React.Fragment key={opt}>
             {i > 0 && (
-              <span aria-hidden='true' style={{
-                width: '1px',
-                background: 'var(--reefpi-color-border)',
-                flexShrink: 0
-              }} />
+              <span
+                aria-hidden='true'
+                style={{
+                  width: '1px',
+                  background: 'var(--reefpi-color-border)',
+                  flexShrink: 0
+                }}
+              />
             )}
             <label
               htmlFor={id}

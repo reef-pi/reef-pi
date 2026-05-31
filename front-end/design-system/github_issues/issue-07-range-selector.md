@@ -29,6 +29,6 @@ Segmented control used in every monitoring tile header.
 - Persists to `localStorage` under `reefpi.range.<scope>` where `scope` defaults to `'global'` but tiles can pass `scope="dashboard"` to isolate.
 
 ## Acceptance
-- [ ] Renders as a `<fieldset>` of `<input type=radio>` so it's keyboard + screen-reader navigable.
-- [ ] Compact mode: "1H" → "1".
-- [ ] Storybook covers full + compact + keyboard.
+- [x] Renders as a `<fieldset>` of `<input type=radio>` so it's keyboard + screen-reader navigable.
+- [x] Compact mode: "1H" → "1".
+- [x] Storybook covers full + compact + keyboard.
