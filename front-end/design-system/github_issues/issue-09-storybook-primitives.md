@@ -15,5 +15,5 @@ Add isolated design-system entries for everything in E2 so reviewers can click t
 - `useTimeSeries` — loading / loaded / error / stale-while-revalidate (mocked)
 
 ## Acceptance
-- [ ] Each story is a self-contained HTML file under `preview/primitives/` registered in the asset review manifest under **Components**.
-- [ ] No network calls in stories — use fixtures.
+- [x] Each story is a self-contained HTML file under `preview/primitives/` registered in the asset review manifest under **Components**.
+- [x] No network calls in stories — use fixtures.
