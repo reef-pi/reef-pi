@@ -30,7 +30,7 @@
       font-family: var(--reefpi-font-app);
     }
 
-    @media (max-width: 600px) { .temp-tile { min-height: 260px; } }
+    @media (max-width: 480px) { .temp-tile { min-height: 260px; } }
 
     .tile-header {
       display: flex;
@@ -99,6 +99,9 @@
     /* ── Error state ───────────────────────────── */
     .error-state { flex:1 1 auto; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.75rem; }
     .error-banner { padding:.5rem .75rem; background:var(--reefpi-color-error-bg); border:1px solid var(--reefpi-color-error-border); border-radius:var(--reefpi-radius-sm); color:var(--reefpi-color-error); font-size:.8rem; }
+    .empty-state { flex:1 1 auto; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.5rem; color:var(--reefpi-color-text-muted); text-align:center; }
+    .empty-title { font-size:.9rem; font-weight:500; color:var(--reefpi-color-text); }
+    .empty-copy { font-size:.75rem; max-width:18rem; }
 
     /* ── RangeSelector ─────────────────────────── */
     .rs { display:inline-flex; border:1px solid var(--reefpi-color-border); border-radius:var(--reefpi-radius-sm); overflow:hidden; background:var(--reefpi-color-surface-elevated); }
@@ -181,7 +184,25 @@
     </div>
   </div>
 
-  <!-- Story 3: Error -->
+  <!-- Story 3: Empty -->
+  <div class="card" style="margin-bottom:1.5rem;">
+    <div class="card-header">Empty state</div>
+    <div class="card-body" style="padding:0;">
+      <div class="temp-tile">
+        <div class="tile-header">
+          <span class="tile-header-label">Temperature</span>
+        </div>
+        <div class="tile-body">
+          <div class="empty-state">
+            <div class="empty-title">No temperature data yet</div>
+            <div class="empty-copy">Telemetry will appear here after the next successful reading.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Story 4: Error -->
   <div class="card">
     <div class="card-header">Error state</div>
     <div class="card-body" style="padding:0;">

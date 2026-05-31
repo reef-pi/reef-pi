@@ -16,7 +16,7 @@ Promote temperature to a 2-col tile that doubles as the dashboard's anchor.
 - Header-right: `<RangeSelector scope="dashboard" />`.
 
 ## Acceptance
-- [ ] Uses `useTimeSeries('temperature.display', range)`.
-- [ ] Crosshair-hover updates the numeric readout so user can scrub history.
-- [ ] Meets min-height 320px on desktop, 260px on mobile.
-- [ ] Empty / loading / error states match tile conventions.
+- [x] Uses `useTimeSeries('temperature.display', range)`.
+- [x] Crosshair-hover updates the numeric readout so user can scrub history.
+- [x] Meets min-height 320px on desktop, 260px on mobile.
+- [x] Empty / loading / error states match tile conventions.

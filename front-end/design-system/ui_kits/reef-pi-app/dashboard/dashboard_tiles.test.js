@@ -150,9 +150,47 @@ describe('design-system dashboard tiles', () => {
       refetch: jest.fn()
     })
     const html = renderToStaticMarkup(<TemperatureTile metric='temp' unit='F' />)
+    expect(useTimeSeries).toHaveBeenLastCalledWith({ metric: 'temp', range: '1d', maxPoints: 120 })
     expect(html).toContain('Temperature')
     expect(html).toContain('78.3')
     expect(html).toContain('vs 1h ago')
+    expect(html).toContain('col-md-8')
+    expect(html).toContain('min-height: 320px')
+    expect(html).toContain('@media (max-width: 480px)')
+    expect(html).toContain('min-height: 260px')
+  })
+
+  it('renders TemperatureTile empty state and updates readout while scrubbing history', () => {
+    useTimeSeries.mockReturnValueOnce({ points: [], loading: false, error: null, refetch: jest.fn() })
+    expect(renderToStaticMarkup(<TemperatureTile metric='temp' unit='F' />)).toContain('No temperature data yet')
+
+    useTimeSeries.mockReturnValueOnce({
+      points: [{ t: 1, v: 77.1 }, { t: 2, v: 81.5 }],
+      loading: false,
+      error: null,
+      refetch: jest.fn()
+    })
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+    const root = createRoot(container)
+
+    act(() => {
+      root.render(<TemperatureTile metric='temp' unit='F' />)
+    })
+
+    expect(container.textContent).toContain('81.5')
+    const svg = container.querySelector('svg[aria-label="Sparkline chart"]')
+    svg.getBoundingClientRect = () => ({ left: 0, width: 300 })
+
+    act(() => {
+      svg.dispatchEvent(new MouseEvent('pointermove', { clientX: 0, bubbles: true }))
+    })
+
+    expect(container.textContent).toContain('77.1')
+    expect(container.textContent).toContain('scrubbing history')
+
+    act(() => root.unmount())
+    container.remove()
   })
 
   it('renders TemperatureTile alert footer and handles alert clicks', () => {

@@ -41,130 +41,151 @@ export default function TemperatureTile ({ metric = 'temperature.display', unit 
   const alertBorder = alert ? (ALERT_BORDER[alert.severity] ?? ALERT_BORDER.warn) : null
 
   return (
-    <div
-      className='reefpi-temperature-tile col-md-8'
-      style={{
-        background: 'var(--reefpi-color-surface-elevated)',
-        border: '1px solid var(--reefpi-color-border)',
-        borderTop: alertBorder ? `3px solid ${alertBorder}` : '1px solid var(--reefpi-color-border)',
-        borderRadius: 'var(--reefpi-radius-md)',
-        display: 'flex',
-        flexDirection: 'column',
-        minHeight: '320px',
-        overflow: 'hidden',
-        fontFamily: 'var(--reefpi-font-app)'
-      }}
-    >
-      {/* ── Header ── */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '0.75rem 1rem',
-        borderBottom: '1px solid var(--reefpi-color-border)',
-        flexShrink: 0
-      }}
+    <>
+      <style>{'\n        .reefpi-temperature-tile { min-height: 320px; }\n        @media (max-width: 480px) { .reefpi-temperature-tile { min-height: 260px; } }\n      '}</style>
+      <div
+        className='reefpi-temperature-tile col-md-8'
+        style={{
+          background: 'var(--reefpi-color-surface-elevated)',
+          border: '1px solid var(--reefpi-color-border)',
+          borderTop: alertBorder ? `3px solid ${alertBorder}` : '1px solid var(--reefpi-color-border)',
+          borderRadius: 'var(--reefpi-radius-md)',
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden',
+          fontFamily: 'var(--reefpi-font-app)'
+        }}
       >
-        <span style={{ fontSize: '0.75rem', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--reefpi-color-text-muted)' }}>
-          Temperature
-        </span>
-        <RangeSelector value={range} onChange={setRange} scope='dashboard' compact />
-      </div>
+        {/* ── Header ── */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '0.75rem 1rem',
+          borderBottom: '1px solid var(--reefpi-color-border)',
+          flexShrink: 0
+        }}
+        >
+          <span style={{ fontSize: '0.75rem', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--reefpi-color-text-muted)' }}>
+            Temperature
+          </span>
+          <RangeSelector value={range} onChange={setRange} scope='dashboard' compact />
+        </div>
 
-      {/* ── Body ── */}
-      <div style={{ flex: '1 1 auto', display: 'flex', flexDirection: 'column', padding: '1rem', gap: '0.75rem', minHeight: 0 }}>
+        {/* ── Body ── */}
+        <div style={{ flex: '1 1 auto', display: 'flex', flexDirection: 'column', padding: '1rem', gap: '0.75rem', minHeight: 0 }}>
 
-        {loading && !points.length ? (
-          <LoadingSkeleton />
-        ) : error && !points.length ? (
-          <ErrorState message={error} onRetry={refetch} />
-        ) : (
-          <>
-            {/* ThresholdGauge */}
-            <ThresholdGauge
-              value={display ?? 78}
-              safe={SAFE}
-              warn={WARN}
-              critical={CRIT}
-              unit={unit}
-              label='Display Tank'
-            />
+          {loading && !points.length && <LoadingSkeleton />}
+          {!loading && error && !points.length && <ErrorState message={error} onRetry={refetch} />}
+          {!loading && !error && !points.length && <EmptyState />}
+          {points.length > 0 && (
+            <>
+              {/* ThresholdGauge */}
+              <ThresholdGauge
+                value={display ?? 78}
+                safe={SAFE}
+                warn={WARN}
+                critical={CRIT}
+                unit={unit}
+                label='Display Tank'
+              />
 
-            {/* Numeric readout */}
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem' }}>
-              <span style={{
-                fontSize: '3rem',
-                fontWeight: 500,
-                lineHeight: 1,
-                color: 'var(--reefpi-color-text)',
-                fontVariantNumeric: 'tabular-nums'
-              }}
-              >
-                {display !== null ? display.toFixed(1) : '—'}
-              </span>
-              <span style={{ fontSize: '1rem', color: 'var(--reefpi-color-text-muted)' }}>{unit}</span>
-              {diff !== null && hoverValue === null && (
+              {/* Numeric readout */}
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem' }}>
                 <span style={{
-                  fontSize: '0.8rem',
-                  color: parseFloat(diff) >= 0 ? 'var(--reefpi-color-warn)' : 'var(--reefpi-color-brand)',
+                  fontSize: '3rem',
+                  fontWeight: 500,
+                  lineHeight: 1,
+                  color: 'var(--reefpi-color-text)',
                   fontVariantNumeric: 'tabular-nums'
                 }}
                 >
-                  {parseFloat(diff) >= 0 ? '+' : ''}{diff} vs 1h ago
+                  {display !== null ? display.toFixed(1) : '—'}
                 </span>
-              )}
-              {hoverValue !== null && (
-                <span style={{ fontSize: '0.8rem', color: 'var(--reefpi-color-text-muted)' }}>
-                  scrubbing history
-                </span>
-              )}
-            </div>
+                <span style={{ fontSize: '1rem', color: 'var(--reefpi-color-text-muted)' }}>{unit}</span>
+                {diff !== null && hoverValue === null && (
+                  <span style={{
+                    fontSize: '0.8rem',
+                    color: parseFloat(diff) >= 0 ? 'var(--reefpi-color-warn)' : 'var(--reefpi-color-brand)',
+                    fontVariantNumeric: 'tabular-nums'
+                  }}
+                  >
+                    {parseFloat(diff) >= 0 ? '+' : ''}{diff} vs 1h ago
+                  </span>
+                )}
+                {hoverValue !== null && (
+                  <span style={{ fontSize: '0.8rem', color: 'var(--reefpi-color-text-muted)' }}>
+                    scrubbing history
+                  </span>
+                )}
+              </div>
 
-            {/* Sparkline — fills remaining height */}
-            <div style={{ flex: '1 1 auto', minHeight: '80px' }}>
-              <Sparkline
-                points={points}
-                fill='gradient'
-                band={SAFE}
-                bandColor='var(--reefpi-color-band-safe)'
-                hover
-                onHover={pt => setHoverValue(pt ? pt.v : null)}
-                height={120}
-              />
-            </div>
-          </>
+              {/* Sparkline — fills remaining height */}
+              <div style={{ flex: '1 1 auto', minHeight: '80px' }}>
+                <Sparkline
+                  points={points}
+                  fill='gradient'
+                  band={SAFE}
+                  bandColor='var(--reefpi-color-band-safe)'
+                  hover
+                  onHover={pt => setHoverValue(pt ? pt.v : null)}
+                  height={120}
+                />
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* Inline alert footer */}
+        {alert && (
+          <button
+            onClick={onAlertClick}
+            aria-live='polite'
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.375rem',
+              padding: '0.375rem 0.875rem',
+              background: 'transparent',
+              border: 'none',
+              borderTop: `1px solid ${alertBorder}`,
+              width: '100%',
+              cursor: onAlertClick ? 'pointer' : 'default',
+              fontFamily: 'var(--reefpi-font-app)',
+              flexShrink: 0
+            }}
+          >
+            <span style={{ fontSize: '0.72rem', color: alertBorder, flex: '1 1 auto', textAlign: 'left', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {alert.message}
+            </span>
+            {alert.at && (
+              <span style={{ fontSize: '0.65rem', color: 'var(--reefpi-color-text-muted)', fontFamily: 'var(--reefpi-font-mono)', flexShrink: 0 }}>
+                {alertRelTime(alert.at)}
+              </span>
+            )}
+          </button>
         )}
       </div>
+    </>
+  )
+}
 
-      {/* Inline alert footer */}
-      {alert && (
-        <button
-          onClick={onAlertClick}
-          aria-live='polite'
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.375rem',
-            padding: '0.375rem 0.875rem',
-            background: 'transparent',
-            border: 'none',
-            borderTop: `1px solid ${alertBorder}`,
-            width: '100%',
-            cursor: onAlertClick ? 'pointer' : 'default',
-            fontFamily: 'var(--reefpi-font-app)',
-            flexShrink: 0
-          }}
-        >
-          <span style={{ fontSize: '0.72rem', color: alertBorder, flex: '1 1 auto', textAlign: 'left', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-            {alert.message}
-          </span>
-          {alert.at && (
-            <span style={{ fontSize: '0.65rem', color: 'var(--reefpi-color-text-muted)', fontFamily: 'var(--reefpi-font-mono)', flexShrink: 0 }}>
-              {alertRelTime(alert.at)}
-            </span>
-          )}
-        </button>
-      )}
+function EmptyState () {
+  return (
+    <div
+      style={{
+        flex: '1 1 auto',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '0.5rem',
+        color: 'var(--reefpi-color-text-muted)',
+        textAlign: 'center'
+      }}
+    >
+      <div style={{ fontSize: '0.9rem', fontWeight: 500, color: 'var(--reefpi-color-text)' }}>No temperature data yet</div>
+      <div style={{ fontSize: '0.75rem', maxWidth: '18rem' }}>Telemetry will appear here after the next successful reading.</div>
     </div>
   )
 }
