@@ -287,9 +287,9 @@
       </div>
     </div>
 
-    <!-- Story 5: No safe band — warn band only -->
+    <!-- Story 5: No safe band — target band only -->
     <div class="card" style="grid-column: 1 / -1;">
-      <div class="card-header">No safe band — warn band only (Salinity)</div>
+      <div class="card-header">No safe band — target band only (Salinity)</div>
       <div class="card-body">
         <div class="gauge-host"
           role="meter"
@@ -306,13 +306,13 @@
           <!--
             critical: [33, 37]
             warn:     [34, 36]  → 25 % – 75 %
-            safe:     none
+            safe:     none (warn range renders as the target/safe band)
             value:    35  → 50 %
           -->
           <div class="gauge-track-wrap">
             <div class="gauge-zones">
               <div class="zone zone-critical" style="width:25%"></div>
-              <div class="zone zone-warn"     style="width:50%"></div>
+              <div class="zone zone-safe"     style="width:50%"></div>
               <div class="zone zone-critical" style="width:25%"></div>
             </div>
             <div class="gauge-needle" style="left:50%; background:var(--reefpi-color-text-strong)"></div>

@@ -1,63 +1,65 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-/**
- * Builds percentage-based colour zones along a 0–100 track.
- * Returns an array of { left, width, color } objects ready for inline styles.
- */
-function buildZones (min, max, safe, warn) {
-  const pct = v => ((v - min) / (max - min)) * 100
+const clamp = (value, min, max) => Math.min(Math.max(value, min), max)
+const pctOf = (value, min, max) => ((value - min) / (max - min)) * 100
+const pct = value => Math.round(value * 1000) / 1000
 
-  if (!safe && !warn) {
-    return [{ left: 0, width: 100, color: 'var(--reefpi-color-band-safe)' }]
-  }
+const isRange = value => Array.isArray(value) && value.length === 2 && value.every(Number.isFinite)
 
-  const zones = []
-
-  if (warn) {
-    // critical (red) left of warn
-    if (warn[0] > min) {
-      zones.push({ left: 0, width: pct(warn[0]), color: 'var(--reefpi-color-band-critical)' })
-    }
-    // warn (yellow) left of safe
-    if (safe && safe[0] > warn[0]) {
-      zones.push({ left: pct(warn[0]), width: pct(safe[0]) - pct(warn[0]), color: 'var(--reefpi-color-band-warn)' })
-    }
-  } else if (safe) {
-    // no warn band — left of safe is critical
-    if (safe[0] > min) {
-      zones.push({ left: 0, width: pct(safe[0]), color: 'var(--reefpi-color-band-critical)' })
-    }
-  }
-
-  // safe (green) band
-  if (safe) {
-    zones.push({ left: pct(safe[0]), width: pct(safe[1]) - pct(safe[0]), color: 'var(--reefpi-color-band-safe)' })
-  }
-
-  if (warn) {
-    // warn (yellow) right of safe
-    if (safe && warn[1] > safe[1]) {
-      zones.push({ left: pct(safe[1]), width: pct(warn[1]) - pct(safe[1]), color: 'var(--reefpi-color-band-warn)' })
-    }
-    // critical (red) right of warn
-    if (warn[1] < max) {
-      zones.push({ left: pct(warn[1]), width: 100 - pct(warn[1]), color: 'var(--reefpi-color-band-critical)' })
-    }
-  } else if (safe) {
-    // no warn band — right of safe is critical
-    if (safe[1] < max) {
-      zones.push({ left: pct(safe[1]), width: 100 - pct(safe[1]), color: 'var(--reefpi-color-band-critical)' })
-    }
-  }
-
-  return zones
+function normaliseRange (range) {
+  if (!isRange(range)) return null
+  return range[0] <= range[1] ? range : [range[1], range[0]]
 }
 
-function zoneLabel (value, safe, warn) {
-  if (safe && value >= safe[0] && value <= safe[1]) return 'within safe range'
-  if (warn && value >= warn[0] && value <= warn[1]) return 'in warning zone'
+function addZone (zones, min, max, start, end, color) {
+  const left = pct(clamp(pctOf(start, min, max), 0, 100))
+  const right = pct(clamp(pctOf(end, min, max), 0, 100))
+  if (right <= left) return
+  zones.push({ left, width: pct(right - left), color })
+}
+
+function buildZones (min, max, safe, warn) {
+  if (max <= min) return [{ left: 0, width: 100, color: 'var(--reefpi-color-band-safe)' }]
+
+  const safeRange = normaliseRange(safe)
+  const warnRange = normaliseRange(warn)
+  const zones = []
+
+  if (safeRange) {
+    const outer = warnRange || safeRange
+    addZone(zones, min, max, min, outer[0], 'var(--reefpi-color-band-critical)')
+    if (warnRange) addZone(zones, min, max, warnRange[0], safeRange[0], 'var(--reefpi-color-band-warn)')
+    addZone(zones, min, max, safeRange[0], safeRange[1], 'var(--reefpi-color-band-safe)')
+    if (warnRange) addZone(zones, min, max, safeRange[1], warnRange[1], 'var(--reefpi-color-band-warn)')
+    addZone(zones, min, max, outer[1], max, 'var(--reefpi-color-band-critical)')
+    return zones
+  }
+
+  if (warnRange) {
+    addZone(zones, min, max, min, warnRange[0], 'var(--reefpi-color-band-critical)')
+    addZone(zones, min, max, warnRange[0], warnRange[1], 'var(--reefpi-color-band-safe)')
+    addZone(zones, min, max, warnRange[1], max, 'var(--reefpi-color-band-critical)')
+    return zones
+  }
+
+  return [{ left: 0, width: 100, color: 'var(--reefpi-color-band-safe)' }]
+}
+
+function zoneLabel (value, safe, warn, min, max) {
+  const safeRange = normaliseRange(safe)
+  const warnRange = normaliseRange(warn)
+
+  if (value < min || value > max) return 'out of bounds'
+  if (safeRange && value >= safeRange[0] && value <= safeRange[1]) return 'within safe range'
+  if (!safeRange && warnRange && value >= warnRange[0] && value <= warnRange[1]) return 'within safe range'
+  if (warnRange && value >= warnRange[0] && value <= warnRange[1]) return 'in warning zone'
+  if (!safeRange && !warnRange) return 'within safe range'
   return 'out of bounds'
+}
+
+function formatValue (value, unit) {
+  return String(value) + unit
 }
 
 export default function ThresholdGauge ({
@@ -69,63 +71,38 @@ export default function ThresholdGauge ({
   label = '',
   onBoundsExceeded
 }) {
-  const min = critical ? critical[0] : (warn ? warn[0] : (safe ? safe[0] : 0))
-  const max = critical ? critical[1] : (warn ? warn[1] : (safe ? safe[1] : 100))
-
-  const clampedValue = Math.min(Math.max(value, min), max)
-  const indicatorPct = ((clampedValue - min) / (max - min)) * 100
-
-  const outOfBounds = value < min || value > max
-  const inWarn = !outOfBounds && warn && (value < (safe ? safe[0] : warn[0]) || value > (safe ? safe[1] : warn[1]))
+  const safeRange = normaliseRange(safe)
+  const warnRange = normaliseRange(warn)
+  const criticalRange = normaliseRange(critical)
+  const min = criticalRange ? criticalRange[0] : (warnRange ? warnRange[0] : (safeRange ? safeRange[0] : 0))
+  const max = criticalRange ? criticalRange[1] : (warnRange ? warnRange[1] : (safeRange ? safeRange[1] : 100))
+  const rangeMax = max > min ? max : min + 1
+  const clampedValue = clamp(value, min, rangeMax)
+  const indicatorPct = pct(pctOf(clampedValue, min, rangeMax))
+  const outOfBounds = value < min || value > rangeMax
+  const status = zoneLabel(value, safeRange, warnRange, min, rangeMax)
+  const inWarn = status === 'in warning zone'
+  const zones = buildZones(min, rangeMax, safeRange, warnRange)
+  const indicatorColor = outOfBounds
+    ? 'var(--reefpi-color-band-critical)'
+    : 'var(--reefpi-color-text-strong)'
+  const valueText = formatValue(value, unit) + ', ' + status
 
   React.useEffect(() => {
     if (outOfBounds && onBoundsExceeded) onBoundsExceeded(value)
   }, [value, outOfBounds, onBoundsExceeded])
 
-  const zones = buildZones(min, max, safe || null, warn || null)
-
-  const indicatorColor = outOfBounds
-    ? 'var(--reefpi-color-band-critical)'
-    : 'var(--reefpi-color-text-strong)'
-
-  const valueText = `${value}${unit}, ${zoneLabel(value, safe, warn)}`
-
   return (
     <div className='reefpi-threshold-gauge' style={{ width: '100%' }}>
-      {/* Value + label row */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'baseline',
-        marginBottom: '6px'
-      }}>
-        <span style={{
-          fontSize: '0.875rem',
-          fontWeight: 500,
-          color: outOfBounds
-            ? 'var(--reefpi-color-error)'
-            : inWarn
-              ? 'var(--reefpi-color-warn)'
-              : 'var(--reefpi-color-text)'
-        }}>
-          {value}{unit}
-        </span>
-        {label && (
-          <span style={{
-            fontSize: '0.75rem',
-            color: 'var(--reefpi-color-text-muted)'
-          }}>
-            {label}
-          </span>
-        )}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '18px' }}>
+        <span style={{ fontSize: '0.75rem', color: 'var(--reefpi-color-text-muted)' }}>{label}</span>
       </div>
 
-      {/* Track */}
       <div
         role='meter'
         aria-label={label || 'Threshold gauge'}
         aria-valuemin={min}
-        aria-valuemax={max}
+        aria-valuemax={rangeMax}
         aria-valuenow={value}
         aria-valuetext={valueText}
         style={{
@@ -137,59 +114,75 @@ export default function ThresholdGauge ({
           border: '1px solid var(--reefpi-color-border)'
         }}
       >
-        {/* Coloured zone segments */}
+        <span
+          className='reefpi-threshold-gauge__value'
+          style={{
+            position: 'absolute',
+            left: indicatorPct + '%',
+            bottom: '18px',
+            transform: 'translateX(-50%)',
+            fontSize: '0.875rem',
+            fontWeight: 500,
+            color: outOfBounds
+              ? 'var(--reefpi-color-error)'
+              : inWarn
+                ? 'var(--reefpi-color-warn)'
+                : 'var(--reefpi-color-text)',
+            whiteSpace: 'nowrap'
+          }}
+        >
+          {value}{unit && <sub style={{ fontSize: '0.65em', lineHeight: 0 }}>{unit}</sub>}
+        </span>
+
         <div style={{ position: 'absolute', inset: 0, borderRadius: '7px', overflow: 'hidden' }}>
           {zones.map((z, i) => (
-            <div key={i} style={{
-              position: 'absolute',
-              top: 0,
-              bottom: 0,
-              left: `${z.left}%`,
-              width: `${z.width}%`,
-              background: z.color
-            }} />
+            <div
+              key={i} style={{
+                position: 'absolute',
+                top: 0,
+                bottom: 0,
+                left: z.left + '%',
+                width: z.width + '%',
+                background: z.color
+              }}
+            />
           ))}
         </div>
 
-        {/* Needle drop */}
         <div style={{
           position: 'absolute',
           top: '50%',
-          left: `${indicatorPct}%`,
+          left: indicatorPct + '%',
           transform: 'translate(-50%, -50%)',
           width: '2px',
           height: '20px',
           background: indicatorColor,
           borderRadius: '1px',
           zIndex: 1
-        }} />
+        }}
+        />
 
-        {/* Circular indicator */}
         <div style={{
           position: 'absolute',
           top: '50%',
-          left: `${indicatorPct}%`,
+          left: indicatorPct + '%',
           transform: 'translate(-50%, -50%)',
           width: '16px',
           height: '16px',
           borderRadius: '50%',
           background: 'var(--reefpi-color-surface-elevated)',
-          border: `2px solid ${indicatorColor}`,
+          border: '2px solid ' + indicatorColor,
           zIndex: 2
-        }} />
+        }}
+        />
       </div>
 
-      {/* Min / max labels */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        marginTop: '4px'
-      }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '4px' }}>
         <span style={{ fontSize: '0.65rem', color: 'var(--reefpi-color-text-muted)', fontFamily: 'var(--reefpi-font-mono)' }}>
-          {min}{unit}
+          {formatValue(min, unit)}
         </span>
         <span style={{ fontSize: '0.65rem', color: 'var(--reefpi-color-text-muted)', fontFamily: 'var(--reefpi-font-mono)' }}>
-          {max}{unit}
+          {formatValue(rangeMax, unit)}
         </span>
       </div>
     </div>

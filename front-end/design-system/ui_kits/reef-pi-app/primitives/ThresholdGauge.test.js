@@ -13,7 +13,7 @@ describe('design-system ThresholdGauge', () => {
     expect(html).toContain('aria-label="Reservoir"')
     expect(html).toContain('aria-valuemin="0"')
     expect(html).toContain('aria-valuemax="100"')
-    expect(html).toContain('50%, out of bounds')
+    expect(html).toContain('50%, within safe range')
   })
 
   it('renders safe and warning zones around the current value', () => {
@@ -35,6 +35,39 @@ describe('design-system ThresholdGauge', () => {
 
     expect(html).toContain('81, in warning zone')
     expect(html).toContain('var(--reefpi-color-warn)')
+  })
+
+  it('anchors the value label above the indicator and renders the unit as a subscript', () => {
+    const html = renderToStaticMarkup(
+      <ThresholdGauge value={78.4} safe={[76, 80]} warn={[74, 82]} critical={[70, 86]} unit='°F' label='Display Tank' />
+    )
+
+    expect(html).toContain('class="reefpi-threshold-gauge__value"')
+    expect(html).toContain('left:52.5%')
+    expect(html).toContain('78.4<sub')
+    expect(html).toContain('°F</sub>')
+    expect(html).toContain('aria-valuetext="78.4°F, within safe range"')
+  })
+
+  it('renders a safe band with critical edges when no warning band is provided', () => {
+    const html = renderToStaticMarkup(
+      <ThresholdGauge value={7.9} safe={[7.8, 8.2]} critical={[7.4, 8.6]} unit='pH' />
+    )
+
+    expect(html).toContain('var(--reefpi-color-band-safe)')
+    expect(html).toContain('var(--reefpi-color-band-critical)')
+    expect(html).not.toContain('var(--reefpi-color-band-warn)')
+    expect(html).toContain('7.9pH, within safe range')
+  })
+
+  it('renders a target-only safe band when no safe range is supplied', () => {
+    const html = renderToStaticMarkup(
+      <ThresholdGauge value={8.1} warn={[7.9, 8.3]} critical={[7.4, 8.6]} unit='pH' />
+    )
+
+    expect(html).toContain('var(--reefpi-color-band-safe)')
+    expect(html).not.toContain('var(--reefpi-color-band-warn)')
+    expect(html).toContain('8.1pH, within safe range')
   })
 
   it('notifies when the value exceeds critical bounds', () => {

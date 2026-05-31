@@ -30,7 +30,7 @@ Horizontal bar that answers "is this reading safe?" in one glance.
 - If `value` is outside `critical`, indicator turns red and the whole tile border should flag (consumer's concern; gauge just reports via `onBoundsExceeded` callback).
 
 ## Acceptance
-- [ ] Component in `ui_kits/reef-pi-app/primitives/ThresholdGauge.jsx`.
-- [ ] Handles unit conversion hint (°F / °C) — renders unit as-is; no math.
-- [ ] Accessible: `role="meter"`, `aria-valuemin/max/now`, `aria-valuetext` reads "78.4°F, within safe range".
-- [ ] Storybook entry (#9) covers: within safe, in warn zone, out of bounds, no warn band, no safe band (e.g. pH only shows a target ± tolerance).
+- [x] Component in `ui_kits/reef-pi-app/primitives/ThresholdGauge.jsx`.
+- [x] Handles unit conversion hint (°F / °C) — renders unit as-is; no math.
+- [x] Accessible: `role="meter"`, `aria-valuemin/max/now`, `aria-valuetext` reads "78.4°F, within safe range".
+- [x] Storybook entry (#9) covers: within safe, in warn zone, out of bounds, no warn band, no safe band (e.g. pH only shows a target ± tolerance).
