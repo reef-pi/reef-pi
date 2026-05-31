@@ -152,7 +152,7 @@ export class RawMainPanel extends React.Component {
               )}
           <div className='container-fluid' style={contentStyle}>
             <FatalError />
-            {window.FEATURE_FLAGS?.alert_center ? <AlertCenterBell /> : <NotificationAlert />}
+            {window.FEATURE_FLAGS?.alert_center ? <AlertCenterBell sseEndpoint='/api/alerts' /> : <NotificationAlert />}
             <div className='row body-panel'>
               <div className='col'>
                 <ErrorBoundary>

@@ -313,6 +313,7 @@ describe('MainPanel', () => {
     const bell = findAll(rendered, node => node.type && node.type.name === 'AlertCenterBell')[0]
     const legacyNotify = findAll(rendered, node => node.type && node.type.name === 'NotificationAlert')[0]
     expect(bell).toBeDefined()
+    expect(bell.props.sseEndpoint).toBe('/api/alerts')   // ← add this line
     expect(legacyNotify).toBeUndefined()
     window.FEATURE_FLAGS = {}
   })
