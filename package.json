@@ -126,7 +126,16 @@
       "*.test.js",
       "**/__snapshots__",
       "**/__snapshots__/**"
-    ]
+    ],
+    "rules": {
+      "no-restricted-syntax": [
+        "error",
+        {
+          "selector": "JSXAttribute[name.name='className'] Literal[value=/\\b(container-fluid|container|col-|d-flex|justify-content-|align-items-|align-self-|[mp][tblrxy]?-[0-5]|text-(center|left|right))\\b/]",
+          "message": "Bootstrap Tier-1 utility class banned — use tokens + plain flex/grid. See E6 #27."
+        }
+      ]
+    }
   },
   "jest": {
     "setupFilesAfterEnv": [

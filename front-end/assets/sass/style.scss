@@ -590,3 +590,13 @@ textarea:focus,
     padding-bottom: 0;
   }
 }
+
+.summary-desktop {
+  display: none;
+}
+
+@media screen and (min-width: 992px) {
+  .summary-desktop {
+    display: block;
+  }
+}

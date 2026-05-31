@@ -126,8 +126,8 @@ export class RawMainPanel extends React.Component {
             ? <NewShellNav capabilities={currentCaps} />
             : (
               <nav className='navbar navbar-dark navbar-reefpi navbar-expand-lg'>
-                <span className='navbar-brand mb-0 h1' data-testid='smoke-brand'>{this.props.info.name}</span>
-                <span className='navbar-brand mb-0 h1 navbar-toggler current-tab' data-testid='smoke-current-tab'><CurrentPageHeader /></span>
+                <span className='navbar-brand h1' data-testid='smoke-brand'>{this.props.info.name}</span>
+                <span className='navbar-brand h1 navbar-toggler current-tab' data-testid='smoke-current-tab'><CurrentPageHeader /></span>
                 <button
                   className='navbar-toggler'
                   type='button'
@@ -150,27 +150,23 @@ export class RawMainPanel extends React.Component {
                 </div>
               </nav>
               )}
-          <div className='container-fluid' style={contentStyle}>
+          <div data-testid='smoke-content-panel' style={{ padding: '0 var(--reefpi-shell-gutter)', ...contentStyle }}>
             <FatalError />
             {window.FEATURE_FLAGS?.alert_center ? <AlertCenterBell sseEndpoint='/api/alerts' /> : <NotificationAlert />}
-            <div className='row body-panel'>
-              <div className='col'>
-                <ErrorBoundary>
-                  <Routes>
-                    {mainPanelRouteElements}
-                  </Routes>
-                </ErrorBoundary>
-              </div>
+            <div className='body-panel'>
+              <ErrorBoundary>
+                <Routes>
+                  {mainPanelRouteElements}
+                </Routes>
+              </ErrorBoundary>
             </div>
-            <div className='row d-none d-lg-block'>
-              <div className='col'>
-                <Summary
-                  fetch={this.props.fetchInfo}
-                  info={this.props.info}
-                  errors={this.props.errors}
-                  devMode={this.props.capabilities.dev_mode}
-                />
-              </div>
+            <div className='summary-desktop'>
+              <Summary
+                fetch={this.props.fetchInfo}
+                info={this.props.info}
+                errors={this.props.errors}
+                devMode={this.props.capabilities.dev_mode}
+              />
             </div>
           </div>
         </div>
