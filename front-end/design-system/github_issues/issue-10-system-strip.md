@@ -17,10 +17,10 @@ Single-line strip above the tile grid. Answers "is everything OK?" in one glance
 - Right cluster: alert count (click → opens alert center from #17), kebab (Configure / Sign out).
 
 ## Acceptance
-- [ ] Height 56px; collapses to 48px on narrow viewports.
-- [ ] Health pill derives from alert severity reducer (no independent state).
-- [ ] Clicking alert count opens alert-center slide-over.
-- [ ] Kebab removes the bottom Configure button currently in Dashboard.
+- [x] Height 56px; collapses to 48px on narrow viewports.
+- [x] Health pill derives from alert severity reducer (no independent state).
+- [x] Clicking alert count opens alert-center slide-over.
+- [x] Kebab removes the bottom Configure button currently in Dashboard.
 
 ## Dependencies
 - #17 alert center must exist (or stub) for the alert-count click.

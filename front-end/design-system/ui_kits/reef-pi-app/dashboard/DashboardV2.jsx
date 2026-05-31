@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import SystemStrip from './SystemStrip'
+import { AlertCenter } from './AlertCenter'
 import TemperatureTile from './TemperatureTile'
 import PhTile from './PhTile'
 import AtoTile from './AtoTile'
@@ -215,6 +216,7 @@ export default function DashboardV2 ({
 }) {
   const { alerts } = useAlertsStore({ sseEndpoint })
   const [configRevision, setConfigRevision] = useState(0)
+  const [alertCenterOpen, setAlertCenterOpen] = useState(false)
 
   if (!window.FEATURE_FLAGS?.dashboard_v2) {
     return children ?? null
@@ -239,9 +241,11 @@ export default function DashboardV2 ({
     setConfigRevision(v => v + 1)
   }
 
-  const tempAlert = toTileAlert(firstAlertFor(alerts, 'temperature.display'))
-  const phAlert = toTileAlert(firstAlertFor(alerts, 'ph.display'))
-  const atoAlert = toTileAlert(firstAlertFor(alerts, 'ato.reservoir'))
+  const activeAlerts = alerts.filter(alert => !alert.acknowledged)
+
+  const tempAlert = toTileAlert(firstAlertFor(activeAlerts, 'temperature.display'))
+  const phAlert = toTileAlert(firstAlertFor(activeAlerts, 'ph.display'))
+  const atoAlert = toTileAlert(firstAlertFor(activeAlerts, 'ato.reservoir'))
 
   return (
     <div
@@ -257,9 +261,12 @@ export default function DashboardV2 ({
       {/* System strip — full width */}
       <SystemStrip
         sseEndpoint={sseEndpoint}
+        alerts={activeAlerts}
+        onAlertClick={() => setAlertCenterOpen(true)}
         onConfigure={onConfigure}
         onResetDashboardConfig={handleResetDashboardConfig}
       />
+      <AlertCenter open={alertCenterOpen} onClose={() => setAlertCenterOpen(false)} />
 
       {/* Primary metric row */}
       <div className='row' style={{ margin: 0, gap: '1rem', display: 'flex', flexWrap: 'wrap' }}>

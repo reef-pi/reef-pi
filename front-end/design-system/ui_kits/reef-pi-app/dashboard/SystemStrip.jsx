@@ -46,174 +46,176 @@ export default function SystemStrip ({
   }, [menuOpen])
 
   return (
-    <div
-      className='reefpi-system-strip'
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '0.75rem',
-        height: '56px',
-        padding: '0 1rem',
-        background: 'var(--reefpi-color-surface-elevated)',
-        borderBottom: '1px solid var(--reefpi-color-border)',
-        fontFamily: 'var(--reefpi-font-app)',
-        flexShrink: 0
-      }}
-    >
-      {/* Health pill */}
-      <span
-        aria-label={`System health: ${health}`}
+    <>
+      <style>{'\n        .reefpi-system-strip { height: 56px; }\n        @media (max-width: 480px) { .reefpi-system-strip { height: 48px; } }\n      '}</style>
+      <div
+        className='reefpi-system-strip'
         style={{
-          width: '10px',
-          height: '10px',
-          borderRadius: '50%',
-          background: PILL_COLORS[health],
-          flexShrink: 0,
-          transition: 'background-color 0.2s'
-        }}
-      />
-
-      {/* Tank name */}
-      <span
-        style={{
-          fontSize: '0.9rem',
-          fontWeight: 500,
-          color: 'var(--reefpi-color-text)',
-          whiteSpace: 'nowrap',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          flex: '1 1 auto',
-          minWidth: 0
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.75rem',
+          padding: '0 1rem',
+          background: 'var(--reefpi-color-surface-elevated)',
+          borderBottom: '1px solid var(--reefpi-color-border)',
+          fontFamily: 'var(--reefpi-font-app)',
+          flexShrink: 0
         }}
       >
-        {displayName}
-      </span>
+        {/* Health pill */}
+        <span
+          aria-label={`System health: ${health}`}
+          style={{
+            width: '10px',
+            height: '10px',
+            borderRadius: '50%',
+            background: PILL_COLORS[health],
+            flexShrink: 0,
+            transition: 'background-color 0.2s'
+          }}
+        />
 
-      {/* Uptime + version (hidden on very narrow viewports via flex shrink) */}
-      {(uptimeLabel || version) && (
+        {/* Tank name */}
         <span
           style={{
-            fontSize: '0.72rem',
-            color: 'var(--reefpi-color-text-muted)',
+            fontSize: '0.9rem',
+            fontWeight: 500,
+            color: 'var(--reefpi-color-text)',
             whiteSpace: 'nowrap',
-            flexShrink: 1,
-            overflow: 'hidden'
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            flex: '1 1 auto',
+            minWidth: 0
           }}
         >
-          {[uptimeLabel, version].filter(Boolean).join(' · ')}
+          {displayName}
         </span>
-      )}
 
-      {/* Alert count badge */}
-      {alertCount > 0 && (
-        <button
-          onClick={onAlertClick}
-          aria-label={`${alertCount} alert${alertCount !== 1 ? 's' : ''} — open alert center`}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.3rem',
-            background: health === 'critical'
-              ? 'var(--reefpi-color-error-bg)'
-              : 'var(--reefpi-color-warn-bg)',
-            border: `1px solid ${health === 'critical'
-              ? 'var(--reefpi-color-error-border)'
-              : 'var(--reefpi-color-warn)'}`,
-            borderRadius: 'var(--reefpi-radius-sm)',
-            color: health === 'critical'
-              ? 'var(--reefpi-color-error)'
-              : 'var(--reefpi-color-warn)',
-            fontSize: '0.72rem',
-            fontFamily: 'var(--reefpi-font-app)',
-            padding: '2px 8px',
-            cursor: 'pointer',
-            minHeight: '28px',
-            whiteSpace: 'nowrap',
-            flexShrink: 0
-          }}
-        >
+        {/* Uptime + version (hidden on very narrow viewports via flex shrink) */}
+        {(uptimeLabel || version) && (
           <span
             style={{
-              width: '6px',
-              height: '6px',
-              borderRadius: '50%',
-              background: 'currentColor',
-              flexShrink: 0
-            }}
-          />
-          {alertCount} alert{alertCount !== 1 ? 's' : ''}
-        </button>
-      )}
-
-      {/* Kebab menu */}
-      <div ref={menuRef} style={{ position: 'relative', flexShrink: 0 }}>
-        <button
-          aria-label='System menu'
-          aria-expanded={menuOpen}
-          aria-haspopup='true'
-          onClick={() => setMenuOpen(o => !o)}
-          style={{
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            padding: '6px 8px',
-            minHeight: '44px',
-            minWidth: '44px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderRadius: 'var(--reefpi-radius-sm)',
-            color: 'var(--reefpi-color-text-muted)'
-          }}
-        >
-          <svg width='4' height='16' viewBox='0 0 4 16' fill='currentColor' aria-hidden='true'>
-            <circle cx='2' cy='2' r='1.5' />
-            <circle cx='2' cy='8' r='1.5' />
-            <circle cx='2' cy='14' r='1.5' />
-          </svg>
-        </button>
-
-        {menuOpen && (
-          <div
-            role='menu'
-            style={{
-              position: 'absolute',
-              top: '100%',
-              right: 0,
-              zIndex: 100,
-              background: 'var(--reefpi-color-surface-elevated)',
-              border: '1px solid var(--reefpi-color-border)',
-              borderRadius: 'var(--reefpi-radius-md)',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
-              minWidth: '140px',
+              fontSize: '0.72rem',
+              color: 'var(--reefpi-color-text-muted)',
+              whiteSpace: 'nowrap',
+              flexShrink: 1,
               overflow: 'hidden'
             }}
           >
-            <button
-              role='menuitem'
-              onClick={() => { setMenuOpen(false); onConfigure?.() }}
-              style={menuItemStyle}
-            >
-              Configure
-            </button>
-            <button
-              role='menuitem'
-              onClick={() => { setMenuOpen(false); onResetDashboardConfig?.() }}
-              style={{ ...menuItemStyle, borderTop: '1px solid var(--reefpi-color-border)' }}
-            >
-              Reset dashboard config
-            </button>
-            <button
-              role='menuitem'
-              onClick={() => { setMenuOpen(false); onSignOut?.() }}
-              style={{ ...menuItemStyle, color: 'var(--reefpi-color-error)', borderTop: '1px solid var(--reefpi-color-border)' }}
-            >
-              Sign out
-            </button>
-          </div>
+            {[uptimeLabel, version].filter(Boolean).join(' · ')}
+          </span>
         )}
+
+        {/* Alert count badge */}
+        {alertCount > 0 && (
+          <button
+            onClick={onAlertClick}
+            aria-label={`${alertCount} alert${alertCount !== 1 ? 's' : ''} — open alert center`}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.3rem',
+              background: health === 'critical'
+                ? 'var(--reefpi-color-error-bg)'
+                : 'var(--reefpi-color-warn-bg)',
+              border: `1px solid ${health === 'critical'
+              ? 'var(--reefpi-color-error-border)'
+              : 'var(--reefpi-color-warn)'}`,
+              borderRadius: 'var(--reefpi-radius-sm)',
+              color: health === 'critical'
+                ? 'var(--reefpi-color-error)'
+                : 'var(--reefpi-color-warn)',
+              fontSize: '0.72rem',
+              fontFamily: 'var(--reefpi-font-app)',
+              padding: '2px 8px',
+              cursor: 'pointer',
+              minHeight: '28px',
+              whiteSpace: 'nowrap',
+              flexShrink: 0
+            }}
+          >
+            <span
+              style={{
+                width: '6px',
+                height: '6px',
+                borderRadius: '50%',
+                background: 'currentColor',
+                flexShrink: 0
+              }}
+            />
+            {alertCount} alert{alertCount !== 1 ? 's' : ''}
+          </button>
+        )}
+
+        {/* Kebab menu */}
+        <div ref={menuRef} style={{ position: 'relative', flexShrink: 0 }}>
+          <button
+            aria-label='System menu'
+            aria-expanded={menuOpen}
+            aria-haspopup='true'
+            onClick={() => setMenuOpen(o => !o)}
+            style={{
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              padding: '6px 8px',
+              minHeight: '44px',
+              minWidth: '44px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: 'var(--reefpi-radius-sm)',
+              color: 'var(--reefpi-color-text-muted)'
+            }}
+          >
+            <svg width='4' height='16' viewBox='0 0 4 16' fill='currentColor' aria-hidden='true'>
+              <circle cx='2' cy='2' r='1.5' />
+              <circle cx='2' cy='8' r='1.5' />
+              <circle cx='2' cy='14' r='1.5' />
+            </svg>
+          </button>
+
+          {menuOpen && (
+            <div
+              role='menu'
+              style={{
+                position: 'absolute',
+                top: '100%',
+                right: 0,
+                zIndex: 100,
+                background: 'var(--reefpi-color-surface-elevated)',
+                border: '1px solid var(--reefpi-color-border)',
+                borderRadius: 'var(--reefpi-radius-md)',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+                minWidth: '140px',
+                overflow: 'hidden'
+              }}
+            >
+              <button
+                role='menuitem'
+                onClick={() => { setMenuOpen(false); onConfigure?.() }}
+                style={menuItemStyle}
+              >
+                Configure
+              </button>
+              <button
+                role='menuitem'
+                onClick={() => { setMenuOpen(false); onResetDashboardConfig?.() }}
+                style={{ ...menuItemStyle, borderTop: '1px solid var(--reefpi-color-border)' }}
+              >
+                Reset dashboard config
+              </button>
+              <button
+                role='menuitem'
+                onClick={() => { setMenuOpen(false); onSignOut?.() }}
+                style={{ ...menuItemStyle, color: 'var(--reefpi-color-error)', borderTop: '1px solid var(--reefpi-color-border)' }}
+              >
+                Sign out
+              </button>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 

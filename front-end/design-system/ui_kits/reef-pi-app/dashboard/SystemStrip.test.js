@@ -27,6 +27,14 @@ describe('design-system SystemStrip', () => {
     )).toContain('System health: critical')
   })
 
+  it('ships the narrow viewport height rule with the component', () => {
+    const html = renderToStaticMarkup(<SystemStrip />)
+
+    expect(html).toContain('height: 56px')
+    expect(html).toContain('@media (max-width: 480px)')
+    expect(html).toContain('height: 48px')
+  })
+
   it('opens menu, invokes actions, and closes on outside pointer down', () => {
     const onAlertClick = jest.fn()
     const onConfigure = jest.fn()
