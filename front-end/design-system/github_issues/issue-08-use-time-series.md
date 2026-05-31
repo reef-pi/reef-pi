@@ -24,7 +24,7 @@ const { points, loading, error, refetch } = useTimeSeries({
 - `refetch()` is a manual override (wired to alert-center "retry").
 
 ## Acceptance
-- [ ] No duplicate network calls when two tiles request the same metric+range.
-- [ ] Stale-while-revalidate: returns cached points immediately, fires network in background.
-- [ ] Error state bubbles up for inline-tile-alerts (#18).
-- [ ] Unit test covers LTTB output length == maxPoints and endpoints preserved.
+- [x] No duplicate network calls when two tiles request the same metric+range.
+- [x] Stale-while-revalidate: returns cached points immediately, fires network in background.
+- [x] Error state bubbles up for inline-tile-alerts (#18).
+- [x] Unit test covers LTTB output length == maxPoints and endpoints preserved.

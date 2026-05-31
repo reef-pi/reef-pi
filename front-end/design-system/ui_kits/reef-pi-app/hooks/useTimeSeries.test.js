@@ -10,6 +10,13 @@ const HookProbe = ({ metric, range, maxPoints, onUpdate }) => {
   return <span>{state.points.length}</span>
 }
 
+const PairProbe = ({ metric, range, maxPoints, onUpdate }) => {
+  const first = useTimeSeries({ metric, range, maxPoints })
+  const second = useTimeSeries({ metric, range, maxPoints })
+  onUpdate({ first, second })
+  return <span>{first.points.length + second.points.length}</span>
+}
+
 describe('design-system useTimeSeries', () => {
   beforeEach(() => {
     jest.useFakeTimers()
@@ -75,6 +82,66 @@ describe('design-system useTimeSeries', () => {
     expect(updates.at(-1).points).toEqual([{ t: 2, v: 2 }])
 
     act(() => root.unmount())
+  })
+
+  it('deduplicates concurrent requests and updates every subscriber', async () => {
+    const raw = [{ t: 1, v: 1 }, { t: 2, v: 3 }]
+    fetch.mockResolvedValueOnce({ ok: true, json: () => Promise.resolve(raw) })
+    const updates = []
+    const container = document.createElement('div')
+    const root = createRoot(container)
+
+    await act(async () => {
+      root.render(<PairProbe metric='shared' range='1h' maxPoints={5} onUpdate={state => updates.push(state)} />)
+      await Promise.resolve()
+      await Promise.resolve()
+    })
+
+    expect(fetch).toHaveBeenCalledTimes(1)
+    expect(updates.at(-1).first.points).toEqual(raw)
+    expect(updates.at(-1).second.points).toEqual(raw)
+    expect(updates.at(-1).first.loading).toBe(false)
+    expect(updates.at(-1).second.loading).toBe(false)
+
+    act(() => root.unmount())
+  })
+
+  it('returns cached points immediately and refreshes them in the background', async () => {
+    fetch
+      .mockResolvedValueOnce({ ok: true, json: () => Promise.resolve([{ t: 1, v: 1 }]) })
+      .mockResolvedValueOnce({ ok: true, json: () => Promise.resolve([{ t: 2, v: 2 }]) })
+
+    const firstUpdates = []
+    const firstContainer = document.createElement('div')
+    const firstRoot = createRoot(firstContainer)
+
+    await act(async () => {
+      firstRoot.render(<HookProbe metric='swr' range='1d' maxPoints={5} onUpdate={state => firstUpdates.push(state)} />)
+      await Promise.resolve()
+      await Promise.resolve()
+    })
+    expect(fetch).toHaveBeenCalledTimes(1)
+    act(() => firstRoot.unmount())
+
+    const secondUpdates = []
+    const secondContainer = document.createElement('div')
+    const secondRoot = createRoot(secondContainer)
+
+    await act(async () => {
+      secondRoot.render(<HookProbe metric='swr' range='1d' maxPoints={5} onUpdate={state => secondUpdates.push(state)} />)
+      await Promise.resolve()
+    })
+
+    expect(secondUpdates[0].points).toEqual([{ t: 1, v: 1 }])
+    expect(fetch).toHaveBeenCalledTimes(2)
+
+    await act(async () => {
+      await Promise.resolve()
+    })
+    expect(secondUpdates.at(-1).points).toEqual([{ t: 2, v: 2 }])
+    expect(secondUpdates.at(-1).loading).toBe(false)
+
+    act(() => secondRoot.unmount())
   })
 
   it('sets an error when telemetry fetch fails', async () => {
