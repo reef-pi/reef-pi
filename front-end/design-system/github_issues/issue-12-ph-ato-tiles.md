@@ -17,6 +17,6 @@ Each tile:
 - pH uses `band={[8.1, 8.4]}`; ATO uses `band` only if configured target set.
 
 ## Acceptance
-- [ ] Both tiles obey the global-scope `RangeSelector` unless user changes locally (then falls back to local scope).
-- [ ] Identical card chrome across both — extract a `MetricTile` wrapper.
-- [ ] Empty / loading / error states.
+- [x] Both tiles obey the global-scope `RangeSelector` unless user changes locally (then falls back to local scope).
+- [x] Identical card chrome across both — extract a `MetricTile` wrapper.
+- [x] Empty / loading / error states.

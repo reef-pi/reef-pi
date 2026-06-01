@@ -70,6 +70,33 @@ describe('design-system dashboard tiles', () => {
     expect(html).toContain('1m')
   })
 
+  it('inherits global range until a local compact range is selected', () => {
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+    const root = createRoot(container)
+
+    act(() => {
+      root.render(
+        <MetricTile
+          metric='ph.display'
+          label='pH'
+          globalRange='7d'
+        />
+      )
+    })
+
+    expect(useTimeSeries).toHaveBeenLastCalledWith({ metric: 'ph.display', range: '7d', maxPoints: 80 })
+
+    const hourRange = container.querySelector('input[value="1h"]')
+    act(() => hourRange.click())
+
+    expect(useTimeSeries).toHaveBeenLastCalledWith({ metric: 'ph.display', range: '1h', maxPoints: 80 })
+    expect(container.querySelector('.reefpi-range-selector')).not.toBeNull()
+
+    act(() => root.unmount())
+    container.remove()
+  })
+
   it('renders MetricTile loading, error, and empty states', () => {
     useTimeSeries.mockReturnValueOnce({ points: [], loading: true, error: null, refetch: jest.fn() })
     expect(renderToStaticMarkup(<MetricTile metric='m1' label='Metric' />)).toContain('reefpi-shimmer')
@@ -90,6 +117,25 @@ describe('design-system dashboard tiles', () => {
 
     useTimeSeries.mockReturnValueOnce({ points: [{ t: 1, v: 7.9 }], loading: false, error: null, refetch: jest.fn() })
     expect(renderToStaticMarkup(<PhTile globalRange='1d' />)).toContain('outside safe range')
+  })
+
+  it('renders pH and ATO secondary tiles with shared chrome and configured bands', () => {
+    useTimeSeries.mockReturnValueOnce({ points: [{ t: 1, v: 8.2 }], loading: false, error: null, refetch: jest.fn() })
+    const phHtml = renderToStaticMarkup(<PhTile globalRange='1d' />)
+    expect(phHtml).toContain('reefpi-metric-tile col-md-4')
+    expect(phHtml).toContain('reefpi-range-selector')
+    expect(phHtml).toContain('linearGradient')
+    expect(phHtml).toContain('var(--reefpi-color-band-safe)')
+
+    useTimeSeries.mockReturnValueOnce({ points: [{ t: 1, v: 50 }, { t: 2, v: 52 }], loading: false, error: null, refetch: jest.fn() })
+    const atoWithTargetHtml = renderToStaticMarkup(<AtoTile globalRange='1d' targetLevel={50} />)
+    expect(atoWithTargetHtml).toContain('reefpi-metric-tile col-md-4')
+    expect(atoWithTargetHtml).toContain('reefpi-range-selector')
+    expect(atoWithTargetHtml).toContain('var(--reefpi-color-band-safe)')
+
+    useTimeSeries.mockReturnValueOnce({ points: [{ t: 1, v: 50 }, { t: 2, v: 52 }], loading: false, error: null, refetch: jest.fn() })
+    const atoWithoutTargetHtml = renderToStaticMarkup(<AtoTile globalRange='1d' />)
+    expect(atoWithoutTargetHtml).not.toContain('var(--reefpi-color-band-safe)')
   })
 
   it('renders EquipmentStrip empty, sorted, toggle, retry, and keyboard flows', () => {
