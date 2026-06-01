@@ -9,8 +9,8 @@ parent: "[EPIC] Dashboard v2 — tiered hierarchy + system strip"
 Ship safely.
 
 ## Acceptance
-- [ ] `dashboard_v2` lives in the existing Tweaks object and in server-side feature config.
-- [ ] When `false`, original dashboard renders unchanged.
-- [ ] When `true`, new `<DashboardV2>` renders.
-- [ ] Flag default = `false` until QA sign-off, then flipped to `true`.
-- [ ] Removal ticket filed for 2 releases later.
+- [x] `dashboard_v2` lives in the existing Tweaks object and in server-side feature config.
+- [x] When `false`, original dashboard renders unchanged.
+- [x] When `true`, new `<DashboardV2>` renders.
+- [x] Flag default = `false` until QA sign-off, then flipped to `true`.
+- [x] Removal ticket filed for 2 releases later.

@@ -15,14 +15,14 @@ Rebuild the dashboard around a clear visual hierarchy. Add a single-line system-
 - [x] Temperature tile spans `col-md-8` on desktop, showing big numeric + gradient area chart + shaded threshold band (76–80°F).
 - [x] pH and ATO tiles (`col-md-4`) use `Sparkline v2` + `RangeSelector`.
 - [x] Equipment toggles move into a horizontal strip along the dashboard footer (above `Summary`).
-- [ ] Old dashboard still reachable via `dashboard_v2=false` until flag removal.
+- [x] Old dashboard still reachable via `dashboard_v2=false` until flag removal.
 
 ## Sub-tasks
 - [x] #10 System status strip
 - [x] #11 Hero TemperatureTile
 - [x] #12 Secondary PhTile / AtoTile with RangeSelector
 - [x] #13 Equipment strip (horizontal, footer position)
-- [ ] #14 Wire behind `dashboard_v2` flag
+- [x] #14 Wire behind `dashboard_v2` flag
 
 ## Dependencies
 - Requires E2 primitives (#5, #6, #7, #8).

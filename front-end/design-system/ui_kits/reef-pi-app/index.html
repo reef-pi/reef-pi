@@ -15,7 +15,8 @@
     const TWEAKS = /*EDITMODE-BEGIN*/{
       "startSignedIn": true,
       "startRoute": "dashboard",
-      "devMode": false
+      "devMode": false,
+      "dashboardV2": false
     }/*EDITMODE-END*/;
   </script>
 
@@ -35,6 +36,7 @@
   <script type="text/babel">
     const root = ReactDOM.createRoot(document.getElementById('app'));
     function mount() {
+      window.FEATURE_FLAGS = Object.assign({}, window.FEATURE_FLAGS, { dashboard_v2: TWEAKS.dashboardV2 });
       root.render(
         <App
           initialRoute={TWEAKS.startRoute}
@@ -53,6 +55,7 @@
         <div class="tw-hdr">Tweaks</div>
         <label class="tw-row"><input type="checkbox" ${TWEAKS.startSignedIn ? 'checked' : ''} data-k="startSignedIn"> Start signed in</label>
         <label class="tw-row"><input type="checkbox" ${TWEAKS.devMode ? 'checked' : ''} data-k="devMode"> DevMode (show error footer)</label>
+        <label class="tw-row"><input type="checkbox" ${TWEAKS.dashboardV2 ? 'checked' : ''} data-k="dashboardV2"> Dashboard v2</label>
         <label class="tw-row">Start route
           <select data-k="startRoute">
             ${['dashboard','equipment','lighting','temperature','ato','ph','doser','timers','configuration']
