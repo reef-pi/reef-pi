@@ -15,6 +15,6 @@ Replace the square equipment tile with a wider horizontal strip at the dashboard
 - Items ordered by last-toggled desc.
 
 ## Acceptance
-- [ ] Reuses `ToggleSwitch` (with pending/error states from #15 once available).
-- [ ] Tapping equipment name deep-links to `/equipment?edit={id}`.
-- [ ] Keyboard: arrow keys step between items; Space/Enter toggles.
+- [x] Reuses `ToggleSwitch` (with pending/error states from #15 once available).
+- [x] Tapping equipment name deep-links to `/equipment?edit={id}`.
+- [x] Keyboard: arrow keys step between items; Space/Enter toggles.

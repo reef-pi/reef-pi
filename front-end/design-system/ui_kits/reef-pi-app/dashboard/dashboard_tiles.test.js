@@ -163,8 +163,23 @@ describe('design-system dashboard tiles', () => {
 
     const items = Array.from(container.querySelectorAll('[data-equip-item]'))
     expect(items.map(item => item.querySelector('a').textContent)).toEqual(['New Heater', 'Old Pump', 'Bad Light'])
+    expect(items[0].querySelector('a').getAttribute('href')).toBe('/equipment?edit=new')
+    expect(items[0].querySelector('[role="switch"]')).not.toBeNull()
     expect(items[0].textContent).toContain('on 1m')
     expect(items[2].textContent).toContain('failed')
+
+    expect(renderToStaticMarkup(
+      <EquipmentStrip
+        onToggle={onToggle}
+        items={[{ id: 'strip', name: 'Strip Pump', state: 'off', lastToggledAt: 10 }]}
+      />
+    )).toContain('height:96px')
+    expect(renderToStaticMarkup(
+      <EquipmentStrip
+        onToggle={onToggle}
+        items={[{ id: 'strip', name: 'Strip Pump', state: 'off', lastToggledAt: 10 }]}
+      />
+    )).toContain('scroll-snap-type:x mandatory')
 
     act(() => items[0].querySelector('button').click())
     expect(onToggle).toHaveBeenCalledWith('new', 'off')
@@ -177,6 +192,16 @@ describe('design-system dashboard tiles', () => {
       container.querySelector('[role="list"]').dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }))
     })
     expect(scrollIntoView).toHaveBeenCalled()
+
+    act(() => {
+      items[1].dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }))
+    })
+    expect(onToggle).toHaveBeenCalledWith('old', 'on')
+
+    act(() => {
+      items[0].dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }))
+    })
+    expect(onToggle).toHaveBeenCalledWith('new', 'off')
 
     act(() => root.unmount())
     container.remove()

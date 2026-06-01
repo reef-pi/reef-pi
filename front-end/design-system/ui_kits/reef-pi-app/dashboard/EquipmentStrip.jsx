@@ -14,7 +14,7 @@ import ToggleSwitch from '../primitives/ToggleSwitch'
 function formatOnSince (ts) {
   if (!ts) return null
   const s = Math.floor((Date.now() - ts) / 1000)
-  if (s < 60)   return `on ${s}s`
+  if (s < 60) return `on ${s}s`
   if (s < 3600) return `on ${Math.floor(s / 60)}m`
   const h = Math.floor(s / 3600)
   const m = Math.floor((s % 3600) / 60)
@@ -37,17 +37,26 @@ export default function EquipmentStrip ({ items = [], onToggle }) {
   }
 
   const handleKeyDown = e => {
-    if (e.key === 'ArrowRight') { e.preventDefault(); stepFocus(1) }
-    if (e.key === 'ArrowLeft')  { e.preventDefault(); stepFocus(-1) }
+    if (e.key === 'ArrowRight') {
+      e.preventDefault()
+      stepFocus(1)
+    }
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault()
+      stepFocus(-1)
+    }
   }
 
   if (sorted.length === 0) {
     return (
       <div style={stripStyle}>
         <span style={{
-          fontSize: '0.8rem', color: 'var(--reefpi-color-text-muted)',
-          fontFamily: 'var(--reefpi-font-app)', padding: '0 1rem'
-        }}>
+          fontSize: '0.8rem',
+          color: 'var(--reefpi-color-text-muted)',
+          fontFamily: 'var(--reefpi-font-app)',
+          padding: '0 1rem'
+        }}
+        >
           No equipment configured
         </span>
       </div>
@@ -79,11 +88,28 @@ function EquipmentItem ({ item, isLast, onToggle }) {
     ? formatOnSince(item.onSince)
     : null
 
+  const requestToggle = () => {
+    if (item.state === 'pending') return
+    if (item.state === 'error') {
+      onToggle?.(item.id, 'on')
+      return
+    }
+    onToggle?.(item.id, item.state === 'on' ? 'off' : 'on')
+  }
+
+  const handleItemKeyDown = e => {
+    if (e.target !== e.currentTarget) return
+    if (e.key !== ' ' && e.key !== 'Enter') return
+    e.preventDefault()
+    requestToggle()
+  }
+
   return (
     <div
       role='listitem'
       tabIndex={0}
       data-equip-item
+      onKeyDown={handleItemKeyDown}
       style={{
         scrollSnapAlign: 'start',
         flexShrink: 0,
@@ -102,7 +128,7 @@ function EquipmentItem ({ item, isLast, onToggle }) {
       <ToggleSwitch
         state={item.state ?? 'off'}
         onRequestChange={next => onToggle?.(item.id, next)}
-        onRetry={() => onToggle?.(item.id, 'on')}
+        onRetry={requestToggle}
         errorMessage={item.errorMessage}
       />
       <a
@@ -129,7 +155,8 @@ function EquipmentItem ({ item, isLast, onToggle }) {
         fontFamily: 'var(--reefpi-font-mono)',
         height: '11px',
         lineHeight: '11px'
-      }}>
+      }}
+      >
         {onSince ?? ''}
       </span>
     </div>
