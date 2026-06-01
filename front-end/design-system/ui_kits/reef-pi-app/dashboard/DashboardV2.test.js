@@ -1,3 +1,5 @@
+import fs from 'fs'
+import path from 'path'
 import React, { act } from 'react'
 import { createRoot } from 'react-dom/client'
 import { renderToStaticMarkup } from 'react-dom/server'
@@ -38,6 +40,9 @@ import DashboardV2 from './DashboardV2'
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true
 
+const repoRoot = path.resolve(__dirname, '../../../../../')
+
+
 function renderDashboard (props = {}) {
   const container = document.createElement('div')
   document.body.appendChild(container)
@@ -60,6 +65,25 @@ function renderDashboard (props = {}) {
 function dataAlert (container, testId) {
   return JSON.parse(container.querySelector(`[data-testid="${testId}"]`).getAttribute('data-alert'))
 }
+
+describe('dashboard_v2 feature flag wiring', () => {
+  it('keeps dashboard_v2 disabled in the shipped server-rendered feature config', () => {
+    const html = fs.readFileSync(path.join(repoRoot, 'front-end/assets/home.html'), 'utf8')
+
+    expect(html).toContain('window.FEATURE_FLAGS')
+    expect(html).toContain('dashboard_v2: false')
+    expect(html).not.toContain('dashboard_v2: true')
+  })
+
+  it('exposes dashboard_v2 in the design-system Tweaks object and mirrors it to window.FEATURE_FLAGS', () => {
+    const html = fs.readFileSync(path.join(repoRoot, 'front-end/design-system/ui_kits/reef-pi-app/index.html'), 'utf8')
+
+    expect(html).toContain('"dashboardV2": false')
+    expect(html).toContain('window.FEATURE_FLAGS')
+    expect(html).toContain('dashboard_v2: TWEAKS.dashboardV2')
+    expect(html).toContain('Dashboard v2')
+  })
+})
 
 describe('design-system DashboardV2', () => {
   beforeEach(() => {

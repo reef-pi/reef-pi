@@ -2,6 +2,12 @@ const { test, expect } = require('@playwright/test')
 const { createSmokeApi, seedDashboard, updateDashboard } = require('../fixtures/apiSeed')
 const { NavBar } = require('../pages/navBar')
 
+async function enableDashboardV2 (page) {
+  await page.addInitScript(() => {
+    window.FEATURE_FLAGS = Object.assign({}, window.FEATURE_FLAGS, { dashboard_v2: true })
+  })
+}
+
 async function expectDashboardReady (page) {
   const dashboardV2 = page.getByTestId('smoke-dashboard-v2')
   if (await dashboardV2.count()) {
@@ -62,6 +68,7 @@ test('prunes orphaned dashboard chart subscriptions from local storage', async (
     await api.dispose()
   }
 
+  await enableDashboardV2(page)
   await page.addInitScript(() => {
     window.localStorage.setItem('dashboard_config', JSON.stringify({
       subscriptions: [
