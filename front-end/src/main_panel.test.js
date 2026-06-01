@@ -204,7 +204,7 @@ describe('MainPanel', () => {
     expect(container.querySelector('[data-testid="smoke-nav"]')).not.toBeNull()
     expect(container.querySelector('[data-testid="smoke-tab-dashboard"]')).not.toBeNull()
     expect(container.querySelector('[aria-label="Main navigation"]')).not.toBeNull()
-    expect(container.querySelector('#content .container-fluid').style.paddingLeft).toBe('72px')
+    expect(container.querySelector('[data-testid="smoke-content-panel"]').style.paddingLeft).toBe('72px')
     expect(Array.from(container.querySelectorAll('[aria-label]')).map(node => node.getAttribute('aria-label'))).toContain('equipment')
 
     unmount()
@@ -313,6 +313,7 @@ describe('MainPanel', () => {
     const bell = findAll(rendered, node => node.type && node.type.name === 'AlertCenterBell')[0]
     const legacyNotify = findAll(rendered, node => node.type && node.type.name === 'NotificationAlert')[0]
     expect(bell).toBeDefined()
+    expect(bell.props.sseEndpoint).toBe('/api/alerts')
     expect(legacyNotify).toBeUndefined()
     window.FEATURE_FLAGS = {}
   })

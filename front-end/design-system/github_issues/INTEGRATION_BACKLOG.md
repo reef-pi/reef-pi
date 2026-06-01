@@ -4,40 +4,42 @@
 > All issues target `front-end/src/` (the live app), not the design-system preview cards.
 
 ## F1 · CSS Foundation (prerequisite for all F2+)
-- [ ] #2913 Inject design system token CSS + no-flash theme script into `home.html` + `entry.js`
+- [x] #2913 Inject design system token CSS + no-flash theme script into `home.html` + `entry.js`
 
 ## F2 · Shell (flag: `new_shell`)
-- [ ] #2914 Replace Bootstrap top navbar with `Sidebar` + `BottomNav` in `main_panel.jsx`
+- [x] #2914 Replace Bootstrap top navbar with `Sidebar` + `BottomNav` in `main_panel.jsx`
 
 ## F3 · Sign-in page
-- [ ] #2915 Wrap sign-in form with `SignInConfidenceCard` layout
+- [x] #2915 Wrap sign-in form with `SignInConfidenceCard` layout
 
 ## F4 · Theme system
-- [ ] #2916 Wire `useTheme` hook + `ThemePicker` into `configuration/settings` appearance section
+- [x] #2916 Wire `useTheme` hook + `ThemePicker` into `configuration/settings` appearance section
 
 ## F5 · Equipment — toggle states (flag: `pending_states`)
 - [ ] #2917 Replace `react-toggle-switch` with `ToggleSwitch` + `useEquipmentToggle` in `view_equipment.jsx` + `ctrl_panel.jsx`
+<!-- NOT TICKED: ctrl_panel.jsx still renders the old Switch from react-toggle-switch alongside the new ToggleSwitch; migration is incomplete -->
 
 ## F6 · Alert center (flag: `alert_center`)
-- [ ] #2918 Bridge Redux `alerts` → `useAlertsStore`; replace `NotificationAlert` with `AlertCenter` slide-over + bell
+- [x] #2918 Bridge Redux `alerts` → `useAlertsStore`; replace `NotificationAlert` with `AlertCenter` slide-over + bell
 
 ## F7 · Dashboard v2 wire-up (flag: `dashboard_v2`)
-- [ ] #2919 Wire `DashboardV2` into `dashboard/main.jsx` with live API data (temp, pH, ATO, equipment, health)
+- [x] #2919 Wire `DashboardV2` into `dashboard/main.jsx` with live API data (temp, pH, ATO, equipment, health)
 
 ## F8 · Temperature module — monitoring primitives
-- [ ] #2920 Wire `RangeSelector` + `useTimeSeries` + `Sparkline` + `ThresholdGauge` into `temperature/main.jsx`
+- [x] #2920 Wire `RangeSelector` + `useTimeSeries` + `Sparkline` + `ThresholdGauge` into `temperature/main.jsx`
 
 ## F9 · pH module — monitoring primitives
-- [ ] #2921 Wire `RangeSelector` + `useTimeSeries` + `Sparkline` + `ThresholdGauge` into `ph/main.jsx`
+- [x] #2921 Wire `RangeSelector` + `useTimeSeries` + `Sparkline` + `ThresholdGauge` into `ph/main.jsx`
 
 ## F10 · ATO module — monitoring primitives
-- [ ] #2922 Wire `RangeSelector` + `useTimeSeries` + `Sparkline` into `ato/main.jsx`
+- [x] #2922 Wire `RangeSelector` + `useTimeSeries` + `Sparkline` into `ato/main.jsx`
 
 ## F11 · Doser module — monitoring primitives
-- [ ] #2923 Wire `RangeSelector` + `useTimeSeries` + `Sparkline` into `doser/main.jsx`
+- [x] #2923 Wire `RangeSelector` + `useTimeSeries` + `Sparkline` into `doser/main.jsx`
 
 ## F12 · Empty states across all list modules
 - [ ] #2924 Wire `EmptyState` to: equipment, timers, lighting, doser, ATO, pH, macro, camera, journal
+<!-- NOT TICKED: camera/main.jsx has no EmptyState; full list of modules is not yet confirmed complete -->
 
 ---
 
