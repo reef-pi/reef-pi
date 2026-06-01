@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>reef-pi - Form primitives</title>
+  <link rel="stylesheet" href="../_card.css">
+  <style>
+    body {
+      padding: var(--reefpi-space-lg);
+      background: var(--reefpi-color-surface);
+    }
+
+    .subtitle {
+      max-width: 720px;
+      margin: 0 0 var(--reefpi-space-lg);
+      color: var(--reefpi-color-text-muted);
+      font-size: 0.875rem;
+    }
+
+    .story-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(220px, 1fr));
+      gap: var(--reefpi-space-md);
+      align-items: start;
+    }
+
+    @media (max-width: 860px) {
+      .story-grid { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      width: auto;
+      min-height: 0;
+      flex-direction: column;
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-md);
+      background: var(--reefpi-color-surface-elevated);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--reefpi-space-sm);
+      color: var(--reefpi-color-text);
+      font-weight: 600;
+    }
+
+    .theme-chip {
+      color: var(--reefpi-color-text-muted);
+      font-family: var(--reefpi-font-mono);
+      font-size: 0.7rem;
+      font-weight: 500;
+    }
+
+    .sample {
+      display: grid;
+      gap: var(--reefpi-space-sm);
+      padding: var(--reefpi-space-md);
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-md);
+      background: var(--reefpi-color-surface);
+    }
+
+    .field {
+      display: grid;
+      gap: var(--reefpi-space-xxs);
+      min-width: 0;
+    }
+
+    .field label {
+      color: var(--reefpi-color-text);
+      font-size: 0.875rem;
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    .required {
+      color: var(--reefpi-color-error);
+      margin-left: 0.25rem;
+    }
+
+    .control {
+      width: 100%;
+      min-height: var(--reefpi-tap-target-min);
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-sm);
+      background: var(--reefpi-color-surface-elevated);
+      color: var(--reefpi-color-text);
+      font-family: var(--reefpi-font-app);
+      font-size: 1rem;
+      line-height: 1.4;
+      padding: 0 var(--reefpi-space-sm);
+      box-shadow: none;
+    }
+
+    .control[aria-invalid="true"] {
+      border-color: var(--reefpi-color-error);
+    }
+
+    .control[disabled], .control[readonly] {
+      background: var(--reefpi-color-pending-bg);
+      cursor: not-allowed;
+    }
+
+    .hint, .error {
+      font-size: 0.75rem;
+      line-height: 1.35;
+    }
+
+    .hint { color: var(--reefpi-color-text-muted); }
+    .error { color: var(--reefpi-color-error); font-weight: 500; }
+  </style>
+</head>
+<body>
+  <h1>Field / Input / Select</h1>
+  <p class="subtitle">Tokenized form primitives for replacing Bootstrap form controls route by route.</p>
+
+  <div class="story-grid">
+    <section class="card" data-theme-sample="light">
+      <div class="card-header">Equipment form <span class="theme-chip">light</span></div>
+      <div class="sample">
+        <div class="field">
+          <label for="light-name">Name<span class="required" aria-hidden="true">*</span></label>
+          <input class="control" id="light-name" value="Return pump" aria-describedby="light-name-help" required>
+          <div class="hint" id="light-name-help">Shown on dashboards and control strips.</div>
+        </div>
+        <div class="field">
+          <label for="light-outlet">Outlet</label>
+          <select class="control" id="light-outlet">
+            <option>Outlet 1</option>
+            <option selected>Outlet 2</option>
+            <option>Outlet 3</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" data-theme="dark" data-theme-sample="dark">
+      <div class="card-header">Validation <span class="theme-chip">dark</span></div>
+      <div class="sample">
+        <div class="field">
+          <label for="dark-name">Name<span class="required" aria-hidden="true">*</span></label>
+          <input class="control" id="dark-name" value="" aria-invalid="true" aria-describedby="dark-name-error" required>
+          <div class="error" id="dark-name-error" role="alert">Name is required</div>
+        </div>
+        <div class="field">
+          <label for="dark-date">Service date</label>
+          <input class="control" id="dark-date" type="date" value="2026-06-01" readonly>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" data-theme="actinic" data-theme-sample="actinic">
+      <div class="card-header">Disabled states <span class="theme-chip">actinic</span></div>
+      <div class="sample">
+        <div class="field">
+          <label for="actinic-pin">Connector</label>
+          <select class="control" id="actinic-pin" disabled>
+            <option selected>Unavailable</option>
+          </select>
+          <div class="hint">Locked while hardware capabilities load.</div>
+        </div>
+        <div class="field">
+          <label for="actinic-pass">Password</label>
+          <input class="control" id="actinic-pass" type="password" value="reef-pi" disabled>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="../_card.js"></script>
+</body>
+</html>
