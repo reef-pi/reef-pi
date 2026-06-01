@@ -78,6 +78,7 @@
     "ui-dev": "webpack --watch --mode=development",
     "token-diff": "node front-end/scripts/token-diff.mjs",
     "contrast-check": "node front-end/design-system/scripts/contrast-check.mjs",
+    "bootstrap-class-check": "node front-end/scripts/bootstrap-class-check.mjs",
     "js-lint": "standard \"front-end/src/**/*.{js,jsx}\"",
     "standard": "standard --fix \"front-end/src/**/*.{js,jsx}\"",
     "jest": "cross-env NODE_ENV=testing jest --env=jsdom",

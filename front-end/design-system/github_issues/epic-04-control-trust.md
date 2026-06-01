@@ -11,18 +11,18 @@ parent: null
 Eliminate the "did that actually work?" anxiety. Every switch, doser command, and setpoint write shows pending → confirmed → error states. Failures funnel into a persistent alert center. Inline alerts appear directly on the affected tile.
 
 ## Success criteria
-- [ ] `ToggleSwitch` has four states: off, on, pending (spinner around thumb), error (red ring + retry).
-- [ ] Every control mutation is wrapped in an optimistic-with-ack helper; ack timeout = 3s before flipping to `error`.
-- [ ] Navbar bell shows count badge + slide-over alert center with Acknowledge/Dismiss.
-- [ ] Any tile whose metric is in an alert state shows a red top-border + single-line description.
-- [ ] Retry uses exponential backoff; max 3 attempts before user-visible error.
+- [x] `ToggleSwitch` has four states: off, on, pending (spinner around thumb), error (red ring + retry).
+- [x] Every control mutation is wrapped in an optimistic-with-ack helper; ack timeout = 3s before flipping to `error`.
+- [x] Navbar bell shows count badge + slide-over alert center with Acknowledge/Dismiss.
+- [x] Any tile whose metric is in an alert state shows a red top-border + single-line description.
+- [x] Retry uses exponential backoff; max 3 attempts before user-visible error.
 
 ## Sub-tasks
-- [ ] #15 ToggleSwitch pending + error states
-- [ ] #16 Optimistic-with-ack pattern + equipment API wire-up
-- [ ] #17 Alert center slide-over + navbar bell
-- [ ] #18 Inline tile alerts
-- [ ] #19 Retry + backoff UX
+- [x] #15 ToggleSwitch pending + error states
+- [x] #16 Optimistic-with-ack pattern + equipment API wire-up
+- [x] #17 Alert center slide-over + navbar bell
+- [x] #18 Inline tile alerts
+- [x] #19 Retry + backoff UX
 
 ## Dependencies
 - #1 (state tokens) for pending/error colors.

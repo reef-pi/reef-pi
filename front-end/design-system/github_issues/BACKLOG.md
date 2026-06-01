@@ -24,20 +24,20 @@
 - [x] #14 Wire behind `dashboard_v2` flag — `issue-14-dashboard-flag.md`
 
 ## E4 · Control trust (flags: `pending_states`, `alert_center`)
-- [ ] #15 ToggleSwitch pending + error — `issue-15-toggle-states.md`
-- [ ] #16 `useAckMutation` + equipment wire-up — `issue-16-ack-mutation.md`
-- [ ] #17 Alert center slide-over + bell — `issue-17-alert-center.md`
-- [ ] #18 Inline tile alerts — `issue-18-inline-alerts.md`
-- [ ] #19 Retry + backoff UX — `issue-19-retry-backoff.md`
+- [x] #15 ToggleSwitch pending + error — `issue-15-toggle-states.md`
+- [x] #16 `useAckMutation` + equipment wire-up — `issue-16-ack-mutation.md`
+- [x] #17 Alert center slide-over + bell — `issue-17-alert-center.md`
+- [x] #18 Inline tile alerts — `issue-18-inline-alerts.md`
+- [x] #19 Retry + backoff UX — `issue-19-retry-backoff.md`
 
 ## E5 · Shell + theming (flag: `new_shell`)
-- [ ] #20 Collapsible left sidebar (≥992px) — `issue-20-sidebar.md`
-- [ ] #21 Bottom nav + drawer — `issue-21-bottom-nav.md`
-- [ ] #22 Dark theme pass — `issue-22-dark-pass.md`
-- [ ] #23 Actinic theme — `issue-23-actinic.md`
-- [ ] #24 Sign-in confidence card — `issue-24-signin-confidence.md`
-- [ ] #25 Empty states for every list page — `issue-25-empty-states.md`
-- [ ] #26 Theme picker + persistence — `issue-26-theme-picker.md`
+- [x] #20 Collapsible left sidebar (≥992px) — `issue-20-sidebar.md`
+- [x] #21 Bottom nav + drawer — `issue-21-bottom-nav.md`
+- [x] #22 Dark theme pass — `issue-22-dark-pass.md`
+- [x] #23 Actinic theme — `issue-23-actinic.md`
+- [x] #24 Sign-in confidence card — `issue-24-signin-confidence.md`
+- [x] #25 Empty states for every list page — `issue-25-empty-states.md`
+- [x] #26 Theme picker + persistence — `issue-26-theme-picker.md`
 
 ## E6 · Framework exit (no flag — incremental, one route per PR)
 - [ ] #27 Bootstrap 4.6 exit plan — `issue-27-bootstrap-exit.md`
