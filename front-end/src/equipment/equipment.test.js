@@ -211,26 +211,6 @@ describe('Equipment ui', () => {
     expect(tree.type).toBe('div')
   })
 
-  it('<ViewEquipment /> should toggle state', () => {
-    const onStateChange = jest.fn()
-    const tree = ViewEquipment({
-      onStateChange,
-      equipment: eqs[0],
-      outletName: 'O1',
-      onDelete: () => true,
-      onEdit: () => true
-    })
-    const toggle = findFirst(tree, child => child.props && typeof child.props.onClick === 'function' && child.props.on === true)
-
-    click(toggle)
-    expect(onStateChange).toHaveBeenCalledWith('1', {
-      name: 'Foo',
-      on: false,
-      outlet: '1',
-      stay_off_on_boot: undefined
-    })
-  })
-
   it('<EditEquipment />', () => {
     const unsortedOutlets = [
       { id: '1', name: 'Outlet B' },

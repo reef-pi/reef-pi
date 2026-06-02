@@ -2,9 +2,7 @@ import React, { cloneElement } from 'react'
 import { FaAngleDown, FaAngleUp, FaEdit, FaTrashAlt } from 'react-icons/fa'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import Switch from 'react-toggle-switch'
-
-import i18next from 'i18next'
+import ToggleSwitch from '../../design-system/ui_kits/reef-pi-app/primitives/ToggleSwitch'
 
 class Collapsible extends React.Component {
   constructor (props) {
@@ -45,9 +43,10 @@ class Collapsible extends React.Component {
     let toggleStateButton = ''
     if (onToggleState) {
       toggleStateButton = (
-        <Switch onClick={onToggleState} on={enabled}>
-          <small className='ml-1 align-top'>{enabled ? i18next.t('on') : i18next.t('off')}</small>
-        </Switch>
+        <ToggleSwitch
+          state={enabled ? 'on' : 'off'}
+          onRequestChange={() => onToggleState()}
+        />
       )
     }
 
@@ -61,7 +60,8 @@ class Collapsible extends React.Component {
           <div
             className={classNames('collapsible-title col-12 col-sm-6 col-md-8 col-lg-9 order-sm-first form-inline', {
               pointer: readOnly
-            })} onClick={() => onToggle(name)}
+            })}
+            onClick={() => onToggle(name)}
           >
             {expanded ? FaAngleUp() : FaAngleDown()}
             {this.props.title}

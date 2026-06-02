@@ -54,7 +54,6 @@
     "react-icons": "5.5.0",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.14.2",
-    "react-toggle-switch": "3.0.4",
     "recharts": "^2.15.4",
     "redoc-cli": "^0.13.21",
     "redux": "^5.0.1",

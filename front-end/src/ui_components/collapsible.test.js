@@ -155,4 +155,12 @@ describe('Collapsible', () => {
     expect(derived.expanded.another).toBe(false)
     expect(derived.readOnly.another).toBe(true)
   })
+
+  it('renders a ToggleSwitch when onToggleState is provided', () => {
+    const markup = renderToStaticMarkup(
+      makeCollapsible({ onToggleState: jest.fn(), enabled: true, readOnly: true }).render()
+    )
+    expect(markup).toContain('role="switch"')
+    expect(markup).toContain('aria-checked="true"')
+  })
 })

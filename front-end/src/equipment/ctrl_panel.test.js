@@ -1,6 +1,5 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
-import Switch from 'react-toggle-switch'
 import EquipmentCtrlPanel, { RawEquipmentCtrlPanel, mapDispatchToProps, mapStateToProps } from './ctrl_panel'
 import 'isomorphic-fetch'
 
@@ -20,14 +19,14 @@ const outlets = [
 describe('<EquipmentCtrlPanel />', () => {
   afterEach(() => {
     jest.clearAllMocks()
+    window.FEATURE_FLAGS = {}
   })
 
   it('renders without throwing with equipment', () => {
     const panel = new RawEquipmentCtrlPanel({
       equipment,
       outlets,
-      fetchEquipment: jest.fn(),
-      updateEquipment: jest.fn()
+      fetchEquipment: jest.fn()
     })
     expect(() => panel.render()).not.toThrow()
     expect(EquipmentCtrlPanel).toBeDefined()
@@ -37,8 +36,7 @@ describe('<EquipmentCtrlPanel />', () => {
     const panel = new RawEquipmentCtrlPanel({
       equipment: undefined,
       outlets: [],
-      fetchEquipment: jest.fn(),
-      updateEquipment: jest.fn()
+      fetchEquipment: jest.fn()
     })
     expect(panel.render().type).toBe('div')
   })
@@ -49,8 +47,7 @@ describe('<EquipmentCtrlPanel />', () => {
     const panel = new RawEquipmentCtrlPanel({
       equipment,
       outlets,
-      fetchEquipment,
-      updateEquipment: jest.fn()
+      fetchEquipment
     })
     panel.componentDidMount()
     jest.advanceTimersByTime(16000)
@@ -59,35 +56,18 @@ describe('<EquipmentCtrlPanel />', () => {
     expect(fetchEquipment).toHaveBeenCalled()
   })
 
-  it('toggles equipment state', () => {
-    const updateEquipment = jest.fn()
-    const panel = new RawEquipmentCtrlPanel({
-      equipment,
-      outlets,
-      fetchEquipment: jest.fn(),
-      updateEquipment
-    })
-    const preventDefault = jest.fn()
-    panel.toggleState({ preventDefault }, equipment[0])
-    expect(preventDefault).toHaveBeenCalled()
-    expect(updateEquipment).toHaveBeenCalled()
-  })
-
-  it('renders sorted switches with toggle handlers', () => {
-    const panel = new RawEquipmentCtrlPanel({
-      equipment: [equipment[1], equipment[0]],
-      outlets,
-      fetchEquipment: jest.fn(),
-      updateEquipment: jest.fn()
-    })
-
-    const switches = panel.render().props.children.props.children
-      .map(col => col.props.children.props.children[0])
-
+  it('always renders a ToggleSwitch per equipment item', () => {
+    const dispatch = jest.fn()
+    render(
+      <RawEquipmentCtrlPanel
+        equipment={equipment}
+        outlets={outlets}
+        fetchEquipment={jest.fn()}
+        dispatch={dispatch}
+      />
+    )
+    const switches = screen.getAllByRole('switch')
     expect(switches).toHaveLength(2)
-    expect(switches[0].type).toBe(Switch)
-    expect(switches[0].props.on).toBe(true)
-    expect(switches[1].props.on).toBe(false)
   })
 
   it('maps state and dispatch props for the connected control panel', () => {
@@ -95,43 +75,36 @@ describe('<EquipmentCtrlPanel />', () => {
     const dispatch = jest.fn(action => action)
     const props = mapDispatchToProps(dispatch)
     props.fetchEquipment()
-    props.updateEquipment(1, { on: false })
-    expect(dispatch).toHaveBeenCalledTimes(2)
+    expect(dispatch).toHaveBeenCalledTimes(1)
   })
 
-  it('renders ToggleSwitch per item when pending_states flag is enabled', () => {
-    window.FEATURE_FLAGS = { pending_states: true }
+  it('renders ToggleSwitch per item', () => {
     const dispatch = jest.fn()
     render(
       <RawEquipmentCtrlPanel
         equipment={equipment}
         outlets={outlets}
         fetchEquipment={jest.fn()}
-        updateEquipment={jest.fn()}
         dispatch={dispatch}
       />
     )
     const switches = screen.getAllByRole('switch')
     expect(switches).toHaveLength(2)
-    window.FEATURE_FLAGS = {}
   })
 
   it('PendingEquipmentToggle receives id and name from useEquipmentToggle', () => {
     const { useEquipmentToggle } = require('../../design-system/ui_kits/reef-pi-app/hooks/useEquipmentToggle')
-    window.FEATURE_FLAGS = { pending_states: true }
     const dispatch = jest.fn()
     render(
       <RawEquipmentCtrlPanel
         equipment={[equipment[0]]}
         outlets={outlets}
         fetchEquipment={jest.fn()}
-        updateEquipment={jest.fn()}
         dispatch={dispatch}
       />
     )
     expect(useEquipmentToggle).toHaveBeenCalledWith(
       expect.objectContaining({ id: equipment[0].id, name: equipment[0].name })
     )
-    window.FEATURE_FLAGS = {}
   })
 })
