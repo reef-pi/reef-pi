@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>reef-pi - List primitive</title>
+  <link rel="stylesheet" href="../_card.css">
+  <style>
+    body { padding: var(--reefpi-space-lg); background: var(--reefpi-color-surface); }
+    .subtitle { max-width: 720px; margin: 0 0 var(--reefpi-space-lg); color: var(--reefpi-color-text-muted); font-size: 0.875rem; }
+    .story-grid { display: grid; grid-template-columns: repeat(2, minmax(280px, 1fr)); gap: var(--reefpi-space-md); }
+    @media (max-width: 760px) { .story-grid { grid-template-columns: 1fr; } }
+    .card { width: auto; min-height: 0; flex-direction: column; border: 1px solid var(--reefpi-color-border); border-radius: var(--reefpi-radius-md); background: var(--reefpi-color-surface-elevated); }
+    .card-header { color: var(--reefpi-color-text); font-weight: 600; }
+    .rp-list { display: grid; margin: 0; padding: 0; list-style: none; border: 1px solid var(--reefpi-color-border); border-radius: var(--reefpi-radius-md); background: var(--reefpi-color-surface-elevated); overflow: hidden; min-width: 0; }
+    .rp-item { align-items: center; background: var(--reefpi-color-surface-elevated); border-top: 1px solid var(--reefpi-color-border); color: var(--reefpi-color-text); display: grid; gap: var(--reefpi-space-sm); grid-template-columns: minmax(0, 1fr); line-height: 1.4; min-height: var(--reefpi-tap-target-min); min-width: 0; padding: var(--reefpi-space-md); width: 100%; }
+    .rp-item:first-child { border-top: none; }
+    .rp-item[data-density="compact"] { padding: var(--reefpi-space-xs); }
+    .rp-item[data-layout="leading-trailing"] { grid-template-columns: auto minmax(0, 1fr) auto; }
+    .rp-main { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+    .rp-meta { color: var(--reefpi-color-text-muted); font-size: 0.75rem; }
+    .rp-slot { align-items: center; display: inline-flex; flex-shrink: 0; gap: var(--reefpi-space-xs); }
+    .pill { border: 1px solid var(--reefpi-color-border); border-radius: var(--reefpi-radius-sm); color: var(--reefpi-color-text-muted); font-size: 0.75rem; padding: 0.125rem var(--reefpi-space-xs); }
+    .empty { color: var(--reefpi-color-text-muted); font-size: 0.875rem; line-height: 1.4; padding: var(--reefpi-space-md); text-align: center; }
+  </style>
+</head>
+<body>
+  <h1>List / ListItem</h1>
+  <p class="subtitle">Tokenized list primitive for replacing Bootstrap list surfaces route by route.</p>
+  <div class="story-grid">
+    <section class="card">
+      <div class="card-header">Equipment list</div>
+      <ul class="rp-list" data-density="roomy">
+        <li class="rp-item" data-layout="leading-trailing"><span class="rp-slot">P</span><span class="rp-main">Return pump <span class="rp-meta">Outlet 2</span></span><span class="pill">On</span></li>
+        <li class="rp-item" data-layout="leading-trailing"><span class="rp-slot">H</span><span class="rp-main">Heater</span><span class="pill">Auto</span></li>
+      </ul>
+    </section>
+    <section class="card">
+      <div class="card-header">Action list</div>
+      <ul class="rp-list" data-density="compact">
+        <li class="rp-item" data-density="compact" data-layout="leading-trailing"><span class="rp-main">ATO reservoir sensor with a long label</span><span class="rp-slot"><button class="pill">Edit</button><button class="pill">Delete</button></span></li>
+        <li class="rp-item" data-density="compact" data-layout="leading-trailing"><span class="rp-main">Skimmer delay</span><span class="pill">45s</span></li>
+      </ul>
+    </section>
+    <section class="card">
+      <div class="card-header">Empty state</div>
+      <div class="rp-list empty">No timers configured.</div>
+    </section>
+    <section class="card">
+      <div class="card-header">Dense mobile rows</div>
+      <ul class="rp-list" data-density="compact">
+        <li class="rp-item" data-density="compact"><span class="rp-main">Lighting profile</span></li>
+        <li class="rp-item" data-density="compact"><span class="rp-main">Doser calibration</span></li>
+      </ul>
+    </section>
+  </div>
+  <script src="../_card.js"></script>
+</body>
+</html>
