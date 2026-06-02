@@ -4,6 +4,7 @@ import { RawCapture, cameraImageURL } from './capture'
 import Config from './config'
 import Gallery from './gallery'
 import Motion from './motion'
+import EmptyState from '../../design-system/ui_kits/reef-pi-app/shell/EmptyState'
 import fetchMock from 'fetch-mock'
 import 'isomorphic-fetch'
 import * as Alert from '../utils/alert'
@@ -92,6 +93,18 @@ describe('Camera module', () => {
     })
 
     expect(() => camera.render()).not.toThrow()
+  })
+
+  it('<Main /> renders EmptyState when images is empty', () => {
+    const camera = new RawCamera({
+      config: {},
+      images: [],
+      fetchConfig: jest.fn(),
+      listImages: jest.fn(),
+      updateConfig: jest.fn()
+    })
+    const tree = camera.render()
+    expect(findByType(tree, EmptyState)).toBeDefined()
   })
 
   it('<Main /> toggles config form rendering', () => {

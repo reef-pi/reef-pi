@@ -5,6 +5,7 @@ import Capture, { cameraImageURL } from './capture'
 import { fetchConfig, updateConfig, listImages } from 'redux/actions/camera'
 import { connect } from 'react-redux'
 import Motion from './motion'
+import EmptyState from '../../design-system/ui_kits/reef-pi-app/shell/EmptyState'
 import i18next from 'i18next'
 
 export class RawCamera extends React.Component {
@@ -67,7 +68,14 @@ export class RawCamera extends React.Component {
           {config}
         </div>
         <div className='row'>
-          <Gallery images={images} />
+          {images.length > 0
+            ? <Gallery images={images} />
+            : !this.state.showConfig && (
+              <EmptyState
+                title='No images yet'
+                body='Capture an image to get started.'
+              />
+            )}
         </div>
         <div className='row'>
           <Capture />

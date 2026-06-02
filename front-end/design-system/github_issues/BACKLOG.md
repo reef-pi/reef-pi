@@ -41,7 +41,7 @@
 
 ## E6 · Framework exit (no flag — incremental, one route per PR)
 - [ ] #27 Bootstrap 4.6 exit plan — `issue-27-bootstrap-exit.md`
-- [ ] #28 Material-UI v4 exit plan — `issue-28-mui-exit.md`
+- [x] #28 Material-UI v4 exit plan — `issue-28-mui-exit.md`
 
 ## E7 · UI audit screenshot pipeline
 - [x] #30 UI audit artifact foundation — `issue-30-ui-audit-artifact-foundation.md`
