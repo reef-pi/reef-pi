@@ -2,6 +2,8 @@ import React from 'react'
 import i18n from 'utils/i18n'
 import { isSignedIn, signIn, signOut } from './session_api'
 import SignInConfidenceCard from '../design-system/ui_kits/reef-pi-app/shell/SignInConfidenceCard'
+import Button from '../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { Field, Input } from '../design-system/ui_kits/reef-pi-app/primitives/Form'
 
 export default class SignIn extends React.Component {
   constructor (props) {
@@ -66,62 +68,66 @@ export default class SignIn extends React.Component {
 
   render () {
     return (
-      <div className='container d-flex h-100'>
-        <div className='align-self-center w-100'>
-          <div className='col-md-12 col-lg-6 mx-auto'>
-            <form id='sign-in-form' data-testid='smoke-sign-in-form'>
-              <div className='form'>
-                <h1 className='h3 mb-3 font-weight-normal reef-pi-title'>reef-pi</h1>
-                {this.state.invalidCredentials
-                  ? (
-                    <div className='alert alert-danger' role='alert'>
-                      <strong>Oops!</strong> {i18n.t('signin:invalidcredentials')}
-                    </div>
-                    )
-                  : (
-                    <div />
-                    )}
-                <label htmlFor='reef-pi-user' className='sr-only'>
-                  {i18n.t('signin:username')}
-                </label>
-                <input
+      <div style={{ display: 'flex', minHeight: '100vh', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ width: '100%', maxWidth: '24rem', padding: '0 1rem' }}>
+          <form id='sign-in-form' data-testid='smoke-sign-in-form'>
+            <div style={{ display: 'grid', gap: 'var(--reefpi-space-sm)' }}>
+              <h1
+                className='reef-pi-title'
+                style={{ fontSize: 'var(--reefpi-h3)', fontWeight: 500, marginBottom: 0 }}
+              >
+                reef-pi
+              </h1>
+              {this.state.invalidCredentials && (
+                <div
+                  role='alert'
+                  style={{
+                    background: 'var(--reefpi-color-error-bg)',
+                    border: '1px solid var(--reefpi-color-error-border)',
+                    borderRadius: 'var(--reefpi-radius-sm)',
+                    color: 'var(--reefpi-color-error)',
+                    padding: 'var(--reefpi-space-xs) var(--reefpi-space-sm)'
+                  }}
+                >
+                  <strong>Oops!</strong> {i18n.t('signin:invalidcredentials')}
+                </div>
+              )}
+              <Field label={i18n.t('signin:username')}>
+                <Input
                   onChange={this.handleUserChange}
                   type='text'
                   id='reef-pi-user'
                   data-testid='smoke-sign-in-user'
-                  className='form-control'
                   name='username'
                   placeholder={i18n.t('signin:username')}
-                  required=''
-                  autoFocus=''
+                  required
+                  autoFocus
                 />
-                <label htmlFor='reef-pi-pass' className='sr-only'>
-                  {i18n.t('signin:password')}
-                </label>
-                <input
+              </Field>
+              <Field label={i18n.t('signin:password')}>
+                <Input
                   onChange={this.handlePasswordChange}
                   type='password'
                   id='reef-pi-pass'
                   data-testid='smoke-sign-in-pass'
-                  className='form-control'
                   name='password'
                   placeholder={i18n.t('signin:password')}
-                  required=''
-                  autoFocus=''
+                  required
                 />
-                <button
-                  className='btn btn-lg btn-success btn-block mt-3'
-                  onClick={this.handleLogin}
-                  type='submit'
-                  id='btnSaveCreds'
-                  data-testid='smoke-sign-in-submit'
-                >
-                  {i18n.t('signin:signin')}
-                </button>
-              </div>
-            </form>
-            <SignInConfidenceCard />
-          </div>
+              </Field>
+              <Button
+                variant='primary'
+                type='submit'
+                id='btnSaveCreds'
+                data-testid='smoke-sign-in-submit'
+                onClick={this.handleLogin}
+                style={{ width: '100%' }}
+              >
+                {i18n.t('signin:signin')}
+              </Button>
+            </div>
+          </form>
+          <SignInConfidenceCard />
         </div>
       </div>
     )
