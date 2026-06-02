@@ -2,6 +2,7 @@ import React from 'react'
 import { SketchPicker } from 'react-color'
 import PropTypes from 'prop-types'
 import i18next from 'i18next'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 
 class ColorPicker extends React.Component {
   constructor (props) {
@@ -28,20 +29,20 @@ class ColorPicker extends React.Component {
   render () {
     if (this.state.expand === false) {
       return (
-        <button
+        <Button
+          variant='secondary'
           disabled={this.props.readOnly}
           onClick={() => this.setState({ expand: true })}
-          style={{ backgroundColor: this.state.color, color: this.state.color }}
-          className='btn btn-secondary col-12'
+          style={{ backgroundColor: this.state.color, color: this.state.color, width: '100%' }}
         >
           {i18next.t('color_picker:choose')}
-        </button>
+        </Button>
       )
     }
     return (
       <SketchPicker
         name={this.props.name}
-        className='mt-2'
+        style={{ marginTop: 'var(--reefpi-space-xs)' }}
         color={this.state.color}
         onChangeComplete={this.handleColorChange}
       />

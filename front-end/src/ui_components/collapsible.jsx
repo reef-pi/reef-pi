@@ -1,8 +1,9 @@
 import React, { cloneElement } from 'react'
 import { FaAngleDown, FaAngleUp, FaEdit, FaTrashAlt } from 'react-icons/fa'
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
 import ToggleSwitch from '../../design-system/ui_kits/reef-pi-app/primitives/ToggleSwitch'
+import { ListItem } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 
 class Collapsible extends React.Component {
   constructor (props) {
@@ -26,15 +27,15 @@ class Collapsible extends React.Component {
     const { expanded, onToggle, onToggleState, enabled, name, children, readOnly, disableEdit } = this.props
 
     const editButton = (
-      <button
-        type='button'
+      <Button
+        variant='secondary'
+        style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
         onClick={this.handleEdit}
         disabled={disableEdit}
         id={'edit-' + name}
-        className='btn btn-sm float-right d-block d-sm-inline ml-2'
       >
         {FaEdit()}
-      </button>
+      </Button>
     )
     const handleSubmit = (values) => {
       this.props.onSubmit(this.props.name)
@@ -50,35 +51,31 @@ class Collapsible extends React.Component {
       )
     }
 
-    return (
-      <li className='list-group-item'>
-        <div
-          className={classNames('row mb-1 text-center text-md-left', {
-            pointer: readOnly
-          })}
+    const trailing = (
+      <div style={{ display: 'flex', gap: 'var(--reefpi-space-xs)', alignItems: 'center', flexShrink: 0 }}>
+        <Button
+          variant='secondary'
+          style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
+          onClick={this.handleDelete}
+          id={'delete-' + name}
         >
-          <div
-            className={classNames('collapsible-title col-12 col-sm-6 col-md-8 col-lg-9 order-sm-first form-inline', {
-              pointer: readOnly
-            })}
-            onClick={() => onToggle(name)}
-          >
-            {expanded ? FaAngleUp() : FaAngleDown()}
-            {this.props.title}
-          </div>
-          <div className='col-12 col-sm-6 col-md-4 col-lg-3 order-sm-2 order-md-last'>
-            <button
-              type='button'
-              onClick={this.handleDelete}
-              id={'delete-' + name}
-              className='btn btn-sm float-right d-block d-sm-inline ml-2'
-            >
-              {FaTrashAlt()}
-            </button>
-            {readOnly ? toggleStateButton : null}
-            {readOnly ? editButton : null}
-            {this.props.buttons}
-          </div>
+          {FaTrashAlt()}
+        </Button>
+        {readOnly ? toggleStateButton : null}
+        {readOnly ? editButton : null}
+        {this.props.buttons}
+      </div>
+    )
+
+    return (
+      <ListItem trailing={trailing}>
+        <div
+          className='collapsible-title'
+          style={{ display: 'flex', alignItems: 'center', gap: 'var(--reefpi-space-xs)', cursor: 'pointer' }}
+          onClick={() => onToggle(name)}
+        >
+          {expanded ? FaAngleUp() : FaAngleDown()}
+          {this.props.title}
         </div>
         {expanded
           ? cloneElement(children, {
@@ -86,7 +83,7 @@ class Collapsible extends React.Component {
             onSubmit: handleSubmit
           })
           : null}
-      </li>
+      </ListItem>
     )
   }
 }

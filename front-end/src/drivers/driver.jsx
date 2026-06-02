@@ -4,6 +4,7 @@ import { confirm } from 'utils/confirm'
 import { showUpdateSuccessful } from 'utils/alert'
 import i18n from 'utils/i18n'
 import DriverForm from './driver_form'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 
 export default class Driver extends React.Component {
   constructor (props) {
@@ -90,9 +91,9 @@ export default class Driver extends React.Component {
 
   ui () {
     return (
-      <div className='row'>
-        <div className='col-4'>{this.props.driver.name}</div>
-        <div className='col-4'>
+      <div style={{ display: 'flex', gap: 'var(--reefpi-space-sm)' }}>
+        <div style={{ flex: '1 1 0', minWidth: 0 }}>{this.props.driver.name}</div>
+        <div>
           <label className='small'>
             {this.props.driver.type}
           </label>
@@ -109,40 +110,38 @@ export default class Driver extends React.Component {
     if (this.props.read_only !== true) {
       if (!this.state.edit) {
         btnEdit = (
-          <input
-            type='button'
-            className='edit-outlet btn btn-sm btn-outline-primary float-right d-block d-sm-inline ml-2'
-            value={this.state.lbl}
+          <Button
+            variant='secondary'
+            style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
+            className='edit-outlet'
             onClick={this.handleEdit}
-          />
+          >{this.state.lbl}</Button>
         )
         btnProvision = (
-          <input
-            type='button'
-            className='btn btn-sm btn-outline-info float-right d-block d-sm-inline ml-2'
+          <Button
+            variant='secondary'
+            style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
             title={i18n.t('configuration:drivers:provision_title')}
-            value={i18n.t('configuration:drivers:provision')}
             onClick={() => {
               this.props.provision(this.props.driver.id)
               showUpdateSuccessful()
             }}
-          />
+          >{i18n.t('configuration:drivers:provision')}</Button>
         )
       }
       btnDelete = (
-        <input
-          type='button'
-          className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'
-          value='X'
+        <Button
+          variant='danger'
+          style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
           onClick={() => { this.handleRemove(this.props.driver) }}
-        />
+        >X</Button>
       )
     }
 
     return (
-      <div className='row border-bottom py-1'>
-        <div className='col-8 col-md-9'>{this.state.edit ? this.editUI() : this.ui()}</div>
-        <div className='col-4 col-md-3'>
+      <div style={{ display: 'flex', gap: 'var(--reefpi-space-sm)', alignItems: 'center', borderBottom: '1px solid var(--reefpi-color-border)', padding: 'var(--reefpi-space-xs) 0' }}>
+        <div style={{ flex: '1 1 0', minWidth: 0 }}>{this.state.edit ? this.editUI() : this.ui()}</div>
+        <div style={{ display: 'flex', gap: 'var(--reefpi-space-xs)', flexShrink: 0 }}>
           {btnDelete}
           {btnEdit}
           {btnProvision}

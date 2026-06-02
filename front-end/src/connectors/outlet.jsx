@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import Pin from './pin'
 import i18next from 'i18next'
 import { byCapability } from './driver_filter'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { Field as FormField, Input, Select } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
 
 export default class Outlet extends React.Component {
   constructor (props) {
@@ -71,73 +73,61 @@ export default class Outlet extends React.Component {
 
   editUI () {
     return (
-      <div className='row'>
-        <div className='col-12 col-md-6'>
-          <div className='form-group'>
-            <span className='input-group-addon'>{i18next.t('name')}</span>
-            <input
-              type='text'
-              id={'outlet-' + this.props.outlet_id + '-name'}
-              className='form-control outlet-name'
-              onChange={this.handleNameChange}
-              value={this.state.name}
-            />
-          </div>
-        </div>
-        <div className='col-12 col-md-3'>
-          <Pin
-            update={this.onPinChange}
-            driver={this.state.driver}
-            type='digital-output'
-            current={this.state.pin}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))', gap: 'var(--reefpi-space-md)' }}>
+        <FormField label={i18next.t('name')}>
+          <Input
+            type='text'
+            id={'outlet-' + this.props.outlet_id + '-name'}
+            className='outlet-name'
+            onChange={this.handleNameChange}
+            value={this.state.name}
           />
-        </div>
-        <div className='col-12 col-md-3'>
-          <div className='form-group'>
-            <span className='input-group-addon'>{i18next.t('reverse')}</span>
-            <input
-              type='checkbox'
-              onChange={this.handleReverseChange}
-              className='form-control outlet-reverse'
-              id={'outlet-' + this.props.outlet_id + '-reverse'}
-              checked={this.state.reverse}
-            />
-          </div>
-        </div>
-        <div className='col-12 col-md-3'>
-          <div className='form-group'>
-            <label>{i18next.t('driver')}</label>
-            <select
-              name='driver'
-              className='custom-select form-control'
-              onChange={this.handleDriverChange}
-              value={this.state.driver.id}
-            >
-              {this.props.drivers.filter(byCapability('digital-output')).map(item => {
-                return (
-                  <option key={item.id} value={item.id}>
-                    {item.name}
-                  </option>
-                )
-              })}
-            </select>
-          </div>
-        </div>
+        </FormField>
+        <Pin
+          update={this.onPinChange}
+          driver={this.state.driver}
+          type='digital-output'
+          current={this.state.pin}
+        />
+        <FormField label={i18next.t('reverse')}>
+          <Input
+            type='checkbox'
+            onChange={this.handleReverseChange}
+            className='outlet-reverse'
+            id={'outlet-' + this.props.outlet_id + '-reverse'}
+            checked={this.state.reverse}
+          />
+        </FormField>
+        <FormField label={i18next.t('driver')}>
+          <Select
+            name='driver'
+            onChange={this.handleDriverChange}
+            value={this.state.driver.id}
+          >
+            {this.props.drivers.filter(byCapability('digital-output')).map(item => {
+              return (
+                <option key={item.id} value={item.id}>
+                  {item.name}
+                </option>
+              )
+            })}
+          </Select>
+        </FormField>
       </div>
     )
   }
 
   ui () {
     return (
-      <div className='row'>
-        <div className='col'>{this.state.name}</div>
-        <div className='col'>
+      <div style={{ display: 'flex', gap: 'var(--reefpi-space-sm)' }}>
+        <div style={{ flex: '1 1 0', minWidth: 0 }}>{this.state.name}</div>
+        <div>
           <label className='small'>
             {this.state.driver.name}
             ({this.state.pin})
           </label>
         </div>
-        <div className='col'>
+        <div>
           <label className='small'>{this.props.equipment === '' ? '' : i18next.t('in-use')}</label>
           <label className='small'>{this.state.reverse ? i18next.t('reverse') : ''}</label>
         </div>
@@ -151,21 +141,20 @@ export default class Outlet extends React.Component {
 
   render () {
     return (
-      <div className='row border-bottom py-1'>
-        <div className='col-8 col-md-9'>{this.state.edit ? this.editUI() : this.ui()}</div>
-        <div className='col-4 col-md-3'>
-          <input
-            type='button'
-            className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'
-            value='X'
+      <div style={{ display: 'flex', gap: 'var(--reefpi-space-sm)', alignItems: 'center', borderBottom: '1px solid var(--reefpi-color-border)', padding: 'var(--reefpi-space-xs) 0' }}>
+        <div style={{ flex: '1 1 0', minWidth: 0 }}>{this.state.edit ? this.editUI() : this.ui()}</div>
+        <div style={{ display: 'flex', gap: 'var(--reefpi-space-xs)', flexShrink: 0 }}>
+          <Button
+            variant='danger'
+            style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
             onClick={this.handleRemove}
-          />
-          <input
-            type='button'
-            className='edit-outlet btn btn-sm btn-outline-primary float-right d-block d-sm-inline ml-2'
-            value={this.state.lbl}
+          >X</Button>
+          <Button
+            variant='secondary'
+            style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
+            className='edit-outlet'
             onClick={this.handleEdit}
-          />
+          >{this.state.lbl}</Button>
         </div>
       </div>
     )

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Field as FormField, Input } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
 
 export default class Mqtt extends React.Component {
   constructor (props) {
@@ -37,36 +38,31 @@ export default class Mqtt extends React.Component {
       return
     }
     return (
-      <div className='form-group col-md-4 col-sm-12' key={'telemetry-' + label}>
-        <label htmlFor={'telemetry-mqtt-' + label}>{text}</label>
-        <input
+      <FormField key={'telemetry-' + label} label={text}>
+        <Input
           type={iType}
           {...(iType === 'checkbox'
             ? { checked: this.state.config[label] }
             : { value: this.state.config[label] })}
           onChange={this.onChange(label)}
           id={'telemetry-mqtt-' + label}
-          className='form-control'
         />
-      </div>
+      </FormField>
     )
   }
 
   render () {
     return (
       <>
-        <div className=' col-12' key='telemetry-mqtt-enable'>
-          <div className='form-group'>
-            <label className='form-check-label'>
-              <input
-                className='form-check-input'
-                type='checkbox'
-                defaultChecked={this.state.config.enable}
-                onClick={this.handleUpdateEnable}
-              />
-              <b>MQTT</b>
-            </label>
-          </div>
+        <div style={{ marginBottom: 'var(--reefpi-space-sm)' }} key='telemetry-mqtt-enable'>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 'var(--reefpi-space-xs)' }}>
+            <input
+              type='checkbox'
+              defaultChecked={this.state.config.enable}
+              onClick={this.handleUpdateEnable}
+            />
+            <b>MQTT</b>
+          </label>
         </div>
         {this.toRow('server', 'Server', 'text')}
         {this.toRow('username', 'Username', 'text')}

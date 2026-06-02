@@ -1,5 +1,6 @@
 import React from 'react'
 import i18n from '../utils/i18n'
+import { Field as FormField, Input } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
 
 export default class NotificationSettings extends React.Component {
   constructor (props) {
@@ -43,61 +44,53 @@ export default class NotificationSettings extends React.Component {
 
   inputTo () {
     return (
-      <div className='form-group col-12'>
-        <label htmlFor='input-to'>{i18n.t('telemetry:notification:to')}</label>
-        <input
+      <FormField label={i18n.t('telemetry:notification:to')}>
+        <Input
           type='text'
           id='input-to'
           value={this.state.config.to.join()}
           onChange={this.updateTo()}
-          className='form-control'
         />
-      </div>
+      </FormField>
     )
   }
 
   inputGroup (key) {
     return (
-      <div className='form-group col-12'>
-        <label htmlFor={'input-' + key}>{i18n.t('telemetry:notification:' + key)}</label>
-        <input
+      <FormField label={i18n.t('telemetry:notification:' + key)}>
+        <Input
           type='text'
           id={'input-' + key}
           value={this.state.config[key]}
           onChange={this.update(key)}
-          className='form-control'
         />
-      </div>
+      </FormField>
     )
   }
 
   render () {
     return (
-      <div className='row'>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))', gap: 'var(--reefpi-space-md)' }}>
         {this.inputGroup('server')}
         {this.inputGroup('port')}
         {this.inputGroup('from')}
         {this.inputTo('to')}
-        <div className='form-group col-12'>
-          <label htmlFor='input-username'>{i18n.t('telemetry:notification:username')} ({i18n.t('optional')})</label>
-          <input
+        <FormField label={i18n.t('telemetry:notification:username') + ' (' + i18n.t('optional') + ')'}>
+          <Input
             type='text'
             id='input-username'
             value={this.state.config.username}
             onChange={this.update('username')}
-            className='form-control'
           />
-        </div>
-        <div className='form-group col-12'>
-          <label htmlFor='email-password'>{i18n.t('telemetry:notification:password')} ({i18n.t('optional')})</label>
-          <input
+        </FormField>
+        <FormField label={i18n.t('telemetry:notification:password') + ' (' + i18n.t('optional') + ')'}>
+          <Input
             type='password'
             id='email-password'
             value={this.state.config.password}
             onChange={this.update('password')}
-            className='form-control'
           />
-        </div>
+        </FormField>
       </div>
     )
   }

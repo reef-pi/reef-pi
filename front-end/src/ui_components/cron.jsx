@@ -1,92 +1,33 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
-import classNames from 'classnames'
-import { Field } from 'formik'
+import { Field as FormikField } from 'formik'
+import { Field as FormField } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
 import i18next from 'i18next'
 
 const Cron = ({ values, errors, touched, readOnly }) => {
+  const fields = [
+    { name: 'month', label: i18next.t('cron:month'), testId: 'smoke-cron-month' },
+    { name: 'week', label: i18next.t('cron:week'), testId: 'smoke-cron-week' },
+    { name: 'day', label: i18next.t('cron:day_of_month'), testId: 'smoke-cron-day' },
+    { name: 'hour', label: i18next.t('cron:hour'), testId: 'smoke-cron-hour' },
+    { name: 'minute', label: i18next.t('cron:minute'), testId: 'smoke-cron-minute' },
+    { name: 'second', label: i18next.t('cron:second'), testId: 'smoke-cron-second' }
+  ]
+
   return (
-    <div className='row'>
-
-      <div className='form-group col-12 col-sm-4 col-md-2'>
-        <label htmlFor='month'>{i18next.t('cron:month')}</label>
-        <Field
-          name='month'
-          data-testid='smoke-cron-month'
-          disabled={readOnly}
-          className={classNames('col form-control', {
-            'is-invalid': ShowError('month', touched, errors)
-          })}
-        />
-        <ErrorFor errors={errors} touched={touched} name='month' />
-      </div>
-
-      <div className='form-group col-12 col-sm-4 col-md-2'>
-        <label htmlFor='week'>{i18next.t('cron:week')}</label>
-        <Field
-          name='week'
-          data-testid='smoke-cron-week'
-          disabled={readOnly}
-          className={classNames('col form-control', {
-            'is-invalid': ShowError('week', touched, errors)
-          })}
-        />
-        <ErrorFor errors={errors} touched={touched} name='week' />
-      </div>
-
-      <div className='form-group col-12 col-sm-4 col-md-2'>
-        <label htmlFor='day'>{i18next.t('cron:day_of_month')}</label>
-        <Field
-          name='day'
-          data-testid='smoke-cron-day'
-          disabled={readOnly}
-          className={classNames('col form-control', {
-            'is-invalid': ShowError('day', touched, errors)
-          })}
-        />
-        <ErrorFor errors={errors} touched={touched} name='day' />
-      </div>
-
-      <div className='form-group col-12 col-sm-4 col-md-2'>
-        <label htmlFor='hour'>{i18next.t('cron:hour')}</label>
-        <Field
-          name='hour'
-          data-testid='smoke-cron-hour'
-          disabled={readOnly}
-          className={classNames('col form-control', {
-            'is-invalid': ShowError('hour', touched, errors)
-          })}
-        />
-        <ErrorFor errors={errors} touched={touched} name='hour' />
-      </div>
-
-      <div className='form-group col-12 col-sm-4 col-md-2'>
-        <label htmlFor='minute'>{i18next.t('cron:minute')}</label>
-        <Field
-          name='minute'
-          data-testid='smoke-cron-minute'
-          disabled={readOnly}
-          className={classNames('col form-control', {
-            'is-invalid': ShowError('minute', touched, errors)
-          })}
-        />
-        <ErrorFor errors={errors} touched={touched} name='minute' />
-      </div>
-
-      <div className='form-group col-12 col-sm-4 col-md-2'>
-        <label htmlFor='second'>{i18next.t('cron:second')}</label>
-        <Field
-          name='second'
-          data-testid='smoke-cron-second'
-          disabled={readOnly}
-          className={classNames('col form-control', {
-            'is-invalid': ShowError('second', touched, errors)
-          })}
-        />
-        <ErrorFor errors={errors} touched={touched} name='second' />
-      </div>
-
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(8rem, 1fr))', gap: 'var(--reefpi-space-sm)' }}>
+      {fields.map(field => (
+        <FormField key={field.name} label={field.label}>
+          <FormikField
+            name={field.name}
+            data-testid={field.testId}
+            disabled={readOnly}
+            className={ShowError(field.name, touched, errors) ? 'is-invalid' : ''}
+          />
+          <ErrorFor errors={errors} touched={touched} name={field.name} />
+        </FormField>
+      ))}
     </div>
   )
 }

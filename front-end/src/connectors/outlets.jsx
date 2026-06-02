@@ -7,6 +7,8 @@ import Pin from './pin'
 import i18n from 'utils/i18n'
 import { byCapability } from './driver_filter'
 import { groupByDriverName } from './driver_groups'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { Field as FormField, Input, Select } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
 
 class outlets extends React.Component {
   constructor (props) {
@@ -96,7 +98,7 @@ class outlets extends React.Component {
     const list = []
     driverGroups.groups.forEach(group => {
       list.push(
-        <div key={'driver-' + group.driverName} className='mt-2'>
+        <div key={'driver-' + group.driverName} style={{ marginTop: 'var(--reefpi-space-xs)' }}>
           <small className='text-muted font-weight-bold'>{group.driverName}</small>
         </div>
       )
@@ -129,56 +131,46 @@ class outlets extends React.Component {
     }
     return (
       <div className='container'>
-        <div className='row mb-1'>
-          <div className='col-12'>
+        <div style={{ marginBottom: 'var(--reefpi-space-xxs)' }}>
+          <div>
             <label className='h5'>{i18n.t('outlets')}</label>
             {this.list()}
           </div>
         </div>
-        <div className='row'>
-          <div className='col-12'>
-            <input
+        <div>
+          <div>
+            <Button
               id='add_outlet'
               data-testid='smoke-outlet-add-toggle'
-              type='button'
-              value={this.state.add ? '-' : '+'}
+              variant='secondary'
+              style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
               onClick={this.handleAdd}
-              className='btn btn-sm btn-outline-success'
-            />
+            >{this.state.add ? '-' : '+'}</Button>
           </div>
         </div>
-
-        <div className='row' style={dStyle}>
-          <div className='col-12 col-md-3'>
-            <div className='form-group'>
-              <span className='input-group-addon'>{i18n.t('name')}</span>
-              <input
+        <div style={dStyle}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))', gap: 'var(--reefpi-space-md)' }}>
+            <FormField label={i18n.t('name')}>
+              <Input
                 type='text'
                 id='outletName'
                 data-testid='smoke-outlet-name'
                 onChange={this.handleNameChange}
                 value={this.state.outName}
-                className='form-control'
               />
-            </div>
-          </div>
-          <div className='col-12 col-md-2'>
+            </FormField>
             <Pin
               driver={this.state.driver}
               update={this.onPinChange}
               type='digital-output'
               current={this.state.outPin}
             />
-          </div>
-          <div className='col-12 col-md-2'>
-            <div className='driver-type form-group'>
-              <span className='input-group-addon'>{i18n.t('driver')}</span>
-              <select
+            <FormField label={i18n.t('driver')}>
+              <Select
                 name='driver'
                 data-testid='smoke-outlet-driver'
-                className='form-control custom-select'
                 onChange={this.handleDriverChange}
-                value={this.state.driver.id}
+                value={this.state.driver ? this.state.driver.id : ''}
               >
                 {this.props.drivers.filter(byCapability('digital-output')).map(item => {
                   return (
@@ -187,30 +179,24 @@ class outlets extends React.Component {
                     </option>
                   )
                 })}
-              </select>
-            </div>
-          </div>
-          <div className='col-12 col-md-2'>
-            <div className='form-group'>
-              <span className='input-group-addon'> {i18n.t('reverse')} </span>
-              <input
+              </Select>
+            </FormField>
+            <FormField label={i18n.t('reverse')}>
+              <Input
                 type='checkbox'
                 id='outletReverse'
                 onChange={this.handleReverseChange}
-                className='form-control'
                 checked={this.state.outReverse}
               />
+            </FormField>
+            <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end' }}>
+              <Button
+                id='createOutlet'
+                data-testid='smoke-outlet-submit'
+                variant='primary'
+                onClick={this.handleSave}
+              >{i18n.t('add')}</Button>
             </div>
-          </div>
-          <div className='col-12 col-md-3 text-right'>
-            <input
-              type='button'
-              id='createOutlet'
-              data-testid='smoke-outlet-submit'
-              value={i18n.t('add')}
-              onClick={this.handleSave}
-              className='btn btn-outline-primary col-12 col-md-4'
-            />
           </div>
         </div>
       </div>

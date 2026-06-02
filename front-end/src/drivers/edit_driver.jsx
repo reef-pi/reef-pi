@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
 import { showError, showUpdateSuccessful } from 'utils/alert'
-import classNames from 'classnames'
-import { Field } from 'formik'
+import { Field as FormikField } from 'formik'
+import { Field as FormField, Input, Select } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
 import i18n from 'utils/i18n'
 
 const EditDriver = ({
@@ -50,28 +50,27 @@ const EditDriver = ({
 
     selectedType.slice().sort((a, b) => parseInt(a.order) - parseInt(b.order))
       .forEach((item) => {
+        const fieldName = 'config.' + item.name.toLowerCase()
+        const hasError = ShowError(fieldName, touched, errors)
         const param = (
-          <div key={item.name} className='col col-sm-6 col-md-3'>
-            <div className='form-group'>
-              <label htmlFor={'config.' + item.name.toLowerCase()}>{item.name}</label>
-              <Field
-                name={'config.' + item.name.toLowerCase()}
-                disabled={readOnly}
-                type={item.type === 4 ? 'checkbox' : 'text'}
-                placeholder={item.default.toString()}
-                className={classNames('form-control', {
-                  'is-invalid': ShowError('config.' + item.name.toLowerCase(), touched, errors)
-                })}
-              />
-              <ErrorFor errors={errors} touched={touched} name={'config.' + item.name.toLowerCase()} />
-            </div>
+          <div key={item.name} style={{ display: 'grid', gap: 'var(--reefpi-space-xxs)', minWidth: 0 }}>
+            <label htmlFor={fieldName} style={{ fontSize: '0.875rem', fontWeight: 600 }}>{item.name}</label>
+            <FormikField
+              name={fieldName}
+              disabled={readOnly}
+              type={item.type === 4 ? 'checkbox' : 'text'}
+              placeholder={item.default.toString()}
+              className={hasError ? 'is-invalid' : ''}
+            />
+            <ErrorFor errors={errors} touched={touched} name={fieldName} />
           </div>
         )
         params.push(param)
       })
 
+    if (readOnly) return null
     return (
-      <div className={classNames('row', { 'd-none': readOnly })}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))', gap: 'var(--reefpi-space-md)', marginBottom: 'var(--reefpi-space-sm)' }}>
         {params}
       </div>
     )
@@ -89,57 +88,46 @@ const EditDriver = ({
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className={classNames('row', { 'd-none': readOnly })}>
-        <div className='col col-sm-6 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor='name'>{i18n.t('name')}</label>
-            <Field
+      {!readOnly && (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))', gap: 'var(--reefpi-space-md)', marginBottom: 'var(--reefpi-space-sm)' }}>
+          <FormField label={i18n.t('name')}>
+            <FormikField
               name='name'
               data-testid='smoke-driver-name'
               disabled={readOnly}
-              className={classNames('form-control', {
-                'is-invalid': ShowError('name', touched, errors)
-              })}
+              className={ShowError('name', touched, errors) ? 'is-invalid' : ''}
             />
             <ErrorFor errors={errors} touched={touched} name='name' />
-          </div>
-        </div>
-      </div>
-      <div className='row'>
-        <div className='col-12 col-sm-6 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor='inlet'>{i18n.t('configuration:drivers:type')}</label>
-            <Field
+          </FormField>
+          <FormField label={i18n.t('configuration:drivers:type')}>
+            <Select
               name='type'
-              component='select'
               data-testid='smoke-driver-type'
               onChange={driverTypeChangeHandler}
               disabled={mode === 'edit' || readOnly}
-              className={classNames('custom-select', {
-                'is-invalid': ShowError('type', touched, errors)
-              })}
+              value={values.type}
             >
-              <option value='' className='d-none'>
+              <option value=''>
                 -- {i18n.t('select')} --
               </option>
               {typeOptions()}
-            </Field>
+            </Select>
             <ErrorFor errors={errors} touched={touched} name='type' />
-          </div>
+          </FormField>
         </div>
-      </div>
+      )}
       {driverConfig()}
-      <div className={classNames('row', { 'd-none': readOnly })}>
-        <div className='col-12'>
+      {!readOnly && (
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 'var(--reefpi-space-sm)' }}>
           <input
             type='submit'
             data-testid='smoke-driver-submit'
             value={i18n.t('save')}
             disabled={readOnly}
-            className='btn btn-sm btn-primary float-right mt-1'
+            style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem', cursor: 'pointer' }}
           />
         </div>
-      </div>
+      )}
     </form>
   )
 }

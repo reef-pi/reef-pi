@@ -2,6 +2,7 @@ import React from 'react'
 import { fetchInlets } from '../redux/actions/inlets'
 import { connect } from 'react-redux'
 import i18next from 'i18next'
+import { Menu } from '../../design-system/ui_kits/reef-pi-app/primitives/Interaction'
 
 class inletSelector extends React.Component {
   constructor (props) {
@@ -47,41 +48,20 @@ class inletSelector extends React.Component {
 
   inlets () {
     const readOnly = this.props.readOnly !== undefined ? this.props.readOnly : false
-    let title = ''
-    let id = this.props.active
+    let title = i18next.t('select')
     if (this.state.inlet !== undefined) {
       title = this.state.inlet.name
-      id = this.state.inlet.id
     }
-    const items = []
-    this.props.inlets.forEach((v, k) => {
-      let cName = 'dropdown-item'
-      if (v.id === id) {
-        cName += ' active'
-      }
-      items.push(
-        <a className={cName} href='#' onClick={this.set(k)} key={k}>
-          <span id={this.props.name + '-' + v.id}>{v.name}</span>
-        </a>
-      )
-    })
+    const items = this.props.inlets.map((v, k) => ({
+      label: v.name,
+      onSelect: this.set(k)
+    }))
     return (
-      <div className='dropdown'>
-        <button
-          className='btn btn-secondary dropdown-toggle'
-          type='button'
-          id={this.props.name + '-inlet'}
-          data-toggle='dropdown'
-          aria-haspopup='true'
-          aria-expanded='false'
-          disabled={readOnly}
-        >
-          {title}
-        </button>
-        <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
-          {items}
-        </div>
-      </div>
+      <Menu
+        buttonLabel={title}
+        items={items}
+        disabled={readOnly}
+      />
     )
   }
 
@@ -101,9 +81,9 @@ class inletSelector extends React.Component {
   render () {
     return (
       <div className='container'>
-        <div className='row'>
-          <div className='col-lg-1'>{i18next.t('inlet')}</div>
-          <div className='col-lg-1'>{this.inlets()}</div>
+        <div style={{ display: 'flex', gap: 'var(--reefpi-space-sm)', alignItems: 'center' }}>
+          <div>{i18next.t('inlet')}</div>
+          <div>{this.inlets()}</div>
         </div>
       </div>
     )
