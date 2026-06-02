@@ -177,7 +177,7 @@ class main extends React.Component {
               name={'light-' + light.id}
               item={light}
               buttons={modeButton}
-              title={<b className='ml-2 aligtn-middle'>{light.name}</b>}
+              title={<b style={{ marginLeft: 'var(--reefpi-space-xs)', verticalAlign: 'middle' }}>{light.name}</b>}
               onDelete={this.handleDeleteLight}
               disableEdit={mode === 'manual'}
             >
