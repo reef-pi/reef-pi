@@ -4,6 +4,15 @@ import { connect } from 'react-redux'
 import { fetchDashboard, updateDashboard } from 'redux/actions/dashboard'
 import { showError, showUpdateSuccessful } from 'utils/alert'
 import i18next from 'i18next'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { Field as FormField, Input } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
+
+const formGridStyle = {
+  display: 'grid',
+  gap: 'var(--reefpi-space-md)',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))',
+  width: '100%'
+}
 
 export class RawDashboardConfig extends React.Component {
   constructor (props) {
@@ -68,10 +77,8 @@ export class RawDashboardConfig extends React.Component {
       }
     }.bind(this)
     return (
-      <div className='col-md-6 col-sm-12 form-group'>
-        <label className='input-group-addon'>{label}</label>
-        <input
-          className='form-control'
+      <FormField label={label} key={key}>
+        <Input
           type='number'
           onChange={fn}
           value={this.state.config[key]}
@@ -79,7 +86,7 @@ export class RawDashboardConfig extends React.Component {
           min={Min}
           max={Max}
         />
-      </div>
+      </FormField>
     )
   }
 
@@ -103,21 +110,18 @@ export class RawDashboardConfig extends React.Component {
   }
 
   render () {
-    const updateButtonClass = 'btn btn-outline-success col-12'
     if (this.state.config.grid_details === undefined) {
       return <div />
     }
     return (
-      <div className='col-12'>
-        <div className='row'>
+      <div style={{ width: '100%' }}>
+        <div style={formGridStyle}>
           {this.toRow('row', i18next.t('rows'), 1, 12)}
           {this.toRow('column', i18next.t('columns'), 1, 12)}
-        </div>
-        <div className='row'>
           {this.toRow('width', i18next.t('width'), 100, 1920)}
           {this.toRow('height', i18next.t('height'), 100, 1080)}
         </div>
-        <div className='row'>
+        <div style={{ marginTop: 'var(--reefpi-space-md)' }}>
           <Grid
             rows={this.state.config.row}
             cells={this.state.config.grid_details}
@@ -133,10 +137,16 @@ export class RawDashboardConfig extends React.Component {
             blank={this.props.blank}
           />
         </div>
-        <div className='row'>
-          <div className='col-xs-12'>
-            <input type='button' className={updateButtonClass} onClick={this.handleSave} id='save_dashboard' data-testid='smoke-dashboard-save' value={i18next.t('update')} />
-          </div>
+        <div style={{ marginTop: 'var(--reefpi-space-md)' }}>
+          <Button
+            variant='primary'
+            onClick={this.handleSave}
+            id='save_dashboard'
+            data-testid='smoke-dashboard-save'
+            style={{ width: '100%' }}
+          >
+            {i18next.t('update')}
+          </Button>
         </div>
       </div>
     )

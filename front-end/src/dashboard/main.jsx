@@ -20,6 +20,7 @@ import ErrorBoundary from '../ui_components/error_boundary'
 import i18n from 'utils/i18n'
 import DashboardV2 from '../../design-system/ui_kits/reef-pi-app/dashboard/DashboardV2'
 import { buildEquipmentPayload } from 'equipment/utils'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 
 export class RawDashboardMain extends React.Component {
   constructor (props) {
@@ -55,7 +56,8 @@ export class RawDashboardMain extends React.Component {
       return
     }
 
-    const colSize = numColsToColSize(config.column)
+    // numColsToColSize kept for compatibility but layout now uses flex
+    numColsToColSize(config.column)
 
     let i, j
     const rows = []
@@ -69,10 +71,11 @@ export class RawDashboardMain extends React.Component {
         if (ch === undefined) {
           continue
         }
+        const chartStyle = { flex: '1 1 0', minWidth: 0 }
         switch (ch.type) {
           case 'lights':
             columns.push(
-              <div className={'col-md-' + colSize} key={'chart-' + i + '-' + j}>
+              <div style={chartStyle} key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
                   <GenericLightChart width={config.width} height={config.height} light_id={ch.id} />
                 </ErrorBoundary>
@@ -81,7 +84,7 @@ export class RawDashboardMain extends React.Component {
             break
           case 'equipment_barchart':
             columns.push(
-              <div className={'col-md-' + colSize} key={'chart-' + i + '-' + j}>
+              <div style={chartStyle} key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
                   <EquipmentChart width={config.width} height={config.height} />
                 </ErrorBoundary>
@@ -90,7 +93,7 @@ export class RawDashboardMain extends React.Component {
             break
           case 'equipment_ctrlpanel':
             columns.push(
-              <div className={'col-md-' + colSize} key={'chart-' + i + '-' + j}>
+              <div style={chartStyle} key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
                   <EquipmentCtrlPanel width={config.width} height={config.height} />
                 </ErrorBoundary>
@@ -99,7 +102,7 @@ export class RawDashboardMain extends React.Component {
             break
           case 'blank_panel':
             columns.push(
-              <div className={'col-md-' + colSize} key={'chart-' + i + '-' + j}>
+              <div style={chartStyle} key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
                   <BlankPanel width={config.width} height={config.height} />
                 </ErrorBoundary>
@@ -108,7 +111,7 @@ export class RawDashboardMain extends React.Component {
             break
           case 'ato':
             columns.push(
-              <div className={'col-md-' + colSize} key={'chart-' + i + '-' + j}>
+              <div style={chartStyle} key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
                   <ATOChart width={config.width} height={config.height} ato_id={ch.id} />
                 </ErrorBoundary>
@@ -117,7 +120,7 @@ export class RawDashboardMain extends React.Component {
             break
           case 'journal':
             columns.push(
-              <div className={'col-md-' + colSize} key={'chart-' + i + '-' + j}>
+              <div style={chartStyle} key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
                   <JournalChart width={config.width} height={config.height} journal_id={ch.id} />
                 </ErrorBoundary>
@@ -126,7 +129,7 @@ export class RawDashboardMain extends React.Component {
             break
           case 'ph_current':
             columns.push(
-              <div className={'col-md-' + colSize} key={'chart-' + i + '-' + j}>
+              <div style={chartStyle} key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
                   <PhChart width={config.width} height={config.height} probe_id={ch.id} type='current' />
                 </ErrorBoundary>
@@ -135,7 +138,7 @@ export class RawDashboardMain extends React.Component {
             break
           case 'ph_historical':
             columns.push(
-              <div className={'col-md-' + colSize} key={'chart-' + i + '-' + j}>
+              <div style={chartStyle} key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
                   <PhChart width={config.width} height={config.height} probe_id={ch.id} type='historical' />
                 </ErrorBoundary>
@@ -144,7 +147,7 @@ export class RawDashboardMain extends React.Component {
             break
           case 'ph_usage':
             columns.push(
-              <div className={'col-md-' + colSize} key={'chart-' + i + '-' + j}>
+              <div style={chartStyle} key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
                   <PhUsageChart width={config.width} height={config.height} probe_id={ch.id} type='historical' />
                 </ErrorBoundary>
@@ -153,7 +156,7 @@ export class RawDashboardMain extends React.Component {
             break
           case 'doser':
             columns.push(
-              <div className={'col-md-' + colSize} key={'chart-' + i + '-' + j}>
+              <div style={chartStyle} key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
                   <DoserChart width={config.width} height={config.height} doser_id={ch.id} />
                 </ErrorBoundary>
@@ -162,7 +165,7 @@ export class RawDashboardMain extends React.Component {
             break
           case 'health':
             columns.push(
-              <div className={'col-md-' + colSize} key={'chart-' + i + '-' + j}>
+              <div style={chartStyle} key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
                   <HealthChart width={config.width} height={config.height} trend={ch.id} />
                 </ErrorBoundary>
@@ -171,7 +174,7 @@ export class RawDashboardMain extends React.Component {
             break
           case 'temp_current':
             columns.push(
-              <div className={'col-md-' + colSize} key={'chart-' + i + '-' + j}>
+              <div style={chartStyle} key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
                   <TempReadingsChart width={config.width} height={config.height} sensor_id={ch.id} />
                 </ErrorBoundary>
@@ -180,7 +183,7 @@ export class RawDashboardMain extends React.Component {
             break
           case 'temp_historical':
             columns.push(
-              <div className={'col-md-' + colSize} key={'chart-' + i + '-' + j}>
+              <div style={chartStyle} key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
                   <TempControlChart width={config.width} height={config.height} sensor_id={ch.id} />
                 </ErrorBoundary>
@@ -192,7 +195,7 @@ export class RawDashboardMain extends React.Component {
         }
       }
       rows.push(
-        <div className='row' key={'row-' + i}>
+        <div style={{ display: 'flex', gap: 'var(--reefpi-space-sm)', flexWrap: 'wrap' }} key={'row-' + i}>
           {columns}
         </div>
       )
@@ -210,17 +213,19 @@ export class RawDashboardMain extends React.Component {
 
     const legacyDashboard = (
       <div key='content'>
-        <div className='row'>
-          <div className='col'>
-            {content}
-          </div>
+        <div style={{ marginBottom: 'var(--reefpi-space-sm)' }}>
+          {content}
         </div>
-        <div className='row' key='configure'>
-          <div className='col-12'>
-            <button className='btn btn-outline-dark btn-sm' onClick={this.handleToggle} id='configure-dashboard' data-testid='smoke-dashboard-configure'>
-              {lbl}
-            </button>
-          </div>
+        <div key='configure'>
+          <Button
+            variant='secondary'
+            onClick={this.handleToggle}
+            id='configure-dashboard'
+            data-testid='smoke-dashboard-configure'
+            style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
+          >
+            {lbl}
+          </Button>
         </div>
       </div>
     )
