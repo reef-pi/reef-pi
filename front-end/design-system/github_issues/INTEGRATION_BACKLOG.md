@@ -16,8 +16,7 @@
 - [x] #2916 Wire `useTheme` hook + `ThemePicker` into `configuration/settings` appearance section
 
 ## F5 · Equipment — toggle states (flag: `pending_states`)
-- [ ] #2917 Replace `react-toggle-switch` with `ToggleSwitch` + `useEquipmentToggle` in `view_equipment.jsx` + `ctrl_panel.jsx`
-<!-- NOT TICKED: ctrl_panel.jsx still renders the old Switch from react-toggle-switch alongside the new ToggleSwitch; migration is incomplete -->
+- [x] #2917 Replace `react-toggle-switch` with `ToggleSwitch` + `useEquipmentToggle` in `view_equipment.jsx` + `ctrl_panel.jsx`
 
 ## F6 · Alert center (flag: `alert_center`)
 - [x] #2918 Bridge Redux `alerts` → `useAlertsStore`; replace `NotificationAlert` with `AlertCenter` slide-over + bell
