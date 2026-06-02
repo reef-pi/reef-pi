@@ -103,7 +103,7 @@ export class RawDoser extends React.Component {
               onToggleState={handleTState}
               enabled={doser.regiment.enable}
               buttons={calibrationButton}
-              title={<b className='ml-2 align-middle'>{doser.name} </b>}
+              title={<b style={{ marginLeft: 'var(--reefpi-space-xs)', verticalAlign: 'middle' }}>{doser.name}</b>}
               onDelete={this.handleDeleteDoser}
             >
               {enhancedView}

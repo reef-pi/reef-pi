@@ -41,7 +41,7 @@ export class RawJournalMain extends React.Component {
             key={'panel-journal-' + j.id}
             name={'panel-journal-' + j.id}
             item={j}
-            title={<b className='ml-2 align-middle'>{j.name} </b>}
+            title={<b style={{ marginLeft: 'var(--reefpi-space-xs)', verticalAlign: 'middle' }}>{j.name}</b>}
             onDelete={this.handleDelete}
           >
             <Journal config={j} />

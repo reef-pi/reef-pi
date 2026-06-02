@@ -93,7 +93,7 @@ export class RawMacroMain extends React.Component {
               name={'panel-macro-' + macro.id}
               item={macro}
               buttons={buttons}
-              title={<b className='ml-2 align-middle'>{macro.name} </b>}
+              title={<b style={{ marginLeft: 'var(--reefpi-space-xs)', verticalAlign: 'middle' }}>{macro.name}</b>}
               onDelete={this.handleDeleteMacro}
             >
               <MacroForm

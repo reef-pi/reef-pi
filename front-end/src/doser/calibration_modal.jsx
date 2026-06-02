@@ -103,7 +103,15 @@ export default class CalibrationModal extends React.Component {
             </div>
           )}
           {isDCPump && vps > 0 && (
-            <div className='alert alert-info mt-2 py-1'>
+            <div style={{
+              background: 'var(--reefpi-color-pending-bg)',
+              border: '1px solid var(--reefpi-color-border)',
+              borderRadius: 'var(--reefpi-radius-sm)',
+              color: 'var(--reefpi-color-text)',
+              fontSize: '0.875rem',
+              marginTop: 'var(--reefpi-space-xs)',
+              padding: 'var(--reefpi-space-xxs) var(--reefpi-space-xs)'
+            }}>
               {i18n.t('doser:calibration:current_rate')}: {vps.toFixed(3)} mL/s
             </div>
           )}
