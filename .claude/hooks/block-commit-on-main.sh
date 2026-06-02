@@ -23,8 +23,8 @@ fi
 BRANCH=$(git -C "$(git rev-parse --show-toplevel 2>/dev/null || echo .)" rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
 
 if [ "$BRANCH" = "main" ] || [ "$BRANCH" = "master" ]; then
-    echo "BLOCKED: direct commit to '$BRANCH' is not allowed."
-    echo "Create a feature branch first:  git checkout -b <your-feature-name>"
+    echo "BLOCKED: direct commit to '$BRANCH' is not allowed." >&2
+    echo "Create a feature branch first:  git checkout -b <your-feature-name>" >&2
     exit 2
 fi
 
