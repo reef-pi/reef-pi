@@ -5,36 +5,38 @@ import { Field } from 'formik'
 import classNames from 'classnames'
 import i18next from 'i18next'
 
+const inputStyle = { padding: 'var(--reefpi-space-xs)', border: '1px solid var(--reefpi-color-border)', borderRadius: 'var(--reefpi-radius-sm)', fontFamily: 'var(--reefpi-font-app)', width: '100%' }
+
 const CyclicProfile = (props) => {
   return (
-    <div className='form-inline'>
-      <label className='mr-2'>{i18next.t('lighting:cyclic_period')}</label>
-      <div className='input-group mr-3'>
-        <Field
-          name={NameFor(props.name, 'period')}
-          type='number'
-          min='1'
-          readOnly={props.readOnly}
-          className={classNames('form-control col-12 col-sm-3 col-md-2 col-lg-2',
-            { 'is-invalid': ShowError(NameFor(props.name, 'period'), props.touched, props.errors) })}
-        />
-        <div className='input-group-append'>
-          <span className='input-group-text'>{i18next.t('second_s')}</span>
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--reefpi-space-sm)', alignItems: 'flex-end' }}>
+      <div>
+        <label style={{ marginRight: 'var(--reefpi-space-xs)' }}>{i18next.t('lighting:cyclic_period')}</label>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <Field
+            name={NameFor(props.name, 'period')}
+            type='number'
+            min='1'
+            readOnly={props.readOnly}
+            className={classNames({ 'is-invalid': ShowError(NameFor(props.name, 'period'), props.touched, props.errors) })}
+            style={{ ...inputStyle, width: '6rem' }}
+          />
+          <span style={{ marginLeft: 'var(--reefpi-space-xs)' }}>{i18next.t('second_s')}</span>
         </div>
       </div>
-      <label className='mr-2'>{i18next.t('lighting:cyclic_phase_shift')}</label>
-      <div className='input-group mr-3'>
-        <Field
-          name={NameFor(props.name, 'phase_shift')}
-          type='number'
-          min='0'
-          max='99'
-          readOnly={props.readOnly}
-          className={classNames('form-control col-12 col-sm-3 col-md-2 col-lg-2',
-            { 'is-invalid': ShowError(NameFor(props.name, 'phase_shift'), props.touched, props.errors) })}
-        />
-        <div className='input-group-append'>
-          <span className='input-group-text'>%</span>
+      <div>
+        <label style={{ marginRight: 'var(--reefpi-space-xs)' }}>{i18next.t('lighting:cyclic_phase_shift')}</label>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <Field
+            name={NameFor(props.name, 'phase_shift')}
+            type='number'
+            min='0'
+            max='99'
+            readOnly={props.readOnly}
+            className={classNames({ 'is-invalid': ShowError(NameFor(props.name, 'phase_shift'), props.touched, props.errors) })}
+            style={{ ...inputStyle, width: '6rem' }}
+          />
+          <span style={{ marginLeft: 'var(--reefpi-space-xs)' }}>%</span>
         </div>
       </div>
       <ErrorFor {...props} name={NameFor(props.name, 'period')} />

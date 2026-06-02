@@ -13,6 +13,8 @@ import { IoMdSwitch } from 'react-icons/io'
 import ManualLight from './manual_light'
 import { SortByName } from 'utils/sort_by_name'
 import i18n from 'utils/i18n'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { Menu } from '../../design-system/ui_kits/reef-pi-app/primitives/Interaction'
 
 export const DEFAULT_CHANNEL_COLOR = '#000000'
 
@@ -48,9 +50,9 @@ class main extends React.Component {
     const jacks = []
     this.props.jacks.forEach((jack, i) => {
       jacks.push(
-        <a className='dropdown-item' key={i} onClick={this.setJack(i)}>
+        <button role='menuitem' key={i} onClick={this.setJack(i)} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'block', padding: 'var(--reefpi-space-xs) var(--reefpi-space-sm)', width: '100%', textAlign: 'left' }}>
           <span id={'select-jack-' + jack.name}>{jack.name}</span>
-        </a>
+        </button>
       )
     })
     return jacks
@@ -159,9 +161,14 @@ class main extends React.Component {
           }
 
           const modeButton = (
-            <button type='button' onClick={this.handleChangeMode(light)} className='btn btn-sm btn-outline-info float-right'>
+            <Button
+              type='button'
+              onClick={this.handleChangeMode(light)}
+              variant='secondary'
+              style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem', marginLeft: 'auto' }}
+            >
               <><IoMdSwitch /> {this.getModeLabel(mode)}</>
-            </button>
+            </Button>
           )
 
           return (
@@ -261,43 +268,26 @@ class main extends React.Component {
       jack = j.name
     }
     return (
-      <div className='row'>
-        <div className='col-12 col-sm-3 col-md-2 col-lg-1'>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))', gap: 'var(--reefpi-space-md)', alignItems: 'end' }}>
+        <div>
           <label htmlFor='lightName'>{i18n.t('name')}</label>
+          <input type='text' id='lightName' data-testid='smoke-light-name' style={{ display: 'block', width: '100%', padding: 'var(--reefpi-space-xs)', border: '1px solid var(--reefpi-color-border)', borderRadius: 'var(--reefpi-radius-sm)', fontFamily: 'var(--reefpi-font-app)' }} required />
         </div>
-        <div className='col-12 col-sm-9 col-md-3 col-lg-3 mb-1'>
-          <input type='text' id='lightName' data-testid='smoke-light-name' className='form-control' required />
-        </div>
-        <div className='col-12 col-sm-3 col-md-1 col-lg-1'>
+        <div>
           <label htmlFor='jack'>{i18n.t('jack')}</label>
+          <Menu buttonLabel={jack || i18n.t('select')}>
+            {this.jacksList()}
+          </Menu>
         </div>
-        <div className='col-12 col-sm-9 col-md-4 col-lg-3 mb-1'>
-          <div className='dropdown w-100'>
-            <button
-              className='btn btn-secondary dropdown-toggle w-100'
-              type='button'
-              id='jack'
-              data-testid='smoke-light-jack'
-              data-toggle='dropdown'
-              aria-haspopup='true'
-              aria-expanded='false'
-            >
-              {jack || i18n.t('select')}
-            </button>
-            <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
-              {this.jacksList()}
-            </div>
-          </div>
-        </div>
-        <div className='col-12 col-sm-6 col-md-2 col-lg-1'>
-          <input
-            type='button'
+        <div>
+          <Button
             id='createLight'
             data-testid='smoke-light-submit'
-            value={i18n.t('add')}
             onClick={this.handleAddLight}
-            className='btn btn-outline-primary'
-          />
+            variant='primary'
+          >
+            {i18n.t('add')}
+          </Button>
         </div>
       </div>
     )
@@ -321,26 +311,22 @@ class main extends React.Component {
     }
 
     return (
-      <ul className='list-group list-group-flush'>
+      <div>
         <CollapsibleList>
           {this.lightsList()}
         </CollapsibleList>
-        <li className='list-group-item add-light'>
-          <div className='row'>
-            <div className='col'>
-              <input
-                id='add_light'
-                data-testid='smoke-light-add-toggle'
-                type='button'
-                value={this.state.addLight ? '-' : '+'}
-                onClick={this.handleToggleAddLightDiv}
-                className='btn btn-outline-success'
-              />
-            </div>
-          </div>
+        <div style={{ padding: 'var(--reefpi-space-sm) 0' }}>
+          <Button
+            id='add_light'
+            data-testid='smoke-light-add-toggle'
+            onClick={this.handleToggleAddLightDiv}
+            variant='secondary'
+          >
+            {this.state.addLight ? '-' : '+'}
+          </Button>
           {nLight}
-        </li>
-      </ul>
+        </div>
+      </div>
     )
   }
 }

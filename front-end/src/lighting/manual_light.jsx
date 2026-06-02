@@ -55,22 +55,18 @@ export default class ManualLight extends React.Component {
 
   channels () {
     return Object.keys(this.state.channels).map((item) => (
-      <div className='row form-group justify-content-center' key={item}>
-        <div className='col-6 col-sm-3 col-md-2 col-xl-2'>
-          <label className='col-form-label'>{this.state.channels[item].name}</label>
-        </div>
-        <div className='col-6 col-sm-3 col-md-2 col-xl-1 order-sm-2 mb-1 mb-sm-0'>
-          <input
-            type='number'
-            name={item}
-            className='form-control no-spinner'
-            value={this.state.channels[item].value}
-            onChange={this.handleValueChange}
-          />
-        </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--reefpi-space-sm)', marginBottom: 'var(--reefpi-space-xs)' }} key={item}>
+        <label style={{ minWidth: '8rem' }}>{this.state.channels[item].name}</label>
+        <input
+          type='number'
+          name={item}
+          style={{ width: '5rem', padding: 'var(--reefpi-space-xs)', border: '1px solid var(--reefpi-color-border)', borderRadius: 'var(--reefpi-radius-sm)', fontFamily: 'var(--reefpi-font-app)' }}
+          value={this.state.channels[item].value}
+          onChange={this.handleValueChange}
+        />
         <input
           name={item}
-          className='d-none d-sm-block col-sm-6 col-md-8 col-xl-9 order-sm-1'
+          style={{ flex: 1 }}
           type='range'
           onChange={this.handleValueChange}
           value={this.state.channels[item].value}

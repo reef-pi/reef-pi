@@ -196,31 +196,31 @@ const Channel = (props) => {
     props.onChangeHandler(event, props.channelNum)
   }
 
+  const inputStyle = { display: 'block', width: '100%', padding: 'var(--reefpi-space-xs)', border: '1px solid var(--reefpi-color-border)', borderRadius: 'var(--reefpi-radius-sm)', fontFamily: 'var(--reefpi-font-app)' }
+
   return (
     <div className='controls border-top'>
-      <div className='row align-items-start'>
-        <div className='col-sm-6 col-md-4 col-xl-2'>
-          <div className='form-group'>
-            <label className='w-100'>
-              {i18next.t('lighting:channel_name')}
-              <small className='float-right badge badge-info mt-1'>(pin {props.channel.pin})</small>
-            </label>
-            <Field
-              name={NameFor(props.name, 'name')}
-              className={classNames('form-control',
-                { 'is-invalid': ShowError(NameFor(props.name, 'name'), props.touched, props.errors) })}
-              placeholder={i18next.t('lighting:channel_name')}
-              disabled={props.readOnly}
-            />
-            <ErrorFor
-              {...props}
-              name={NameFor(props.name, 'name')}
-            />
-          </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))', gap: 'var(--reefpi-space-md)', alignItems: 'start', marginBottom: 'var(--reefpi-space-sm)' }}>
+        <div>
+          <label className='w-100' style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            {i18next.t('lighting:channel_name')}
+            <small style={{ background: 'var(--reefpi-color-brand)', color: 'var(--reefpi-color-nav-text-strong)', borderRadius: 'var(--reefpi-radius-sm)', padding: '0 var(--reefpi-space-xs)', fontSize: '0.75rem', marginTop: 'var(--reefpi-space-xxs)' }}>(pin {props.channel.pin})</small>
+          </label>
+          <Field
+            name={NameFor(props.name, 'name')}
+            className={classNames({ 'is-invalid': ShowError(NameFor(props.name, 'name'), props.touched, props.errors) })}
+            style={inputStyle}
+            placeholder={i18next.t('lighting:channel_name')}
+            disabled={props.readOnly}
+          />
+          <ErrorFor
+            {...props}
+            name={NameFor(props.name, 'name')}
+          />
         </div>
 
-        <div className='form-group col-sm-6 col-md-4 col-xl-2 form-inline'>
-          <label className='mb-2'>{i18next.t('lighting:chart_color')}</label>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--reefpi-space-xs)' }}>
+          <label>{i18next.t('lighting:chart_color')}</label>
           <ColorPicker
             name={NameFor(props.name, 'color')}
             readOnly={props.readOnly}
@@ -229,75 +229,67 @@ const Channel = (props) => {
           />
         </div>
 
-        <div className='col-sm-6 col-md-4 col-xl-2'>
-          <div className='form-group'>
-            <label>{i18next.t('minimum')}</label>
-            <Percent
-              type='text'
-              className={classNames('form-control',
-                { 'is-invalid': ShowError(NameFor(props.name, 'min'), props.touched, props.errors) })}
-              name={NameFor(props.name, 'min')}
-              onBlur={props.onBlur}
-              disabled={props.readOnly}
-              onChange={handleChange}
-              value={props.channel.min}
-            />
-            <ErrorFor {...props} name={NameFor(props.name, 'min')} />
-          </div>
+        <div>
+          <label>{i18next.t('minimum')}</label>
+          <Percent
+            type='text'
+            className={classNames({ 'is-invalid': ShowError(NameFor(props.name, 'min'), props.touched, props.errors) })}
+            style={inputStyle}
+            name={NameFor(props.name, 'min')}
+            onBlur={props.onBlur}
+            disabled={props.readOnly}
+            onChange={handleChange}
+            value={props.channel.min}
+          />
+          <ErrorFor {...props} name={NameFor(props.name, 'min')} />
         </div>
-        <div className='col-sm-6 col-md-4 col-xl-2'>
-          <div className='form-group'>
-            <label>{i18next.t('maximum')}</label>
-            <Percent
-              type='text'
-              className={classNames('form-control',
-                { 'is-invalid': ShowError(NameFor(props.name, 'max'), props.touched, props.errors) })}
-              name={NameFor(props.name, 'max')}
-              onBlur={props.onBlur}
-              disabled={props.readOnly}
-              onChange={handleChange}
-              value={props.channel.max}
-            />
-            <ErrorFor {...props} name={NameFor(props.name, 'max')} />
-          </div>
+
+        <div>
+          <label>{i18next.t('maximum')}</label>
+          <Percent
+            type='text'
+            className={classNames({ 'is-invalid': ShowError(NameFor(props.name, 'max'), props.touched, props.errors) })}
+            style={inputStyle}
+            name={NameFor(props.name, 'max')}
+            onBlur={props.onBlur}
+            disabled={props.readOnly}
+            onChange={handleChange}
+            value={props.channel.max}
+          />
+          <ErrorFor {...props} name={NameFor(props.name, 'max')} />
         </div>
-        <div className='col-sm-6 col-md-4 col-xl-2'>
-          <div className='form-group'>
-            <label>{i18next.t('status')}</label>
-            <Field
-              name={NameFor(props.name, 'on')}
-              component={BooleanSelect}
-              disabled={props.readOnly}
-              className={classNames('custom-select', {
-                'is-invalid': ShowError('enable', props.touched, props.errors)
-              })}
-            >
-              <option value='true'>{i18next.t('enabled')}</option>
-              <option value='false'>{i18next.t('disabled')}</option>
-            </Field>
-          </div>
+
+        <div>
+          <label>{i18next.t('status')}</label>
+          <Field
+            name={NameFor(props.name, 'on')}
+            component={BooleanSelect}
+            disabled={props.readOnly}
+            className={classNames({ 'is-invalid': ShowError('enable', props.touched, props.errors) })}
+            style={{ display: 'block', width: '100%', padding: 'var(--reefpi-space-xs)', border: '1px solid var(--reefpi-color-border)', borderRadius: 'var(--reefpi-radius-sm)', fontFamily: 'var(--reefpi-font-app)' }}
+          >
+            <option value='true'>{i18next.t('enabled')}</option>
+            <option value='false'>{i18next.t('disabled')}</option>
+          </Field>
         </div>
 
       </div>
-      <div className='row'>
-        <div className='col'>
-          <div className='form-group'>
-            <label className='mr-3'>{i18next.t('profile')}</label>
-            <ProfileSelector
-              className={classNames('form-control',
-                { 'is-invalid': ShowError(NameFor(props.name, 'profile'), props.touched, props.errors) })}
-              name={NameFor(props.name, 'profile')}
-              readOnly={props.readOnly}
-              onChangeHandler={handleConfigChange}
-              value={props.channel.profile.type}
-            />
-            <input className='d-none is-invalid form-control' />
-            <ErrorFor {...props} name={NameFor(props.name, 'profile.type')} />
-          </div>
+      <div style={{ marginBottom: 'var(--reefpi-space-sm)' }}>
+        <div>
+          <label style={{ marginRight: 'var(--reefpi-space-sm)' }}>{i18next.t('profile')}</label>
+          <ProfileSelector
+            className={classNames({ 'is-invalid': ShowError(NameFor(props.name, 'profile'), props.touched, props.errors) })}
+            name={NameFor(props.name, 'profile')}
+            readOnly={props.readOnly}
+            onChangeHandler={handleConfigChange}
+            value={props.channel.profile.type}
+          />
+          <input className='d-none is-invalid' style={{ display: 'none' }} />
+          <ErrorFor {...props} name={NameFor(props.name, 'profile.type')} />
         </div>
       </div>
-      <div className='row mb-3'>
-        <div className='col'>
+      <div style={{ marginBottom: 'var(--reefpi-space-md)' }}>
+        <div>
           <Profile
             {...props}
             name={NameFor(props.name, 'profile.config')}

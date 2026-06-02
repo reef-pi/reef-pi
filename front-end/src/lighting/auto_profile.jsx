@@ -6,6 +6,8 @@ import { Field } from 'formik'
 import i18next from 'i18next'
 import { IsPercentageInput } from '../utils/percentage_input'
 
+const inputStyle = { padding: 'var(--reefpi-space-xs)', border: '1px solid var(--reefpi-color-border)', borderRadius: 'var(--reefpi-radius-sm)', fontFamily: 'var(--reefpi-font-app)', width: '100%' }
+
 export default class AutoProfile extends React.Component {
   constructor (props) {
     super(props)
@@ -103,53 +105,51 @@ export default class AutoProfile extends React.Component {
 
     for (let i = 0; i < values.length; i++) {
       list.push(
-        <div className='col-12 col-md-1 text-center' key={i + 1}>
-          <div className='row'>
-            <div className='col-6 col-sm-6 col-md-12 d-block d-md-none d-lg-block order-md-first order-sm-last'>
-              <button
-                type='button'
-                className='btn btn-link btn-sm btn-remove-point'
-                onClick={this.handleRemovePoint.bind(this, i)}
-              >
-                {i18next.t('lighting:remove')}
-              </button>
-              <input
-                type='number'
-                name={NameFor(this.props.name, 'values.' + i)}
-                onBlur={this.props.onBlur}
-                className={classNames('form-control form-control-sm mb-1 d-block d-md-none d-lg-block px-0 px-sm-1 text-center no-spinner',
-                  { 'is-invalid': ShowError(NameFor(this.props.name, 'values.' + i), this.props.touched, this.props.errors) })}
-                value={values[i]}
-                onChange={this.curry(i)}
-                disabled={this.props.readOnly}
-              />
-            </div>
-            <div className='d-none d-md-inline d-lg-none col-12'>
-              {values[i]}
-            </div>
-            <div className='col-12 col-sm-6 col-md-12 d-none d-md-inline'>
-              <input
-                className='d-none d-md-inline'
-                type='range'
-                style={rangeStyle}
-                onChange={this.curry(i)}
-                value={values[i]}
-                id={'intensity-' + i}
-                orient='vertical'
-                disabled={this.props.readOnly}
-              />
-            </div>
-            <div className='col-6 col-md-12 col-sm-6 order-md-last order-first px-0'>
-              {labels[i]}
-            </div>
+        <div style={{ textAlign: 'center', minWidth: '4rem' }} key={i + 1}>
+          <button
+            type='button'
+            className='btn-remove-point'
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--reefpi-color-text)', fontSize: '0.875rem', padding: 'var(--reefpi-space-xxs)' }}
+            onClick={this.handleRemovePoint.bind(this, i)}
+          >
+            {i18next.t('lighting:remove')}
+          </button>
+          <input
+            type='number'
+            name={NameFor(this.props.name, 'values.' + i)}
+            onBlur={this.props.onBlur}
+            className={classNames('no-spinner', { 'is-invalid': ShowError(NameFor(this.props.name, 'values.' + i), this.props.touched, this.props.errors) })}
+            style={{ ...inputStyle, width: '4rem', textAlign: 'center', marginBottom: 'var(--reefpi-space-xxs)' }}
+            value={values[i]}
+            onChange={this.curry(i)}
+            disabled={this.props.readOnly}
+          />
+          <div>
+            <input
+              type='range'
+              style={rangeStyle}
+              onChange={this.curry(i)}
+              value={values[i]}
+              id={'intensity-' + i}
+              orient='vertical'
+              disabled={this.props.readOnly}
+            />
+          </div>
+          <div className='order-md-last' style={{ fontSize: '0.75rem' }}>
+            {labels[i]}
           </div>
         </div>
       )
     }
     if (values.length < 12) {
       list.push(
-        <div className='col-12 col-md-1 text-center' key={values.length + 1}>
-          <button type='button' className='btn btn-link btn-add-point' onClick={this.handleAddPoint}>
+        <div style={{ textAlign: 'center', minWidth: '4rem' }} key={values.length + 1}>
+          <button
+            type='button'
+            className='btn-add-point'
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--reefpi-color-text)', fontSize: '0.875rem', padding: 'var(--reefpi-space-xxs)' }}
+            onClick={this.handleAddPoint}
+          >
             {i18next.t('lighting:add_point')}
           </button>
         </div>
@@ -160,33 +160,35 @@ export default class AutoProfile extends React.Component {
 
   render () {
     return (
-      <div className='container'>
-        <div className='row mb-2'>
-          <div className='form-inline'>
-            <label className='mr-2'>{i18next.t('start_time')}</label>
+      <div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--reefpi-space-sm)', alignItems: 'flex-end', marginBottom: 'var(--reefpi-space-sm)' }}>
+          <div>
+            <label style={{ marginRight: 'var(--reefpi-space-xs)' }}>{i18next.t('start_time')}</label>
             <Field
               name={NameFor(this.props.name, 'start')}
               readOnly={this.props.readOnly}
-              className={classNames('form-control mr-3 col-12 col-sm-3 col-md-2 col-lg-2',
-                { 'is-invalid': ShowError(NameFor(this.props.name, 'start'), this.props.touched, this.props.errors) })}
-              placeholder='HH:mm:ss'
-            />
-            <label className='mr-2'>{i18next.t('end_time')}</label>
-            <Field
-              name={NameFor(this.props.name, 'end')}
-              readOnly={this.props.readOnly}
-              className={classNames('form-control mr-3 col-12 col-sm-3 col-md-2 col-lg-2',
-                { 'is-invalid': ShowError(NameFor(this.props.name, 'end'), this.props.touched, this.props.errors) })}
+              className={classNames({ 'is-invalid': ShowError(NameFor(this.props.name, 'start'), this.props.touched, this.props.errors) })}
+              style={inputStyle}
               placeholder='HH:mm:ss'
             />
             <ErrorFor {...this.props} name={NameFor(this.props.name, 'start')} />
+          </div>
+          <div>
+            <label style={{ marginRight: 'var(--reefpi-space-xs)' }}>{i18next.t('end_time')}</label>
+            <Field
+              name={NameFor(this.props.name, 'end')}
+              readOnly={this.props.readOnly}
+              className={classNames({ 'is-invalid': ShowError(NameFor(this.props.name, 'end'), this.props.touched, this.props.errors) })}
+              style={inputStyle}
+              placeholder='HH:mm:ss'
+            />
             <ErrorFor {...this.props} name={NameFor(this.props.name, 'end')} />
           </div>
         </div>
-        <div className='row'>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--reefpi-space-sm)', alignItems: 'flex-start', overflowX: 'auto' }}>
           {this.sliderList()}
-          <div className='col-12 order-last text-center'>
-            <input className='d-none is-invalid form-control' />
+          <div style={{ width: '100%', textAlign: 'center' }}>
+            <input style={{ display: 'none' }} className='is-invalid' />
             <ErrorFor {...this.props} name={NameFor(this.props.name, 'values')} />
           </div>
         </div>
