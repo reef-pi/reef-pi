@@ -81,6 +81,7 @@ All stories live under `preview/primitives/`. Open with `?theme=dark` or `?theme
 | `Sparkline` | bare / gradient / band / hover / keyboard / back-compat (number[]) | [primitives/sparkline.html](primitives/sparkline.html) |
 | `RangeSelector` | default / compact / keyboard / custom options+scope | [primitives/range-selector.html](primitives/range-selector.html) |
 | `Field` / `Input` / `Select` | label+help / validation / disabled / light+dark+actinic | [primitives/form-controls.html](primitives/form-controls.html) |
+| `Button` | primary / secondary / danger / ghost / disabled / icon-only | [primitives/button.html](primitives/button.html) |
 | `useTimeSeries` | loading / loaded (120 pts LTTB) / error / stale-while-revalidate | [primitives/use-time-series.html](primitives/use-time-series.html) |
 
 ## Components (E3 · Dashboard v2)

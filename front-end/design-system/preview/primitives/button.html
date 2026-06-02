@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>reef-pi - Button primitive</title>
+  <link rel="stylesheet" href="../_card.css">
+  <style>
+    body { padding: var(--reefpi-space-lg); background: var(--reefpi-color-surface); }
+    .subtitle { max-width: 720px; margin: 0 0 var(--reefpi-space-lg); color: var(--reefpi-color-text-muted); font-size: 0.875rem; }
+    .story-grid { display: grid; grid-template-columns: repeat(2, minmax(280px, 1fr)); gap: var(--reefpi-space-md); }
+    @media (max-width: 760px) { .story-grid { grid-template-columns: 1fr; } }
+    .card { width: auto; min-height: 0; flex-direction: column; border: 1px solid var(--reefpi-color-border); border-radius: var(--reefpi-radius-md); background: var(--reefpi-color-surface-elevated); }
+    .card-header { color: var(--reefpi-color-text); font-weight: 600; }
+    .sample-row { display: flex; flex-wrap: wrap; gap: var(--reefpi-space-sm); align-items: center; }
+    .action { align-items: center; border: 1px solid transparent; border-radius: var(--reefpi-radius-sm); box-shadow: none; cursor: pointer; display: inline-flex; font-family: var(--reefpi-font-app); font-size: 0.9375rem; font-weight: 600; gap: var(--reefpi-space-xs); justify-content: center; line-height: 1.2; min-height: var(--reefpi-tap-target-min); min-width: var(--reefpi-tap-target-min); padding: 0 var(--reefpi-space-md); text-align: center; text-decoration: none; transition: background-color 0.12s, border-color 0.12s, color 0.12s; user-select: none; }
+    .action[data-variant="primary"] { background: var(--reefpi-color-brand); border-color: var(--reefpi-color-brand); color: var(--reefpi-color-nav-text-strong); }
+    .action[data-variant="secondary"] { background: var(--reefpi-color-surface-elevated); border-color: var(--reefpi-color-border); color: var(--reefpi-color-text); }
+    .action[data-variant="danger"] { background: var(--reefpi-color-error); border-color: var(--reefpi-color-error); color: var(--reefpi-color-nav-text-strong); }
+    .action[data-variant="ghost"] { background: transparent; border-color: transparent; color: var(--reefpi-color-text); }
+    .action[data-state="disabled"] { cursor: not-allowed; opacity: 0.58; }
+    .action.icon-only { padding: 0; }
+  </style>
+</head>
+<body>
+  <h1>Button</h1>
+  <p class="subtitle">Tokenized action primitive for replacing Bootstrap button classes route by route.</p>
+  <div class="story-grid">
+    <section class="card">
+      <div class="card-header">Variants</div>
+      <div class="sample-row">
+        <button class="action" data-variant="primary">Save</button>
+        <button class="action" data-variant="secondary">Cancel</button>
+        <button class="action" data-variant="danger">Delete</button>
+        <button class="action" data-variant="ghost">Edit</button>
+      </div>
+    </section>
+    <section class="card">
+      <div class="card-header">States</div>
+      <div class="sample-row">
+        <button class="action" data-variant="primary" type="submit">Apply</button>
+        <button class="action" data-variant="secondary" data-state="disabled" disabled>Disabled</button>
+        <button class="action icon-only" data-variant="ghost" aria-label="Edit"><span aria-hidden="true">&#9998;</span></button>
+        <button class="action icon-only" data-variant="danger" aria-label="Delete"><span aria-hidden="true">&#10005;</span></button>
+      </div>
+    </section>
+  </div>
+  <script src="../_card.js"></script>
+</body>
+</html>
