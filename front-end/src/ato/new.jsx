@@ -2,6 +2,8 @@ import React from 'react'
 import { createATO } from 'redux/actions/ato'
 import AtoForm from './ato_form'
 import { connect } from 'react-redux'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { ListItem } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
 
 export class RawNewATO extends React.Component {
   constructor (props) {
@@ -66,10 +68,18 @@ export class RawNewATO extends React.Component {
 
   render () {
     return (
-      <div className='list-group-item add-ato'>
-        <input id='add_new_ato_sensor' data-testid='smoke-ato-add-toggle' type='button' value={this.state.add ? '-' : '+'} onClick={this.handleToggle} className='btn btn-outline-success' />
+      <ListItem>
+        <Button
+          id='add_new_ato_sensor'
+          data-testid='smoke-ato-add-toggle'
+          type='button'
+          variant='primary'
+          onClick={this.handleToggle}
+        >
+          {this.state.add ? '-' : '+'}
+        </Button>
         {this.ui()}
-      </div>
+      </ListItem>
     )
   }
 }

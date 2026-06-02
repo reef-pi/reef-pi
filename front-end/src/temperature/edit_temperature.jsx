@@ -3,12 +3,17 @@ import PropTypes from 'prop-types'
 import ColorPicker from '../ui_components/color_picker'
 import { NameFor, ErrorFor, ShowError } from '../utils/validation_helper'
 import { showError, showUpdateSuccessful } from 'utils/alert'
-import classNames from 'classnames'
-import { Field } from 'formik'
-import BooleanSelect from '../ui_components/boolean_select'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { Field as FormField, Input, Select } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
 import ReadingsChart from './readings_chart'
 import ControlChart from './control_chart'
 import i18next from 'i18next'
+
+const gridStyle = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))',
+  gap: 'var(--reefpi-space-md)'
+}
 
 const EditTemperature = ({
   values,
@@ -22,7 +27,9 @@ const EditTemperature = ({
   isValid,
   dirty,
   readOnly,
-  showChart
+  showChart,
+  handleBlur,
+  handleChange
 }) => {
   const handleSubmit = event => {
     event.preventDefault()
@@ -41,8 +48,8 @@ const EditTemperature = ({
 
   const temperatureUnit = () => {
     return values.fahrenheit === true || values.fahrenheit === 'true'
-      ? '\u2109'
-      : '\u2103'
+      ? '℉'
+      : '℃'
   }
 
   const charts = () => {
@@ -51,22 +58,16 @@ const EditTemperature = ({
     }
 
     let chs = (
-      <div className='row'>
-        <div className='col'>
-          <ReadingsChart sensor_id={values.id} width={500} height={300} />
-        </div>
+      <div style={{ marginTop: 'var(--reefpi-space-sm)' }}>
+        <ReadingsChart sensor_id={values.id} width={500} height={300} />
       </div>
     )
 
     if ((values.heater !== undefined && values.heater !== '') || (values.cooler !== undefined && values.cooler !== '')) {
       chs = (
-        <div className='row'>
-          <div className='col-lg-6'>
-            <ReadingsChart sensor_id={values.id} width={500} height={300} />
-          </div>
-          <div className='col-lg-6'>
-            <ControlChart sensor_id={values.id} width={500} height={300} />
-          </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--reefpi-space-md)', marginTop: 'var(--reefpi-space-sm)' }}>
+          <ReadingsChart sensor_id={values.id} width={500} height={300} />
+          <ControlChart sensor_id={values.id} width={500} height={300} />
         </div>
       )
     }
@@ -112,415 +113,371 @@ const EditTemperature = ({
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <div className={classNames('row', { 'd-none': readOnly })}>
-          <div className='col col-sm-6 col-md-3'>
-            <div className='form-group'>
-              <label htmlFor='name'>{i18next.t('name')}</label>
-              <Field
+        {!readOnly && (
+          <div style={{ ...gridStyle, marginBottom: 'var(--reefpi-space-md)' }}>
+            <FormField
+              label={i18next.t('name')}
+              error={ShowError('name', touched, errors) ? ErrorFor(errors, 'name') : undefined}
+            >
+              <Input
                 name='name'
                 data-testid='smoke-temperature-name'
                 disabled={readOnly}
-                className={classNames('form-control', {
-                  'is-invalid': ShowError('name', touched, errors)
-                })}
+                value={values.name || ''}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                invalid={ShowError('name', touched, errors)}
               />
-              <ErrorFor errors={errors} touched={touched} name='name' />
-            </div>
+            </FormField>
           </div>
-        </div>
+        )}
 
-        <div className='row'>
-          <div className='col-12 col-sm-6 col-md-3'>
-            <div className='form-group'>
-              <label htmlFor='sensor'>{i18next.t('temperature:sensor')}</label>
-              <Field
-                name='sensor'
-                component='select'
-                data-testid='smoke-temperature-sensor'
-                disabled={readOnly || values.analog_input !== ''}
-                className={classNames('custom-select', {
-                  'is-invalid': ShowError('sensor', touched, errors)
-                })}
-              >
-                <option value='' className='d-none'>
-                  -- {i18next.t('select')} --
-                </option>
-                {sensorOptions()}
-              </Field>
-              <ErrorFor errors={errors} touched={touched} name='sensor' />
-            </div>
-          </div>
-
-          <div className='col-12 col-sm-6 col-md-3'>
-            <div className='form-group'>
-              <label htmlFor='analog_input'>{i18next.t('temperature:analog_input')}</label>
-              <Field
-                name='analog_input'
-                component='select'
-                disabled={readOnly || values.sensor !== ''}
-                className={classNames('custom-select', {
-                  'is-invalid': ShowError('analog_input', touched, errors)
-                })}
-              >
-                <option value=''>
-                  {i18next.t('none')}
-                </option>
-                {analogInputOptions()}
-              </Field>
-              <ErrorFor errors={errors} touched={touched} name='analog_input' />
-            </div>
-          </div>
-
-          <div className='col-12 col-sm-6 col-md-3'>
-            <div className='form-group'>
-              <label htmlFor='fahrenheit'>{i18next.t('temperature:unit')}</label>
-              <Field
-                name='fahrenheit'
-                component={BooleanSelect}
-                disabled={readOnly}
-                className={classNames('custom-select', {
-                  'is-invalid': ShowError('fahrenheit', touched, errors)
-                })}
-              >
-                <option value='true'>{i18next.t('temperature:fahrenheit')}</option>
-                <option value='false'>{i18next.t('temperature:celsius')}</option>
-              </Field>
-              <ErrorFor errors={errors} touched={touched} name='fahrenheit' />
-            </div>
-          </div>
-
-          <div className='col-12 col-sm-6 col-md-3'>
-            <div className='form-group'>
-              <label htmlFor='period'>{i18next.t('temperature:check_frequency')}</label>
-              <div className='input-group'>
-                <Field
-                  name='period'
-                  data-testid='smoke-temperature-period'
-                  readOnly={readOnly}
-                  type='number'
-                  className={classNames('form-control', {
-                    'is-invalid': ShowError('period', touched, errors)
-                  })}
-                />
-                <div className='input-group-append'>
-                  <span className='input-group-text d-none d-lg-flex'>
-                    {i18next.t('second_s')}
-                  </span>
-                  <span className='input-group-text d-flex d-lg-none'>{i18next.t('sec')}</span>
-                </div>
-                <ErrorFor errors={errors} touched={touched} name='period' />
-              </div>
-            </div>
-          </div>
-
-          <div className='col-12 col-sm-6 col-md-3'>
-            <div className='form-group'>
-              <label htmlFor='enable'>{i18next.t('status')}</label>
-              <Field
-                name='enable'
-                component={BooleanSelect}
-                disabled={readOnly}
-                className={classNames('custom-select', {
-                  'is-invalid': ShowError('enable', touched, errors)
-                })}
-              >
-                <option value='true'>{i18next.t('enabled')}</option>
-                <option value='false'>{i18next.t('disabled')}</option>
-              </Field>
-              <ErrorFor errors={errors} touched={touched} name='enable' />
-            </div>
-          </div>
-        </div>
-
-        <div className='row'>
-          <div className='col-12 col-sm-6 col-md-3'>
-            <div className='form-group'>
-              <label htmlFor='one_shot'>{i18next.t('one_shot')}</label>
-              <Field
-                name='one_shot'
-                component={BooleanSelect}
-                disabled={readOnly}
-                className={classNames('custom-select', {
-                  'is-invalid': ShowError('one_shot', touched, errors)
-                })}
-              >
-                <option value='true'>{i18next.t('enabled')}</option>
-                <option value='false'>{i18next.t('disabled')}</option>
-              </Field>
-              <ErrorFor errors={errors} touched={touched} name='one_shot' />
-            </div>
-          </div>
-
-          <div className='col-12 col-sm-6 col-md-3'>
-            <div className='form-group'>
-              <label htmlFor='fail_safe'>{i18next.t('temperature:fail_safe')}</label>
-              <Field
-                name='fail_safe'
-                component={BooleanSelect}
-                disabled={readOnly}
-                className={classNames('custom-select', {
-                  'is-invalid': ShowError('fail_safe', touched, errors)
-                })}
-              >
-                <option value='true'>{i18next.t('enabled')}</option>
-                <option value='false'>{i18next.t('disabled')}</option>
-              </Field>
-              <ErrorFor errors={errors} touched={touched} name='fail_safe' />
-            </div>
-          </div>
-        </div>
-
-        <div className='row'>
-          <div className='col-12 col-sm-6 col-md-3'>
-            <div className='form-group'>
-              <label htmlFor='chart.ymin'>{i18next.t('temperature:chart_ymin')}</label>
-              <Field
-                name='chart.ymin'
-                readOnly={readOnly}
-                type='number'
-                className={classNames('form-control', {
-                  'is-invalid': ShowError('chart.ymin', touched, errors)
-                })}
-              />
-              <ErrorFor errors={errors} touched={touched} name='chart.ymin' />
-            </div>
-          </div>
-          <div className='col-12 col-sm-6 col-md-3'>
-            <div className='form-group'>
-              <label htmlFor='chart.ymax'>{i18next.t('temperature:chart_ymax')}</label>
-              <Field
-                name='chart.ymax'
-                readOnly={readOnly}
-                type='number'
-                className={classNames('form-control', {
-                  'is-invalid': ShowError('chart.ymax', touched, errors)
-                })}
-              />
-              <ErrorFor errors={errors} touched={touched} name='chart.ymax' />
-            </div>
-          </div>
-          <div className='col-12 col-sm-6 col-md-3'>
-            <div className='form-group'>
-              <label htmlFor='chart.color'>{i18next.t('temperature:chart_color')}</label>
-              <ColorPicker
-                name={NameFor(values.name, 'chart.color')}
-                readOnly={readOnly}
-                color={values.chart.color}
-                onChangeHandler={updateChartColor}
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className='row'>
-          <div className='col-12 col-sm-6 col-md-3'>
-            <div className='form-group'>
-              <label htmlFor='alerts'>{i18next.t('alerts')}</label>
-              <Field
-                name='alerts'
-                component={BooleanSelect}
-                disabled={readOnly}
-                className={classNames('custom-select', {
-                  'is-invalid': ShowError('alerts', touched, errors)
-                })}
-              >
-                <option value='true'>{i18next.t('enabled')}</option>
-                <option value='false'>{i18next.t('disabled')}</option>
-              </Field>
-              <ErrorFor errors={errors} touched={touched} name='alerts' />
-            </div>
-          </div>
-
-          {/* Wrap to next line on small */}
-          <div className='w-100 d-none d-sm-block d-md-none' />
-
-          <div
-            className={classNames('col-12 col-sm-3 col-md-3 d-sm-block', {
-              'd-none': values.alerts === false
-            })}
+        <div style={gridStyle}>
+          <FormField
+            label={i18next.t('temperature:sensor')}
+            error={ShowError('sensor', touched, errors) ? ErrorFor(errors, 'sensor') : undefined}
           >
-            <div className='form-group'>
-              <label htmlFor='minAlert'>{i18next.t('temperature:alert_below')}</label>
-              <div className='input-group'>
-                <Field
-                  name='minAlert'
-                  type='number'
-                  readOnly={readOnly || values.alerts === false}
-                  className={classNames('form-control px-sm-1 px-md-2', {
-                    'is-invalid': ShowError('minAlert', touched, errors)
-                  })}
-                />
-                <div className='input-group-append'>
-                  <span className='input-group-text'>{temperatureUnit()}</span>
-                </div>
-                <ErrorFor errors={errors} touched={touched} name='minAlert' />
-              </div>
-            </div>
-          </div>
+            <Select
+              name='sensor'
+              data-testid='smoke-temperature-sensor'
+              disabled={readOnly || values.analog_input !== ''}
+              value={values.sensor || ''}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              invalid={ShowError('sensor', touched, errors)}
+            >
+              <option value=''>
+                -- {i18next.t('select')} --
+              </option>
+              {sensorOptions()}
+            </Select>
+          </FormField>
 
-          <div
-            className={classNames('col-12 col-sm-3 col-md-3 d-sm-block', {
-              'd-none': values.alerts === false
-            })}
+          <FormField
+            label={i18next.t('temperature:analog_input')}
+            error={ShowError('analog_input', touched, errors) ? ErrorFor(errors, 'analog_input') : undefined}
           >
-            <div className='form-group'>
-              <label htmlFor='maxAlert'>{i18next.t('temperature:alert_above')}</label>
-              <div className='input-group'>
-                <Field
-                  name='maxAlert'
-                  type='number'
-                  readOnly={readOnly || values.alerts === false}
-                  className={classNames('form-control', {
-                    'is-invalid': ShowError('maxAlert', touched, errors)
-                  })}
-                />
-                <div className='input-group-append'>
-                  <span className='input-group-text'>{temperatureUnit()}</span>
-                </div>
-                <ErrorFor errors={errors} touched={touched} name='maxAlert' />
-              </div>
-            </div>
-          </div>
+            <Select
+              name='analog_input'
+              disabled={readOnly || values.sensor !== ''}
+              value={values.analog_input || ''}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              invalid={ShowError('analog_input', touched, errors)}
+            >
+              <option value=''>
+                {i18next.t('none')}
+              </option>
+              {analogInputOptions()}
+            </Select>
+          </FormField>
+
+          <FormField
+            label={i18next.t('temperature:unit')}
+            error={ShowError('fahrenheit', touched, errors) ? ErrorFor(errors, 'fahrenheit') : undefined}
+          >
+            <Select
+              name='fahrenheit'
+              disabled={readOnly}
+              value={String(values.fahrenheit)}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              invalid={ShowError('fahrenheit', touched, errors)}
+            >
+              <option value='true'>{i18next.t('temperature:fahrenheit')}</option>
+              <option value='false'>{i18next.t('temperature:celsius')}</option>
+            </Select>
+          </FormField>
+
+          <FormField
+            label={i18next.t('temperature:check_frequency')}
+            error={ShowError('period', touched, errors) ? ErrorFor(errors, 'period') : undefined}
+            helpText={i18next.t('second_s')}
+          >
+            <Input
+              name='period'
+              data-testid='smoke-temperature-period'
+              readOnly={readOnly}
+              type='number'
+              value={values.period || ''}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              invalid={ShowError('period', touched, errors)}
+            />
+          </FormField>
+
+          <FormField
+            label={i18next.t('status')}
+            error={ShowError('enable', touched, errors) ? ErrorFor(errors, 'enable') : undefined}
+          >
+            <Select
+              name='enable'
+              disabled={readOnly}
+              value={String(values.enable)}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              invalid={ShowError('enable', touched, errors)}
+            >
+              <option value='true'>{i18next.t('enabled')}</option>
+              <option value='false'>{i18next.t('disabled')}</option>
+            </Select>
+          </FormField>
         </div>
 
-        <div className='row'>
-          <div className='col-12 col-sm-6 col-md-3'>
-            <div className='form-group'>
-              <label htmlFor='control'>{i18next.t('temperature:control')}</label>
-              <Field
-                name='control'
-                component='select'
-                data-testid='smoke-temperature-control'
-                disabled={readOnly}
-                className={classNames('custom-select', {
-                  'is-invalid': ShowError('control', touched, errors)
-                })}
-              >
-                <option value=''>{i18next.t('temperature:controlnothing')}</option>
-                <option value='macro'>{i18next.t('temperature:controlmacro')}</option>
-                <option value='equipment'>{i18next.t('temperature:controlequipment')}</option>
-              </Field>
-              <ErrorFor errors={errors} touched={touched} name='control' />
-            </div>
-          </div>
+        <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
+          <FormField
+            label={i18next.t('one_shot')}
+            error={ShowError('one_shot', touched, errors) ? ErrorFor(errors, 'one_shot') : undefined}
+          >
+            <Select
+              name='one_shot'
+              disabled={readOnly}
+              value={String(values.one_shot)}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              invalid={ShowError('one_shot', touched, errors)}
+            >
+              <option value='true'>{i18next.t('enabled')}</option>
+              <option value='false'>{i18next.t('disabled')}</option>
+            </Select>
+          </FormField>
 
-          {/* Wrap to next line on small */}
-          <div className='w-100 d-none d-sm-block d-md-none' />
-
-          <div className='col col-sm-6 col-md-3'>
-            <div className='form-group'>
-              <label htmlFor='heater'>{i18next.t('temperature:lower_function')}</label>
-              <Field
-                name='heater'
-                component='select'
-                data-testid='smoke-temperature-heater'
-                disabled={readOnly || values.control === ''}
-                className={classNames('custom-select', {
-                  'is-invalid': ShowError('heater', touched, errors)
-                })}
-              >
-                <option value=''>{i18next.t('temperature:controlnothing')}</option>
-                {controlOptions()}
-              </Field>
-              <ErrorFor errors={errors} touched={touched} name='heater' />
-            </div>
-          </div>
-          <div className='col col-sm-6 col-md-3'>
-            <div className='form-group'>
-              <label htmlFor='min'>{i18next.t('temperature:lower_threshold')}</label>
-              <div className='input-group'>
-                <Field
-                  name='min'
-                  data-testid='smoke-temperature-min'
-                  readOnly={readOnly || values.control === '' || values.heater === undefined || values.heater === ''}
-                  className={classNames('form-control', {
-                    'is-invalid': ShowError('min', touched, errors)
-                  })}
-                />
-                <div className='input-group-append'>
-                  <span className='input-group-text'>{temperatureUnit()}</span>
-                </div>
-                <ErrorFor errors={errors} touched={touched} name='min' />
-              </div>
-            </div>
-          </div>
+          <FormField
+            label={i18next.t('temperature:fail_safe')}
+            error={ShowError('fail_safe', touched, errors) ? ErrorFor(errors, 'fail_safe') : undefined}
+          >
+            <Select
+              name='fail_safe'
+              disabled={readOnly}
+              value={String(values.fail_safe)}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              invalid={ShowError('fail_safe', touched, errors)}
+            >
+              <option value='true'>{i18next.t('enabled')}</option>
+              <option value='false'>{i18next.t('disabled')}</option>
+            </Select>
+          </FormField>
         </div>
 
-        <div className='row'>
-          <div className='col col-sm-6 col-md-3 offset-md-3'>
-            <div className='form-group'>
-              <label htmlFor='cooler'>{i18next.t('temperature:upper_function')}</label>
-              <Field
-                name='cooler'
-                component='select'
-                data-testid='smoke-temperature-cooler'
-                disabled={readOnly || values.control === ''}
-                className={classNames('custom-select', {
-                  'is-invalid': ShowError('cooler', touched, errors)
-                })}
-              >
-                <option value=''>{i18next.t('temperature:controlnothing')}</option>
-                {controlOptions()}
-              </Field>
-              <ErrorFor errors={errors} touched={touched} name='cooler' />
-            </div>
-          </div>
-          <div className='col col-sm-6 col-md-3'>
-            <div className='form-group'>
-              <label htmlFor='max'>{i18next.t('temperature:upper_threshold')}</label>
-              <div className='input-group'>
-                <Field
-                  name='max'
-                  data-testid='smoke-temperature-max'
-                  readOnly={readOnly || values.control === '' || values.cooler === undefined || values.cooler === ''}
-                  className={classNames('form-control', {
-                    'is-invalid': ShowError('max', touched, errors)
-                  })}
-                />
-                <div className='input-group-append'>
-                  <span className='input-group-text'>{temperatureUnit()}</span>
-                </div>
-                <ErrorFor errors={errors} touched={touched} name='max' />
-              </div>
-            </div>
-          </div>
+        <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
+          <FormField
+            label={i18next.t('temperature:chart_ymin')}
+            error={ShowError('chart.ymin', touched, errors) ? ErrorFor(errors, 'chart.ymin') : undefined}
+          >
+            <Input
+              name='chart.ymin'
+              readOnly={readOnly}
+              type='number'
+              value={values.chart ? values.chart.ymin : ''}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              invalid={ShowError('chart.ymin', touched, errors)}
+            />
+          </FormField>
+          <FormField
+            label={i18next.t('temperature:chart_ymax')}
+            error={ShowError('chart.ymax', touched, errors) ? ErrorFor(errors, 'chart.ymax') : undefined}
+          >
+            <Input
+              name='chart.ymax'
+              readOnly={readOnly}
+              type='number'
+              value={values.chart ? values.chart.ymax : ''}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              invalid={ShowError('chart.ymax', touched, errors)}
+            />
+          </FormField>
+          <FormField label={i18next.t('temperature:chart_color')}>
+            <ColorPicker
+              name={NameFor(values.name, 'chart.color')}
+              readOnly={readOnly}
+              color={values.chart ? values.chart.color : ''}
+              onChangeHandler={updateChartColor}
+            />
+          </FormField>
         </div>
 
-        <div className='row'>
-          <div className='col col-sm-6 col-md-3 offset-md-3'>
-            <div className='form-group'>
-              <label htmlFor='hysteresis'>{i18next.t('temperature:hysteresis')}</label>
-              <div className='input-group'>
-                <Field
-                  name='hysteresis'
-                  readOnly={readOnly || values.control === ''}
-                  className={classNames('form-control', {
-                    'is-invalid': ShowError('hysteresis', touched, errors)
-                  })}
-                />
-                <div className='input-group-append'>
-                  <span className='input-group-text'>{temperatureUnit()}</span>
-                </div>
-                <ErrorFor errors={errors} touched={touched} name='hysteresis' />
-              </div>
-            </div>
-          </div>
+        <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
+          <FormField
+            label={i18next.t('alerts')}
+            error={ShowError('alerts', touched, errors) ? ErrorFor(errors, 'alerts') : undefined}
+          >
+            <Select
+              name='alerts'
+              disabled={readOnly}
+              value={String(values.alerts)}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              invalid={ShowError('alerts', touched, errors)}
+            >
+              <option value='true'>{i18next.t('enabled')}</option>
+              <option value='false'>{i18next.t('disabled')}</option>
+            </Select>
+          </FormField>
+
+          {values.alerts !== false && (
+            <FormField
+              label={i18next.t('temperature:alert_below')}
+              error={ShowError('minAlert', touched, errors) ? ErrorFor(errors, 'minAlert') : undefined}
+              helpText={temperatureUnit()}
+            >
+              <Input
+                name='minAlert'
+                type='number'
+                readOnly={readOnly || values.alerts === false}
+                value={values.minAlert || ''}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                invalid={ShowError('minAlert', touched, errors)}
+              />
+            </FormField>
+          )}
+
+          {values.alerts !== false && (
+            <FormField
+              label={i18next.t('temperature:alert_above')}
+              error={ShowError('maxAlert', touched, errors) ? ErrorFor(errors, 'maxAlert') : undefined}
+              helpText={temperatureUnit()}
+            >
+              <Input
+                name='maxAlert'
+                type='number'
+                readOnly={readOnly || values.alerts === false}
+                value={values.maxAlert || ''}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                invalid={ShowError('maxAlert', touched, errors)}
+              />
+            </FormField>
+          )}
+        </div>
+
+        <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
+          <FormField
+            label={i18next.t('temperature:control')}
+            error={ShowError('control', touched, errors) ? ErrorFor(errors, 'control') : undefined}
+          >
+            <Select
+              name='control'
+              data-testid='smoke-temperature-control'
+              disabled={readOnly}
+              value={values.control || ''}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              invalid={ShowError('control', touched, errors)}
+            >
+              <option value=''>{i18next.t('temperature:controlnothing')}</option>
+              <option value='macro'>{i18next.t('temperature:controlmacro')}</option>
+              <option value='equipment'>{i18next.t('temperature:controlequipment')}</option>
+            </Select>
+          </FormField>
+
+          <FormField
+            label={i18next.t('temperature:lower_function')}
+            error={ShowError('heater', touched, errors) ? ErrorFor(errors, 'heater') : undefined}
+          >
+            <Select
+              name='heater'
+              data-testid='smoke-temperature-heater'
+              disabled={readOnly || values.control === ''}
+              value={values.heater || ''}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              invalid={ShowError('heater', touched, errors)}
+            >
+              <option value=''>{i18next.t('temperature:controlnothing')}</option>
+              {controlOptions()}
+            </Select>
+          </FormField>
+
+          <FormField
+            label={i18next.t('temperature:lower_threshold')}
+            error={ShowError('min', touched, errors) ? ErrorFor(errors, 'min') : undefined}
+            helpText={temperatureUnit()}
+          >
+            <Input
+              name='min'
+              data-testid='smoke-temperature-min'
+              readOnly={readOnly || values.control === '' || values.heater === undefined || values.heater === ''}
+              value={values.min || ''}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              invalid={ShowError('min', touched, errors)}
+            />
+          </FormField>
+        </div>
+
+        <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
+          <FormField
+            label={i18next.t('temperature:upper_function')}
+            error={ShowError('cooler', touched, errors) ? ErrorFor(errors, 'cooler') : undefined}
+          >
+            <Select
+              name='cooler'
+              data-testid='smoke-temperature-cooler'
+              disabled={readOnly || values.control === ''}
+              value={values.cooler || ''}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              invalid={ShowError('cooler', touched, errors)}
+            >
+              <option value=''>{i18next.t('temperature:controlnothing')}</option>
+              {controlOptions()}
+            </Select>
+          </FormField>
+
+          <FormField
+            label={i18next.t('temperature:upper_threshold')}
+            error={ShowError('max', touched, errors) ? ErrorFor(errors, 'max') : undefined}
+            helpText={temperatureUnit()}
+          >
+            <Input
+              name='max'
+              data-testid='smoke-temperature-max'
+              readOnly={readOnly || values.control === '' || values.cooler === undefined || values.cooler === ''}
+              value={values.max || ''}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              invalid={ShowError('max', touched, errors)}
+            />
+          </FormField>
+        </div>
+
+        <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
+          <FormField
+            label={i18next.t('temperature:hysteresis')}
+            error={ShowError('hysteresis', touched, errors) ? ErrorFor(errors, 'hysteresis') : undefined}
+            helpText={temperatureUnit()}
+          >
+            <Input
+              name='hysteresis'
+              readOnly={readOnly || values.control === ''}
+              value={values.hysteresis || ''}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              invalid={ShowError('hysteresis', touched, errors)}
+            />
+          </FormField>
         </div>
 
         {charts()}
       </div>
 
-      <div className={classNames('row', { 'd-none': readOnly })}>
-        <div className='col-12'>
-          <input
+      {!readOnly && (
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 'var(--reefpi-space-xs)' }}>
+          <Button
             type='submit'
             data-testid='smoke-temperature-submit'
-            value={i18next.t('save')}
+            variant='primary'
             disabled={readOnly}
-            className='btn btn-sm btn-primary float-right mt-1'
-          />
+            style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
+          >
+            {i18next.t('save')}
+          </Button>
         </div>
-      </div>
+      )}
     </form>
   )
 }

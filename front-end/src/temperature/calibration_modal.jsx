@@ -1,10 +1,11 @@
 import React from 'react'
-import Modal from 'modal'
+import { Dialog } from '../../design-system/ui_kits/reef-pi-app/primitives/Interaction'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { Field as FormField, Input } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
 import i18n from 'utils/i18n'
 import * as Yup from 'yup'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
-import classNames from 'classnames'
-import { withFormik, Field } from 'formik'
+import { withFormik, Field as FormikField } from 'formik'
 
 export class CalibrationForm extends React.Component {
   constructor (props) {
@@ -31,59 +32,56 @@ export class CalibrationForm extends React.Component {
 
   render () {
     return (
-      <Modal>
+      <Dialog
+        open
+        onClose={this.handleCancel}
+        title={`${i18n.t('temperature:calibrate')}: ${this.props.probe.name}`}
+        actions={
+          <div style={{ display: 'flex', gap: 'var(--reefpi-space-sm)' }}>
+            <Button
+              role='abort'
+              type='button'
+              variant='secondary'
+              onClick={this.handleCancel}
+            >
+              {i18n.t('cancel')}
+            </Button>
+            <Button
+              role='confirm'
+              type='submit'
+              variant='primary'
+              onClick={this.props.handleSubmit}
+            >
+              {i18n.t('apply')}
+            </Button>
+          </div>
+        }
+      >
         <form onSubmit={this.props.handleSubmit}>
-          <div className='modal-header'>
-            <h4 className='modal-title'>
-              {i18n.t('temperature:calibrate')}: {this.props.probe.name}
-            </h4>
-          </div>
-          <div className='modal-body'>
-
-            <div className='form-group row'>
-              <label htmlFor='value' className='col-4 col-form-label'>
-                {i18n.t('temperature:calibration:set_temperature')}
-              </label>
-              <div className='col-4'>
-                <div className='form-group'>
-                  <Field
-                    name='value'
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--reefpi-space-md)' }}>
+            <FormField
+              label={i18n.t('temperature:calibration:set_temperature')}
+              error={ShowError('value', this.props.touched, this.props.errors) ? ErrorFor(this.props.errors, 'value') : undefined}
+            >
+              <FormikField name='value'>
+                {({ field }) => (
+                  <Input
+                    {...field}
                     type='number'
-                    className={classNames('form-control', {
-                      'is-invalid': ShowError('value', this.props.touched, this.props.errors)
-                    })}
+                    invalid={ShowError('value', this.props.touched, this.props.errors)}
                   />
-                  <ErrorFor errors={this.props.errors} touched={this.props.touched} name='value' />
-                </div>
+                )}
+              </FormikField>
+            </FormField>
+            <div>
+              <div style={{ fontSize: '0.875rem', fontWeight: 600, marginBottom: 'var(--reefpi-space-xxs)' }}>
+                {i18n.t('temperature:current_reading')}
               </div>
-            </div>
-
-            <div className='row'>
-              <div className='col-4'>{i18n.t('temperature:current_reading')}</div>
-              <div className='col-4'>{this.props.currentReading[this.props.probe.id]}</div>
-            </div>
-          </div>
-          <div className='modal-footer'>
-            <div className='text-center'>
-              <button
-                role='abort'
-                type='button'
-                className='btn btn-light mr-2'
-                onClick={this.handleCancel}
-              >
-                {i18n.t('cancel')}
-              </button>
-              <button
-                role='confirm'
-                type='submit'
-                className='btn btn-primary'
-              >
-                {i18n.t('apply')}
-              </button>
+              <div>{this.props.currentReading[this.props.probe.id]}</div>
             </div>
           </div>
         </form>
-      </Modal>
+      </Dialog>
     )
   }
 }

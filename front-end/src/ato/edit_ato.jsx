@@ -2,11 +2,16 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
 import { showError, showUpdateSuccessful } from 'utils/alert'
-import classNames from 'classnames'
-import { Field } from 'formik'
-import BooleanSelect from '../ui_components/boolean_select'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { Field as FormField, Input, Select } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
 import i18next from 'i18next'
 import ATOChart from './chart'
+
+const gridStyle = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))',
+  gap: 'var(--reefpi-space-md)'
+}
 
 const EditAto = ({
   values,
@@ -18,7 +23,9 @@ const EditAto = ({
   submitForm,
   isValid,
   dirty,
-  readOnly
+  readOnly,
+  handleBlur,
+  handleChange
 }) => {
   const charts = () => {
     if (!values.enable) {
@@ -28,7 +35,7 @@ const EditAto = ({
       return
     }
     return (
-      <div className='row'>
+      <div style={{ marginTop: 'var(--reefpi-space-sm)' }}>
         <ATOChart ato_id={values.id} width={500} height={300} ato_name={values.name} />
       </div>
     )
@@ -71,250 +78,224 @@ const EditAto = ({
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className={classNames('row', { 'd-none': readOnly })}>
-        <div className='col col-sm-6 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor='name'>{i18next.t('name')}</label>
-            <Field
+      {!readOnly && (
+        <div style={{ ...gridStyle, marginBottom: 'var(--reefpi-space-md)' }}>
+          <FormField
+            label={i18next.t('name')}
+            error={ShowError('name', touched, errors) ? ErrorFor(errors, 'name') : undefined}
+          >
+            <Input
               name='name'
               data-testid='smoke-ato-name'
               disabled={readOnly}
-              className={classNames('form-control', {
-                'is-invalid': ShowError('name', touched, errors)
-              })}
+              value={values.name || ''}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              invalid={ShowError('name', touched, errors)}
             />
-            <ErrorFor errors={errors} touched={touched} name='name' />
-          </div>
+          </FormField>
         </div>
-      </div>
+      )}
 
-      <div className='row'>
-        <div className='col-12 col-sm-6 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor='inlet'>{i18next.t('inlet')}</label>
-            <Field
-              name='inlet'
-              component='select'
-              data-testid='smoke-ato-inlet'
-              disabled={readOnly}
-              className={classNames('custom-select', {
-                'is-invalid': ShowError('inlet', touched, errors)
-              })}
-            >
-              <option value='' className='d-none'>
-                -- {i18next.t('select')} --
-              </option>
-              {inletOptions()}
-            </Field>
-            <ErrorFor errors={errors} touched={touched} name='inlet' />
-          </div>
-        </div>
-
-        <div className='col-12 col-sm-6 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor='period'>{i18next.t('ato:chk_freq')}</label>
-            <div className='input-group'>
-              <Field
-                name='period'
-                data-testid='smoke-ato-period'
-                readOnly={readOnly}
-                type='number'
-                className={classNames('form-control', {
-                  'is-invalid': ShowError('period', touched, errors)
-                })}
-              />
-              <div className='input-group-append'>
-                <span className='input-group-text d-none d-lg-flex'>
-                  {i18next.t('second_s')}
-                </span>
-                <span className='input-group-text d-flex d-lg-none'>sec</span>
-              </div>
-              <ErrorFor errors={errors} touched={touched} name='period' />
-            </div>
-          </div>
-        </div>
-
-        <div className='col-12 col-sm-6 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor='debounce'>{i18next.t('ato:debounce')}</label>
-            <div className='input-group'>
-              <Field
-                name='debounce'
-                readOnly={readOnly}
-                type='number'
-                min='0'
-                className={classNames('form-control', {
-                  'is-invalid': ShowError('debounce', touched, errors)
-                })}
-              />
-              <div className='input-group-append'>
-                <span className='input-group-text d-none d-lg-flex'>
-                  {i18next.t('second_s')}
-                </span>
-                <span className='input-group-text d-flex d-lg-none'>sec</span>
-              </div>
-              <ErrorFor errors={errors} touched={touched} name='debounce' />
-            </div>
-          </div>
-        </div>
-
-        <div className='col-12 col-sm-6 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor='enable'>{i18next.t('status')}</label>
-            <Field
-              name='enable'
-              component={BooleanSelect}
-              disabled={readOnly}
-              className={classNames('custom-select', {
-                'is-invalid': ShowError('enable', touched, errors)
-              })}
-            >
-              <option value='true'>{i18next.t('enabled')}</option>
-              <option value='false'>{i18next.t('disabled')}</option>
-            </Field>
-            <ErrorFor errors={errors} touched={touched} name='enable' />
-          </div>
-        </div>
-      </div>
-
-      <div className='row'>
-        <div className='col-12 col-sm-6 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor='control'>{i18next.t('ato:control')}</label>
-            <Field
-              name='control'
-              component='select'
-              data-testid='smoke-ato-control'
-              disabled={readOnly}
-              className={classNames('custom-select', {
-                'is-invalid': ShowError('control', touched, errors)
-              })}
-            >
-              <option value=''>{i18next.t('ato:controlnothing')}</option>
-              <option value='macro'>{i18next.t('ato:controlmacro')}</option>
-              <option value='equipment'>{i18next.t('ato:controlequipment')}</option>
-            </Field>
-            <ErrorFor errors={errors} touched={touched} name='control' />
-          </div>
-        </div>
-
-        <div className='col-12 col-sm-6 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor='pump'>{i18next.t('ato:control_target')}</label>
-            <Field
-              name='pump'
-              component='select'
-              data-testid='smoke-ato-pump'
-              disabled={readOnly || values.control === ''}
-              className={classNames('custom-select', {
-                'is-invalid': ShowError('pump', touched, errors)
-              })}
-            >
-              <option key='' value=''>
-                {i18next.t('none')}
-              </option>
-              {controlOptions()}
-            </Field>
-            <ErrorFor errors={errors} touched={touched} name='pump' />
-          </div>
-        </div>
-
-        <div className='col-12 col-sm-6 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor='one_shot'>{i18next.t('one_shot')}</label>
-            <Field
-              name='one_shot'
-              component={BooleanSelect}
-              disabled={readOnly}
-              className={classNames('custom-select', {
-                'is-invalid': ShowError('one_shot', touched, errors)
-              })}
-            >
-              <option value='true'>{i18next.t('enabled')}</option>
-              <option value='false'>{i18next.t('disabled')}</option>
-            </Field>
-            <ErrorFor errors={errors} touched={touched} name='one_shot' />
-          </div>
-        </div>
-      </div>
-
-      <div className='row'>
-        <div className='col-12 col-sm-6 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor='notify'>{i18next.t('alerts')}</label>
-            <Field
-              name='notify'
-              component={BooleanSelect}
-              disabled={readOnly}
-              className={classNames('custom-select', {
-                'is-invalid': ShowError('notify', touched, errors)
-              })}
-            >
-              <option value='true'>{i18next.t('enabled')}</option>
-              <option value='false'>{i18next.t('disabled')}</option>
-            </Field>
-            <ErrorFor errors={errors} touched={touched} name='notify' />
-          </div>
-        </div>
-
-        <div
-          className={classNames('col-12 col-sm-3 col-md-3 d-sm-block', {
-            'd-none': values.notify === false
-          })}
+      <div style={gridStyle}>
+        <FormField
+          label={i18next.t('inlet')}
+          error={ShowError('inlet', touched, errors) ? ErrorFor(errors, 'inlet') : undefined}
         >
-          <div className='form-group'>
-            <label htmlFor='maxAlert'>{i18next.t('ato:alert_after')}</label>
-            <div className='input-group'>
-              <Field
-                title={i18next.t('ato:total_seconds_pump_on')}
-                name='maxAlert'
-                type='number'
-                readOnly={readOnly || values.notify === false}
-                className={classNames('form-control px-sm-1 px-md-2', {
-                  'is-invalid': ShowError('maxAlert', touched, errors)
-                })}
-              />
-              <div className='input-group-append'>
-                <span className='input-group-text d-none d-lg-flex'>
-                  {i18next.t('second_s')}
-                </span>
-                <span className='input-group-text d-flex d-lg-none'>sec</span>
-              </div>
-              <ErrorFor errors={errors} touched={touched} name='maxAlert' />
-            </div>
-          </div>
-        </div>
+          <Select
+            name='inlet'
+            data-testid='smoke-ato-inlet'
+            disabled={readOnly}
+            value={values.inlet || ''}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            invalid={ShowError('inlet', touched, errors)}
+          >
+            <option value=''>
+              -- {i18next.t('select')} --
+            </option>
+            {inletOptions()}
+          </Select>
+        </FormField>
 
-        <div className='col-12 col-sm-6 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor='disable_on_alert'>{i18next.t('ato:disable_on_alert')}</label>
-            <Field
-              name='disable_on_alert'
-              component={BooleanSelect}
-              disabled={readOnly}
-              className={classNames('custom-select', {
-                'is-invalid': ShowError('disable_on_alert', touched, errors)
-              })}
-            >
-              <option value='true'>{i18next.t('enabled')}</option>
-              <option value='false'>{i18next.t('disabled')}</option>
-            </Field>
-            <ErrorFor errors={errors} touched={touched} name='disable_on_alert' />
-          </div>
-        </div>
+        <FormField
+          label={i18next.t('ato:chk_freq')}
+          error={ShowError('period', touched, errors) ? ErrorFor(errors, 'period') : undefined}
+          helpText={i18next.t('second_s')}
+        >
+          <Input
+            name='period'
+            data-testid='smoke-ato-period'
+            readOnly={readOnly}
+            type='number'
+            value={values.period || ''}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            invalid={ShowError('period', touched, errors)}
+          />
+        </FormField>
+
+        <FormField
+          label={i18next.t('ato:debounce')}
+          error={ShowError('debounce', touched, errors) ? ErrorFor(errors, 'debounce') : undefined}
+          helpText={i18next.t('second_s')}
+        >
+          <Input
+            name='debounce'
+            readOnly={readOnly}
+            type='number'
+            min='0'
+            value={values.debounce || ''}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            invalid={ShowError('debounce', touched, errors)}
+          />
+        </FormField>
+
+        <FormField
+          label={i18next.t('status')}
+          error={ShowError('enable', touched, errors) ? ErrorFor(errors, 'enable') : undefined}
+        >
+          <Select
+            name='enable'
+            disabled={readOnly}
+            value={String(values.enable)}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            invalid={ShowError('enable', touched, errors)}
+          >
+            <option value='true'>{i18next.t('enabled')}</option>
+            <option value='false'>{i18next.t('disabled')}</option>
+          </Select>
+        </FormField>
       </div>
 
-      <div className={classNames('row', { 'd-none': readOnly })}>
-        <div className='col-12'>
-          <input
+      <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
+        <FormField
+          label={i18next.t('ato:control')}
+          error={ShowError('control', touched, errors) ? ErrorFor(errors, 'control') : undefined}
+        >
+          <Select
+            name='control'
+            data-testid='smoke-ato-control'
+            disabled={readOnly}
+            value={values.control || ''}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            invalid={ShowError('control', touched, errors)}
+          >
+            <option value=''>{i18next.t('ato:controlnothing')}</option>
+            <option value='macro'>{i18next.t('ato:controlmacro')}</option>
+            <option value='equipment'>{i18next.t('ato:controlequipment')}</option>
+          </Select>
+        </FormField>
+
+        <FormField
+          label={i18next.t('ato:control_target')}
+          error={ShowError('pump', touched, errors) ? ErrorFor(errors, 'pump') : undefined}
+        >
+          <Select
+            name='pump'
+            data-testid='smoke-ato-pump'
+            disabled={readOnly || values.control === ''}
+            value={values.pump || ''}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            invalid={ShowError('pump', touched, errors)}
+          >
+            <option key='' value=''>
+              {i18next.t('none')}
+            </option>
+            {controlOptions()}
+          </Select>
+        </FormField>
+
+        <FormField
+          label={i18next.t('one_shot')}
+          error={ShowError('one_shot', touched, errors) ? ErrorFor(errors, 'one_shot') : undefined}
+        >
+          <Select
+            name='one_shot'
+            disabled={readOnly}
+            value={String(values.one_shot)}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            invalid={ShowError('one_shot', touched, errors)}
+          >
+            <option value='true'>{i18next.t('enabled')}</option>
+            <option value='false'>{i18next.t('disabled')}</option>
+          </Select>
+        </FormField>
+      </div>
+
+      <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
+        <FormField
+          label={i18next.t('alerts')}
+          error={ShowError('notify', touched, errors) ? ErrorFor(errors, 'notify') : undefined}
+        >
+          <Select
+            name='notify'
+            disabled={readOnly}
+            value={String(values.notify)}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            invalid={ShowError('notify', touched, errors)}
+          >
+            <option value='true'>{i18next.t('enabled')}</option>
+            <option value='false'>{i18next.t('disabled')}</option>
+          </Select>
+        </FormField>
+
+        {values.notify !== false && (
+          <FormField
+            label={i18next.t('ato:alert_after')}
+            error={ShowError('maxAlert', touched, errors) ? ErrorFor(errors, 'maxAlert') : undefined}
+            helpText={i18next.t('second_s')}
+          >
+            <Input
+              title={i18next.t('ato:total_seconds_pump_on')}
+              name='maxAlert'
+              type='number'
+              readOnly={readOnly || values.notify === false}
+              value={values.maxAlert || ''}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              invalid={ShowError('maxAlert', touched, errors)}
+            />
+          </FormField>
+        )}
+
+        <FormField
+          label={i18next.t('ato:disable_on_alert')}
+          error={ShowError('disable_on_alert', touched, errors) ? ErrorFor(errors, 'disable_on_alert') : undefined}
+        >
+          <Select
+            name='disable_on_alert'
+            disabled={readOnly}
+            value={String(values.disable_on_alert)}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            invalid={ShowError('disable_on_alert', touched, errors)}
+          >
+            <option value='true'>{i18next.t('enabled')}</option>
+            <option value='false'>{i18next.t('disabled')}</option>
+          </Select>
+        </FormField>
+      </div>
+
+      {!readOnly && (
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 'var(--reefpi-space-xs)' }}>
+          <Button
             type='submit'
             data-testid='smoke-ato-submit'
-            value={i18next.t('save')}
+            variant='primary'
             disabled={readOnly}
-            className='btn btn-sm btn-primary float-right mt-1'
-          />
+            style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
+          >
+            {i18next.t('save')}
+          </Button>
         </div>
-      </div>
+      )}
 
       {charts()}
     </form>

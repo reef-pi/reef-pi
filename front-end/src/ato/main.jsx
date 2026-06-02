@@ -14,6 +14,8 @@ import { SortByName } from 'utils/sort_by_name'
 import { timestampToEpoch } from 'utils/timestamp'
 import RangeSelector from '../../design-system/ui_kits/reef-pi-app/primitives/RangeSelector'
 import Sparkline from '../../design-system/ui_kits/reef-pi-app/primitives/Sparkline'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { List, ListItem } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
 
 const RANGE_MS = { '1h': 3600000, '6h': 21600000, '1d': 86400000, '7d': 604800000, '30d': 2592000000 }
 
@@ -127,14 +129,15 @@ export class RawATOMain extends React.Component {
           this.props.update(probe.id, probe)
         }
         const resetButton = (
-          <button
+          <Button
             type='button'
             name={'reset-ato-' + probe.id}
-            className='btn btn-sm btn-outline-info float-right'
+            variant='secondary'
+            style={{ marginLeft: 'auto', padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
             onClick={() => { this.handleReset(probe) }}
           >
             {i18n.t('ato:reset_usage')}
-          </button>
+          </Button>
         )
         const enhancedView = !!window.FEATURE_FLAGS?.dashboard_v2 && (
           <AtoPrimitives
@@ -192,10 +195,10 @@ export class RawATOMain extends React.Component {
 
     return (
       <div>
-        <ul className='list-group list-group-flush'>
+        <List>
           <CollapsibleList>{this.probeList()}</CollapsibleList>
-          {newATO}
-        </ul>
+          <ListItem>{newATO}</ListItem>
+        </List>
       </div>
     )
   }

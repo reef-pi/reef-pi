@@ -1,11 +1,12 @@
 import React from 'react'
 import * as Yup from 'yup'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
-import classNames from 'classnames'
-import { withFormik, Field } from 'formik'
+import { withFormik, Field as FormikField } from 'formik'
 import { FaCheck } from 'react-icons/fa'
 import { IconContext } from 'react-icons'
 import i18n from 'utils/i18n'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { Field as FormField, Input } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
 
 export const Calibrate = ({ values, errors, touched, label, submitForm, complete, readOnly }) => {
   const handleSubmit = event => {
@@ -15,25 +16,24 @@ export const Calibrate = ({ values, errors, touched, label, submitForm, complete
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className='form-group row'>
-        <label htmlFor='value' className='col-4 col-form-label'>
-          {label}
-        </label>
-        <div className='col-4'>
-          <div className='form-group'>
-            <Field
-              name='value'
-              type='number'
-              step='any'
-              disabled={readOnly}
-              className={classNames('form-control', {
-                'is-invalid': ShowError('value', touched, errors)
-              })}
-            />
-            <ErrorFor errors={errors} touched={touched} name='value' />
-          </div>
-        </div>
-        <div className='col-4'>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr auto', gap: 'var(--reefpi-space-md)', alignItems: 'end' }}>
+        <FormField
+          label={label}
+          error={ShowError('value', touched, errors) ? ErrorFor(errors, 'value') : undefined}
+        >
+          <FormikField name='value'>
+            {({ field }) => (
+              <Input
+                {...field}
+                type='number'
+                step='any'
+                disabled={readOnly}
+                invalid={ShowError('value', touched, errors)}
+              />
+            )}
+          </FormikField>
+        </FormField>
+        <div>
           {complete
             ? (
               <IconContext.Provider value={{ color: 'blue', className: 'align-bottom' }}>
@@ -41,12 +41,14 @@ export const Calibrate = ({ values, errors, touched, label, submitForm, complete
               </IconContext.Provider>
               )
             : (
-              <input
+              <Button
                 type='submit'
                 disabled={readOnly}
-                value={i18n.t('ph:run_calibration')}
-                className='btn btn-sm btn-outline-primary'
-              />
+                variant='secondary'
+                style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
+              >
+                {i18n.t('ph:run_calibration')}
+              </Button>
               )}
         </div>
       </div>
