@@ -4,7 +4,6 @@ import MainPanel from 'main_panel'
 import SignIn from 'sign_in'
 import 'style.scss'
 import 'bootstrap/dist/js/bootstrap.min.js'
-import 'react-toggle-switch/dist/css/switch.min.css'
 import i18n from 'utils/i18n'
 import { useTheme } from '../design-system/ui_kits/reef-pi-app/hooks/useTheme'
 
