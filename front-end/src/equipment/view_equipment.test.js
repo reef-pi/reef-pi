@@ -50,9 +50,8 @@ describe('<ViewEquipment />', () => {
     expect(container.textContent).toContain('Return Pump')
     expect(container.textContent).toContain('Outlet 1')
 
-    const actionButtons = container.querySelectorAll('.d-inline')
-    act(() => actionButtons[0].click())
-    act(() => actionButtons[1].click())
+    act(() => container.querySelector('[data-testid="equipment-edit"]').click())
+    act(() => container.querySelector('[data-testid="equipment-delete"]').click())
     expect(onEdit).toHaveBeenCalled()
     expect(onDelete).toHaveBeenCalled()
 

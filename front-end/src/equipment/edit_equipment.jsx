@@ -1,11 +1,35 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { ErrorFor, ShowError } from '../utils/validation_helper'
+import { ErrorMessage, ShowError } from '../utils/validation_helper'
 import { showError, showUpdateSuccessful } from 'utils/alert'
-import classNames from 'classnames'
 import i18next from 'i18next'
 import { FaTrashAlt, FaSave } from 'react-icons/fa'
 import { SortByName } from 'utils/sort_by_name'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { Field, Input, Select } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
+
+const formGridStyle = {
+  alignItems: 'end',
+  display: 'grid',
+  gap: 'var(--reefpi-space-md)',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))',
+  width: '100%'
+}
+
+const checkboxStyle = {
+  height: '1.25rem',
+  minHeight: '1.25rem',
+  minWidth: '1.25rem',
+  width: '1.25rem'
+}
+
+const actionStyle = {
+  alignItems: 'center',
+  display: 'inline-flex',
+  gap: 'var(--reefpi-space-xs)'
+}
+
+const fieldError = (name, touched, errors) => ShowError(name, touched, errors) ? ErrorMessage(errors, name) : undefined
 
 const EditEquipment = ({
   values,
@@ -34,41 +58,34 @@ const EditEquipment = ({
   const deleteAction = () => {
     if (values.id) {
       return (
-        <div className='d-inline p-2' onClick={onDelete}>
-          {FaTrashAlt()}
-        </div>
+        <Button type='button' variant='ghost' icon={<FaTrashAlt />} iconOnly aria-label='Delete equipment' onClick={onDelete} />
       )
     }
-    return ''
+    return null
   }
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className='d-flex flex-wrap'>
-        <div className='p-2 mr-auto'>
-          <label className='mr-2'>{i18next.t('name')}</label>
-          <input
+      <div style={formGridStyle}>
+        <Field label={i18next.t('name')} error={fieldError('name', touched, errors)}>
+          <Input
             type='text'
             name='name'
             data-testid='smoke-equipment-name'
             onChange={handleChange}
             onBlur={handleBlur}
-            className={classNames('form-control', { 'is-invalid': ShowError('name', touched, errors) })}
             value={values.name}
           />
-          <ErrorFor errors={errors} touched={touched} name='name' />
-        </div>
-        <div className='p-2 mr-auto'>
-          <label className='mr-2'>{i18next.t('outlet')}</label>
-          <select
+        </Field>
+        <Field label={i18next.t('outlet')} error={fieldError('outlet', touched, errors)}>
+          <Select
             name='outlet'
             data-testid='smoke-equipment-outlet'
             onChange={handleChange}
             onBlur={handleBlur}
-            className={classNames('form-control', { 'is-invalid': ShowError('outlet', touched, errors) })}
             value={values.outlet}
           >
-            <option value='' className='d-none'>-- {i18next.t('select')} --</option>
+            <option value=''>-- {i18next.t('select')} --</option>
             {outlets.slice().sort((a, b) => SortByName(a, b))
               .map((item) => {
                 return (
@@ -80,41 +97,35 @@ const EditEquipment = ({
                   </option>
                 )
               })}
-          </select>
-          <ErrorFor errors={errors} touched={touched} name='outlet' />
-        </div>
-        <div className='p-2 mr-auto'>
-          <label className='mr-2'>{i18next.t('stayoffonboot')}</label>
-          <input
+          </Select>
+        </Field>
+        <Field label={i18next.t('stayoffonboot')} error={fieldError('stay_off_on_boot', touched, errors)}>
+          <Input
             type='checkbox'
             name='stay_off_on_boot'
             checked={values.stay_off_on_boot}
             onChange={handleChange}
             onBlur={handleBlur}
-            className={classNames('form-control', { 'is-invalid': ShowError('stay_off_on_boot', touched, errors) })}
             value={values.stay_off_on_boot}
+            style={checkboxStyle}
           />
-          <ErrorFor errors={errors} touched={touched} name='stay_off_on_boot' />
-        </div>
-        <div className='p-2 mr-auto'>
-          <label className='mr-2'>{i18next.t('equipment:boot_delay')}</label>
-          <input
+        </Field>
+        <Field label={i18next.t('equipment:boot_delay')} error={fieldError('boot_delay', touched, errors)}>
+          <Input
             type='number'
             min='0'
             name='boot_delay'
             value={values.boot_delay}
             onChange={handleChange}
             onBlur={handleBlur}
-            className={classNames('form-control', { 'is-invalid': ShowError('boot_delay', touched, errors) })}
           />
-          <ErrorFor errors={errors} touched={touched} name='boot_delay' />
+        </Field>
+        <div style={actionStyle}>
+          <Button type='submit' id='add_equipment' data-testid='smoke-equipment-submit' icon={<FaSave />}>
+            {actionLabel}
+          </Button>
+          {deleteAction()}
         </div>
-        <div className='p-2 mr-auto'>
-          <button type='submit' id='add_equipment' data-testid='smoke-equipment-submit'>
-            {FaSave()}
-          </button>
-        </div>
-        {deleteAction()}
       </div>
     </form>
   )

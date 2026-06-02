@@ -7,6 +7,9 @@ import EquipmentForm from './equipment_form'
 import { SORT_NAME_AZ, SORT_NAME_ZA, SORT_ON_FIRST, SORT_OFF_FIRST, sortEquipment } from './utils'
 import i18next from 'i18next'
 import EmptyState, { EquipmentIcon } from '../../design-system/ui_kits/reef-pi-app/shell/EmptyState'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { Field, Select } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
+import { List, ListItem } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
 
 const sortOptions = [
   { value: SORT_NAME_AZ, label: 'equipment:sort_name_az' },
@@ -14,6 +17,21 @@ const sortOptions = [
   { value: SORT_ON_FIRST, label: 'equipment:sort_on_first' },
   { value: SORT_OFF_FIRST, label: 'equipment:sort_off_first' }
 ]
+
+const sortRowStyle = {
+  alignItems: 'end',
+  display: 'grid',
+  gap: 'var(--reefpi-space-sm)',
+  gridTemplateColumns: 'minmax(12rem, 18rem)',
+  justifyContent: 'start'
+}
+
+const addRowStyle = {
+  alignItems: 'start',
+  display: 'grid',
+  gap: 'var(--reefpi-space-sm)',
+  justifyItems: 'start'
+}
 
 export class RawEquipmentMain extends React.Component {
   constructor (props) {
@@ -58,7 +76,7 @@ export class RawEquipmentMain extends React.Component {
     const sorted = sortEquipment(this.props.equipment, this.state.sortMode)
     const newEquipmentForm = this.state.addEquipment
       ? <EquipmentForm outlets={this.props.outlets} actionLabel={i18next.t('add')} onSubmit={this.handleAddEquipment} />
-      : <div />
+      : null
 
     if (sorted.length === 0 && !this.state.addEquipment) {
       return (
@@ -72,26 +90,17 @@ export class RawEquipmentMain extends React.Component {
     }
 
     return (
-      <ul className='list-group list-group-flush'>
-        <li className='list-group-item'>
-          <div className='row align-items-center'>
-            <div className='col-auto'>
-              <label htmlFor='equipment-sort' className='col-form-label'>{i18next.t('equipment:sort')}</label>
-            </div>
-            <div className='col-auto'>
-              <select
-                id='equipment-sort'
-                className='form-control form-control-sm'
-                value={this.state.sortMode}
-                onChange={this.handleSortChange}
-              >
-                {sortOptions.map(option => (
-                  <option key={option.value} value={option.value}>{i18next.t(option.label)}</option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </li>
+      <List density='roomy'>
+        <ListItem style={sortRowStyle}>
+          <Field id='equipment-sort' label={i18next.t('equipment:sort')}>
+            <Select
+              id='equipment-sort'
+              value={this.state.sortMode}
+              onChange={this.handleSortChange}
+              options={sortOptions.map(option => ({ value: option.value, label: i18next.t(option.label) }))}
+            />
+          </Field>
+        </ListItem>
         {sorted.map(item => {
           return (
             <Equipment
@@ -103,22 +112,21 @@ export class RawEquipmentMain extends React.Component {
             />
           )
         })}
-        <li className='list-group-item add-equipment'>
-          <div className='row'>
-            <div className='col'>
-              <input
-                id='add_equipment'
-                data-testid='smoke-equipment-add-toggle'
-                type='button'
-                value={this.state.addEquipment ? '-' : '+'}
-                onClick={this.handleToggleAddEquipmentDiv}
-                className='btn btn-outline-success'
-              />
-            </div>
-          </div>
+        <ListItem style={addRowStyle}>
+          <Button
+            id='add_equipment'
+            data-testid='smoke-equipment-add-toggle'
+            type='button'
+            variant='secondary'
+            onClick={this.handleToggleAddEquipmentDiv}
+            aria-expanded={this.state.addEquipment}
+            aria-label={this.state.addEquipment ? i18next.t('close') : i18next.t('equipment:add', 'Add equipment')}
+          >
+            {this.state.addEquipment ? '-' : '+'}
+          </Button>
           {newEquipmentForm}
-        </li>
-      </ul>
+        </ListItem>
+      </List>
     )
   }
 }

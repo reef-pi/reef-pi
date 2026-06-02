@@ -75,7 +75,7 @@ Once tier 3 is done, **delete jQuery from `package.json`** (it's only there beca
 
 ## Routes migrated (tick as PRs merge)
 - [ ] dashboard (covered by `dashboard_v2` — Bootstrap-free from day one)
-- [ ] equipment
+- [x] equipment
 - [ ] timers
 - [ ] lighting
 - [ ] temperature
