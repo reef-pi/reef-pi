@@ -9,6 +9,7 @@ import { connect } from 'react-redux'
 import i18next from 'i18next'
 import { confirm } from 'utils/confirm'
 import { SortByName } from 'utils/sort_by_name'
+import { List, ListItem } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
 
 export class RawJournalMain extends React.Component {
   constructor (props) {
@@ -61,12 +62,10 @@ export class RawJournalMain extends React.Component {
     }
 
     return (
-      <div>
-        <ul className='list-group list-group-flush'>
-          <CollapsibleList>{this.list()}</CollapsibleList>
-          <New />
-        </ul>
-      </div>
+      <List>
+        <CollapsibleList>{this.list()}</CollapsibleList>
+        <New />
+      </List>
     )
   }
 }

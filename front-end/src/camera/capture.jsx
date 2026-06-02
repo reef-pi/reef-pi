@@ -2,6 +2,7 @@ import React from 'react'
 import { takeImage, getLatestImage } from '../redux/actions/camera'
 import { connect } from 'react-redux'
 import i18next from 'i18next'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 
 export const cameraImageRoute = '/images/'
 
@@ -29,13 +30,13 @@ export class RawCapture extends React.Component {
     return (
       <div className='container'>
         <div className='row'>
-          <input
-            type='button'
+          <Button
             id='captureImage'
-            onClick={this.handleTakeImage}
-            value={i18next.t('camera:take_photo')}
-            className='btn btn-outline-primary'
-          />
+            onClick={() => this.handleTakeImage()}
+            variant='primary'
+          >
+            {i18next.t('camera:take_photo')}
+          </Button>
         </div>
         <div className='row'>{img}</div>
       </div>

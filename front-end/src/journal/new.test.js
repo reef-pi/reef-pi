@@ -14,7 +14,7 @@ describe('<New />', () => {
   it('renders collapsed without a journal form', () => {
     const component = new RawNewJournal({ createJournal: jest.fn() })
     expect(() => component.render()).not.toThrow()
-    expect(children(component)[0].props.value).toBe('+')
+    expect(children(component)[0].props.children).toBe('+')
     expect(children(component)[1]).toBeUndefined()
     expect(New).toBeDefined()
   })
@@ -25,7 +25,7 @@ describe('<New />', () => {
       component.state = { ...component.state, ...update }
     })
     children(component)[0].props.onClick()
-    expect(children(component)[0].props.value).toBe('-')
+    expect(children(component)[0].props.children).toBe('-')
     expect(children(component)[1].type).toBe(JournalForm)
     expect(children(component)[1].props.onSubmit).toBe(component.handleSubmit)
   })

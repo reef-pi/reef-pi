@@ -2,6 +2,8 @@ import React from 'react'
 import { createJournal } from 'redux/actions/journal'
 import JournalForm from './form'
 import { connect } from 'react-redux'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { ListItem } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
 
 export class RawNewJournal extends React.Component {
   constructor (props) {
@@ -49,10 +51,12 @@ export class RawNewJournal extends React.Component {
 
   render () {
     return (
-      <div className='list-group-item add-journal'>
-        <input id='add_new_journal' type='button' value={this.state.add ? '-' : '+'} onClick={this.handleToggle} className='btn btn-outline-success' />
+      <ListItem>
+        <Button id='add_new_journal' type='button' variant='primary' onClick={this.handleToggle}>
+          {this.state.add ? '-' : '+'}
+        </Button>
         {this.ui()}
-      </div>
+      </ListItem>
     )
   }
 }

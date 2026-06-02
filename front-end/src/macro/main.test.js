@@ -5,6 +5,7 @@ import 'isomorphic-fetch'
 import fetchMock from 'fetch-mock'
 import MacroForm, { mapMacroPropsToValues, submitMacroForm } from './macro_form'
 import Collapsible from '../ui_components/collapsible'
+import { List } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
 
 jest.mock('utils/confirm', () => {
   return {
@@ -79,7 +80,7 @@ describe('Macro UI', () => {
       { ...macro, id: '2', name: 'Macro A' }
     ]
     const main = makeMain({ macros })
-    expect(main.render().type).toBe('ul')
+    expect(main.render().type).toBe(List)
     expect(macros.map(item => item.name)).toEqual(['Macro B', 'Macro A'])
   })
 

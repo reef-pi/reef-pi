@@ -2,12 +2,19 @@ import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
 import { showError, showUpdateSuccessful } from 'utils/alert'
-import classNames from 'classnames'
 import i18n from 'utils/i18n'
 import { Field, FieldArray } from 'formik'
 import StepSelector from './step_selector'
 import SelectType from './select_type'
 import BooleanSelect from '../ui_components/boolean_select'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { Field as FormField, Input } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
+
+const formGridStyle = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))',
+  gap: 'var(--reefpi-space-md)'
+}
 
 const EditMacro = ({
   values,
@@ -41,44 +48,33 @@ const EditMacro = ({
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className='row'>
-        <div className='col-12 col-sm-6 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor='name'>{i18n.t('name')}</label>
-            <Field
-              name='name'
-              disabled={readOnly}
-              className={classNames('form-control', {
-                'is-invalid': ShowError('name', touched, errors)
-              })}
-            />
-            <ErrorFor errors={errors} touched={touched} name='name' />
-          </div>
-        </div>
-        <div className='col-12 col-sm-6 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor='name'>{i18n.t('macro:reversible')}</label>
-            <Field
-              name='reversible'
-              component={BooleanSelect}
-              disabled={readOnly}
-              className={classNames('form-control', {
-                'is-invalid': ShowError('reversible', touched, errors)
-              })}
-            >
-              <option value='' className='d-none'>-- {i18n.t('select')} --</option>
-              <option value='true'>{i18n.t('yes')}</option>
-              <option value='false'>{i18n.t('no')}</option>
-            </Field>
-            <ErrorFor errors={errors} touched={touched} name='reversible' />
-          </div>
-        </div>
-
+      <div style={formGridStyle}>
+        <FormField label={i18n.t('name')} error={ShowError('name', touched, errors) ? <ErrorFor errors={errors} touched={touched} name='name' /> : undefined}>
+          <Input
+            name='name'
+            disabled={readOnly}
+            onChange={handleChange}
+            onBlur={onBlur}
+            value={values.name}
+            invalid={ShowError('name', touched, errors)}
+          />
+        </FormField>
+        <FormField label={i18n.t('macro:reversible')} error={ShowError('reversible', touched, errors) ? <ErrorFor errors={errors} touched={touched} name='reversible' /> : undefined}>
+          <Field
+            name='reversible'
+            component={BooleanSelect}
+            disabled={readOnly}
+            invalid={ShowError('reversible', touched, errors)}
+          >
+            <option value='' className='d-none'>-- {i18n.t('select')} --</option>
+            <option value='true'>{i18n.t('yes')}</option>
+            <option value='false'>{i18n.t('no')}</option>
+          </Field>
+        </FormField>
       </div>
 
-      <div className='form-group'>
+      <div style={{ marginTop: 'var(--reefpi-space-sm)' }}>
         <h6>{i18n.t('macro:steps')}</h6>
-        <input className='d-none form-control is-invalid' />
         <ErrorFor errors={errors} touched={touched} name='steps' />
       </div>
 
@@ -86,12 +82,13 @@ const EditMacro = ({
         name='steps'
         render={arrayHelpers => {
           return (
-            <div className='ml-2'>
+            <div style={{ paddingLeft: 'var(--reefpi-space-sm)' }}>
               {nosteps(values.steps.length)}
               {values.steps.map((step, index) => {
                 return (
                   <div
-                    className='row macro-step'
+                    style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--reefpi-space-xs)', alignItems: 'flex-start', marginBottom: 'var(--reefpi-space-xs)', cursor: readOnly ? 'default' : 'grab' }}
+                    className='macro-step'
                     name={`step-${index}`}
                     key={index}
                     draggable={!readOnly}
@@ -103,21 +100,17 @@ const EditMacro = ({
                         dragIndex.current = null
                       }
                     }}
-                    style={{ cursor: readOnly ? 'default' : 'grab' }}
                   >
                     {!readOnly && (
-                      <div className='col-auto d-flex align-items-center pr-0' title={i18n.t('macro:drag_to_reorder')}>
+                      <div style={{ display: 'flex', alignItems: 'center', paddingRight: 0 }} title={i18n.t('macro:drag_to_reorder')}>
                         <span style={{ fontSize: '1.2rem', color: '#aaa', userSelect: 'none' }}>&#8942;</span>
                       </div>
                     )}
-                    <div className='col-12 col-sm-4 col-md-3'>
+                    <div style={{ minWidth: '10rem' }}>
                       <SelectType
                         name={`steps.${index}.type`}
                         aria-label='Step Type'
                         title='Step Type'
-                        className={classNames('form-control custom-select', {
-                          'is-invalid': ShowError(`steps.${index}.type`, touched, errors)
-                        })}
                         readOnly={readOnly}
                       />
                       <ErrorFor errors={errors} touched={touched} name={`steps.${index}.type`} />
@@ -130,52 +123,55 @@ const EditMacro = ({
                       readOnly={readOnly}
                     />
 
-                    <div className={classNames('col-12 col-sm-1 col-md-3 ml-auto', { 'd-none': readOnly })}>
-                      <button
-                        aria-label={i18n.t('delete')}
-                        title={i18n.t('delete')}
-                        name={`remove-step-${index}`}
-                        type='button'
-                        className='btn btn-outline-danger'
-                        onClick={() => arrayHelpers.remove(index)}
-                        disabled={readOnly}
-                      >
-                        X
-                      </button>
-                    </div>
+                    {!readOnly && (
+                      <div style={{ marginLeft: 'auto' }}>
+                        <Button
+                          aria-label={i18n.t('delete')}
+                          title={i18n.t('delete')}
+                          name={`remove-step-${index}`}
+                          type='button'
+                          variant='danger'
+                          onClick={() => arrayHelpers.remove(index)}
+                          disabled={readOnly}
+                        >
+                          X
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 )
               })}
-              <div className={classNames('row', { 'd-none': readOnly })}>
-                <div className='col-12'>
-                  <button
+              {!readOnly && (
+                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <Button
                     type='button'
-                    className='btn btn-outline-success float-right'
-                    value='+'
+                    variant='primary'
                     onClick={() => arrayHelpers.push({ duration: '', id: '', on: '', title: '', message: '' })}
                     id='add-step'
                     data-testid='smoke-macro-add-step'
                   >
                     +
-                  </button>
+                  </Button>
                 </div>
-              </div>
+              )}
             </div>
           )
         }}
       />
 
-      <div className={classNames('row', { 'd-none': readOnly })}>
-        <div className='col-12'>
-          <input
+      {!readOnly && (
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 'var(--reefpi-space-xxs)' }}>
+          <Button
             type='submit'
+            variant='primary'
             data-testid='smoke-macro-submit'
-            value={i18n.t('save')}
             disabled={readOnly}
-            className='btn btn-sm btn-primary float-right mt-1'
-          />
+            style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
+          >
+            {i18n.t('save')}
+          </Button>
         </div>
-      </div>
+      )}
     </form>
   )
 }

@@ -62,7 +62,7 @@ describe('EditEntry', () => {
     expect(Alert.showError).toHaveBeenCalled()
   })
 
-  it('shows is-invalid class on value field when there is a touched error', () => {
+  it('marks value field as invalid when there is a touched error', () => {
     const valueField = findAll(
       EditEntry({
         ...defaultProps,
@@ -71,6 +71,6 @@ describe('EditEntry', () => {
       }),
       node => node.props?.name === 'value'
     )[0]
-    expect(valueField.props.className).toContain('is-invalid')
+    expect(valueField.props.invalid).toBeTruthy()
   })
 })

@@ -2,9 +2,16 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
 import { showError, showUpdateSuccessful } from 'utils/alert'
-import classNames from 'classnames'
 import { Field } from 'formik'
 import i18next from 'i18next'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { Field as FormField, Input } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
+
+const formGridStyle = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))',
+  gap: 'var(--reefpi-space-md)'
+}
 
 const EditEntry = ({
   values,
@@ -27,54 +34,39 @@ const EditEntry = ({
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className={classNames('d-flex row')}>
-        <div className='col col-sm-6 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor='value'>{i18next.t('journal:value')}</label>
-            <Field
-              name='value'
-              type='number'
-              className={classNames('form-control', {
-                'is-invalid': ShowError('value', touched, errors)
-              })}
-            />
-            <ErrorFor errors={errors} touched={touched} name='value' />
-          </div>
-        </div>
-        <div className='col col-sm-6 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor='comment'>{i18next.t('journal:comment')}</label>
-            <Field
-              name='comment'
-              className={classNames('form-control', {
-                'is-invalid': ShowError('description', touched, errors)
-              })}
-            />
-            <ErrorFor errors={errors} touched={touched} name='comment' />
-          </div>
-        </div>
-        <div className='col col-sm-6 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor='comment'>{i18next.t('journal:timestamp')}</label>
-            <Field
-              name='timestamp'
-              className={classNames('form-control', {
-                'is-invalid': ShowError('timestamp', touched, errors)
-              })}
-            />
-            <ErrorFor errors={errors} touched={touched} name='timestamp' />
-          </div>
-        </div>
+      <div style={formGridStyle}>
+        <FormField label={i18next.t('journal:value')} error={ShowError('value', touched, errors) ? <ErrorFor errors={errors} touched={touched} name='value' /> : undefined}>
+          <Field
+            name='value'
+            type='number'
+            as={Input}
+            invalid={ShowError('value', touched, errors)}
+          />
+        </FormField>
+        <FormField label={i18next.t('journal:comment')} error={ShowError('comment', touched, errors) ? <ErrorFor errors={errors} touched={touched} name='comment' /> : undefined}>
+          <Field
+            name='comment'
+            as={Input}
+            invalid={ShowError('description', touched, errors)}
+          />
+        </FormField>
+        <FormField label={i18next.t('journal:timestamp')} error={ShowError('timestamp', touched, errors) ? <ErrorFor errors={errors} touched={touched} name='timestamp' /> : undefined}>
+          <Field
+            name='timestamp'
+            as={Input}
+            invalid={ShowError('timestamp', touched, errors)}
+          />
+        </FormField>
       </div>
 
-      <div className={classNames('row')}>
-        <div className='col-12'>
-          <input
-            type='submit'
-            value={i18next.t('journal:add_entry')}
-            className='btn btn-sm btn-primary float-right mt-1'
-          />
-        </div>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 'var(--reefpi-space-xxs)' }}>
+        <Button
+          type='submit'
+          variant='primary'
+          style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
+        >
+          {i18next.t('journal:add_entry')}
+        </Button>
       </div>
     </form>
   )

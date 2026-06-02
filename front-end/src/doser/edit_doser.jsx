@@ -3,11 +3,18 @@ import PropTypes from 'prop-types'
 import { ErrorMessage, ErrorFor, ShowError } from '../utils/validation_helper'
 import i18next from 'i18next'
 import { showError, showUpdateSuccessful } from 'utils/alert'
-import classNames from 'classnames'
 import { Field } from 'formik'
 import Cron from '../ui_components/cron'
 import EditStepper from './edit_stepper'
 import EditDcPump from './edit_dcpump'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { Field as FormField, Input, Select } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
+
+const formGridStyle = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))',
+  gap: 'var(--reefpi-space-md)'
+}
 
 const EditDoser = ({
   values,
@@ -71,87 +78,77 @@ const EditDoser = ({
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className='row'>
+      <div style={formGridStyle}>
+        <FormField label={i18next.t('name')} error={ShowError('name', touched, errors) ? <ErrorFor errors={errors} touched={touched} name='name' /> : undefined}>
+          <Input
+            name='name'
+            data-testid='smoke-doser-name'
+            disabled={readOnly}
+            onChange={handleChange}
+            onBlur={onBlur}
+            value={values.name}
+            invalid={ShowError('name', touched, errors)}
+          />
+        </FormField>
 
-        <div className='col-12 col-sm-6 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor='name'>{i18next.t('name')}</label>
-            <Field
-              name='name'
-              data-testid='smoke-doser-name'
-              disabled={readOnly}
-              className={classNames('form-control', {
-                'is-invalid': ShowError('name', touched, errors)
-              })}
-            />
-            <ErrorFor errors={errors} touched={touched} name='name' />
-          </div>
-        </div>
+        <FormField label={i18next.t('doser:volume')} error={ShowError('volume', touched, errors) ? <ErrorFor errors={errors} touched={touched} name='volume' /> : undefined}>
+          <Input
+            name='volume'
+            data-testid='smoke-doser-volume'
+            readOnly={readOnly}
+            type='number'
+            onChange={handleChange}
+            onBlur={onBlur}
+            value={values.volume}
+            invalid={ShowError('volume', touched, errors)}
+          />
+        </FormField>
 
-        <div className='col-12 col-sm-6 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor='volume'>{i18next.t('doser:volume')}</label>
-            <Field
-              name='volume'
-              data-testid='smoke-doser-volume'
-              readOnly={readOnly}
-              type='number'
-              className={classNames('form-control', {
-                'is-invalid': ShowError('volume', touched, errors)
-              })}
-            />
-            <ErrorFor errors={errors} touched={touched} name='volume' />
-          </div>
-        </div>
-
-        <div className='col-12 col-sm-6 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor='type'>{i18next.t('doser:type')}</label>
-            <Field
-              name='type'
-              component='select'
-              data-testid='smoke-doser-type'
-              disabled={readOnly}
-              className={classNames('custom-select', {
-                'is-invalid': ShowError('type', touched, errors)
-              })}
-            >
-              <option value='dcpump' key='dcpump'> DC motor </option>
-              <option value='stepper' key='stepper'> Stepper</option>
-            </Field>
-            <ErrorFor errors={errors} touched={touched} name='type' />
-          </div>
-        </div>
+        <FormField label={i18next.t('doser:type')} error={ShowError('type', touched, errors) ? <ErrorFor errors={errors} touched={touched} name='type' /> : undefined}>
+          <Select
+            name='type'
+            data-testid='smoke-doser-type'
+            disabled={readOnly}
+            onChange={handleChange}
+            onBlur={onBlur}
+            value={values.type}
+            invalid={ShowError('type', touched, errors)}
+          >
+            <option value='dcpump' key='dcpump'> DC motor </option>
+            <option value='stepper' key='stepper'> Stepper</option>
+          </Select>
+        </FormField>
       </div>
+
       {driverUI()}
 
       {!values.continuous && (
-        <div className='row'>
-          <div className='col'>
-            <div className='row form-group'>
-              <label htmlFor='enable'>{i18next.t('schedule')}</label>
-            </div>
-            <Cron
-              values={values}
-              touched={touched}
-              errors={errors}
-              readOnly={readOnly}
-            />
+        <div style={{ marginTop: 'var(--reefpi-space-sm)' }}>
+          <div>
+            <label>{i18next.t('schedule')}</label>
           </div>
+          <Cron
+            values={values}
+            touched={touched}
+            errors={errors}
+            readOnly={readOnly}
+          />
         </div>
       )}
 
-      <div className={classNames('row', { 'd-none': readOnly })}>
-        <div className='col-12'>
-          <input
+      {!readOnly && (
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 'var(--reefpi-space-xxs)' }}>
+          <Button
             type='submit'
+            variant='primary'
             data-testid='smoke-doser-submit'
-            value={i18next.t('save')}
             disabled={readOnly}
-            className='btn btn-sm btn-primary float-right mt-1'
-          />
+            style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
+          >
+            {i18next.t('save')}
+          </Button>
         </div>
-      </div>
+      )}
     </form>
   )
 }

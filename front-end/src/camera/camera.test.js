@@ -5,6 +5,7 @@ import Config from './config'
 import Gallery from './gallery'
 import Motion from './motion'
 import EmptyState from '../../design-system/ui_kits/reef-pi-app/shell/EmptyState'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 import fetchMock from 'fetch-mock'
 import 'isomorphic-fetch'
 import * as Alert from '../utils/alert'
@@ -190,10 +191,10 @@ describe('Camera module', () => {
     })
 
     const rendered = capture.render()
-    const button = findByType(rendered, 'input')
+    const button = findByType(rendered, Button)
     const placeholder = rendered.props.children[1].props.children
 
-    button.props.onClick.call(capture)
+    button.props.onClick()
 
     expect(takeImage).toHaveBeenCalled()
     expect(button.props.id).toBe('captureImage')
@@ -250,8 +251,9 @@ describe('Camera module', () => {
       config.state = { ...config.state, ...next }
     })
     config.state.updated = true
-    const saveButton = config.render().props.children[5].props.children
-    expect(saveButton.props.className).toContain('btn-outline-danger')
+    const rendered = config.render()
+    const saveButton = findAllByType(rendered, Button).find(n => n.props['data-testid'] === 'camera-save-btn')
+    expect(saveButton.props.variant).toBe('danger')
   })
 
   it('<Config /> saves parsed config without mutating state config', () => {
