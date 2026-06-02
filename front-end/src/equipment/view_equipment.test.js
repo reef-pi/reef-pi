@@ -42,22 +42,13 @@ describe('<ViewEquipment />', () => {
     jest.clearAllMocks()
   })
 
-  it('renders the legacy switch and edit/delete controls', () => {
-    const onStateChange = jest.fn()
+  it('renders equipment name, outlet, and edit/delete controls', () => {
     const onEdit = jest.fn()
     const onDelete = jest.fn()
-    const { container, root } = renderView({ onStateChange, onEdit, onDelete })
+    const { container, root } = renderView({ onEdit, onDelete })
 
     expect(container.textContent).toContain('Return Pump')
     expect(container.textContent).toContain('Outlet 1')
-
-    act(() => container.querySelector('.switch').click())
-    expect(onStateChange).toHaveBeenCalledWith('1', {
-      name: 'Return Pump',
-      on: true,
-      outlet: 'outlet-1',
-      stay_off_on_boot: true
-    })
 
     const actionButtons = container.querySelectorAll('.d-inline')
     act(() => actionButtons[0].click())
@@ -68,8 +59,7 @@ describe('<ViewEquipment />', () => {
     act(() => root.unmount())
   })
 
-  it('uses the pending-state toggle path when the feature flag is enabled', async () => {
-    window.FEATURE_FLAGS = { pending_states: true }
+  it('fires onStateChange via the pending-state toggle on success', async () => {
     const onStateChange = jest.fn()
     global.fetch = jest.fn(() => Promise.resolve({ ok: true }))
     const { container, root } = renderView({ onStateChange })
@@ -100,8 +90,7 @@ describe('<ViewEquipment />', () => {
     act(() => root.unmount())
   })
 
-  it('keeps pending-state toggle unresolved when the request fails', async () => {
-    window.FEATURE_FLAGS = { pending_states: true }
+  it('shows pending state when the request fails', async () => {
     const onStateChange = jest.fn()
     global.fetch = jest.fn(() => Promise.resolve({ ok: false, status: 403 }))
     const { container, root } = renderView({ onStateChange })
