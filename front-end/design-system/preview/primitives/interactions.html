@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>reef-pi - Interaction primitives</title>
+  <link rel="stylesheet" href="../_card.css">
+  <style>
+    body { padding: var(--reefpi-space-lg); background: var(--reefpi-color-surface); }
+    .subtitle { max-width: 760px; margin: 0 0 var(--reefpi-space-lg); color: var(--reefpi-color-text-muted); font-size: 0.875rem; }
+    .story-grid { display: grid; grid-template-columns: repeat(2, minmax(280px, 1fr)); gap: var(--reefpi-space-md); }
+    @media (max-width: 760px) { .story-grid { grid-template-columns: 1fr; } }
+    .card { width: auto; min-height: 0; flex-direction: column; border: 1px solid var(--reefpi-color-border); border-radius: var(--reefpi-radius-md); background: var(--reefpi-color-surface-elevated); }
+    .card-header { color: var(--reefpi-color-text); font-weight: 600; }
+    .action { align-items: center; background: var(--reefpi-color-surface-elevated); border: 1px solid var(--reefpi-color-border); border-radius: var(--reefpi-radius-sm); color: var(--reefpi-color-text); cursor: pointer; display: inline-flex; font-family: var(--reefpi-font-app); font-weight: 600; justify-content: center; min-height: var(--reefpi-tap-target-min); min-width: var(--reefpi-tap-target-min); padding: 0 var(--reefpi-space-md); }
+    .panel { border: 1px solid var(--reefpi-color-border); border-radius: var(--reefpi-radius-md); background: var(--reefpi-color-surface-elevated); color: var(--reefpi-color-text); padding: var(--reefpi-space-md); }
+    .row { display: flex; flex-wrap: wrap; gap: var(--reefpi-space-sm); align-items: center; }
+    .dialog-preview { max-width: 24rem; display: grid; gap: var(--reefpi-space-md); }
+    .menu-preview { display: grid; gap: var(--reefpi-space-xxs); max-width: 13rem; }
+    .menu-preview [role="menuitem"] { justify-content: flex-start; width: 100%; }
+    .tooltip-wrap { display: inline-flex; position: relative; }
+    .tooltip { bottom: calc(100% + var(--reefpi-space-xxs)); font-size: 0.75rem; max-width: 14rem; position: absolute; right: 0; white-space: nowrap; }
+    .tabs { display: grid; gap: var(--reefpi-space-sm); }
+    [role="tablist"] { display: flex; gap: var(--reefpi-space-xs); overflow-x: auto; }
+    [aria-selected="true"] { background: var(--reefpi-color-brand); border-color: var(--reefpi-color-brand); color: var(--reefpi-color-nav-text-strong); }
+  </style>
+</head>
+<body>
+  <h1>Dialog / Menu / Tooltip / Tabs</h1>
+  <p class="subtitle">Interaction primitives for removing modal, dropdown, tooltip, and tab script dependencies.</p>
+  <div class="story-grid">
+    <section class="card">
+      <div class="card-header">Dialog</div>
+      <div class="panel dialog-preview" role="dialog" aria-modal="true" aria-labelledby="dialog-title">
+        <h2 id="dialog-title" style="font-size:1.25rem;margin:0">Delete Skimmer ?</h2>
+        <div>This action will delete equipment Skimmer.</div>
+        <div class="row" style="justify-content:flex-end"><button class="action">Cancel</button><button class="action">Confirm</button></div>
+      </div>
+    </section>
+    <section class="card">
+      <div class="card-header">Menu</div>
+      <button class="action" aria-haspopup="menu" aria-expanded="true">More</button>
+      <div class="panel menu-preview" role="menu">
+        <button class="action" role="menuitem">Edit</button>
+        <button class="action" role="menuitem">Delete</button>
+      </div>
+    </section>
+    <section class="card">
+      <div class="card-header">Tooltip</div>
+      <span class="tooltip-wrap"><button class="action" aria-describedby="tip-retry">Retry</button><span class="panel tooltip" id="tip-retry" role="tooltip">Retry command</span></span>
+    </section>
+    <section class="card">
+      <div class="card-header">Tabs</div>
+      <div class="tabs">
+        <div role="tablist" aria-label="Configuration tabs"><button class="action" role="tab" aria-selected="true" aria-controls="settings-panel">Settings</button><button class="action" role="tab" aria-selected="false" aria-controls="connectors-panel">Connectors</button></div>
+        <section class="panel" id="settings-panel" role="tabpanel">Settings panel</section>
+      </div>
+    </section>
+  </div>
+  <script src="../_card.js"></script>
+</body>
+</html>
