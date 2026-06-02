@@ -2,6 +2,8 @@ import React from 'react'
 import $ from 'jquery'
 import Modal from 'modal'
 import i18next from 'i18next'
+import Button from '../design-system/ui_kits/reef-pi-app/primitives/Button'
+
 export default class Confirm extends React.Component {
   constructor (props) {
     super(props)
@@ -49,13 +51,13 @@ export default class Confirm extends React.Component {
         {modalBody}
         <div className='modal-footer'>
           <div className='text-right'>
-            <button role='abort' type='button' className='btn btn-light' onClick={this.handleAbort}>
+            <Button role='abort' variant='secondary' onClick={this.handleAbort}>
               {this.state.abortLabel}
-            </button>
+            </Button>
             {' '}
-            <button role='confirm' type='button' className='btn btn-primary' ref={this.confirmRef} onClick={this.handleConfirm}>
+            <Button role='confirm' ref={this.confirmRef} onClick={this.handleConfirm}>
               {this.state.confirmLabel}
-            </button>
+            </Button>
           </div>
         </div>
       </Modal>

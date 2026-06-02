@@ -2,8 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
 import { showError, showUpdateSuccessful } from 'utils/alert'
-import classNames from 'classnames'
 import i18next from 'i18next'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { Field as FormField, Input } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
 
 const EditInstance = ({
   values,
@@ -31,14 +32,15 @@ const EditInstance = ({
   const deleteAction = () => {
     if (values.id) {
       return (
-        <div className='col-12 col-sm-2 col-lg-3 order-sm-4 order-lg-last'>
-          <button
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Button
             type='button'
+            variant='danger'
             onClick={onDelete}
-            className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'
+            style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
           >
             {i18next.t('delete')}
-          </button>
+          </Button>
         </div>
       )
     }
@@ -47,59 +49,59 @@ const EditInstance = ({
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className='row align-items-start'>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))', gap: 'var(--reefpi-space-md)' }}>
         {deleteAction()}
-        <div className='col-12 col-sm-5 col-lg-5 order-sm-1'>
-          <label className='mr-2'>{i18next.t('name')}</label>
-          <input
-            type='text' name='name'
+        <FormField label={i18next.t('name')} error={ShowError('name', touched, errors) ? errors.name : undefined}>
+          <Input
+            type='text'
+            name='name'
             onChange={handleChange}
             onBlur={handleBlur}
-            className={classNames('form-control', { 'is-invalid': ShowError('name', touched, errors) })}
+            invalid={ShowError('name', touched, errors)}
             value={values.name}
           />
-          <ErrorFor errors={errors} touched={touched} name='name' />
-        </div>
-        <div className='col-12 col-sm-5 col-lg-5 order-sm-1'>
-          <label className='mr-2'>{i18next.t('address')}</label>
-          <input
-            type='text' name='address'
+        </FormField>
+        <FormField label={i18next.t('address')} error={ShowError('address', touched, errors) ? errors.address : undefined}>
+          <Input
+            type='text'
+            name='address'
             onChange={handleChange}
             onBlur={handleBlur}
-            className={classNames('form-control', { 'is-invalid': ShowError('address', touched, errors) })}
+            invalid={ShowError('address', touched, errors)}
             value={values.address}
           />
-          <ErrorFor errors={errors} touched={touched} name='address' />
-        </div>
+        </FormField>
       </div>
-      <div className='row'>
-        <div className='col-12 col-sm-5 col-lg-5 order-sm-1'>
-          <label className='mr-2'>{i18next.t('user')}</label>
-          <input
-            type='text' name='user'
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))', gap: 'var(--reefpi-space-md)', marginTop: 'var(--reefpi-space-sm)' }}>
+        <FormField label={i18next.t('user')} error={ShowError('user', touched, errors) ? errors.user : undefined}>
+          <Input
+            type='text'
+            name='user'
             onChange={handleChange}
             onBlur={handleBlur}
-            className={classNames('form-control', { 'is-invalid': ShowError('user', touched, errors) })}
+            invalid={ShowError('user', touched, errors)}
             value={values.user}
           />
-          <ErrorFor errors={errors} touched={touched} name='user' />
-        </div>
-        <div className='col-12 col-sm-5 col-lg-5 order-sm-1'>
-          <label className='mr-2'>{i18next.t('password')}</label>
-          <input
-            type='password' name='password'
+        </FormField>
+        <FormField label={i18next.t('password')} error={ShowError('password', touched, errors) ? errors.password : undefined}>
+          <Input
+            type='password'
+            name='password'
             onChange={handleChange}
             onBlur={handleBlur}
-            className={classNames('form-control', { 'is-invalid': ShowError('password', touched, errors) })}
+            invalid={ShowError('password', touched, errors)}
             value={values.password}
           />
-          <ErrorFor errors={errors} touched={touched} name='password' />
-        </div>
+        </FormField>
       </div>
-      <div className='row'>
-        <div className='col-12'>
-          <input type='submit' value={actionLabel} className='btn btn-sm btn-primary float-right mt-1' />
-        </div>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 'var(--reefpi-space-sm)' }}>
+        <Button
+          type='submit'
+          variant='primary'
+          style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
+        >
+          {actionLabel}
+        </Button>
       </div>
     </form>
   )

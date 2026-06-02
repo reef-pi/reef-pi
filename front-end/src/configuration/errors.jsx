@@ -2,6 +2,7 @@ import React from 'react'
 import { fetchErrors, deleteError, deleteErrors } from 'redux/actions/errors'
 import { connect } from 'react-redux'
 import i18n from 'utils/i18n'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 
 class errors extends React.Component {
   constructor (props) {
@@ -30,11 +31,13 @@ class errors extends React.Component {
             {el.count > 1 && <span className='badge badge-secondary ml-1'>{el.count}x</span>}
           </div>
           <div className='col-lg-1'>
-            <input
-              className='btn btn-sm btn-outline-secondary'
-              defaultValue='X'
+            <Button
+              variant='secondary'
+              style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
               onClick={() => this.props.delete(el.id)}
-            />
+            >
+              X
+            </Button>
           </div>
         </div>
       )
@@ -44,9 +47,9 @@ class errors extends React.Component {
         {items}
         <div className='row'>
           <div className='col-lg-2'>
-            <button className='btn btn-outline-secondary' onClick={this.handleClear}>
+            <Button variant='secondary' onClick={this.handleClear}>
               {i18n.t('clear')}
-            </button>
+            </Button>
           </div>
         </div>
       </div>

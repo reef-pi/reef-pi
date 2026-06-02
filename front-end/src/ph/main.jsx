@@ -121,7 +121,7 @@ class ph extends React.Component {
             name={'panel-ph-' + probe.id}
             item={probe}
             buttons={calibrationButton}
-            title={<b className='ml-2 align-middle'>{probe.name} </b>}
+            title={<b style={{ marginLeft: 'var(--reefpi-space-xs)', verticalAlign: 'middle' }}>{probe.name}</b>}
             onDelete={this.handleDeleteProbe}
             onToggleState={handleToggleState}
             enabled={probe.enable}

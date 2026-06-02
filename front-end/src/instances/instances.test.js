@@ -333,15 +333,20 @@ describe('ViewInstance', () => {
       onDelete,
       onStateChange: fn
     })
-    const buttons = findAll(view, node => node.type === 'button')
 
-    expect(view.props.className).toBe('row text-center text-md-left')
     expect(findNode(view, node => node.type === 'b' && node.props.children === instanceData.name)).not.toBeNull()
     expect(findNode(view, node => node.type === 'b' && node.props.children === instanceData.address)).not.toBeNull()
-    expect(buttons).toHaveLength(2)
 
-    buttons[0].props.onClick()
-    buttons[1].props.onClick()
+    // Find Button components (design-system primitive) and trigger their handlers
+    const buttons = findAll(view, node => node.props && node.props.onClick)
+    const editButton = buttons.find(node => node.props.onClick === onEdit)
+    const deleteButton = buttons.find(node => node.props.onClick === onDelete)
+
+    expect(editButton).not.toBeUndefined()
+    expect(deleteButton).not.toBeUndefined()
+
+    editButton.props.onClick()
+    deleteButton.props.onClick()
 
     expect(onDelete).toHaveBeenCalled()
     expect(onEdit).toHaveBeenCalled()
@@ -454,6 +459,8 @@ describe('EditInstance', () => {
   it('does not show delete button when id is absent', () => {
     const props = { ...baseProps, values: { ...baseProps.values, id: undefined } }
     const element = EditInstance(props)
-    expect(findNode(element, node => node.type === 'button' && node.props.type === 'button')).toBeNull()
+    // No delete button rendered when id is absent
+    const deleteButtons = findAll(element, node => node.props && node.props.variant === 'danger')
+    expect(deleteButtons).toHaveLength(0)
   })
 })

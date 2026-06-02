@@ -3,6 +3,8 @@ import { updateCreds } from 'redux/actions/creds'
 import { connect } from 'react-redux'
 import { showUpdateSuccessful } from 'utils/alert'
 import i18n from 'utils/i18n'
+import Button from '../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { Field as FormField, Input } from '../design-system/ui_kits/reef-pi-app/primitives/Form'
 
 export class auth extends React.Component {
   constructor (props) {
@@ -49,37 +51,40 @@ export class auth extends React.Component {
   }
 
   render () {
-    const btnClass = 'btn btn-outline-success col-xs-12 col-md-3 offset-md-9'
     return (
       <div className='container'>
-        <div className='row'>
+        <div style={{ marginBottom: 'var(--reefpi-space-sm)' }}>
           <label>
             <b>{i18n.t('configuration:authentication:credentials')}</b>
           </label>
         </div>
-        <div className='form-group'>
-          <label htmlFor='reef-pi-user'>{i18n.t('signin:username')}</label>
-          <input
+        <FormField
+          label={i18n.t('signin:username')}
+          error={this.state.usernameError ? i18n.t('configuration:authentication:error_user') : undefined}
+        >
+          <Input
             type='text'
-            className={'form-control ' + (this.state.usernameError ? 'is-invalid' : '')}
             id='reef-pi-user'
             placeholder={i18n.t('signin:username')}
             onChange={this.handleUserChange}
+            invalid={this.state.usernameError}
           />
-          <div className='invalid-feedback'>{i18n.t('configuration:authentication:error_user')}</div>
-        </div>
-        <div className='form-group'>
-          <label htmlFor='reef-pi-pass'>{i18n.t('signin:password')}</label>
-          <input
+        </FormField>
+        <FormField
+          label={i18n.t('signin:password')}
+          error={this.state.passwordError ? i18n.t('configuration:authentication:error_pass') : undefined}
+        >
+          <Input
             type='password'
             id='reef-pi-pass'
-            className={'form-control ' + (this.state.passwordError ? 'is-invalid' : '')}
             onChange={this.handlePasswordChange}
+            invalid={this.state.passwordError}
           />
-          <div className='invalid-feedback'>{i18n.t('configuration:authentication:error_pass')}</div>
-        </div>
-        <div className='row'>
-          <input type='button' className={btnClass} value={i18n.t('update')} onClick={this.handleUpdateCreds} />
+        </FormField>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 'var(--reefpi-space-sm)' }}>
+          <Button variant='primary' onClick={this.handleUpdateCreds}>
+            {i18n.t('update')}
+          </Button>
         </div>
       </div>
     )

@@ -6,6 +6,8 @@ import { showError, showUpdateSuccessful } from 'utils/alert'
 import { upgrade, reload, reboot, powerOff, dbImport } from 'redux/actions/admin'
 import { connect } from 'react-redux'
 import i18n from 'utils/i18n'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { Field as FormField, Input } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
 
 export class RawAdmin extends React.Component {
   constructor (props) {
@@ -87,36 +89,27 @@ export class RawAdmin extends React.Component {
   }
 
   render () {
-    const btnClass = 'btn btn-outline-danger btn-block'
     return (
       <div className='container'>
-        <div className='row'>
-          <div className='col-md-12 mt-3 col-lg-3'>
-            <button onClick={this.handleSignout} type='button' className={btnClass}>
-              {i18n.t('configuration:admin:sign_out')}
-            </button>
-          </div>
-          <div className='col-md-12 mt-3 col-lg-3'>
-            <button onClick={this.handleReload} type='button' className={btnClass}>
-              {i18n.t('configuration:admin:reload')}
-            </button>
-          </div>
-          <div className='col-md-12 mt-3 col-lg-3'>
-            <button onClick={this.handleReboot} type='button' className={btnClass}>
-              {i18n.t('configuration:admin:reboot')}
-            </button>
-          </div>
-          <div className='col-md-12 mt-3 col-lg-3'>
-            <button onClick={this.handlePowerOff} type='button' className={btnClass}>
-              {i18n.t('configuration:admin:poweroff')}
-            </button>
-          </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))', gap: 'var(--reefpi-space-md)', marginTop: 'var(--reefpi-space-sm)' }}>
+          <Button variant='danger' onClick={this.handleSignout} type='button'>
+            {i18n.t('configuration:admin:sign_out')}
+          </Button>
+          <Button variant='danger' onClick={this.handleReload} type='button'>
+            {i18n.t('configuration:admin:reload')}
+          </Button>
+          <Button variant='danger' onClick={this.handleReboot} type='button'>
+            {i18n.t('configuration:admin:reboot')}
+          </Button>
+          <Button variant='danger' onClick={this.handlePowerOff} type='button'>
+            {i18n.t('configuration:admin:poweroff')}
+          </Button>
         </div>
-        <div className='row'>
-          <div className='col-md-12 mt-3 col-lg-6'>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))', gap: 'var(--reefpi-space-md)', marginTop: 'var(--reefpi-space-sm)' }}>
+          <div>
             <a href='/api/admin/reef-pi.db' download>{i18n.t('configuration:admin:db_export')}</a>
           </div>
-          <div className='col-md-12 mt-3 col-lg-4'>
+          <div>
             <div className='input-group'>
               <div className='custom-file'>
                 <input type='file' className='custom-file-input' id='dbImportFile' onChange={this.handleDBFileChange} />
@@ -124,25 +117,21 @@ export class RawAdmin extends React.Component {
               </div>
             </div>
           </div>
-          <div className='col-md-12 mt-3 col-lg-2'>
-            <button onClick={this.handleDBFileImport} className='btn btn-danger'>
-              {i18n.t('configuration:admin:db_import')}
-            </button>
-          </div>
+          <Button variant='danger' onClick={this.handleDBFileImport} type='button'>
+            {i18n.t('configuration:admin:db_import')}
+          </Button>
         </div>
 
-        <div className='row form-group'>
-          <div className='col-md-4 mt-3 col-lg-3'>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))', gap: 'var(--reefpi-space-md)', marginTop: 'var(--reefpi-space-sm)' }}>
+          <div>
             <label>{i18n.t('upgrade_reef_pi')}</label>
           </div>
-          <div className='col-md-4 col-lg-3 mt-3'>
-            <input onChange={this.handleVersionChange} type='text' id='reef-pi-version' className='form-control' />
-          </div>
-          <div className='col-md-4 mt-3 col-lg-3'>
-            <button onClick={this.handleInstall} className='btn btn-danger form-control'>
-              {i18n.t('install')}
-            </button>
-          </div>
+          <FormField>
+            <Input onChange={this.handleVersionChange} type='text' id='reef-pi-version' />
+          </FormField>
+          <Button variant='danger' onClick={this.handleInstall} type='button'>
+            {i18n.t('install')}
+          </Button>
         </div>
       </div>
     )
