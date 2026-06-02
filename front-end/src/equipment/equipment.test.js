@@ -2,6 +2,7 @@ import React, { act } from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import Equipment from './equipment'
+import { List } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
 import ViewEquipment from './view_equipment'
 import EditEquipment from './edit_equipment'
 import EquipmentForm from './equipment_form'
@@ -71,7 +72,7 @@ describe('Equipment ui', () => {
 
     expect(props.fetch).toHaveBeenCalled()
     expect(props.fetchOutlets).toHaveBeenCalled()
-    expect(component.render().type).toBe('ul')
+    expect(component.render().type).toBe(List)
   })
 
   it('<Main /> toggles add form and creates equipment payloads', () => {
@@ -358,7 +359,7 @@ describe('Equipment ui', () => {
 
     expect(fetchEquipment).toHaveBeenCalled()
     const rendered = component.render()
-    expect(rendered.props.className).toBe('container')
+    expect(rendered.props.style).toBeTruthy()
     const chart = rendered.props.children[1].props.children
     expect(chart.props.data).toEqual([
       { id: '1', outlet: '1', name: 'Foo', on: true, onstate: 1, offstate: undefined },

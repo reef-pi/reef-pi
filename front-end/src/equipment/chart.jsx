@@ -5,6 +5,21 @@ import { connect } from 'react-redux'
 import i18next from 'i18next'
 import { EQUIPMENT_POLL_INTERVAL_MS } from './utils'
 
+const chartContainerStyle = {
+  display: 'grid',
+  gap: 'var(--reefpi-space-xs)',
+  minWidth: 0,
+  width: '100%'
+}
+
+const titleStyle = {
+  color: 'var(--reefpi-color-text)',
+  fontFamily: 'var(--reefpi-font-app)',
+  fontSize: '1rem',
+  fontWeight: 600,
+  lineHeight: 1.35
+}
+
 class CustomToolTip extends React.Component {
   render () {
     if (this.props.payload === undefined) {
@@ -41,8 +56,8 @@ export class RawEquipmentChart extends React.Component {
       offstate: eq.on ? undefined : 1
     }))
     return (
-      <div className='container'>
-        <span className='h6'>{i18next.t('capabilities:equipment')}</span>
+      <div style={chartContainerStyle}>
+        <span style={titleStyle}>{i18next.t('capabilities:equipment')}</span>
         <ResponsiveContainer height={this.props.height} width='100%'>
           <BarChart data={equipment}>
             <Bar dataKey='onstate' fill='#00c851' isAnimationActive={false} stackId='a' />

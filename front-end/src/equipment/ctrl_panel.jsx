@@ -5,6 +5,21 @@ import ToggleSwitch from '../../design-system/ui_kits/reef-pi-app/primitives/Tog
 import { useEquipmentToggle } from '../../design-system/ui_kits/reef-pi-app/hooks/useEquipmentToggle'
 import { buildEquipmentPayload, EQUIPMENT_POLL_INTERVAL_MS, sortEquipment } from './utils'
 
+const panelStyle = {
+  display: 'grid',
+  gap: 'var(--reefpi-space-sm)',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))',
+  marginBottom: 'var(--reefpi-space-xxs)'
+}
+
+const itemStyle = {
+  alignItems: 'center',
+  display: 'inline-flex',
+  gap: 'var(--reefpi-space-xs)',
+  margin: 0,
+  minHeight: 'var(--reefpi-tap-target-min)'
+}
+
 // Per-item toggle with pending states — must be its own component to call hooks
 function PendingEquipmentToggle ({ item, dispatch }) {
   const send = useCallback(next => {
@@ -52,18 +67,14 @@ export class RawEquipmentCtrlPanel extends React.Component {
     }
 
     return (
-      <div className='container' style={{ marginBottom: '3px' }}>
-        <div className='row'>
-          {sortEquipment(this.props.equipment)
-            .map(item => (
-              <div className='col-12 col-sm-6 col-md-2 col-lg-3 order-sm-3' key={'eq-' + item.id}>
-                <label className='d-inline-flex align-items-center mb-0'>
-                  <PendingEquipmentToggle item={item} dispatch={this.props.dispatch} />
-                  <span className='ml-2'>{item.name}</span>
-                </label>
-              </div>
-            ))}
-        </div>
+      <div style={panelStyle}>
+        {sortEquipment(this.props.equipment)
+          .map(item => (
+            <label style={itemStyle} key={'eq-' + item.id}>
+              <PendingEquipmentToggle item={item} dispatch={this.props.dispatch} />
+              <span>{item.name}</span>
+            </label>
+          ))}
       </div>
     )
   }

@@ -1,8 +1,35 @@
 import React, { useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { FaEdit, FaTrashAlt } from 'react-icons/fa'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 import ToggleSwitch from '../../design-system/ui_kits/reef-pi-app/primitives/ToggleSwitch'
 import { useEquipmentToggle } from '../../design-system/ui_kits/reef-pi-app/hooks/useEquipmentToggle'
+
+const rowStyle = {
+  alignItems: 'center',
+  display: 'grid',
+  gap: 'var(--reefpi-space-sm)',
+  gridTemplateColumns: 'minmax(0, 1fr) auto auto',
+  width: '100%'
+}
+
+const nameStyle = {
+  display: 'grid',
+  gap: 'var(--reefpi-space-xxs)',
+  minWidth: 0
+}
+
+const outletStyle = {
+  color: 'var(--reefpi-color-text-muted)',
+  fontSize: '0.8125rem',
+  fontStyle: 'italic'
+}
+
+const actionStyle = {
+  alignItems: 'center',
+  display: 'inline-flex',
+  gap: 'var(--reefpi-space-xs)'
+}
 
 function PendingToggle ({ equipment, onStateChange }) {
   const send = useCallback(next => {
@@ -42,23 +69,15 @@ function PendingToggle ({ equipment, onStateChange }) {
 
 const ViewEquipment = ({ equipment, outletName, onStateChange, onDelete, onEdit }) => {
   return (
-    <div className='d-flex'>
-      <div className='p-2'>
-        {equipment.name}
+    <div style={rowStyle}>
+      <div style={nameStyle}>
+        <span>{equipment.name}</span>
+        <small style={outletStyle}>{outletName}</small>
       </div>
-      <div className='p-2 mr-auto font-italic'>
-        <small>{outletName}</small>
-      </div>
-      <div className='p-2'>
-        <PendingToggle equipment={equipment} onStateChange={onStateChange} />
-      </div>
-      <div className='p2'>
-        <div className='d-inline p-2' onClick={onEdit}>
-          {FaEdit()}
-        </div>
-        <div className='d-inline p-2' onClick={onDelete}>
-          {FaTrashAlt()}
-        </div>
+      <PendingToggle equipment={equipment} onStateChange={onStateChange} />
+      <div style={actionStyle}>
+        <Button type='button' variant='ghost' icon={<FaEdit />} iconOnly aria-label='Edit equipment' data-testid='equipment-edit' onClick={onEdit} />
+        <Button type='button' variant='ghost' icon={<FaTrashAlt />} iconOnly aria-label='Delete equipment' data-testid='equipment-delete' onClick={onDelete} />
       </div>
     </div>
   )
