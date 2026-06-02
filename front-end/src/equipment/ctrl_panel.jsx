@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react'
-import { fetchEquipment, updateEquipment } from '../redux/actions/equipment'
+import { fetchEquipment } from '../redux/actions/equipment'
 import { connect } from 'react-redux'
-import Switch from 'react-toggle-switch'
 import ToggleSwitch from '../../design-system/ui_kits/reef-pi-app/primitives/ToggleSwitch'
 import { useEquipmentToggle } from '../../design-system/ui_kits/reef-pi-app/hooks/useEquipmentToggle'
 import { buildEquipmentPayload, EQUIPMENT_POLL_INTERVAL_MS, sortEquipment } from './utils'
@@ -22,7 +21,7 @@ function PendingEquipmentToggle ({ item, dispatch }) {
   }, [item, dispatch])
 
   const { mutate, state, retry } = useEquipmentToggle({
-    id:   item.id,
+    id: item.id,
     name: item.name,
     send
   })
@@ -39,11 +38,6 @@ function PendingEquipmentToggle ({ item, dispatch }) {
 }
 
 export class RawEquipmentCtrlPanel extends React.Component {
-  constructor (props) {
-    super(props)
-    this.toggleState = this.toggleState.bind(this)
-  }
-
   componentDidMount () {
     this.timer = window.setInterval(this.props.fetchEquipment, EQUIPMENT_POLL_INTERVAL_MS)
   }
@@ -52,18 +46,10 @@ export class RawEquipmentCtrlPanel extends React.Component {
     window.clearInterval(this.timer)
   }
 
-  toggleState (e, equipment) {
-    e.preventDefault()
-    const values = buildEquipmentPayload(equipment, { on: !equipment.on })
-    this.props.updateEquipment(parseInt(equipment.id), values)
-  }
-
   render () {
     if (this.props.equipment === undefined) {
       return <div />
     }
-
-    const usePending = !!window.FEATURE_FLAGS?.pending_states
 
     return (
       <div className='container' style={{ marginBottom: '3px' }}>
@@ -72,9 +58,7 @@ export class RawEquipmentCtrlPanel extends React.Component {
             .map(item => (
               <div className='col-12 col-sm-6 col-md-2 col-lg-3 order-sm-3' key={'eq-' + item.id}>
                 <label className='d-inline-flex align-items-center mb-0'>
-                  {usePending
-                    ? <PendingEquipmentToggle item={item} dispatch={this.props.dispatch} />
-                    : <Switch on={item.on} onClick={(e) => { this.toggleState(e, item) }} />}
+                  <PendingEquipmentToggle item={item} dispatch={this.props.dispatch} />
                   <span className='ml-2'>{item.name}</span>
                 </label>
               </div>
@@ -95,7 +79,6 @@ export const mapStateToProps = state => {
 export const mapDispatchToProps = dispatch => {
   return {
     fetchEquipment: () => dispatch(fetchEquipment()),
-    updateEquipment: (id, e) => dispatch(updateEquipment(id, e)),
     dispatch
   }
 }
