@@ -37,8 +37,7 @@
 - [x] #2923 Wire `RangeSelector` + `useTimeSeries` + `Sparkline` into `doser/main.jsx`
 
 ## F12 · Empty states across all list modules
-- [ ] #2924 Wire `EmptyState` to: equipment, timers, lighting, doser, ATO, pH, macro, camera, journal
-<!-- NOT TICKED: camera/main.jsx has no EmptyState; full list of modules is not yet confirmed complete -->
+- [x] #2924 Wire `EmptyState` to: equipment, timers, lighting, doser, ATO, pH, macro, camera, journal
 
 ---
 
