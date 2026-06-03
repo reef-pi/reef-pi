@@ -40,7 +40,7 @@
 - [x] #26 Theme picker + persistence — `issue-26-theme-picker.md`
 
 ## E6 · Framework exit (no flag — incremental, one route per PR)
-- [ ] #27 Bootstrap 4.6 exit plan — `issue-27-bootstrap-exit.md`
+- [x] #27 Bootstrap 4.6 exit plan — `issue-27-bootstrap-exit.md`
 - [x] #28 Material-UI v4 exit plan — `issue-28-mui-exit.md`
 
 ## E7 · UI audit screenshot pipeline

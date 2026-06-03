@@ -1,5 +1,4 @@
 import React from 'react'
-import $ from 'jquery'
 import Light from './light_form'
 import { showError } from 'utils/alert'
 import { confirm } from 'utils/confirm'
@@ -25,7 +24,8 @@ class main extends React.Component {
       updated: false,
       enabled: false,
       addLight: false,
-      selectedJack: undefined
+      selectedJack: undefined,
+      lightName: ''
     }
     this.lightsList = this.lightsList.bind(this)
     this.jacksList = this.jacksList.bind(this)
@@ -103,7 +103,7 @@ class main extends React.Component {
       showError(i18n.t('validation:selection_required'))
       return
     }
-    if ($('#lightName').val() === '') {
+    if (this.state.lightName === '') {
       showError(i18n.t('validation:name_required'))
       return
     }
@@ -130,7 +130,7 @@ class main extends React.Component {
       }
     ))
     const payload = {
-      name: $('#lightName').val(),
+      name: this.state.lightName,
       jack: String(jack.id),
       enable: true,
       channels
@@ -138,9 +138,9 @@ class main extends React.Component {
 
     this.props.createLight(payload)
     this.setState({
-      addLight: !this.state.addLight
+      addLight: !this.state.addLight,
+      lightName: ''
     })
-    $('#lightName').val('')
   }
 
   lightsList () {
@@ -211,9 +211,9 @@ class main extends React.Component {
 
   handleToggleAddLightDiv () {
     this.setState({
-      addLight: !this.state.addLight
+      addLight: !this.state.addLight,
+      lightName: ''
     })
-    $('#jackName').val('')
   }
 
   handleChangeMode (light) {
@@ -271,7 +271,7 @@ class main extends React.Component {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))', gap: 'var(--reefpi-space-md)', alignItems: 'end' }}>
         <div>
           <label htmlFor='lightName'>{i18n.t('name')}</label>
-          <input type='text' id='lightName' data-testid='smoke-light-name' style={{ display: 'block', width: '100%', padding: 'var(--reefpi-space-xs)', border: '1px solid var(--reefpi-color-border)', borderRadius: 'var(--reefpi-radius-sm)', fontFamily: 'var(--reefpi-font-app)' }} required />
+          <input type='text' id='lightName' data-testid='smoke-light-name' style={{ display: 'block', width: '100%', padding: 'var(--reefpi-space-xs)', border: '1px solid var(--reefpi-color-border)', borderRadius: 'var(--reefpi-radius-sm)', fontFamily: 'var(--reefpi-font-app)' }} value={this.state.lightName} onChange={e => this.setState({ lightName: e.target.value })} required />
         </div>
         <div>
           <label htmlFor='jack'>{i18n.t('jack')}</label>

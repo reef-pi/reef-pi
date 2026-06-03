@@ -74,20 +74,20 @@ Smallest count, biggest pain. Do **last**.
 Once tier 3 is done, **delete jQuery from `package.json`** (it's only there because Bootstrap pulls it).
 
 ## Routes migrated (tick as PRs merge)
-- [ ] dashboard (covered by `dashboard_v2` — Bootstrap-free from day one)
+- [x] dashboard (covered by `dashboard_v2` — Bootstrap-free from day one)
 - [x] equipment
-- [ ] timers
-- [ ] lighting
-- [ ] temperature
-- [ ] ato
-- [ ] ph
-- [ ] doser
-- [ ] macro
-- [ ] camera
-- [ ] journal
-- [ ] instances
-- [ ] configuration / settings
-- [ ] sign-in (covered by #24)
+- [x] timers
+- [x] lighting
+- [x] temperature
+- [x] ato
+- [x] ph
+- [x] doser
+- [x] macro
+- [x] camera
+- [x] journal
+- [x] instances
+- [x] configuration / settings
+- [x] sign-in (covered by #24)
 
 ## Acceptance (parent)
 - [ ] All 14 routes ticked above.

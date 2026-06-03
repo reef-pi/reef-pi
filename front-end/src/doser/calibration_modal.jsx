@@ -1,5 +1,4 @@
 import React from 'react'
-import $ from 'jquery'
 import Modal from 'modal'
 import CalibrateForm from './calibrate'
 import i18n from 'utils/i18n'
@@ -22,15 +21,18 @@ export default class CalibrationModal extends React.Component {
   }
 
   handleConfirm () {
-    return this.promise.resolve()
+    return this._resolve && this._resolve()
   }
 
   cancel () {
-    return this.promise.reject()
+    return this._reject && this._reject()
   }
 
   componentDidMount () {
-    this.promise = new $.Deferred()
+    this.promise = new Promise((resolve, reject) => {
+      this._resolve = resolve
+      this._reject = reject
+    })
   }
 
   handleCalibrate (duration, speed, volume) {

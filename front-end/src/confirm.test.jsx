@@ -54,15 +54,14 @@ describe('<Confirm />', () => {
 
   it('resolves or rejects its promise from button handlers', () => {
     const component = new Confirm({ message: 'Continue?' })
-    component.promise = {
-      resolve: jest.fn(),
-      reject: jest.fn()
-    }
+    // Now uses native Promise with _resolve/_reject callbacks
+    component._resolve = jest.fn()
+    component._reject = jest.fn()
 
     component.handleConfirm()
     component.handleAbort()
 
-    expect(component.promise.resolve).toHaveBeenCalled()
-    expect(component.promise.reject).toHaveBeenCalled()
+    expect(component._resolve).toHaveBeenCalled()
+    expect(component._reject).toHaveBeenCalled()
   })
 })

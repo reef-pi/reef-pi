@@ -1,9 +1,7 @@
 import React from 'react'
-import $ from 'jquery'
 import MainPanel from 'main_panel'
 import SignIn from 'sign_in'
 import 'style.scss'
-import 'bootstrap/dist/js/bootstrap.min.js'
 import i18n from 'utils/i18n'
 import { useTheme } from '../design-system/ui_kits/reef-pi-app/hooks/useTheme'
 
@@ -31,14 +29,16 @@ export default class App extends React.Component {
 
   getComponent () {
     if (!this.state.logged) {
-      $('html').addClass('auth-page')
-      $('body').addClass('auth-page')
-      $('#main-panel').addClass('auth-page')
+      document.documentElement.classList.add('auth-page')
+      document.body.classList.add('auth-page')
+      const mainPanel = document.getElementById('main-panel')
+      if (mainPanel) mainPanel.classList.add('auth-page')
       return <SignIn />
     } else {
-      $('html').removeClass('auth-page')
-      $('body').removeClass('auth-page')
-      $('#main-panel').removeClass('auth-page')
+      document.documentElement.classList.remove('auth-page')
+      document.body.classList.remove('auth-page')
+      const mainPanel = document.getElementById('main-panel')
+      if (mainPanel) mainPanel.classList.remove('auth-page')
       return <MainPanel />
     }
   }
