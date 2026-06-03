@@ -7,6 +7,13 @@
 @import './alert';
 @import './fatal_error';
 
+// Bootstrap provided box-sizing: border-box — restore it without the framework
+*,
+::before,
+::after {
+  box-sizing: border-box;
+}
+
 :root {
   --reefpi-color-brand: #{$main-color};
   --reefpi-color-brand-dark: #{$main-dark-color};

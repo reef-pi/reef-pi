@@ -22,7 +22,7 @@ export default class Summary extends React.Component {
       devModeWarning = <span style={{ color: 'var(--reefpi-color-error)' }}>{i18n.t('devmode_warning')} | </span>
     }
     return (
-      <nav className='bottom-bar' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', gap: 'var(--reefpi-space-xs)', position: 'fixed', bottom: 0, left: 0, right: 0, background: 'var(--reefpi-color-surface-elevated)', padding: 'var(--reefpi-space-xxs) var(--reefpi-space-sm)' }}>
+      <nav className='bottom-bar' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', gap: 'var(--reefpi-space-xs)', position: 'fixed', bottom: 0, left: 0, right: 0, background: 'var(--reefpi-color-surface-elevated)', padding: '0 var(--reefpi-space-sm)' }}>
         <a href='http://reef-pi.com' target='_blank' rel='noopener noreferrer'>{i18n.t('documentation')}</a>
         <span>|</span>
         <span>{this.props.info.current_time},</span>
