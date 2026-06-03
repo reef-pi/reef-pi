@@ -86,14 +86,16 @@ describe('<EditPh />', () => {
   it('<EditPh /> should disable inputs when controlling nothing', () => {
     const tree = renderEditPh({ values: { control: '' } })
 
-    const upperFunction = findFirst(tree, node => node.props?.name === 'upperFunction' && node.props?.className === 'custom-select')
+    // The Select primitive is a React component (forwardRef); match by name prop alone
+    const upperFunction = findFirst(tree, node => node.props?.name === 'upperFunction')
     expect(upperFunction.props.disabled).toBe(true)
   })
 
   it('<EditPh /> should enable inputs when controlling equipment', () => {
     const tree = renderEditPh({ values: { control: 'equipment' } })
 
-    const upperFunction = findFirst(tree, node => node.props?.name === 'upperFunction' && node.props?.className === 'custom-select')
+    // The Select primitive is a React component (forwardRef); match by name prop alone
+    const upperFunction = findFirst(tree, node => node.props?.name === 'upperFunction')
     expect(upperFunction.props.disabled).toBe(false)
   })
 

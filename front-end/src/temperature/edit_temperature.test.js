@@ -120,9 +120,10 @@ describe('<EditTemperature />', () => {
 
   it('disables control inputs when controlling nothing', () => {
     const element = renderComponent({ isValid: false }, { control: '' })
+    // The Select primitive is a React component (forwardRef); match by name prop alone
     const heaterField = findFirst(
       element,
-      child => child.props.name === 'heater' && child.props.className === 'custom-select'
+      child => child.props.name === 'heater'
     )
 
     expect(heaterField.props.disabled).toBe(true)
@@ -130,9 +131,10 @@ describe('<EditTemperature />', () => {
 
   it('enables control inputs when controlling equipment', () => {
     const element = renderComponent({ isValid: false }, { control: 'equipment' })
+    // The Select primitive is a React component (forwardRef); match by name prop alone
     const heaterField = findFirst(
       element,
-      child => child.props.name === 'heater' && child.props.className === 'custom-select'
+      child => child.props.name === 'heater'
     )
 
     expect(heaterField.props.disabled).toBe(false)

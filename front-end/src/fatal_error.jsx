@@ -40,30 +40,44 @@ export default class FatalError extends React.Component {
         <div className='fatal-error-container'>
           <div className='fatal-error-background' />
           <div className='fatal-error-content'>
-            <div className='container h-100'>
-              <div className='row align-items-center h-100'>
-                <div className='col' />
-                <div className='col-12 col-md-8 col-lg-6'>
-                  <div className='card text-white bg-danger mb-3'>
-                    <div className='card-header'>{i18next.t('fatal_error:fatal_error')}</div>
-                    <div className='card-body'>
-                      <h5 className='card-title'>{i18next.t('fatal_error:connection_lost')}</h5>
-                      <p className='card-text'>
-                        {i18next.t('fatal_error:message')}
-                      </p>
-                      <p className='card-text'>
-                        <a
-                          target='_blank' rel='noopener noreferrer'
-                          href='http://reef-pi.com/additional-documentation/troubleshooting/'
-                          className='btn btn-primary mr-2'
-                        >
-                          {FaMedkit()} {i18next.t('fatal_error:troubleshoot')}
-                        </a>
-                      </p>
-                    </div>
+            <div style={{ display: 'grid', placeItems: 'center', height: '100%', padding: '1rem' }}>
+              <div style={{ maxWidth: '36rem', width: '100%' }}>
+                <div style={{
+                  background: 'var(--reefpi-danger)',
+                  color: 'var(--reefpi-white)',
+                  borderRadius: '0.5rem',
+                  marginBottom: '1rem'
+                }}>
+                  <div style={{ padding: '0.75rem 1rem', borderBottom: '1px solid rgba(255,255,255,0.2)', fontWeight: 600 }}>
+                    {i18next.t('fatal_error:fatal_error')}
+                  </div>
+                  <div style={{ padding: '1rem' }}>
+                    <h5 style={{ marginBottom: '0.5rem', fontWeight: 600 }}>{i18next.t('fatal_error:connection_lost')}</h5>
+                    <p style={{ marginBottom: '0.5rem' }}>
+                      {i18next.t('fatal_error:message')}
+                    </p>
+                    <p style={{ marginBottom: 0 }}>
+                      <a
+                        target='_blank' rel='noopener noreferrer'
+                        href='http://reef-pi.com/additional-documentation/troubleshooting/'
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.4rem',
+                          padding: '0.4rem 0.9rem',
+                          background: 'var(--reefpi-primary)',
+                          color: 'var(--reefpi-white)',
+                          borderRadius: '0.375rem',
+                          textDecoration: 'none',
+                          fontWeight: 500,
+                          fontSize: '0.875rem'
+                        }}
+                      >
+                        {FaMedkit()} {i18next.t('fatal_error:troubleshoot')}
+                      </a>
+                    </p>
                   </div>
                 </div>
-                <div className='col' />
               </div>
             </div>
           </div>
