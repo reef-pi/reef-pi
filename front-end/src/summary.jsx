@@ -17,26 +17,27 @@ export default class Summary extends React.Component {
   }
 
   render () {
-    let devModeWarning = <></>
+    let devModeWarning = null
     if (this.props.devMode) {
-      devModeWarning = <li className='list-inline-item'><span className='text-danger'>{i18n.t('devmode_warning')} </span>| </li>
+      devModeWarning = <span style={{ color: 'var(--reefpi-color-error)' }}>{i18n.t('devmode_warning')} | </span>
     }
     return (
-      <nav className='bottom-bar' style={{ display: 'flex', justifyContent: 'center', position: 'fixed', bottom: 0, left: 0, right: 0, background: 'var(--reefpi-color-surface-elevated)', borderTop: '1px solid var(--reefpi-color-border)', padding: 'var(--reefpi-space-xxs) var(--reefpi-space-sm)' }}>
-        <ul className='list-inline'>
-          <li className='list-inline-item'><a href='http://reef-pi.com' target='_blank' rel='noopener noreferrer'> {i18n.t('documentation')}</a> | </li>
-          <li className='list-inline-item'>{this.props.info.current_time},</li>
-          <li className='list-inline-item'>{i18n.t('running')} {this.props.info.version}, on {this.props.info.model}</li>
-          <li className='list-inline-item'>{i18n.t('since')} {this.props.info.uptime} | </li>
-          <li className='list-inline-item'>IP {this.props.info.ip} | </li>
-          <li className='list-inline-item'><a href='/assets/api.html'>API</a> | </li>
-          {devModeWarning}
-          <li className='list-inline-item'>
-            <a href='/configuration/errors' className='text-danger'>
-              {i18n.t('errors')}({this.props.errors.length})
-            </a>
-          </li>
-        </ul>
+      <nav className='bottom-bar' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', gap: 'var(--reefpi-space-xs)', position: 'fixed', bottom: 0, left: 0, right: 0, background: 'var(--reefpi-color-surface-elevated)', padding: 'var(--reefpi-space-xxs) var(--reefpi-space-sm)' }}>
+        <a href='http://reef-pi.com' target='_blank' rel='noopener noreferrer'>{i18n.t('documentation')}</a>
+        <span>|</span>
+        <span>{this.props.info.current_time},</span>
+        <span>{i18n.t('running')} {this.props.info.version}, on {this.props.info.model}</span>
+        <span>|</span>
+        <span>{i18n.t('since')} {this.props.info.uptime}</span>
+        <span>|</span>
+        <span>IP {this.props.info.ip}</span>
+        <span>|</span>
+        <a href='/assets/api.html'>API</a>
+        <span>|</span>
+        {devModeWarning}
+        <a href='/configuration/errors' style={{ color: 'var(--reefpi-color-error)' }}>
+          {i18n.t('errors')}({this.props.errors.length})
+        </a>
       </nav>
     )
   }
