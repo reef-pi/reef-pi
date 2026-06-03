@@ -23,14 +23,14 @@ class errors extends React.Component {
     this.props.errors.forEach(el => {
       const isAlert = el.id && el.id.startsWith('alert:')
       items.push(
-        <div className='row align-items-center' key={'error-' + el.id}>
-          <div className='col-lg-2'>{el.time}</div>
-          <div className='col-lg-8'>
-            {isAlert && <span className='badge badge-warning mr-1'>{i18n.t('configuration:errors:alert')}</span>}
+        <div key={'error-' + el.id} style={{ display: 'flex', alignItems: 'center', gap: 'var(--reefpi-space-sm)', padding: 'var(--reefpi-space-xs) 0', borderBottom: '1px solid var(--reefpi-color-border)' }}>
+          <div style={{ minWidth: '8rem', color: 'var(--reefpi-color-text-muted)', fontSize: '0.875rem' }}>{el.time}</div>
+          <div style={{ flex: 1 }}>
+            {isAlert && <span style={{ background: 'var(--reefpi-color-warn-bg)', color: 'var(--reefpi-color-warn)', borderRadius: 'var(--reefpi-radius-sm)', fontSize: '0.75rem', fontWeight: 600, padding: '0.1em 0.4em', marginRight: 'var(--reefpi-space-xxs)' }}>{i18n.t('configuration:errors:alert')}</span>}
             {el.message}
-            {el.count > 1 && <span className='badge badge-secondary ml-1'>{el.count}x</span>}
+            {el.count > 1 && <span style={{ background: 'var(--reefpi-color-pending-bg)', color: 'var(--reefpi-color-text)', borderRadius: 'var(--reefpi-radius-sm)', fontSize: '0.75rem', fontWeight: 600, padding: '0.1em 0.4em', marginLeft: 'var(--reefpi-space-xxs)' }}>{el.count}x</span>}
           </div>
-          <div className='col-lg-1'>
+          <div>
             <Button
               variant='secondary'
               style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
@@ -43,14 +43,12 @@ class errors extends React.Component {
       )
     })
     return (
-      <div className='container'>
+      <div>
         {items}
-        <div className='row'>
-          <div className='col-lg-2'>
-            <Button variant='secondary' onClick={this.handleClear}>
-              {i18n.t('clear')}
-            </Button>
-          </div>
+        <div style={{ marginTop: 'var(--reefpi-space-sm)' }}>
+          <Button variant='secondary' onClick={this.handleClear}>
+            {i18n.t('clear')}
+          </Button>
         </div>
       </div>
     )

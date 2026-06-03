@@ -185,7 +185,7 @@ describe('Configuration ui', () => {
 
     const rows = rendered.props.children[0]
     rows[0].props.children[2].props.children.props.onClick()
-    rendered.props.children[1].props.children.props.children.props.onClick()
+    rendered.props.children[1].props.children.props.onClick()
 
     expect(props.delete).toHaveBeenCalledWith('alert:1')
     expect(props.clear).toHaveBeenCalled()

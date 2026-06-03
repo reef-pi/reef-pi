@@ -155,7 +155,7 @@ export class RawSettings extends React.Component {
       return
     }
     return (
-      <div className='container'>
+      <div>
         <Display />
       </div>
     )
@@ -222,7 +222,7 @@ export class RawSettings extends React.Component {
           this.state.settings.capabilities === undefined ||
           Object.keys(this.state.capabilities).length === 0) {
       return (
-        <div className='container'>
+        <div>
           {i18n.t('loading')}
         </div>
       )
@@ -231,7 +231,7 @@ export class RawSettings extends React.Component {
     const updateVariant = this.state.updated ? 'danger' : 'primary'
 
     return (
-      <div className='container'>
+      <div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))', gap: 'var(--reefpi-space-md)' }}>
           {this.toRow('name')}
           {this.toRow('interface')}
@@ -307,7 +307,7 @@ export class RawSettings extends React.Component {
         </div>
         <hr />
         <div>
-          <label className='h5 font-weight-normal'>
+          <label style={{ fontSize: '1.25rem', fontWeight: 400 }}>
             {i18n.t('capabilities')}
           </label>
           {this.showCapabilities()}

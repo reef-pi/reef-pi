@@ -190,12 +190,12 @@ describe('Instances Main', () => {
       delete: fn
     })
 
-    let addButton = findNode(main.render(), node => node.type === 'input' && node.props.id === 'add_instance')
-    expect(addButton.props.value).toBe('+')
+    let addButton = findNode(main.render(), node => node.props && node.props.id === 'add_instance')
+    expect(addButton.props.children).toBe('+')
 
     main.state = { add: true }
-    addButton = findNode(main.render(), node => node.type === 'input' && node.props.id === 'add_instance')
-    expect(addButton.props.value).toBe('-')
+    addButton = findNode(main.render(), node => node.props && node.props.id === 'add_instance')
+    expect(addButton.props.children).toBe('-')
   })
 
   it('renders instances sorted by numeric id descending', () => {

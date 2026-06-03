@@ -70,17 +70,16 @@ describe('Admin DB import', () => {
     })
   })
 
-  it('reports selected database filename and default label', () => {
+  it('tracks selected database file in state', () => {
     const component = new RawAdmin({})
     patchSetState(component)
 
-    expect(component.dbFileName()).toBe('select_file')
+    expect(component.state.dbFile).toBeNull()
 
     const file = new window.File(['reef-pi'], 'backup.db')
     component.handleDBFileChange({ target: { files: [file] } })
 
     expect(component.state.dbFile).toBe(file)
-    expect(component.dbFileName()).toBe('backup.db')
   })
 
   it('shows an error when importing without selecting a database file', () => {

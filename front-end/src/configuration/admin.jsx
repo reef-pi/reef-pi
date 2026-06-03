@@ -22,7 +22,6 @@ export class RawAdmin extends React.Component {
     this.handleSignout = this.handleSignout.bind(this)
     this.handleDBFileImport = this.handleDBFileImport.bind(this)
     this.handleDBFileChange = this.handleDBFileChange.bind(this)
-    this.dbFileName = this.dbFileName.bind(this)
     this.handleInstall = this.handleInstall.bind(this)
     this.handleVersionChange = this.handleVersionChange.bind(this)
   }
@@ -40,13 +39,6 @@ export class RawAdmin extends React.Component {
 
   handleVersionChange (ev) {
     this.setState({ version: ev.target.value })
-  }
-
-  dbFileName () {
-    if (this.state.dbFile === null) {
-      return (i18n.t('select_file'))
-    }
-    return (this.state.dbFile.name)
   }
 
   handleDBFileChange (event) {
@@ -90,7 +82,7 @@ export class RawAdmin extends React.Component {
 
   render () {
     return (
-      <div className='container'>
+      <div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))', gap: 'var(--reefpi-space-md)', marginTop: 'var(--reefpi-space-sm)' }}>
           <Button variant='danger' onClick={this.handleSignout} type='button'>
             {i18n.t('configuration:admin:sign_out')}
@@ -110,12 +102,10 @@ export class RawAdmin extends React.Component {
             <a href='/api/admin/reef-pi.db' download>{i18n.t('configuration:admin:db_export')}</a>
           </div>
           <div>
-            <div className='input-group'>
-              <div className='custom-file'>
-                <input type='file' className='custom-file-input' id='dbImportFile' onChange={this.handleDBFileChange} />
-                <label className='custom-file-label' form='dbImportFile'>{this.dbFileName()}</label>
-              </div>
-            </div>
+            <label htmlFor='dbImportFile' style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--reefpi-color-text)', display: 'block', marginBottom: 'var(--reefpi-space-xxs)' }}>
+              {i18n.t('select_file')}
+            </label>
+            <input type='file' id='dbImportFile' onChange={this.handleDBFileChange} style={{ display: 'block', width: '100%' }} />
           </div>
           <Button variant='danger' onClick={this.handleDBFileImport} type='button'>
             {i18n.t('configuration:admin:db_import')}

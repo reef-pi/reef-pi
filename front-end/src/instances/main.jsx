@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import InstanceForm from './instance_form'
 import i18next from 'i18next'
 import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
-import { List } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
+import { List, ListItem } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
 
 export class RawInstancesMain extends React.Component {
   constructor (props) {
@@ -57,17 +57,14 @@ export class RawInstancesMain extends React.Component {
             />
           )
         })}
-        <li className='reefpi-list-item add-instance' style={{ padding: 'var(--reefpi-space-md)', listStyle: 'none' }}>
+        <ListItem>
           <div>
-            <input
-              id='add_instance'
-              type='button'
-              value={this.state.add ? '-' : '+'}
-              onClick={this.handleToggle}
-            />
+            <Button id='add_instance' onClick={this.handleToggle}>
+              {this.state.add ? '-' : '+'}
+            </Button>
           </div>
           {nEq}
-        </li>
+        </ListItem>
       </List>
     )
   }
