@@ -67,12 +67,12 @@ function dataAlert (container, testId) {
 }
 
 describe('dashboard_v2 feature flag wiring', () => {
-  it('keeps dashboard_v2 disabled in the shipped server-rendered feature config', () => {
+  it('has dashboard_v2 enabled in the shipped server-rendered feature config', () => {
     const html = fs.readFileSync(path.join(repoRoot, 'front-end/assets/home.html'), 'utf8')
 
     expect(html).toContain('window.FEATURE_FLAGS')
-    expect(html).toContain('dashboard_v2: false')
-    expect(html).not.toContain('dashboard_v2: true')
+    expect(html).toContain('dashboard_v2: true')
+    expect(html).not.toContain('dashboard_v2: false')
   })
 
   it('exposes dashboard_v2 in the design-system Tweaks object and mirrors it to window.FEATURE_FLAGS', () => {
