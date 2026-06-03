@@ -20,7 +20,7 @@ jobs:
         with:
           name: pi3-debian-package
       - name: Upload deb package
-        uses: AButler/upload-release-assets@v3.0
+        uses: AButler/upload-release-assets@v4.0
         with:
           files: "reef-pi-*.deb"
           repo-token: ${{ secrets.GITHUB_TOKEN }}
