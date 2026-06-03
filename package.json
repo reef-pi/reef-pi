@@ -48,7 +48,7 @@
     "prop-types": "15.8.1",
     "react": "19.2.5",
     "react-color": "2.19.3",
-    "react-datepicker": "^7.6.0",
+    "react-datepicker": "^9.1.0",
     "react-dom": "19.2.5",
     "react-i18next": "12.0.0",
     "react-icons": "5.5.0",
