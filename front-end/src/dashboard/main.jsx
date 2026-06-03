@@ -15,7 +15,6 @@ import { fetchDashboard } from 'redux/actions/dashboard'
 import { updateEquipment } from 'redux/actions/equipment'
 import { connect } from 'react-redux'
 import Config from './config'
-import { numColsToColSize } from './grid'
 import ErrorBoundary from '../ui_components/error_boundary'
 import i18n from 'utils/i18n'
 import DashboardV2 from '../../design-system/ui_kits/reef-pi-app/dashboard/DashboardV2'
@@ -55,9 +54,6 @@ export class RawDashboardMain extends React.Component {
     if (config.grid_details === undefined) {
       return
     }
-
-    // numColsToColSize kept for compatibility but layout now uses flex
-    numColsToColSize(config.column)
 
     let i, j
     const rows = []

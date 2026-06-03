@@ -60,11 +60,32 @@ export class RawSelectEquipment extends React.Component {
       eqName = this.state.equipment.name
     }
     return (
-      <Menu
-        buttonLabel={eqName}
-        items={this.equipmentList()}
-        disabled={readOnly}
-      />
+      readOnly ? (
+        <button
+          type='button'
+          disabled
+          style={{
+            alignItems: 'center',
+            background: 'var(--reefpi-color-pending-bg)',
+            border: '1px solid var(--reefpi-color-border)',
+            borderRadius: 'var(--reefpi-radius-sm)',
+            color: 'var(--reefpi-color-text)',
+            cursor: 'not-allowed',
+            display: 'inline-flex',
+            fontFamily: 'var(--reefpi-font-app)',
+            fontSize: '0.9375rem',
+            fontWeight: 600,
+            minHeight: 'var(--reefpi-tap-target-min)',
+            minWidth: 'var(--reefpi-tap-target-min)',
+            opacity: 0.58,
+            padding: '0 var(--reefpi-space-md)'
+          }}
+        >
+          {eqName}
+        </button>
+      ) : (
+        <Menu buttonLabel={eqName} items={this.equipmentList()} />
+      )
     )
   }
 }

@@ -116,14 +116,13 @@ export default class Subsystem extends React.Component {
         </div>
         <div style={{ display: 'flex', gap: 'var(--reefpi-space-md)', alignItems: 'center' }}>
           <label>{i18n.t('timers:action')}</label>
-          <Menu buttonLabel={eqAction}>
-            <button role='menuitem' onClick={this.setAction(true)}>
-              {i18n.t('on')}
-            </button>
-            <button role='menuitem' onClick={this.setAction(false)}>
-              {i18n.t('off')}
-            </button>
-          </Menu>
+          <Menu
+            buttonLabel={eqAction}
+            items={[
+              { label: i18n.t('on'), onSelect: this.setAction(true) },
+              { label: i18n.t('off'), onSelect: this.setAction(false) }
+            ]}
+          />
         </div>
         <div style={{ display: 'flex', gap: 'var(--reefpi-space-md)', alignItems: 'center' }}>
           <label>{i18n.t('timers:revert')}</label>
