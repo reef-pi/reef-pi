@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
 import { showError, showUpdateSuccessful } from 'utils/alert'
-import { Field as FormikField } from 'formik'
 import { Field as FormField, Input, Select } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
 import i18n from 'utils/i18n'
 
@@ -12,6 +11,7 @@ const EditDriver = ({
   touched,
   submitForm,
   handleChange,
+  handleBlur,
   setValues,
   mode,
   isValid,
@@ -55,12 +55,15 @@ const EditDriver = ({
         const param = (
           <div key={item.name} style={{ display: 'grid', gap: 'var(--reefpi-space-xxs)', minWidth: 0 }}>
             <label htmlFor={fieldName} style={{ fontSize: '0.875rem', fontWeight: 600 }}>{item.name}</label>
-            <FormikField
+            <Input
               name={fieldName}
               disabled={readOnly}
               type={item.type === 4 ? 'checkbox' : 'text'}
               placeholder={item.default.toString()}
-              className={hasError ? 'is-invalid' : ''}
+              invalid={!!hasError}
+              value={values.config ? (values.config[item.name.toLowerCase()] || '') : ''}
+              onChange={handleChange}
+              onBlur={handleBlur}
             />
             <ErrorFor errors={errors} touched={touched} name={fieldName} />
           </div>
@@ -91,11 +94,14 @@ const EditDriver = ({
       {!readOnly && (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))', gap: 'var(--reefpi-space-md)', marginBottom: 'var(--reefpi-space-sm)' }}>
           <FormField label={i18n.t('name')}>
-            <FormikField
+            <Input
               name='name'
               data-testid='smoke-driver-name'
               disabled={readOnly}
-              className={ShowError('name', touched, errors) ? 'is-invalid' : ''}
+              invalid={!!ShowError('name', touched, errors)}
+              value={values.name || ''}
+              onChange={handleChange}
+              onBlur={handleBlur}
             />
             <ErrorFor errors={errors} touched={touched} name='name' />
           </FormField>

@@ -401,6 +401,7 @@ class connectors extends React.Component {
   renderLegacy () {
     return (
       <div className='container'>
+        {/* Legacy layout — Bootstrap .row used as test selector, preserved until new_shell flag removes this path */}
         <div className='row inlets'>
           <Inlets />
         </div>

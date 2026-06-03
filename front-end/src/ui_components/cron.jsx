@@ -1,11 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
-import { Field as FormikField } from 'formik'
-import { Field as FormField } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
+import { Field as FormField, Input } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
 import i18next from 'i18next'
 
-const Cron = ({ values, errors, touched, readOnly }) => {
+const Cron = ({ values, errors, touched, readOnly, handleChange, handleBlur }) => {
   const fields = [
     { name: 'month', label: i18next.t('cron:month'), testId: 'smoke-cron-month' },
     { name: 'week', label: i18next.t('cron:week'), testId: 'smoke-cron-week' },
@@ -19,11 +18,14 @@ const Cron = ({ values, errors, touched, readOnly }) => {
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(8rem, 1fr))', gap: 'var(--reefpi-space-sm)' }}>
       {fields.map(field => (
         <FormField key={field.name} label={field.label}>
-          <FormikField
+          <Input
             name={field.name}
             data-testid={field.testId}
             disabled={readOnly}
-            className={ShowError(field.name, touched, errors) ? 'is-invalid' : ''}
+            invalid={!!ShowError(field.name, touched, errors)}
+            value={values[field.name] !== undefined ? values[field.name] : ''}
+            onChange={handleChange}
+            onBlur={handleBlur}
           />
           <ErrorFor errors={errors} touched={touched} name={field.name} />
         </FormField>
@@ -38,5 +40,7 @@ Cron.propTypes = {
   readOnly: PropTypes.bool,
   values: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
-  touched: PropTypes.object.isRequired
+  touched: PropTypes.object.isRequired,
+  handleChange: PropTypes.func,
+  handleBlur: PropTypes.func
 }

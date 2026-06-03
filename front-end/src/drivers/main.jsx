@@ -45,10 +45,8 @@ export class RawDriversMain extends React.Component {
   render () {
     return (
       <div className='container'>
-        <div className='row mb-1'>
-          <div className='col-12'>
-            {this.list()}
-          </div>
+        <div style={{ display: 'flex', gap: 'var(--reefpi-space-sm)', marginBottom: 'var(--reefpi-space-xxs)' }}>
+          {this.list()}
         </div>
         <New
           drivers={this.props.drivers}
