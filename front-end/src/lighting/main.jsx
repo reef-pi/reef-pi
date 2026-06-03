@@ -275,9 +275,11 @@ class main extends React.Component {
         </div>
         <div>
           <label htmlFor='jack'>{i18n.t('jack')}</label>
-          <Menu buttonLabel={jack || i18n.t('select')}>
-            {this.jacksList()}
-          </Menu>
+          <span data-testid='smoke-light-jack' style={{ display: 'inline-flex' }}>
+            <Menu buttonLabel={jack || i18n.t('select')}>
+              {this.jacksList()}
+            </Menu>
+          </span>
         </div>
         <div>
           <Button

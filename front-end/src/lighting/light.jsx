@@ -54,7 +54,7 @@ const EditLight = ({
   return (
     <form onSubmit={handleFormSubmit} id={'form-light-' + values.config.id}>
 
-      <div className={classNames({ 'd-none': readOnly })} style={{ display: readOnly ? 'none' : 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))', gap: 'var(--reefpi-space-md)', marginBottom: 'var(--reefpi-space-sm)' }}>
+      <div style={{ display: readOnly ? 'none' : 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))', gap: 'var(--reefpi-space-md)', marginBottom: 'var(--reefpi-space-sm)' }}>
         <div>
           <div>
             <label htmlFor='config.name'>{i18next.t('name')}</label>

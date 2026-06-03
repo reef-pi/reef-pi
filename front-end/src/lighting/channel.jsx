@@ -199,10 +199,10 @@ const Channel = (props) => {
   const inputStyle = { display: 'block', width: '100%', padding: 'var(--reefpi-space-xs)', border: '1px solid var(--reefpi-color-border)', borderRadius: 'var(--reefpi-radius-sm)', fontFamily: 'var(--reefpi-font-app)' }
 
   return (
-    <div className='controls border-top'>
+    <div style={{ borderTop: '1px solid var(--reefpi-color-border)' }}>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))', gap: 'var(--reefpi-space-md)', alignItems: 'start', marginBottom: 'var(--reefpi-space-sm)' }}>
         <div>
-          <label className='w-100' style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <label style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             {i18next.t('lighting:channel_name')}
             <small style={{ background: 'var(--reefpi-color-brand)', color: 'var(--reefpi-color-nav-text-strong)', borderRadius: 'var(--reefpi-radius-sm)', padding: '0 var(--reefpi-space-xs)', fontSize: '0.75rem', marginTop: 'var(--reefpi-space-xxs)' }}>(pin {props.channel.pin})</small>
           </label>
@@ -284,7 +284,7 @@ const Channel = (props) => {
             onChangeHandler={handleConfigChange}
             value={props.channel.profile.type}
           />
-          <input className='d-none is-invalid' style={{ display: 'none' }} />
+          <input style={{ display: 'none' }} />
           <ErrorFor {...props} name={NameFor(props.name, 'profile.type')} />
         </div>
       </div>

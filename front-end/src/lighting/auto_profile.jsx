@@ -135,7 +135,7 @@ export default class AutoProfile extends React.Component {
               disabled={this.props.readOnly}
             />
           </div>
-          <div className='order-md-last' style={{ fontSize: '0.75rem' }}>
+          <div style={{ fontSize: '0.75rem' }}>
             {labels[i]}
           </div>
         </div>
