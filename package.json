@@ -23,7 +23,7 @@
     "csv-parse": "^5.6.0",
     "csv-stringify": "6.5.2",
     "eslint": "9.26.0",
-    "eslint-plugin-react": "7.33.2",
+    "eslint-plugin-react": "7.37.5",
     "fetch-mock": "9.11.0",
     "form-data": "^4.0.1",
     "formik": "2.4.6",
