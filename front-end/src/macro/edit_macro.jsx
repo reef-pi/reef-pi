@@ -43,7 +43,13 @@ const EditMacro = ({
   }
 
   const nosteps = (len) => {
-    if (len < 1) { return (<div className='alert text-danger'> {i18n.t('none')}</div>) }
+    if (len < 1) {
+      return (
+        <div style={{ color: 'var(--reefpi-color-error)', fontSize: '0.875rem', padding: 'var(--reefpi-space-sm) 0' }}>
+          {i18n.t('none')}
+        </div>
+      )
+    }
   }
 
   return (
@@ -103,7 +109,7 @@ const EditMacro = ({
                   >
                     {!readOnly && (
                       <div style={{ display: 'flex', alignItems: 'center', paddingRight: 0 }} title={i18n.t('macro:drag_to_reorder')}>
-                        <span style={{ fontSize: '1.2rem', color: '#aaa', userSelect: 'none' }}>&#8942;</span>
+                        <span style={{ fontSize: '1.2rem', color: 'var(--reefpi-color-text-muted)', userSelect: 'none' }}>&#8942;</span>
                       </div>
                     )}
                     <div style={{ minWidth: '10rem' }}>

@@ -2,6 +2,7 @@ import React from 'react'
 import { showError } from 'utils/alert'
 import i18next from 'i18next'
 import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { Field as FormField, Input } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
 
 export default class Config extends React.Component {
   constructor (props) {
@@ -57,45 +58,34 @@ export default class Config extends React.Component {
   render () {
     if (this.state.config.enable === undefined) {
       return (
-        <div className='container'>
+        <div>
           {i18next.t('loading')}
         </div>
       )
     }
     return (
-      <div className='container'>
-        <div className='row'>
-          <div>{i18next.t('camera:enable')}</div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(14rem, 1fr))', gap: 'var(--reefpi-space-md)' }}>
+        <FormField label={i18next.t('camera:enable')}>
           <input type='checkbox' id='camera_enable' defaultChecked={this.state.config.enable} onClick={this.updateBool('enable')} />
-        </div>
-        <div className='row'>
-          <div>{i18next.t('camera:tick_interval')}</div>
-          <div>
-            <input type='text' onChange={this.updateText('tick_interval')} id='tick_interval' value={this.state.config.tick_interval} />
-          </div>
-        </div>
-        <div className='row'>
-          <div>{i18next.t('camera:capture_flags')}</div>
-          <div>
-            <input type='text' onChange={this.updateText('capture_flags')} id='capture_flags' value={this.state.config.capture_flags} />
-          </div>
-        </div>
-        <div className='row'>
-          <div>{i18next.t('camera:target_dir')}</div>
-          <div>
-            <input type='text' onChange={this.updateText('image_directory')} id='image_directory' value={this.state.config.image_directory} />
-          </div>
-        </div>
-        <div className='row'>
-          <div>{i18next.t('camera:to_gdrive')}</div>
+        </FormField>
+        <FormField label={i18next.t('camera:tick_interval')}>
+          <Input type='text' onChange={this.updateText('tick_interval')} id='tick_interval' value={this.state.config.tick_interval} />
+        </FormField>
+        <FormField label={i18next.t('camera:capture_flags')}>
+          <Input type='text' onChange={this.updateText('capture_flags')} id='capture_flags' value={this.state.config.capture_flags} />
+        </FormField>
+        <FormField label={i18next.t('camera:target_dir')}>
+          <Input type='text' onChange={this.updateText('image_directory')} id='image_directory' value={this.state.config.image_directory} />
+        </FormField>
+        <FormField label={i18next.t('camera:to_gdrive')}>
           <input type='checkbox' id='camera_gdrive' defaultChecked={this.state.config.upload} onClick={this.updateBool('upload')} />
-        </div>
-        <div className='row'>
+        </FormField>
+        <div>
           <Button
             data-testid='camera-save-btn'
             id='updateCamera'
             onClick={this.handleSave}
-            variant={this.state.updated ? 'danger' : 'primary'}
+            variant={this.state.updated ? 'primary' : 'secondary'}
           >
             {i18next.t('update')}
           </Button>

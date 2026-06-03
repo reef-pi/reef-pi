@@ -241,11 +241,10 @@ describe('Camera module', () => {
     const config = new Config({ config: { tick_interval: 1 }, update: jest.fn() })
     const rendered = config.render()
     expect(rendered.type).toBe('div')
-    expect(rendered.props.className).toBe('container')
     expect(rendered.props.children).toBeTruthy()
   })
 
-  it('<Config /> render shows danger save button when updated is true', () => {
+  it('<Config /> render shows primary save button when updated is true', () => {
     const config = new Config({ config: { tick_interval: 1, enable: true }, update: jest.fn() })
     config.setState = jest.fn(next => {
       config.state = { ...config.state, ...next }
@@ -253,7 +252,7 @@ describe('Camera module', () => {
     config.state.updated = true
     const rendered = config.render()
     const saveButton = findAllByType(rendered, Button).find(n => n.props['data-testid'] === 'camera-save-btn')
-    expect(saveButton.props.variant).toBe('danger')
+    expect(saveButton.props.variant).toBe('primary')
   })
 
   it('<Config /> saves parsed config without mutating state config', () => {
