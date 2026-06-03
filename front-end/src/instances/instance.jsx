@@ -3,6 +3,7 @@ import ViewInstance from './view_instance'
 import InstanceForm from './instance_form'
 import i18next from 'i18next'
 import { confirm } from 'utils/confirm'
+import { ListItem } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
 
 export default class Instance extends React.Component {
   constructor (props) {
@@ -59,11 +60,11 @@ export default class Instance extends React.Component {
 
   render () {
     return (
-      <li className='list-group-item'>
+      <ListItem>
         {this.state.readOnly === true
           ? <ViewInstance instance={this.props.instance} onEdit={this.handleToggleEdit} onDelete={this.handleDelete} onStateChange={this.handleUpdate} />
           : <InstanceForm instance={this.props.instance} actionLabel={i18next.t('save')} onSubmit={this.handleSubmit} onUpdate={this.handleUpdate} onDelete={this.handleDelete} />}
-      </li>
+      </ListItem>
     )
   }
 }

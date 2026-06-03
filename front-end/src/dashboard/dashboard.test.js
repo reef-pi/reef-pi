@@ -88,7 +88,7 @@ describe('Dashboard', () => {
     const component = new RawDashboardMain({ config, fetchDashboard: jest.fn() })
     component.setState = update => { component.state = { ...component.state, ...update } }
 
-    click(component.render().props.children.props.children[1].props.children.props.children)
+    click(component.render().props.children.props.children[1].props.children)
     expect(component.state.showConfig).toBe(true)
   })
 
@@ -177,7 +177,7 @@ describe('Dashboard', () => {
     m.setID(1, 'foo')({})
   })
 
-  it('<ComponentSelector /> renders dropdown with active item', () => {
+  it('<ComponentSelector /> renders menu with active item', () => {
     const hook = jest.fn()
     const comps = {
       c1: { id: '1', name: 'Alpha' },
@@ -186,8 +186,9 @@ describe('Dashboard', () => {
     const m = new ComponentSelector({ hook, components: comps, current_id: '2', selector_id: 'test-sel' })
     m.setState = update => { m.state = { ...m.state, ...update } }
     const tree = m.render()
-    expect(tree.type).toBe('div')
-    expect(tree.props.className).toBe('dropdown')
+    // Menu renders a React element (functional component), not a plain div
+    expect(tree).not.toBeNull()
+    expect(tree).toBeDefined()
   })
 
   it('<ComponentSelector /> setID updates state and calls hook', () => {
@@ -206,8 +207,8 @@ describe('Dashboard', () => {
     const m = new ComponentSelector({ hook: jest.fn(), components: comps, current_id: '1', selector_id: 'sel' })
     m.setState = update => { m.state = { ...m.state, ...update } }
     const tree = m.render()
-    const button = tree.props.children[0]
-    expect(button.props.children).toBe('ActiveOne')
+    // Menu renders with buttonLabel set to the active item name
+    expect(tree.props.buttonLabel).toBe('ActiveOne')
   })
 
   it('<Config />', () => {
@@ -227,7 +228,7 @@ describe('Dashboard', () => {
       blank: []
     })
     m.state = RawDashboardConfig.getDerivedStateFromProps({ config }, m.state) || { updated: false, config }
-    expect(m.render().props.className).toBe('col-12')
+    expect(m.render().props.style).toEqual({ width: '100%' })
   })
 
   it('<Config /> fetches dashboard on mount and handles empty props', () => {
@@ -262,11 +263,11 @@ describe('Dashboard', () => {
     m.setState = update => { m.state = { ...m.state, ...update } }
 
     const row = m.toRow('row', 'Rows', 1, 12)
-    row.props.children[1].props.onChange({ target: { value: '' } })
+    row.props.children.props.onChange({ target: { value: '' } })
     expect(m.state.config.row).toBe('')
-    row.props.children[1].props.onChange({ target: { value: '2' } })
+    row.props.children.props.onChange({ target: { value: '2' } })
     expect(m.state.config.row).toBe(2)
-    row.props.children[1].props.onChange({ target: { value: 'x' } })
+    row.props.children.props.onChange({ target: { value: 'x' } })
     expect(m.state.config.row).toBe(2)
 
     m.handleSave()

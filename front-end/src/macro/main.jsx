@@ -15,6 +15,8 @@ import MacroForm from './macro_form'
 import { confirm } from 'utils/confirm'
 import { SortByName } from 'utils/sort_by_name'
 import i18n from 'utils/i18n'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { List, ListItem } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
 
 export class RawMacroMain extends React.Component {
   constructor (props) {
@@ -57,27 +59,31 @@ export class RawMacroMain extends React.Component {
         .map(macro => {
           const buttons = []
           buttons.push(
-            <button
-              type='button' name={'run-macro-' + macro.id}
-              className='btn btn-sm btn-outline-info float-right'
+            <Button
+              type='button'
+              name={'run-macro-' + macro.id}
+              variant='secondary'
+              style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem', marginLeft: 'auto' }}
               disabled={macro.enable}
               onClick={(e) => this.runMacro(e, macro)}
               key='run'
             >
               {macro.enable ? i18n.t('macro:running') : i18n.t('macro:run')}
-            </button>
+            </Button>
           )
           if (macro.reversible) {
             buttons.push(
-              <button
-                type='button' name={'reverse-macro-' + macro.id}
-                className='btn btn-sm btn-outline-info float-right'
+              <Button
+                type='button'
+                name={'reverse-macro-' + macro.id}
+                variant='secondary'
+                style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem', marginLeft: 'auto' }}
                 disabled={macro.enable}
                 onClick={(e) => this.revertMacro(e, macro)}
                 key='revert'
               >
                 {macro.enable ? i18n.t('macro:reverting') : i18n.t('macro:revert')}
-              </button>
+              </Button>
             )
           }
 
@@ -87,7 +93,7 @@ export class RawMacroMain extends React.Component {
               name={'panel-macro-' + macro.id}
               item={macro}
               buttons={buttons}
-              title={<b className='ml-2 align-middle'>{macro.name} </b>}
+              title={<b style={{ marginLeft: 'var(--reefpi-space-xs)', verticalAlign: 'middle' }}>{macro.name}</b>}
               onDelete={this.handleDeleteMacro}
             >
               <MacroForm
@@ -176,26 +182,23 @@ export class RawMacroMain extends React.Component {
     }
 
     return (
-      <ul className='list-group list-group-flush'>
+      <List>
         <CollapsibleList>
           {this.macroList()}
         </CollapsibleList>
-        <li className='list-group-item add-macro'>
-          <div className='row'>
-            <div className='col'>
-              <input
-                type='button'
-                id='add_macro'
-                data-testid='smoke-macro-add-toggle'
-                value={this.state.addMacro ? '-' : '+'}
-                onClick={this.handleToggleAddMacroDiv}
-                className='btn btn-outline-success'
-              />
-            </div>
-          </div>
+        <ListItem>
+          <Button
+            type='button'
+            variant='primary'
+            id='add_macro'
+            data-testid='smoke-macro-add-toggle'
+            onClick={this.handleToggleAddMacroDiv}
+          >
+            {this.state.addMacro ? '-' : '+'}
+          </Button>
           {newMacro}
-        </li>
-      </ul>
+        </ListItem>
+      </List>
     )
   }
 }

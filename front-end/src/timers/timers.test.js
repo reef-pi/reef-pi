@@ -8,6 +8,7 @@ import { thunk } from 'redux-thunk'
 import { RawTimersMain } from './main'
 import TimerForm from './timer_form'
 import Collapsible from '../ui_components/collapsible'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 import 'isomorphic-fetch'
 
 jest.mock('utils/confirm', () => {
@@ -221,10 +222,10 @@ describe('Timer ui', () => {
     component.state.addTimer = true
 
     const rendered = component.render()
-    const addButton = findNodes(rendered, node => node.type === 'input' && node.props.id === 'add_timer')[0]
+    const addButton = findNodes(rendered, node => node.type === Button && node.props.id === 'add_timer')[0]
     const form = findNodes(rendered, node => node.type === TimerForm)[0]
 
-    expect(addButton.props.value).toBe('-')
+    expect(addButton.props.children).toBe('-')
     expect(form.props.onSubmit).toBe(component.handleSubmit)
     expect(form.props.equipment).toBe(component.props.equipment)
     expect(form.props.macros).toBe(component.props.macros)

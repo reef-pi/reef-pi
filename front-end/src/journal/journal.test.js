@@ -93,20 +93,20 @@ describe('<Journal />', () => {
     const { container, unmount } = renderJournal()
 
     expect(container.querySelector('[data-testid="journal-chart"]')).toBeDefined()
-    expect(container.querySelector('input#add_entry')).toBeDefined()
+    expect(container.querySelector('#add_entry')).toBeDefined()
 
     unmount()
   })
 
   it('renders the entry form after clicking Add Entry', () => {
     const { container, unmount } = renderJournal()
-    const addEntryButton = container.querySelector('input#add_entry')
+    const addEntryButton = container.querySelector('#add_entry')
 
     act(() => {
       addEntryButton.dispatchEvent(new MouseEvent('click', { bubbles: true }))
     })
 
-    expect(addEntryButton.value).toBe('-')
+    expect(addEntryButton.textContent).toBe('-')
     expect(container.querySelector('[data-testid="entry-form-submit"]')).toBeDefined()
 
     unmount()
@@ -143,7 +143,7 @@ describe('<Journal />', () => {
     const { container, unmount } = renderJournal()
 
     act(() => {
-      container.querySelector('input#add_entry').dispatchEvent(new MouseEvent('click', { bubbles: true }))
+      container.querySelector('#add_entry').dispatchEvent(new MouseEvent('click', { bubbles: true }))
     })
     act(() => {
       container.querySelector('[data-testid="entry-form-submit"]').dispatchEvent(new MouseEvent('click', { bubbles: true }))
@@ -157,7 +157,7 @@ describe('<Journal />', () => {
       payload: { value: '8.2', comment: 'daily check' }
     })
     expect(dispatch).toHaveBeenNthCalledWith(2, { type: 'FETCH_JOURNAL_USAGE', id: '1' })
-    expect(container.querySelector('input#add_entry').value).toBe('journal:add_entry')
+    expect(container.querySelector('#add_entry').textContent).toBe('journal:add_entry')
 
     unmount()
   })

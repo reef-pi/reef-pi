@@ -2,11 +2,18 @@ import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
 import { showError, showUpdateSuccessful } from 'utils/alert'
-import classNames from 'classnames'
 import { Field } from 'formik'
 import i18next from 'i18next'
 import { useDispatch } from 'react-redux'
 import { fetchJournalUsage } from 'redux/actions/journal'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { Field as FormField, Input } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
+
+const formGridStyle = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))',
+  gap: 'var(--reefpi-space-md)'
+}
 
 const EditJournal = ({
   values,
@@ -38,58 +45,46 @@ const EditJournal = ({
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className='row'>
-        <div className='col col-sm-6 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor='name'>{i18next.t('name')}</label>
-            <Field
-              name='name'
-              disabled={readOnly}
-              className={classNames('form-control', {
-                'is-invalid': ShowError('name', touched, errors)
-              })}
-            />
-            <ErrorFor errors={errors} touched={touched} name='name' />
-          </div>
-        </div>
-        <div className='col col-sm-6 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor='description'>{i18next.t('journal:description')}</label>
-            <Field
-              name='description'
-              disabled={readOnly}
-              className={classNames('form-control', {
-                'is-invalid': ShowError('description', touched, errors)
-              })}
-            />
-            <ErrorFor errors={errors} touched={touched} name='description' />
-          </div>
-        </div>
-        <div className='col col-sm-6 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor='unit'>{i18next.t('journal:unit')}</label>
-            <Field
-              name='unit'
-              disabled={readOnly}
-              className={classNames('form-control', {
-                'is-invalid': ShowError('unit', touched, errors)
-              })}
-            />
-            <ErrorFor errors={errors} touched={touched} name='unit' />
-          </div>
-        </div>
+      <div style={formGridStyle}>
+        <FormField label={i18next.t('name')} error={ShowError('name', touched, errors) ? <ErrorFor errors={errors} touched={touched} name='name' /> : undefined}>
+          <Field
+            name='name'
+            disabled={readOnly}
+            as={Input}
+            invalid={ShowError('name', touched, errors)}
+          />
+        </FormField>
+        <FormField label={i18next.t('journal:description')} error={ShowError('description', touched, errors) ? <ErrorFor errors={errors} touched={touched} name='description' /> : undefined}>
+          <Field
+            name='description'
+            disabled={readOnly}
+            as={Input}
+            invalid={ShowError('description', touched, errors)}
+          />
+        </FormField>
+        <FormField label={i18next.t('journal:unit')} error={ShowError('unit', touched, errors) ? <ErrorFor errors={errors} touched={touched} name='unit' /> : undefined}>
+          <Field
+            name='unit'
+            disabled={readOnly}
+            as={Input}
+            invalid={ShowError('unit', touched, errors)}
+          />
+        </FormField>
       </div>
 
-      <div className={classNames('row', { 'd-none': readOnly })}>
-        <div className='col-12'>
-          <input
+      {!readOnly && (
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 'var(--reefpi-space-xxs)' }}>
+          <Button
             type='submit'
-            value={i18next.t('save')}
+            variant='primary'
             disabled={readOnly}
-            className='btn btn-sm btn-primary float-right mt-1'
-          />
+            data-testid='journal-save-btn'
+            style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
+          >
+            {i18next.t('save')}
+          </Button>
         </div>
-      </div>
+      )}
     </form>
   )
 }

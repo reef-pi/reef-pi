@@ -39,7 +39,7 @@ export class RawNotificationAlert extends React.Component {
       r.push(this.renderAlert(a))
     })
     return (
-      <div id='rpi-alert-container' className={this.state.containerFix + ' col-12 col-sm-6 col-md-4'}>
+      <div id='rpi-alert-container' className={this.state.containerFix}>
         {r}
       </div>
     )

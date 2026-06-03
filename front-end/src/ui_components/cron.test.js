@@ -1,20 +1,24 @@
 import React from 'react'
 import Cron from './cron'
+import { Input } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
 
 const defaultProps = {
   values: { month: '*', week: '*', day: '*', hour: '*', minute: '*', second: '0' },
   errors: {},
-  touched: {}
+  touched: {},
+  handleChange: () => {},
+  handleBlur: () => {}
 }
 
-const findFields = (node, acc = []) => {
+const findInputs = (node, acc = []) => {
   if (!node || typeof node !== 'object') {
     return acc
   }
-  if (node.type && node.type.name === 'Field' && node.props && node.props.name) {
+  // Match design-system Input (forwardRef component)
+  if (node.type === Input && node.props && node.props.name) {
     acc.push(node)
   }
-  React.Children.toArray(node.props?.children).forEach(child => findFields(child, acc))
+  React.Children.toArray(node.props?.children).forEach(child => findInputs(child, acc))
   return acc
 }
 
@@ -23,13 +27,13 @@ describe('Cron', () => {
     expect(() => Cron(defaultProps)).not.toThrow()
   })
 
-  it('renders 6 Field inputs (month, week, day, hour, minute, second)', () => {
-    const fields = findFields(Cron(defaultProps))
-    expect(fields).toHaveLength(6)
+  it('renders 6 Input controls (month, week, day, hour, minute, second)', () => {
+    const inputs = findInputs(Cron(defaultProps))
+    expect(inputs).toHaveLength(6)
   })
 
-  it('renders a field for each cron part', () => {
-    const names = findFields(Cron(defaultProps)).map(f => f.props.name)
+  it('renders an input for each cron part', () => {
+    const names = findInputs(Cron(defaultProps)).map(f => f.props.name)
     expect(names).toContain('month')
     expect(names).toContain('week')
     expect(names).toContain('day')
@@ -38,22 +42,22 @@ describe('Cron', () => {
     expect(names).toContain('second')
   })
 
-  it('disables all fields when readOnly is true', () => {
-    const fields = findFields(Cron({ ...defaultProps, readOnly: true }))
-    fields.forEach(field => {
-      expect(field.props.disabled).toBe(true)
+  it('disables all inputs when readOnly is true', () => {
+    const inputs = findInputs(Cron({ ...defaultProps, readOnly: true }))
+    inputs.forEach(input => {
+      expect(input.props.disabled).toBe(true)
     })
   })
 
-  it('does not disable fields when readOnly is false', () => {
-    const fields = findFields(Cron({ ...defaultProps, readOnly: false }))
-    fields.forEach(field => {
-      expect(field.props.disabled).toBe(false)
+  it('does not disable inputs when readOnly is false', () => {
+    const inputs = findInputs(Cron({ ...defaultProps, readOnly: false }))
+    inputs.forEach(input => {
+      expect(input.props.disabled).toBe(false)
     })
   })
 
-  it('adds is-invalid class when minute has an error and is touched', () => {
-    const minuteField = findFields(
+  it('sets invalid prop when minute has an error and is touched', () => {
+    const minuteInput = findInputs(
       Cron({
         ...defaultProps,
         errors: { minute: 'required' },
@@ -61,11 +65,11 @@ describe('Cron', () => {
       })
     ).find(f => f.props.name === 'minute')
 
-    expect(minuteField.props.className).toContain('is-invalid')
+    expect(minuteInput.props.invalid).toBe(true)
   })
 
-  it('does not add is-invalid class when field is not touched', () => {
-    const minuteField = findFields(
+  it('does not set invalid prop when field is not touched', () => {
+    const minuteInput = findInputs(
       Cron({
         ...defaultProps,
         errors: { minute: 'required' },
@@ -73,6 +77,6 @@ describe('Cron', () => {
       })
     ).find(f => f.props.name === 'minute')
 
-    expect(minuteField.props.className).not.toContain('is-invalid')
+    expect(minuteInput.props.invalid).toBeFalsy()
   })
 })

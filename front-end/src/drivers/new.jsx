@@ -1,5 +1,6 @@
 import React from 'react'
 import DriverForm from './driver_form'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 
 export default class New extends React.Component {
   constructor (props) {
@@ -62,8 +63,15 @@ export default class New extends React.Component {
 
   render () {
     return (
-      <div className='container add-driver'>
-        <input id='add_new_driver' data-testid='smoke-driver-add-toggle' type='button' value={this.state.add ? '-' : '+'} onClick={this.handleToggle} className='btn btn-outline-success' />
+      <div className='add-driver'>
+        <Button
+          id='add_new_driver'
+          data-testid='smoke-driver-add-toggle'
+          variant='secondary'
+          style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
+          onClick={this.handleToggle}
+        >{this.state.add ? '-' : '+'}
+        </Button>
         {this.ui()}
       </div>
     )

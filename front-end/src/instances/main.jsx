@@ -4,6 +4,8 @@ import { updateInstance, fetchInstances, createInstance, deleteInstance } from '
 import { connect } from 'react-redux'
 import InstanceForm from './instance_form'
 import i18next from 'i18next'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { List, ListItem } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
 
 export class RawInstancesMain extends React.Component {
   constructor (props) {
@@ -44,7 +46,7 @@ export class RawInstancesMain extends React.Component {
       nEq = <InstanceForm onSubmit={this.handleCreate} actionLabel={i18next.t('save')} />
     }
     return (
-      <ul className='list-group list-group-flush'>
+      <List>
         {this.props.instances.slice().sort((a, b) => parseInt(b.id) - parseInt(a.id)).map(item => {
           return (
             <Instance
@@ -55,21 +57,15 @@ export class RawInstancesMain extends React.Component {
             />
           )
         })}
-        <li className='list-group-item add-instance'>
-          <div className='row'>
-            <div className='col'>
-              <input
-                id='add_instance'
-                type='button'
-                value={this.state.add ? '-' : '+'}
-                onClick={this.handleToggle}
-                className='btn btn-outline-success'
-              />
-            </div>
+        <ListItem>
+          <div>
+            <Button id='add_instance' onClick={this.handleToggle}>
+              {this.state.add ? '-' : '+'}
+            </Button>
           </div>
           {nEq}
-        </li>
-      </ul>
+        </ListItem>
+      </List>
     )
   }
 }

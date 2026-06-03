@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import { showError } from 'utils/alert'
 import i18next from 'i18next'
 import { byCapability } from './driver_filter'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { Field as FormField, Input, Select } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
 
 export default class Jack extends React.Component {
   constructor (props) {
@@ -78,83 +80,70 @@ export default class Jack extends React.Component {
 
   editUI () {
     return (
-      <div className='row'>
-        <div className='col-12 col-md-3'>
-          <div className='form-group'>
-            <span className='input-group-addon'>{i18next.t('name')}</span>
-            <input
-              type='text'
-              id={'jack-' + this.props.jack_id + '-name'}
-              onChange={this.handleNameChange}
-              className='form-control jack-name'
-              value={this.state.name}
-            />
-          </div>
-        </div>
-        <div className='col-12 col-md-3'>
-          <div className='form-group'>
-            <span className='input-group-addon'>{i18next.t('reverse')}</span>
-            <input
-              className='form-control jack-reverse'
-              type='checkbox'
-              onChange={this.handleReverseChange}
-              id={'jack-' + this.props.jack_id + '-reverse'}
-              checked={this.state.reverse}
-            />
-          </div>
-        </div>
-        <div className='col-12 col-md-3'>
-          <div className='form-group'>
-            <span className='input-group-addon'>{i18next.t('pins')}</span>
-            <input
-              type='text'
-              id={'jack-' + this.props.jack_id + '-pins'}
-              onChange={this.handlePinChange}
-              className='jack-pin form-control'
-              value={this.state.pins}
-            />
-          </div>
-        </div>
-        <div className='col-12 col-md-3'>
-          <div className='form-group'>
-            <label>{i18next.t('driver')}</label>
-            <select
-              name='driver'
-              id={'jack-' + this.props.jack_id + '-driver-select'}
-              className='custom-select form-control'
-              onChange={this.handleSetDriver}
-              value={this.state.driver}
-            >
-              {this.props.drivers.filter(byCapability('pwm')).map(item => {
-                return (
-                  <option
-                    key={item.id}
-                    value={item.id}
-                    id={'jack-' + this.props.jack_id + '-driver-' + item.id}
-                  >
-                    {item.name}
-                  </option>
-                )
-              })}
-            </select>
-          </div>
-        </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))', gap: 'var(--reefpi-space-md)' }}>
+        <FormField label={i18next.t('name')}>
+          <Input
+            type='text'
+            id={'jack-' + this.props.jack_id + '-name'}
+            onChange={this.handleNameChange}
+            className='jack-name'
+            value={this.state.name}
+          />
+        </FormField>
+        <FormField label={i18next.t('reverse')}>
+          <Input
+            className='jack-reverse'
+            type='checkbox'
+            onChange={this.handleReverseChange}
+            id={'jack-' + this.props.jack_id + '-reverse'}
+            checked={this.state.reverse}
+          />
+        </FormField>
+        <FormField label={i18next.t('pins')}>
+          <Input
+            type='text'
+            id={'jack-' + this.props.jack_id + '-pins'}
+            onChange={this.handlePinChange}
+            className='jack-pin'
+            value={this.state.pins}
+          />
+        </FormField>
+        <FormField label={i18next.t('driver')}>
+          <Select
+            name='driver'
+            id={'jack-' + this.props.jack_id + '-driver-select'}
+            onChange={this.handleSetDriver}
+            value={this.state.driver}
+          >
+            {this.props.drivers.filter(byCapability('pwm')).map(item => {
+              return (
+                <option
+                  key={item.id}
+                  value={item.id}
+                  id={'jack-' + this.props.jack_id + '-driver-' + item.id}
+                >
+                  {item.name}
+                </option>
+              )
+            })}
+          </Select>
+        </FormField>
       </div>
     )
   }
 
   ui () {
     return (
-      <div className='row'>
-        <div className='col'>{this.state.name}</div>
-        <div className='col'>
+      <div style={{ display: 'flex', gap: 'var(--reefpi-space-sm)' }}>
+        <div style={{ flex: '1 1 0', minWidth: 0 }}>{this.state.name}</div>
+        <div>
           <label className='small'>
             {this.state.driver_name}
             ({this.state.pins})
             ({this.state.reverse ? 'active high' : 'active low'})
           </label>
         </div>
-        <div className='col' />
+        <div />
       </div>
     )
   }
@@ -165,21 +154,23 @@ export default class Jack extends React.Component {
 
   render () {
     return (
-      <div className='row border-bottom py-1'>
-        <div className='col-8 col-md-9'>{this.state.edit ? this.editUI() : this.ui()}</div>
-        <div className='col-4 col-md-3'>
-          <input
-            type='button'
-            className='jack-remove btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'
-            value='X'
+      <div style={{ display: 'flex', gap: 'var(--reefpi-space-sm)', alignItems: 'center', borderBottom: '1px solid var(--reefpi-color-border)', padding: 'var(--reefpi-space-xs) 0' }}>
+        <div style={{ flex: '1 1 0', minWidth: 0 }}>{this.state.edit ? this.editUI() : this.ui()}</div>
+        <div style={{ display: 'flex', gap: 'var(--reefpi-space-xs)', flexShrink: 0 }}>
+          <Button
+            variant='danger'
+            style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
+            className='jack-remove'
             onClick={this.handleRemove}
-          />
-          <input
-            type='button'
-            className='jack-edit btn btn-sm btn-outline-primary float-right d-block d-sm-inline ml-2'
-            value={this.state.lbl}
+          >X
+          </Button>
+          <Button
+            variant='secondary'
+            style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
+            className='jack-edit'
             onClick={this.handleEdit}
-          />
+          >{this.state.lbl}
+          </Button>
         </div>
       </div>
     )

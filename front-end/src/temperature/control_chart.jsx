@@ -49,7 +49,7 @@ export class RawControlChart extends React.Component {
     const c = this.props.config.chart
     const unit = this.props.config.fahrenheit ? '°F' : '°C'
     return (
-      <div className='container'>
+      <div className='reefpi-view'>
         <span className='h6'>
           {this.props.config.name}
         </span>

@@ -11,6 +11,8 @@ import { fetchOutlets, deleteOutlet, updateOutlet } from 'redux/actions/outlets'
 import { fetchInlets, deleteInlet, updateInlet } from 'redux/actions/inlets'
 import { fetchJacks, deleteJack, updateJack } from 'redux/actions/jacks'
 import { fetchAnalogInputs, deleteAnalogInput, updateAnalogInput } from 'redux/actions/analog_inputs'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { Input, Select } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
 
 const CONNECTOR_KINDS = {
   inlet: { label: 'Inlet', deleteProp: 'deleteInlet', updateProp: 'updateInlet' },
@@ -276,9 +278,9 @@ class connectors extends React.Component {
     const batchDrivers = this.props.drivers || []
     return (
       <div className='connectors-filter-row'>
-        <input
+        <Input
           type='search'
-          className='form-control connectors-search'
+          className='connectors-search'
           placeholder='Search name, pin, or driver'
           value={this.state.filter}
           onChange={this.handleFilterChange}
@@ -292,8 +294,8 @@ class connectors extends React.Component {
           <input type='checkbox' checked={this.state.conflictsOnly} onChange={this.handleConflictsOnlyToggle} />
           <span>Conflicts</span>
         </label>
-        <select
-          className='custom-select connectors-batch-driver'
+        <Select
+          className='connectors-batch-driver'
           disabled={selectedCount === 0}
           value={this.state.batchDriver}
           onChange={this.handleBatchDriverChange}
@@ -301,9 +303,9 @@ class connectors extends React.Component {
         >
           <option value=''>Move to driver</option>
           {batchDrivers.map(driver => <option key={driver.id} value={driver.id}>{driver.name}</option>)}
-        </select>
-        <button type='button' className='btn btn-outline-primary' disabled={selectedCount === 0 || !this.state.batchDriver} onClick={this.handleBatchMove}>Move</button>
-        <button type='button' className='btn btn-outline-danger' disabled={selectedCount === 0} onClick={this.handleBatchDelete}>Delete {selectedCount || ''}</button>
+        </Select>
+        <Button variant='secondary' disabled={selectedCount === 0 || !this.state.batchDriver} onClick={this.handleBatchMove}>Move</Button>
+        <Button variant='danger' disabled={selectedCount === 0} onClick={this.handleBatchDelete}>Delete {selectedCount || ''}</Button>
       </div>
     )
   }
@@ -385,7 +387,7 @@ class connectors extends React.Component {
   renderNewShell () {
     const groups = this.groups()
     return (
-      <div className='container connectors-shell'>
+      <div className='connectors-shell'>
         {this.renderFilterRow()}
         <div className='connector-groups'>
           {groups.length > 0
@@ -398,20 +400,20 @@ class connectors extends React.Component {
 
   renderLegacy () {
     return (
-      <div className='container'>
-        <div className='row inlets'>
+      <div className='reefpi-view'>
+        <div className='legacy-inlets'>
           <Inlets />
         </div>
         <hr />
-        <div className='row outlets'>
+        <div className='legacy-outlets'>
           <Outlets />
         </div>
         <hr />
-        <div className='row analog-inputs'>
+        <div className='legacy-analog-inputs'>
           <AnalogInputs />
         </div>
         <hr />
-        <div className='row jacks'>
+        <div className='legacy-jacks'>
           <Jacks />
         </div>
 
@@ -423,7 +425,7 @@ class connectors extends React.Component {
     if (this.props.drivers === undefined ||
           this.props.drivers.length === 0) {
       return (
-        <div className='container'>
+        <div className='reefpi-view'>
           {i18n.t('loading')}
         </div>
       )

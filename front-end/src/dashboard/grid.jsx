@@ -2,6 +2,7 @@ import React from 'react'
 import ComponentSelector from './component_selector'
 import { buildTypeMap, buildCells } from './types'
 import i18next from 'i18next'
+import { Menu } from '../../design-system/ui_kits/reef-pi-app/primitives/Interaction'
 
 export const numColsToColSize = (numCols) => {
   /*
@@ -44,20 +45,16 @@ export default class Grid extends React.Component {
       id = cell.id
     }
 
-    const colSize = numColsToColSize(this.props.columns)
-
     return (
-      <div className={'col-xs-12 col-md-' + colSize + ' grid-cell-container'} key={'chart-type-' + i + '-' + j}>
+      <div className='grid-cell-wrap' style={{ flex: '1 1 0', minWidth: 0 }} key={'chart-type-' + i + '-' + j}>
         <div className='grid-cell'>
-          <div className='col-12 dropdown'>
-            <button className='btn btn-secondary dropdown-toggle' type='button' id={'db-' + i + '-' + j} data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-              {label}
-            </button>
-            <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
-              {this.menuItems(i, j)}
-            </div>
+          <div style={{ marginBottom: 'var(--reefpi-space-xs)' }}>
+            <Menu
+              buttonLabel={label}
+              items={this.menuItems(i, j)}
+            />
           </div>
-          <div className='col-12 mt-2'>
+          <div style={{ marginTop: 'var(--reefpi-space-xs)' }}>
             <ComponentSelector
               components={options}
               hook={this.setID(i, j)}
@@ -97,19 +94,14 @@ export default class Grid extends React.Component {
   }
 
   menuItem (type, active, i, j) {
-    let cName = 'dropdown-item'
-    if (active) {
-      cName += ' active'
-    }
     if (type === undefined) {
-      return (<span>None</span>)
+      return null
     }
     const label = type.label || '-'
-    return (
-      <a className={cName} href='#' onClick={this.setType(i, j, type.name)} key={type.name + '-' + i + '-' + j}>
-        <span id={type.name + '-' + i + '-' + j}>{label}</span>
-      </a>
-    )
+    return {
+      label,
+      onSelect: this.setType(i, j, type.name)
+    }
   }
 
   menuItems (i, j) {
@@ -127,8 +119,8 @@ export default class Grid extends React.Component {
       this.menuItem(this.state.types.doser, false, i, j),
       this.menuItem(this.state.types.journal, false, i, j),
       this.menuItem(this.state.types.blank_panel, false, i, j)
-    ]
-    return (types)
+    ].filter(Boolean)
+    return types
   }
 
   render () {
@@ -142,14 +134,14 @@ export default class Grid extends React.Component {
         columns.push(this.cellUI(i, j, cell))
       }
       rows.push(
-        <div className='row grid-row' key={'chart-row-' + i}>
-          <label className='d-block d-md-none'>Row {i + 1}</label>
+        <div className='grid-level' style={{ display: 'flex', gap: 'var(--reefpi-space-sm)', flexWrap: 'wrap' }} key={'chart-row-' + i}>
+          <label style={{ display: 'block' }}>Row {i + 1}</label>
           {columns}
         </div>
       )
     }
     return (
-      <div className='col-12 reef-pi-grid'>
+      <div className='reef-pi-grid' style={{ width: '100%' }}>
         <label> {i18next.t('charts')} </label>
         {rows}
       </div>

@@ -5,53 +5,59 @@ import { Field } from 'formik'
 import classNames from 'classnames'
 import i18next from 'i18next'
 
+const inputStyle = { padding: 'var(--reefpi-space-xs)', border: '1px solid var(--reefpi-color-border)', borderRadius: 'var(--reefpi-radius-sm)', fontFamily: 'var(--reefpi-font-app)', width: '100%' }
+
 const CircadianProfile = (props) => {
   return (
-    <div className='form-inline'>
-      <label className='mr-2'>{i18next.t('start_time')}</label>
-      <Field
-        name={NameFor(props.name, 'start')}
-        readOnly={props.readOnly}
-        className={classNames('form-control mr-3 col-12 col-sm-3 col-md-2 col-lg-2',
-          { 'is-invalid': ShowError(NameFor(props.name, 'start'), props.touched, props.errors) })}
-        placeholder='HH:mm:ss'
-      />
-      <label className='mr-2'>{i18next.t('end_time')}</label>
-      <Field
-        name={NameFor(props.name, 'end')}
-        readOnly={props.readOnly}
-        className={classNames('form-control mr-3 col-12 col-sm-3 col-md-2 col-lg-2',
-          { 'is-invalid': ShowError(NameFor(props.name, 'end'), props.touched, props.errors) })}
-        placeholder='HH:mm:ss'
-      />
-      <label className='mr-2'>{i18next.t('lighting:circadian_dawn_value')}</label>
-      <div className='input-group mr-3'>
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--reefpi-space-sm)', alignItems: 'flex-end' }}>
+      <div>
+        <label style={{ marginRight: 'var(--reefpi-space-xs)' }}>{i18next.t('start_time')}</label>
         <Field
-          name={NameFor(props.name, 'dawn_value')}
-          type='number'
-          min='0'
-          max='100'
+          name={NameFor(props.name, 'start')}
           readOnly={props.readOnly}
-          className={classNames('form-control col-12 col-sm-2 col-md-1',
-            { 'is-invalid': ShowError(NameFor(props.name, 'dawn_value'), props.touched, props.errors) })}
+          className={classNames({ 'is-invalid': ShowError(NameFor(props.name, 'start'), props.touched, props.errors) })}
+          style={inputStyle}
+          placeholder='HH:mm:ss'
         />
-        <div className='input-group-append'>
-          <span className='input-group-text'>%</span>
+      </div>
+      <div>
+        <label style={{ marginRight: 'var(--reefpi-space-xs)' }}>{i18next.t('end_time')}</label>
+        <Field
+          name={NameFor(props.name, 'end')}
+          readOnly={props.readOnly}
+          className={classNames({ 'is-invalid': ShowError(NameFor(props.name, 'end'), props.touched, props.errors) })}
+          style={inputStyle}
+          placeholder='HH:mm:ss'
+        />
+      </div>
+      <div>
+        <label style={{ marginRight: 'var(--reefpi-space-xs)' }}>{i18next.t('lighting:circadian_dawn_value')}</label>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <Field
+            name={NameFor(props.name, 'dawn_value')}
+            type='number'
+            min='0'
+            max='100'
+            readOnly={props.readOnly}
+            className={classNames({ 'is-invalid': ShowError(NameFor(props.name, 'dawn_value'), props.touched, props.errors) })}
+            style={{ ...inputStyle, width: '5rem' }}
+          />
+          <span style={{ marginLeft: 'var(--reefpi-space-xs)' }}>%</span>
         </div>
       </div>
-      <label className='mr-2'>{i18next.t('lighting:circadian_noon_value')}</label>
-      <div className='input-group mr-3'>
-        <Field
-          name={NameFor(props.name, 'noon_value')}
-          type='number'
-          min='0'
-          max='100'
-          readOnly={props.readOnly}
-          className={classNames('form-control col-12 col-sm-2 col-md-1',
-            { 'is-invalid': ShowError(NameFor(props.name, 'noon_value'), props.touched, props.errors) })}
-        />
-        <div className='input-group-append'>
-          <span className='input-group-text'>%</span>
+      <div>
+        <label style={{ marginRight: 'var(--reefpi-space-xs)' }}>{i18next.t('lighting:circadian_noon_value')}</label>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <Field
+            name={NameFor(props.name, 'noon_value')}
+            type='number'
+            min='0'
+            max='100'
+            readOnly={props.readOnly}
+            className={classNames({ 'is-invalid': ShowError(NameFor(props.name, 'noon_value'), props.touched, props.errors) })}
+            style={{ ...inputStyle, width: '5rem' }}
+          />
+          <span style={{ marginLeft: 'var(--reefpi-space-xs)' }}>%</span>
         </div>
       </div>
       <ErrorFor {...props} name={NameFor(props.name, 'start')} />

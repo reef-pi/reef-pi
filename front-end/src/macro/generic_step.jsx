@@ -4,8 +4,8 @@ import PropTypes from 'prop-types'
 import BooleanSelect from '../ui_components/boolean_select'
 import { Field } from 'formik'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
-import classNames from 'classnames'
 import i18n from 'utils/i18n'
+import { Select } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
 
 export const RawGenericStep = ({ type, name, readOnly, touched, errors, ...props }) => {
   const options = () => {
@@ -20,32 +20,29 @@ export const RawGenericStep = ({ type, name, readOnly, touched, errors, ...props
 
   return (
     <>
-      <div className='col-12 col-sm-4 col-md-3 form-group'>
+      <div style={{ minWidth: '10rem' }}>
         <Field
           name={`${name}.id`}
           aria-label={i18n.t('macro:system')}
           title={i18n.t('macro:system')}
           component='select'
           readOnly={readOnly}
-          className={classNames('form-control custom-select', {
-            'is-invalid': ShowError(`${name}.id`, touched, errors)
-          })}
+          as={Select}
+          invalid={ShowError(`${name}.id`, touched, errors)}
         >
           <option value='' className='d-none'>-- {i18n.t('select')} --</option>
           {options()}
         </Field>
         <ErrorFor errors={errors} touched={touched} name={`${name}.id`} />
       </div>
-      <div className='col-12 col-sm-3 form-group'>
+      <div style={{ minWidth: '10rem' }}>
         <Field
           name={`${name}.on`}
           aria-label={i18n.t('macro:action')}
           title={i18n.t('macro:action')}
           component={BooleanSelect}
           disabled={readOnly}
-          className={classNames('form-control custom-select', {
-            'is-invalid': ShowError(`${name}.on`, touched, errors)
-          })}
+          invalid={ShowError(`${name}.on`, touched, errors)}
         >
           <option value='' className='d-none'>-- {i18n.t('select')} --</option>
           <option value='true'>{i18n.t('macro:turn_on')}</option>

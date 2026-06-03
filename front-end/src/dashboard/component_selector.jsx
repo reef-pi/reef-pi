@@ -1,4 +1,5 @@
 import React from 'react'
+import { Menu } from '../../design-system/ui_kits/reef-pi-app/primitives/Interaction'
 
 // props: hook, selector_id, components, current_id
 export default class ComponentSelector extends React.Component {
@@ -30,33 +31,19 @@ export default class ComponentSelector extends React.Component {
         return
       }
       const active = v.id === this.state.current_id
-      let cName = 'dropdown-item'
       if (active) {
         title = v.name
-        cName += ' active'
       }
-      items.push(
-        <a className={cName} href='#' onClick={this.setID(v.id, v.name)} key={k}>
-          <span id={this.props.selector_id + '-' + v.id}>{v.name}</span>
-        </a>
-      )
+      items.push({
+        label: v.name,
+        onSelect: this.setID(v.id, v.name)
+      })
     })
     return (
-      <div className='dropdown'>
-        <button
-          id={'select-' + this.props.selector_id}
-          className='btn btn-secondary dropdown-toggle'
-          type='button'
-          data-toggle='dropdown'
-          aria-haspopup='true'
-          aria-expanded='false'
-        >
-          {title}
-        </button>
-        <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
-          {items}
-        </div>
-      </div>
+      <Menu
+        buttonLabel={title}
+        items={items}
+      />
     )
   }
 }

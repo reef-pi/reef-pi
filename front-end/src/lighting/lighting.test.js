@@ -413,9 +413,9 @@ describe('Lighting ui', () => {
   })
 
   it('<Main /> should require a light name when adding a light', () => {
-    document.body.innerHTML = '<input id="lightName" value="">'
     const fnCreateLight = jest.fn()
     const m = createMain({ createLight: fnCreateLight })
+    // lightName defaults to '' in state — no need for DOM manipulation
     m.state.selectedJack = 0
 
     m.handleAddLight()
@@ -425,13 +425,13 @@ describe('Lighting ui', () => {
   })
 
   it('<Main /> should create a light with default channels and reset the add form', () => {
-    document.body.innerHTML = '<input id="lightName" value="Frag Rack">'
     const fnCreateLight = jest.fn()
     const m = createMain({ createLight: fnCreateLight })
     m.state = {
       ...m.state,
       addLight: true,
-      selectedJack: 0
+      selectedJack: 0,
+      lightName: 'Frag Rack'
     }
     m.setState = update => { m.state = { ...m.state, ...update } }
 
@@ -481,7 +481,8 @@ describe('Lighting ui', () => {
       }
     })
     expect(m.state.addLight).toBe(false)
-    expect(document.getElementById('lightName').value).toBe('')
+    // lightName is now cleared via React state, not DOM mutation
+    expect(m.state.lightName).toBe('')
   })
 
   it('<Main /> should render jacks and set selected jack', () => {

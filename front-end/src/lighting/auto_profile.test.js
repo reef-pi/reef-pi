@@ -72,7 +72,7 @@ describe('Lighting ui - Auto Profile', () => {
     }
 
     const m = renderProfile(config)
-    const labels = findAll(m.render(), node => String(node.props?.className).includes('order-md-last'))
+    const labels = findAll(m.render(), node => node.type === 'div' && node.props?.style?.fontSize === '0.75rem')
     expect(labels.length).toBe(3)
     expect(textContent(labels[0])).toBe('14:00')
     expect(textContent(labels[1])).toBe('14:30')
@@ -104,7 +104,7 @@ describe('Lighting ui - Auto Profile', () => {
     addButton.props.onClick()
     findAll(m.render(), node => String(node.props?.className).includes('btn-add-point'))[0].props.onClick()
 
-    const labels = findAll(m.render(), node => String(node.props?.className).includes('order-md-last'))
+    const labels = findAll(m.render(), node => node.type === 'div' && node.props?.style?.fontSize === '0.75rem')
     expect(labels.length).toBe(5)
     expect(textContent(labels[0])).toBe('14:00')
     expect(textContent(labels[1])).toBe('14:15')
@@ -123,7 +123,7 @@ describe('Lighting ui - Auto Profile', () => {
     const m = renderProfile(config)
     findAll(m.render(), node => String(node.props?.className).includes('btn-remove-point'))[1].props.onClick()
 
-    const labels = findAll(m.render(), node => String(node.props?.className).includes('order-md-last'))
+    const labels = findAll(m.render(), node => node.type === 'div' && node.props?.style?.fontSize === '0.75rem')
     expect(labels.length).toBe(2)
     expect(textContent(labels[0])).toBe('14:00')
     expect(textContent(labels[1])).toBe('15:00')
@@ -157,7 +157,7 @@ describe('Lighting ui - Auto Profile', () => {
     }
 
     const m = renderProfile(config)
-    const labels = findAll(m.render(), node => String(node.props?.className).includes('order-md-last'))
+    const labels = findAll(m.render(), node => node.type === 'div' && node.props?.style?.fontSize === '0.75rem')
     expect(labels.length).toBe(4)
     expect(textContent(labels[0])).toBe('23:00')
     expect(textContent(labels[1])).toBe('00:00')
@@ -173,7 +173,7 @@ describe('Lighting ui - Auto Profile', () => {
     }
 
     const m = renderProfile(config)
-    const labels = findAll(m.render(), node => String(node.props?.className).includes('order-md-last'))
+    const labels = findAll(m.render(), node => node.type === 'div' && node.props?.style?.fontSize === '0.75rem')
     expect(labels.length).toBe(3)
     expect(textContent(labels[0])).toBe('02:45')
     expect(textContent(labels[1])).toBe('14:30')

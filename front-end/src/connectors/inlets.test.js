@@ -114,10 +114,10 @@ describe('<Inlets />', () => {
 
     const tree = component.render()
     expect(tree.type).toBe('div')
-    expect(tree.props.className).toBe('container')
+    expect(tree.props.className).toBe('reefpi-view')
     const addButton = tree.props.children[1].props.children.props.children
     expect(addButton.props.id).toBe('add_inlet')
-    expect(addButton.props.value).toBe('+')
+    expect(addButton.props.children).toBe('+')
   })
 
   it('render shows form row when add is true', () => {
@@ -136,7 +136,7 @@ describe('<Inlets />', () => {
     const addButton = tree.props.children[1].props.children.props.children
     const formRow = tree.props.children[2]
 
-    expect(addButton.props.value).toBe('-')
+    expect(addButton.props.children).toBe('-')
     expect(formRow.props.style).toEqual({ display: '' })
   })
 })

@@ -582,7 +582,7 @@ describe('Temperature controller ui', () => {
     instance.setState = update => { instance.state = { ...instance.state, ...(typeof update === 'function' ? update(instance.state) : update) } }
     instance.componentDidMount()
     expect(fetch).toHaveBeenCalledWith('1')
-    expect(instance.render().props.className).toBe('container')
+    expect(instance.render().props.className).toBe('reefpi-view')
     expect(renderedChartData(instance).map(reading => reading.value)).toEqual([1, 2, 4])
     expect(current).toEqual(originalCurrent)
     instance.componentWillUnmount()
@@ -613,7 +613,7 @@ describe('Temperature controller ui', () => {
     instance.setState = update => { instance.state = { ...instance.state, ...(typeof update === 'function' ? update(instance.state) : update) } }
     instance.componentDidMount()
     expect(fetchTCUsage).toHaveBeenCalledWith('1')
-    expect(instance.render().props.className).toBe('container')
+    expect(instance.render().props.className).toBe('reefpi-view')
     expect(renderedChartData(instance).map(reading => reading.value)).toEqual([72, 73, 74])
     expect(renderedChartData(instance).map(reading => reading.cooler)).toEqual([-1, -2, -4])
     expect(historical).toEqual(originalHistorical)

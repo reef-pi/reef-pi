@@ -128,7 +128,12 @@ describe('<EditMacro />', () => {
       touched: {}
     })
 
-    expect(container.querySelector('.alert.text-danger').textContent).toContain('none')
+    const allDivs = container.querySelectorAll('div')
+    const emptyState = Array.from(allDivs).find(el =>
+      el.style && el.style.color && el.style.padding && el.children.length === 0
+    )
+    expect(emptyState).toBeTruthy()
+    expect(emptyState.textContent).toContain('none')
     unmount()
   })
 
@@ -144,8 +149,8 @@ describe('<EditMacro />', () => {
     })
 
     expect(container.querySelector('.macro-step').getAttribute('draggable')).toBe('false')
-    expect(container.querySelector('#add-step').closest('.row').className).toContain('d-none')
-    expect(container.querySelector('[data-testid="smoke-macro-submit"]').closest('.row').className).toContain('d-none')
+    expect(container.querySelector('#add-step')).toBeNull()
+    expect(container.querySelector('[data-testid="smoke-macro-submit"]')).toBeNull()
     unmount()
   })
 

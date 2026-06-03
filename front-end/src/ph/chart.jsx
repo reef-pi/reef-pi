@@ -57,7 +57,7 @@ class chart extends React.Component {
     const showMin = notify && notify.enable && notify.min > 0
     const showMax = notify && notify.enable && notify.max > 0
     return (
-      <div className='container'>
+      <div className='reefpi-view'>
         <span className='h6'>{this.props.config.name}({current})</span>
         <ResponsiveContainer height={this.props.height}>
           <LineChart data={metrics}>

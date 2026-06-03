@@ -5,29 +5,35 @@ import { Field } from 'formik'
 import classNames from 'classnames'
 import i18next from 'i18next'
 
+const inputStyle = { padding: 'var(--reefpi-space-xs)', border: '1px solid var(--reefpi-color-border)', borderRadius: 'var(--reefpi-radius-sm)', fontFamily: 'var(--reefpi-font-app)', width: '100%' }
+
 const SolarProfile = (props) => {
   return (
-    <div className='form-inline'>
-      <label className='mr-2'>{i18next.t('lighting:solar_latitude')}</label>
-      <Field
-        name={NameFor(props.name, 'latitude')}
-        type='number'
-        step='any'
-        disabled={props.readOnly}
-        className={classNames('form-control mr-3 col-12 col-sm-3 col-md-2',
-          { 'is-invalid': ShowError(NameFor(props.name, 'latitude'), props.touched, props.errors) })}
-        placeholder='0.0'
-      />
-      <label className='mr-2'>{i18next.t('lighting:solar_longitude')}</label>
-      <Field
-        name={NameFor(props.name, 'longitude')}
-        type='number'
-        step='any'
-        disabled={props.readOnly}
-        className={classNames('form-control mr-3 col-12 col-sm-3 col-md-2',
-          { 'is-invalid': ShowError(NameFor(props.name, 'longitude'), props.touched, props.errors) })}
-        placeholder='0.0'
-      />
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--reefpi-space-sm)', alignItems: 'flex-end' }}>
+      <div>
+        <label style={{ marginRight: 'var(--reefpi-space-xs)' }}>{i18next.t('lighting:solar_latitude')}</label>
+        <Field
+          name={NameFor(props.name, 'latitude')}
+          type='number'
+          step='any'
+          disabled={props.readOnly}
+          className={classNames({ 'is-invalid': ShowError(NameFor(props.name, 'latitude'), props.touched, props.errors) })}
+          style={inputStyle}
+          placeholder='0.0'
+        />
+      </div>
+      <div>
+        <label style={{ marginRight: 'var(--reefpi-space-xs)' }}>{i18next.t('lighting:solar_longitude')}</label>
+        <Field
+          name={NameFor(props.name, 'longitude')}
+          type='number'
+          step='any'
+          disabled={props.readOnly}
+          className={classNames({ 'is-invalid': ShowError(NameFor(props.name, 'longitude'), props.touched, props.errors) })}
+          style={inputStyle}
+          placeholder='0.0'
+        />
+      </div>
       <ErrorFor {...props} name={NameFor(props.name, 'latitude')} />
       <ErrorFor {...props} name={NameFor(props.name, 'longitude')} />
     </div>

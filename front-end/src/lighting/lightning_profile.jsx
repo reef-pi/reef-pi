@@ -4,6 +4,8 @@ import { Field } from 'formik'
 import i18n from 'utils/i18n'
 import classNames from 'classnames'
 
+const inputStyle = { padding: 'var(--reefpi-space-xs)', border: '1px solid var(--reefpi-color-border)', borderRadius: 'var(--reefpi-radius-sm)', fontFamily: 'var(--reefpi-font-app)', width: '100%' }
+
 const LightningProfile = ({
   config,
   errors,
@@ -19,105 +21,84 @@ const LightningProfile = ({
   const val = (key, fallback) => (config && config[key] !== undefined ? config[key] : fallback)
 
   return (
-    <div className='row'>
-      <div className='col-12 col-sm-6 col-md-3'>
-        <div className='form-group'>
-          <label>{i18n.t('start_time')}</label>
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))', gap: 'var(--reefpi-space-md)' }}>
+      <div>
+        <label>{i18n.t('start_time')}</label>
+        <Field
+          name='config.start'
+          readOnly={readOnly}
+          placeholder='HH:mm:ss'
+          value={val('start', '')}
+          onChange={handleChange}
+          className={classNames({ 'is-invalid': ShowError('config.start', touched, errors) })}
+          style={inputStyle}
+        />
+        <ErrorFor errors={errors} touched={touched} name='config.start' />
+      </div>
+
+      <div>
+        <label>{i18n.t('end_time')}</label>
+        <Field
+          name='config.end'
+          readOnly={readOnly}
+          placeholder='HH:mm:ss'
+          value={val('end', '')}
+          onChange={handleChange}
+          className={classNames({ 'is-invalid': ShowError('config.end', touched, errors) })}
+          style={inputStyle}
+        />
+        <ErrorFor errors={errors} touched={touched} name='config.end' />
+      </div>
+
+      <div>
+        <label>{i18n.t('lighting:lightning_frequency')}</label>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
           <Field
-            name='config.start'
+            name='config.frequency'
+            type='number'
             readOnly={readOnly}
-            placeholder='HH:mm:ss'
-            value={val('start', '')}
+            value={val('frequency', 2)}
             onChange={handleChange}
-            className={classNames('form-control', {
-              'is-invalid': ShowError('config.start', touched, errors)
-            })}
+            className={classNames({ 'is-invalid': ShowError('config.frequency', touched, errors) })}
+            style={inputStyle}
           />
-          <ErrorFor errors={errors} touched={touched} name='config.start' />
+          <span style={{ marginLeft: 'var(--reefpi-space-xs)', whiteSpace: 'nowrap' }}>/min</span>
         </div>
+        <ErrorFor errors={errors} touched={touched} name='config.frequency' />
       </div>
 
-      <div className='col-12 col-sm-6 col-md-3'>
-        <div className='form-group'>
-          <label>{i18n.t('end_time')}</label>
+      <div>
+        <label>{i18n.t('lighting:lightning_flash_slot')}</label>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
           <Field
-            name='config.end'
+            name='config.flash_slot'
+            type='number'
             readOnly={readOnly}
-            placeholder='HH:mm:ss'
-            value={val('end', '')}
+            value={val('flash_slot', 1)}
             onChange={handleChange}
-            className={classNames('form-control', {
-              'is-invalid': ShowError('config.end', touched, errors)
-            })}
+            className={classNames({ 'is-invalid': ShowError('config.flash_slot', touched, errors) })}
+            style={inputStyle}
           />
-          <ErrorFor errors={errors} touched={touched} name='config.end' />
+          <span style={{ marginLeft: 'var(--reefpi-space-xs)', whiteSpace: 'nowrap' }}>{i18n.t('sec')}</span>
         </div>
+        <ErrorFor errors={errors} touched={touched} name='config.flash_slot' />
       </div>
 
-      <div className='col-12 col-sm-6 col-md-3'>
-        <div className='form-group'>
-          <label>{i18n.t('lighting:lightning_frequency')}</label>
-          <div className='input-group'>
-            <Field
-              name='config.frequency'
-              type='number'
-              readOnly={readOnly}
-              value={val('frequency', 2)}
-              onChange={handleChange}
-              className={classNames('form-control', {
-                'is-invalid': ShowError('config.frequency', touched, errors)
-              })}
-            />
-            <div className='input-group-append'>
-              <span className='input-group-text'>/min</span>
-            </div>
-          </div>
-          <ErrorFor errors={errors} touched={touched} name='config.frequency' />
+      <div>
+        <label>{i18n.t('lighting:lightning_intensity')}</label>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <Field
+            name='config.intensity'
+            type='number'
+            readOnly={readOnly}
+            value={val('intensity', 100)}
+            onChange={handleChange}
+            className={classNames({ 'is-invalid': ShowError('config.intensity', touched, errors) })}
+            style={inputStyle}
+          />
+          <span style={{ marginLeft: 'var(--reefpi-space-xs)' }}>%</span>
         </div>
-      </div>
-
-      <div className='col-12 col-sm-6 col-md-3'>
-        <div className='form-group'>
-          <label>{i18n.t('lighting:lightning_flash_slot')}</label>
-          <div className='input-group'>
-            <Field
-              name='config.flash_slot'
-              type='number'
-              readOnly={readOnly}
-              value={val('flash_slot', 1)}
-              onChange={handleChange}
-              className={classNames('form-control', {
-                'is-invalid': ShowError('config.flash_slot', touched, errors)
-              })}
-            />
-            <div className='input-group-append'>
-              <span className='input-group-text'>{i18n.t('sec')}</span>
-            </div>
-          </div>
-          <ErrorFor errors={errors} touched={touched} name='config.flash_slot' />
-        </div>
-      </div>
-
-      <div className='col-12 col-sm-6 col-md-3'>
-        <div className='form-group'>
-          <label>{i18n.t('lighting:lightning_intensity')}</label>
-          <div className='input-group'>
-            <Field
-              name='config.intensity'
-              type='number'
-              readOnly={readOnly}
-              value={val('intensity', 100)}
-              onChange={handleChange}
-              className={classNames('form-control', {
-                'is-invalid': ShowError('config.intensity', touched, errors)
-              })}
-            />
-            <div className='input-group-append'>
-              <span className='input-group-text'>%</span>
-            </div>
-          </div>
-          <ErrorFor errors={errors} touched={touched} name='config.intensity' />
-        </div>
+        <ErrorFor errors={errors} touched={touched} name='config.intensity' />
       </div>
     </div>
   )

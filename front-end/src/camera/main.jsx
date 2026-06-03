@@ -56,8 +56,8 @@ export class RawCamera extends React.Component {
       config = <Config config={this.props.config} update={this.props.updateConfig} />
     }
     return (
-      <div className='container'>
-        <div className='row'>
+      <div className='reefpi-view'>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--reefpi-space-sm)' }}>
           <input
             type='button'
             id='showConfig'
@@ -67,7 +67,7 @@ export class RawCamera extends React.Component {
           />
           {config}
         </div>
-        <div className='row'>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--reefpi-space-sm)' }}>
           {images.length > 0
             ? <Gallery images={images} />
             : !this.state.showConfig && (
@@ -75,9 +75,9 @@ export class RawCamera extends React.Component {
                 title='No images yet'
                 body='Capture an image to get started.'
               />
-            )}
+              )}
         </div>
-        <div className='row'>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--reefpi-space-sm)' }}>
           <Capture />
         </div>
         {this.motion()}

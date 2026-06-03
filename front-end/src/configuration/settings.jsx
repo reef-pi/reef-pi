@@ -8,6 +8,8 @@ import { connect } from 'react-redux'
 import SettingsSchema from './settings_schema'
 import i18n from 'utils/i18n'
 import ThemePicker from '../../design-system/ui_kits/reef-pi-app/shell/ThemePicker'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { Field as FormField, Input, Select } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
 
 export class RawSettings extends React.Component {
   constructor (props) {
@@ -50,15 +52,14 @@ export class RawSettings extends React.Component {
 
   checkBoxComponent (attr) {
     return (
-      <div className='col-6 col-md-3 form-check'>
-        <label htmlFor={attr} className='form-check-label'>
-          <input
-            type='checkbox'
-            id={attr}
-            onChange={this.updateCheckbox(attr)}
-            checked={!!this.state.settings[attr]}
-            className='form-check-input'
-          />
+      <div style={{ display: 'flex', gap: 'var(--reefpi-space-xs)', alignItems: 'center' }}>
+        <input
+          type='checkbox'
+          id={attr}
+          onChange={this.updateCheckbox(attr)}
+          checked={!!this.state.settings[attr]}
+        />
+        <label htmlFor={attr}>
           {i18n.t('configuration:settings:' + attr)}
         </label>
       </div>
@@ -154,7 +155,7 @@ export class RawSettings extends React.Component {
       return
     }
     return (
-      <div className='container'>
+      <div>
         <Display />
       </div>
     )
@@ -205,16 +206,14 @@ export class RawSettings extends React.Component {
       })
     }.bind(this)
     return (
-      <div className='form-group'>
-        <label htmlFor={'to-row-' + label}> {i18n.t(`configuration:settings:${label}`)}</label>
-        <input
-          className='form-control'
+      <FormField label={i18n.t(`configuration:settings:${label}`)}>
+        <Input
           type='text'
           onChange={fn}
           value={this.state.settings[label]}
           id={'to-row-' + label}
         />
-      </div>
+      </FormField>
     )
   }
 
@@ -223,112 +222,105 @@ export class RawSettings extends React.Component {
           this.state.settings.capabilities === undefined ||
           Object.keys(this.state.capabilities).length === 0) {
       return (
-        <div className='container'>
+        <div>
           {i18n.t('loading')}
         </div>
       )
     }
 
-    let updateButtonClass = 'btn btn-outline-success col-xs-12 col-md-3 offset-md-9'
-    if (this.state.updated) {
-      updateButtonClass = 'btn btn-outline-danger col-xs-12 col-md-3 offset-md-9'
-    }
+    const updateVariant = this.state.updated ? 'danger' : 'primary'
 
     return (
-      <div className='container'>
-        <div className='row'>
-          <div className='col-12'>
-            <div className='row'>
-              <div className='col-lg-6 col-sm-12'>{this.toRow('name')}</div>
-              <div className='col-lg-6 col-sm-12'>{this.toRow('interface')}</div>
-            </div>
-            <div className='row'>
-              <div className='col-lg-6 col-sm-12'>
-                <div className='form-group'>
-                  <label htmlFor='to-row-address'> {i18n.t('configuration:settings:address')}</label>
-                  <div className='input-group'>
-                    <div className='input-group-prepend'>
-                      <button className='btn btn-outline-secondary dropdown-toggle' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-                        {this.state.settings.https === true ? 'https' : 'http'}://
-                      </button>
-                      <div className='dropdown-menu'>
-                        <a className='dropdown-item' onClick={this.handleSetProtocolHttp}>http://</a>
-                        <a className='dropdown-item' onClick={this.handleSetProtocolHttps}>https://</a>
-                      </div>
-                    </div>
-                    <input
-                      className='form-control'
-                      type='text'
-                      onChange={this.handleSetAddress}
-                      value={this.state.settings.address}
-                      id='to-row-address'
-                    />
-                  </div>
-                </div>
+      <div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))', gap: 'var(--reefpi-space-md)' }}>
+          {this.toRow('name')}
+          {this.toRow('interface')}
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))', gap: 'var(--reefpi-space-md)', marginTop: 'var(--reefpi-space-sm)' }}>
+          <FormField label={i18n.t('configuration:settings:address')}>
+            <div style={{ display: 'flex', gap: 'var(--reefpi-space-xs)', alignItems: 'center' }}>
+              <div style={{ display: 'flex', gap: 0 }}>
+                <Button
+                  variant='secondary'
+                  style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem', borderRadius: 'var(--reefpi-radius-sm) 0 0 var(--reefpi-radius-sm)' }}
+                  onClick={this.handleSetProtocolHttp}
+                  type='button'
+                >
+                  http://
+                </Button>
+                <Button
+                  variant='secondary'
+                  style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem', borderRadius: '0 var(--reefpi-radius-sm) var(--reefpi-radius-sm) 0' }}
+                  onClick={this.handleSetProtocolHttps}
+                  type='button'
+                >
+                  https://
+                </Button>
               </div>
-              <div className='col-lg-6 col-sm-12'>{this.toRow('rpi_pwm_freq')}</div>
+              <Input
+                type='text'
+                onChange={this.handleSetAddress}
+                value={this.state.settings.address}
+                id='to-row-address'
+              />
             </div>
-            <div className='row'>
-              <div className='col'>
-                <div className='form-group'>
-                  <label htmlFor='app-language'>{i18n.t('language:language')}</label>
-                  <select value={this.state.currentLanguage} onChange={this.handleSetLang} id='app-language' className='form-control'>
-                    <option value='en'>{i18n.t('language:en')}</option>
-                    <option value='fr'>{i18n.t('language:fr')}</option>
-                    <option value='es'>{i18n.t('language:es')}</option>
-                    <option value='pt'>{i18n.t('language:pt')}</option>
-                    <option value='de'>{i18n.t('language:de')}</option>
-                    <option value='it'>{i18n.t('language:it')}</option>
-                    <option value='nl'>{i18n.t('language:nl')}</option>
-                    <option value='hi'>{i18n.t('language:hi')}</option>
-                    <option value='fa'>{i18n.t('language:fa')}</option>
-                    <option value='zh'>{i18n.t('language:zh')}</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
+          </FormField>
+          {this.toRow('rpi_pwm_freq')}
+        </div>
+        <div style={{ marginTop: 'var(--reefpi-space-sm)' }}>
+          <FormField label={i18n.t('language:language')}>
+            <Select
+              value={this.state.currentLanguage}
+              onChange={this.handleSetLang}
+              id='app-language'
+            >
+              <option value='en'>{i18n.t('language:en')}</option>
+              <option value='fr'>{i18n.t('language:fr')}</option>
+              <option value='es'>{i18n.t('language:es')}</option>
+              <option value='pt'>{i18n.t('language:pt')}</option>
+              <option value='de'>{i18n.t('language:de')}</option>
+              <option value='it'>{i18n.t('language:it')}</option>
+              <option value='nl'>{i18n.t('language:nl')}</option>
+              <option value='hi'>{i18n.t('language:hi')}</option>
+              <option value='fa'>{i18n.t('language:fa')}</option>
+              <option value='zh'>{i18n.t('language:zh')}</option>
+            </Select>
+          </FormField>
         </div>
 
-        <div className='col-12'>
-          <div className='row'>
+        <div style={{ marginTop: 'var(--reefpi-space-sm)' }}>
+          <div style={{ display: 'flex', gap: 'var(--reefpi-space-sm)', flexWrap: 'wrap' }}>
             {this.checkBoxComponent('display')}
             {this.showDisplay()}
           </div>
         </div>
 
-        <div className='col-12'>
-          <div className='row'>
-            {this.checkBoxComponent('notification')}
-            {this.checkBoxComponent('pprof')}
-            {this.checkBoxComponent('prometheus')}
-            {this.checkBoxComponent('cors')}
-          </div>
+        <div style={{ display: 'flex', gap: 'var(--reefpi-space-sm)', flexWrap: 'wrap', marginTop: 'var(--reefpi-space-sm)' }}>
+          {this.checkBoxComponent('notification')}
+          {this.checkBoxComponent('pprof')}
+          {this.checkBoxComponent('prometheus')}
+          {this.checkBoxComponent('cors')}
         </div>
         <hr />
-        <div className='row'>
-          <div className='col-12'>
-            <ThemePicker />
-          </div>
+        <div>
+          <ThemePicker />
         </div>
         <hr />
-        <div className='row'>
-          <div className='col-12'>
-            <label className='h5 font-weight-normal'>
-              {i18n.t('capabilities')}
-            </label>
-            {this.showCapabilities()}
-          </div>
+        <div>
+          <label style={{ fontSize: '1.25rem', fontWeight: 400 }}>
+            {i18n.t('capabilities')}
+          </label>
+          {this.showCapabilities()}
         </div>
-        <div className='row'>{this.showHealthNotify()}</div>
-        <div className='row'>
-          <input
-            type='button'
-            className={updateButtonClass}
+        <div>{this.showHealthNotify()}</div>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 'var(--reefpi-space-sm)' }}>
+          <Button
+            variant={updateVariant}
             onClick={this.handleUpdate}
             id='systemUpdateSettings'
-            value={i18n.t('update')}
-          />
+          >
+            {i18n.t('update')}
+          </Button>
         </div>
       </div>
     )

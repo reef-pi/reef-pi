@@ -45,7 +45,7 @@ export class RawReadingsChart extends React.Component {
       .sort((a, b) => timestampToEpoch(a.time) - timestampToEpoch(b.time))
 
     return (
-      <div className='container'>
+      <div className='reefpi-view'>
         <span className='h6'>{this.props.config.name}({currentTemp})</span>
         <ResponsiveContainer height={this.props.height} width='100%'>
           <AreaChart data={readings}>

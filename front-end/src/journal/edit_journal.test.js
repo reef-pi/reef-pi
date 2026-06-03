@@ -87,8 +87,8 @@ describe('EditJournal', () => {
 
   it('disables fields when readOnly', () => {
     const { container, unmount } = render({ readOnly: true })
-    expect(container.querySelectorAll('[disabled]')).toHaveLength(4)
-    expect(container.querySelector('.row.d-none input[type="submit"]')).not.toBeNull()
+    expect(container.querySelectorAll('[disabled]')).toHaveLength(3)
+    expect(container.querySelector('[data-testid="journal-save-btn"]')).toBeNull()
     unmount()
   })
 
@@ -128,7 +128,7 @@ describe('EditJournal', () => {
       errors: { name: 'required' },
       touched: { name: true }
     })
-    expect(container.querySelector('[name="name"]').className).toContain('is-invalid')
+    expect(container.querySelector('[name="name"]').getAttribute('aria-invalid')).toBe('true')
     unmount()
   })
 })

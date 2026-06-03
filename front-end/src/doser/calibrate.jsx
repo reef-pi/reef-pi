@@ -2,8 +2,9 @@ import React from 'react'
 import * as Yup from 'yup'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
 import i18n from 'utils/i18n'
-import classNames from 'classnames'
 import { withFormik, Field } from 'formik'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { Field as FormField, Input } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
 
 export const Calibrate = ({
   values,
@@ -21,34 +22,24 @@ export const Calibrate = ({
   const dcPump = () => {
     return (
       <>
-        <label htmlFor='speed' className='col-2 col-form-label'>{i18n.t('doser:speed')}</label>
-        <div className='col-3'>
-          <div className='form-group'>
-            <Field
-              name='speed'
-              type='number'
-              disabled={readOnly}
-              className={classNames('form-control', {
-                'is-invalid': ShowError('speed', touched, errors)
-              })}
-            />
-            <ErrorFor errors={errors} touched={touched} name='speed' />
-          </div>
-        </div>
-        <label htmlFor='duration' className='col-2 col-form-label'>{i18n.t('doser:duration')}</label>
-        <div className='col-3'>
-          <div className='form-group'>
-            <Field
-              name='duration'
-              type='number'
-              disabled={readOnly}
-              className={classNames('form-control', {
-                'is-invalid': ShowError('duration', touched, errors)
-              })}
-            />
-            <ErrorFor errors={errors} touched={touched} name='duration' />
-          </div>
-        </div>
+        <FormField label={i18n.t('doser:speed')} error={ShowError('speed', touched, errors) ? <ErrorFor errors={errors} touched={touched} name='speed' /> : undefined}>
+          <Field
+            name='speed'
+            type='number'
+            disabled={readOnly}
+            as={Input}
+            invalid={ShowError('speed', touched, errors)}
+          />
+        </FormField>
+        <FormField label={i18n.t('doser:duration')} error={ShowError('duration', touched, errors) ? <ErrorFor errors={errors} touched={touched} name='duration' /> : undefined}>
+          <Field
+            name='duration'
+            type='number'
+            disabled={readOnly}
+            as={Input}
+            invalid={ShowError('duration', touched, errors)}
+          />
+        </FormField>
       </>
     )
   }
@@ -56,35 +47,32 @@ export const Calibrate = ({
   const stepper = () => {
     return (
       <>
-        <label htmlFor='volume' className='col-2 col-form-label'>{i18n.t('doser:volume')}</label>
-        <div className='col-3'>
-          <div className='form-group'>
-            <Field
-              name='volume'
-              type='number'
-              disabled={readOnly}
-              className={classNames('form-control', {
-                'is-invalid': ShowError('volume', touched, errors)
-              })}
-            />
-            <ErrorFor errors={errors} touched={touched} name='duration' />
-          </div>
-        </div>
+        <FormField label={i18n.t('doser:volume')} error={ShowError('volume', touched, errors) ? <ErrorFor errors={errors} touched={touched} name='duration' /> : undefined}>
+          <Field
+            name='volume'
+            type='number'
+            disabled={readOnly}
+            as={Input}
+            invalid={ShowError('volume', touched, errors)}
+          />
+        </FormField>
       </>
     )
   }
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className='form-group row'>
+      <div style={{ display: 'flex', gap: 'var(--reefpi-space-md)', alignItems: 'flex-end', flexWrap: 'wrap' }}>
         {values.pumpType === 'stepper' ? stepper() : dcPump()}
-        <div className='col-2'>
-          <input
+        <div>
+          <Button
             type='submit'
+            variant='primary'
             disabled={readOnly}
-            value={i18n.t('doser:calibration:run')}
-            className='btn btn-sm btn-outline-primary'
-          />
+            style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
+          >
+            {i18n.t('doser:calibration:run')}
+          </Button>
         </div>
       </div>
     </form>

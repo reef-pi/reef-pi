@@ -9,7 +9,12 @@ const findAll = (node, predicate, acc = []) => {
   if (predicate(node)) {
     acc.push(node)
   }
+  // Traverse children
   React.Children.toArray(node.props?.children).forEach(child => findAll(child, predicate, acc))
+  // Also traverse Dialog 'actions' prop since cancel/confirm buttons live there
+  if (node.props?.actions) {
+    findAll(node.props.actions, predicate, acc)
+  }
   return acc
 }
 

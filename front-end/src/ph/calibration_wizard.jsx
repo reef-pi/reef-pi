@@ -1,5 +1,6 @@
 import React from 'react'
-import Modal from 'modal'
+import { Dialog } from '../../design-system/ui_kits/reef-pi-app/primitives/Interaction'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 import Calibrate from './calibrate'
 import i18next from 'i18next'
 
@@ -76,60 +77,55 @@ export default class CalibrationWizard extends React.Component {
   }
 
   render () {
-    let cancelButton = null
-    if (this.state.midCalibrated === false) {
-      cancelButton = (
-        <button role='abort' type='button' className='btn btn-light mr-2' onClick={this.handleCancel}>
-          {i18next.t('cancel')}
-        </button>
-      )
-    }
+    const actions = (
+      <div style={{ display: 'flex', gap: 'var(--reefpi-space-sm)' }}>
+        {this.state.midCalibrated === false && (
+          <Button role='abort' type='button' variant='secondary' onClick={this.handleCancel}>
+            {i18next.t('cancel')}
+          </Button>
+        )}
+        <Button role='confirm' type='button' variant='primary' onClick={this.handleConfirm}>
+          {i18next.t('done')}
+        </Button>
+      </div>
+    )
+
     return (
-      <Modal>
-        <div className='modal-header'>
-          <h4 className='modal-title'>
-            {i18next.t('ph:calibrate')} {this.props.probe.name}
-          </h4>
+      <Dialog
+        open
+        onClose={this.handleCancel}
+        title={`${i18next.t('ph:calibrate')} ${this.props.probe.name}`}
+        actions={actions}
+      >
+        <Calibrate
+          point='mid'
+          label={i18next.t('ph:midpoint')}
+          defaultValue='7'
+          complete={this.state.midCalibrated}
+          readOnly={!this.state.enableMid}
+          onSubmit={this.handleCalibrate}
+        />
+        <Calibrate
+          point='second'
+          label={i18next.t('ph:second_point')}
+          defaultValue='10'
+          complete={this.state.secondCalibrated}
+          readOnly={!this.state.enableSecond}
+          onSubmit={this.handleCalibrate}
+        />
+        <Calibrate
+          point='low'
+          label={i18next.t('ph:low_point')}
+          defaultValue='4'
+          complete={this.state.lowCalibrated}
+          readOnly={!this.state.enableLow}
+          onSubmit={this.handleCalibrate}
+        />
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--reefpi-space-md)', marginTop: 'var(--reefpi-space-sm)' }}>
+          <div>{i18next.t('ph:current_reading')}</div>
+          <div>{this.props.currentReading[this.props.probe.id]}</div>
         </div>
-        <div className='modal-body'>
-          <Calibrate
-            point='mid'
-            label={i18next.t('ph:midpoint')}
-            defaultValue='7'
-            complete={this.state.midCalibrated}
-            readOnly={!this.state.enableMid}
-            onSubmit={this.handleCalibrate}
-          />
-          <Calibrate
-            point='second'
-            label={i18next.t('ph:second_point')}
-            defaultValue='10'
-            complete={this.state.secondCalibrated}
-            readOnly={!this.state.enableSecond}
-            onSubmit={this.handleCalibrate}
-          />
-          <Calibrate
-            point='low'
-            label={i18next.t('ph:low_point')}
-            defaultValue='4'
-            complete={this.state.lowCalibrated}
-            readOnly={!this.state.enableLow}
-            onSubmit={this.handleCalibrate}
-          />
-          <div className='row'>
-            <div className='col-4'>{i18next.t('ph:current_reading')}</div>
-            <div className='col-4'>{this.props.currentReading[this.props.probe.id]}</div>
-          </div>
-        </div>
-        <div className='modal-footer'>
-          <div className='text-center'>
-            {cancelButton}
-            <button role='confirm' type='button' className='btn btn-primary' ref={(r) => { this.confirm = r }} onClick={this.handleConfirm}>
-              {i18next.t('done')}
-            </button>
-          </div>
-        </div>
-      </Modal>
+      </Dialog>
     )
   }
 }

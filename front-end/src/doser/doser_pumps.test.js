@@ -6,9 +6,7 @@ import EditStepper from './edit_stepper'
 import CalibrationModal from './calibration_modal'
 import 'isomorphic-fetch'
 
-jest.mock('jquery', () => ({
-  Deferred: jest.fn().mockReturnValue({ resolve: jest.fn(), reject: jest.fn() })
-}))
+// jQuery was removed; CalibrationModal now uses native Promise
 
 const wrapFormik = (component, initialValues = {}) => (
   <Formik initialValues={initialValues} onSubmit={() => {}}>

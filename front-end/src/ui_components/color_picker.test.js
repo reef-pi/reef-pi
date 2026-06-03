@@ -1,4 +1,5 @@
 import ColorPicker from './color_picker'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 
 describe('ColorPicker', () => {
   it('starts collapsed and expands', () => {
@@ -11,10 +12,15 @@ describe('ColorPicker', () => {
       component.state = { ...component.state, ...update }
     })
 
-    expect(component.render().type).toBe('button')
+    // Collapsed state renders a Button component (design-system primitive, not raw 'button')
+    const rendered = component.render()
+    expect(rendered.type).toBe(Button)
 
-    component.render().props.onClick()
+    // Clicking it should set expand=true
+    rendered.props.onClick()
     expect(component.state.expand).toBe(true)
+
+    // Expanded state renders SketchPicker with onChangeComplete bound to handleColorChange
     expect(component.render().props.onChangeComplete).toBe(component.handleColorChange)
   })
 

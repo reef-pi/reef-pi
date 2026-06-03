@@ -3,11 +3,19 @@ import PropTypes from 'prop-types'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
 import { showError, showUpdateSuccessful } from 'utils/alert'
 import classNames from 'classnames'
-import { Field } from 'formik'
+import { Field as FormikField } from 'formik'
 import BooleanSelect from '../ui_components/boolean_select'
 import Cron from '../ui_components/cron'
 import Target from './target'
 import i18n from 'utils/i18n'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+
+const formGridStyle = {
+  display: 'grid',
+  gap: 'var(--reefpi-space-md)',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))',
+  width: '100%'
+}
 
 const EditTimer = ({
   values,
@@ -71,27 +79,25 @@ const EditTimer = ({
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className='row'>
+      <div style={formGridStyle}>
 
-        <div className='col col-sm-6 col-lg-3 order-lg-1'>
-          <div className='form-group'>
+        <div>
+          <div style={{ marginBottom: 'var(--reefpi-space-xs)' }}>
             <label htmlFor='name'>{i18n.t('name')}</label>
-            <Field
+            <FormikField
               name='name'
               data-testid='smoke-timer-name'
               disabled={readOnly}
-              className={classNames('form-control', {
-                'is-invalid': ShowError('name', touched, errors)
-              })}
+              className={classNames({ 'is-invalid': ShowError('name', touched, errors) })}
             />
             <ErrorFor errors={errors} touched={touched} name='name' />
           </div>
         </div>
 
-        <div className='col-12 col-sm-6 col-lg-3 order-lg-2'>
-          <div className='form-group'>
+        <div>
+          <div style={{ marginBottom: 'var(--reefpi-space-xs)' }}>
             <label htmlFor='enable'>{i18n.t('status')}</label>
-            <Field
+            <FormikField
               name='enable'
               component={BooleanSelect}
               disabled={readOnly}
@@ -101,17 +107,15 @@ const EditTimer = ({
             >
               <option value='true'>{i18n.t('enabled')}</option>
               <option value='false'>{i18n.t('disabled')}</option>
-            </Field>
+            </FormikField>
             <ErrorFor errors={errors} touched={touched} name='enable' />
           </div>
         </div>
-      </div>
 
-      <div className='row'>
-        <div className='col-12 col-sm-6 col-lg-3 order-lg-3'>
-          <div className='form-group'>
+        <div>
+          <div style={{ marginBottom: 'var(--reefpi-space-xs)' }}>
             <label htmlFor='type'>{i18n.t('timers:function')}</label>
-            <Field
+            <FormikField
               name='type'
               component='select'
               data-testid='smoke-timer-type'
@@ -131,10 +135,11 @@ const EditTimer = ({
               <option value='lightings'>{i18n.t('function:lightings')}</option>
               <option value='phprobes'>{i18n.t('function:phprobes')}</option>
               <option value='temperature'>{i18n.t('function:temperature')}</option>
-            </Field>
+            </FormikField>
             <ErrorFor errors={errors} touched={touched} name='type' />
           </div>
         </div>
+
         <Target
           {...props}
           name='target'
@@ -149,31 +154,31 @@ const EditTimer = ({
           onChangeHandler={handleChange}
         />
       </div>
-      <div className='row'>
-        <div className='col'>
-          <div className='row form-group'>
-            <label htmlFor='enable'>{i18n.t('schedule')}</label>
-          </div>
-          <Cron
-            values={values}
-            touched={touched}
-            errors={errors}
-            readOnly={readOnly}
-          />
+
+      <div style={{ marginTop: 'var(--reefpi-space-sm)' }}>
+        <div style={{ marginBottom: 'var(--reefpi-space-xs)' }}>
+          <label htmlFor='enable'>{i18n.t('schedule')}</label>
         </div>
+        <Cron
+          values={values}
+          touched={touched}
+          errors={errors}
+          readOnly={readOnly}
+        />
       </div>
 
-      <div className={classNames('row', { 'd-none': readOnly })}>
-        <div className='col-12'>
-          <input
+      {!readOnly && (
+        <div style={{ display: 'flex', marginTop: 'var(--reefpi-space-xs)' }}>
+          <Button
             type='submit'
             data-testid='smoke-timer-submit'
-            value={i18n.t('save')}
             disabled={readOnly}
-            className='btn btn-sm btn-primary float-right mt-1'
-          />
+            style={{ marginLeft: 'auto', padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
+          >
+            {i18n.t('save')}
+          </Button>
         </div>
-      </div>
+      )}
 
     </form>
   )

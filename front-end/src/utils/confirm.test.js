@@ -4,9 +4,9 @@ jest.mock('confirm', () => {
   const React = require('react')
   return class MockConfirm extends React.Component {
     componentDidMount () {
-      this.promise = {
-        always: jest.fn(() => ({ promise: jest.fn(() => Promise.resolve()) }))
-      }
+      this.promise = Promise.resolve()
+      this._resolve = jest.fn()
+      this._reject = jest.fn()
     }
 
     render () {
@@ -15,17 +15,19 @@ jest.mock('confirm', () => {
   }
 }, { virtual: true })
 
-const mockAlways = jest.fn(callback => {
-  callback()
-  return { promise: jest.fn(() => Promise.resolve()) }
-})
+const mockUnmount = jest.fn()
+let capturedModalRef
+
 const mockRender = jest.fn(element => {
-  const modalRef = element?.props?.ref
-  if (modalRef) {
-    modalRef.current = { promise: { always: mockAlways } }
+  // Capture the ref so we can set current on it
+  capturedModalRef = element?.props?.ref
+  if (capturedModalRef) {
+    const MockConfirm = require('confirm')
+    const instance = new MockConfirm({})
+    instance.componentDidMount()
+    capturedModalRef.current = instance
   }
 })
-const mockUnmount = jest.fn()
 
 jest.mock('react-dom', () => ({
   flushSync: jest.fn(fn => fn())
@@ -39,6 +41,11 @@ jest.mock('react-dom/client', () => ({
 }))
 
 describe('confirm utils', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+    capturedModalRef = null
+  })
+
   it('confirm is a function', () => {
     expect(typeof confirm).toBe('function')
   })
@@ -65,9 +72,8 @@ describe('confirm utils', () => {
     return showModal(React.createElement(require('confirm')))
       .then(() => new Promise(resolve => setTimeout(resolve, 0)))
       .then(() => {
-      expect(mockRender).toHaveBeenCalled()
-      expect(mockAlways).toHaveBeenCalled()
-      expect(mockUnmount).toHaveBeenCalled()
+        expect(mockRender).toHaveBeenCalled()
+        expect(mockUnmount).toHaveBeenCalled()
       })
   })
 })

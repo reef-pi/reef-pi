@@ -2,13 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Field } from 'formik'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
-import classNames from 'classnames'
 import i18n from 'utils/i18n'
+import { Input } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
 
 const WaitStep = ({ name, readOnly, touched, errors }) => {
   return (
-    <div className='col-12 col-sm-4 col-md-3 form-group'>
-      <div className='input-group'>
+    <div style={{ minWidth: '10rem' }}>
+      <div style={{ display: 'inline-flex', gap: 'var(--reefpi-space-xs)', alignItems: 'center' }}>
         <Field
           name={`${name}.duration`}
           aria-label='Duration'
@@ -16,18 +16,12 @@ const WaitStep = ({ name, readOnly, touched, errors }) => {
           type='number'
           readOnly={readOnly}
           placeholder={i18n.t('macro:wait:duration')}
-          className={classNames('form-control', {
-            'is-invalid': ShowError(`${name}.duration`, touched, errors)
-          })}
+          as={Input}
+          invalid={ShowError(`${name}.duration`, touched, errors)}
         />
-        <div className='input-group-append'>
-          <span className='input-group-text d-none d-lg-flex'>
-            {i18n.t('second_s')}
-          </span>
-          <span className='input-group-text d-flex d-lg-none'>sec</span>
-        </div>
-        <ErrorFor errors={errors} touched={touched} name={`${name}.duration`} />
+        <span>{i18n.t('second_s')}</span>
       </div>
+      <ErrorFor errors={errors} touched={touched} name={`${name}.duration`} />
     </div>
   )
 }

@@ -14,6 +14,8 @@ import { timestampToEpoch } from 'utils/timestamp'
 import RangeSelector from '../../design-system/ui_kits/reef-pi-app/primitives/RangeSelector'
 import Sparkline from '../../design-system/ui_kits/reef-pi-app/primitives/Sparkline'
 import ThresholdGauge from '../../design-system/ui_kits/reef-pi-app/primitives/ThresholdGauge'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { List, ListItem } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
 
 const RANGE_MS = { '1h': 3600000, '6h': 21600000, '1d': 86400000, '7d': 604800000, '30d': 2592000000 }
 
@@ -35,9 +37,9 @@ function TemperaturePrimitives ({ probe, usage, currentReading }) {
     : undefined
 
   return (
-    <div style={{ padding: '8px 0' }}>
+    <div style={{ padding: 'var(--reefpi-space-xs) 0' }}>
       <RangeSelector value={range} onChange={setRange} compact scope={`temp-${probe.id}`} />
-      <div style={{ marginTop: '8px' }}>
+      <div style={{ marginTop: 'var(--reefpi-space-xs)' }}>
         <Sparkline
           points={points}
           stroke='var(--reefpi-color-brand)'
@@ -48,7 +50,7 @@ function TemperaturePrimitives ({ probe, usage, currentReading }) {
         />
       </div>
       {latestValue != null && (
-        <div style={{ marginTop: '8px' }}>
+        <div style={{ marginTop: 'var(--reefpi-space-xs)' }}>
           <ThresholdGauge
             value={latestValue}
             safe={safe}
@@ -137,14 +139,15 @@ export class RawTemperatureMain extends React.Component {
       .sort((a, b) => SortByName(a, b))
       .map(probe => {
         const calibrationButton = (
-          <button
+          <Button
             type='button'
             name={'calibrate-probe-' + probe.id}
-            className='btn btn-sm btn-outline-info float-right'
+            variant='secondary'
+            style={{ marginLeft: 'auto', padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
             onClick={e => this.calibrateProbe(e, probe)}
           >
             {i18next.t('temperature:calibrate')}
-          </button>
+          </Button>
         )
         const handleToggleState = () => {
           probe.enable = !probe.enable
@@ -163,7 +166,7 @@ export class RawTemperatureMain extends React.Component {
             name={'panel-temperature-' + probe.id}
             item={probe}
             buttons={calibrationButton}
-            title={<b className='ml-2 align-middle'>{probe.name} </b>}
+            title={<b style={{ marginLeft: 'var(--reefpi-space-xs)', verticalAlign: 'middle' }}>{probe.name}</b>}
             onDelete={this.handleDelete}
             onToggleState={handleToggleState}
             enabled={probe.enable}
@@ -284,24 +287,23 @@ export class RawTemperatureMain extends React.Component {
     return (
       <div>
         {calibrationModal}
-        <ul className='list-group list-group-flush'>
+        <List>
           <CollapsibleList>{this.probeList()}</CollapsibleList>
-          <li className='list-group-item add-temperature'>
-            <div className='row'>
-              <div className='col'>
-                <input
-                  type='button'
-                  id='add_probe'
-                  data-testid='smoke-temperature-add-toggle'
-                  value={this.state.addProbe ? '-' : '+'}
-                  onClick={this.handleToggleAddProbeDiv}
-                  className='btn btn-outline-success'
-                />
-              </div>
+          <ListItem>
+            <div>
+              <Button
+                type='button'
+                id='add_probe'
+                data-testid='smoke-temperature-add-toggle'
+                variant='primary'
+                onClick={this.handleToggleAddProbeDiv}
+              >
+                {this.state.addProbe ? '-' : '+'}
+              </Button>
             </div>
             {newProbe}
-          </li>
-        </ul>
+          </ListItem>
+        </List>
       </div>
     )
   }

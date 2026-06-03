@@ -3,6 +3,7 @@ import { fetchDisplay, switchDisplay, setBrightness } from '../redux/actions/dis
 import { connect } from 'react-redux'
 import { showUpdateSuccessful } from 'utils/alert'
 import i18n from 'utils/i18n'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 
 export class RawDisplay extends React.Component {
   constructor (props) {
@@ -47,26 +48,19 @@ export class RawDisplay extends React.Component {
   }
 
   render () {
-    let style = 'btn btn-outline-success'
-    let action = i18n.t('on')
-    if (this.state.on) {
-      style = 'btn btn-outline-danger'
-      action = i18n.t('off')
-    }
+    const variant = this.state.on ? 'danger' : 'primary'
+    const action = this.state.on ? i18n.t('off') : i18n.t('on')
     return (
-      <div className='container'>
-        <div className='col-sm-1'>
-          <button onClick={this.handleToggle} type='button' className={style}>
-            {' '}
-            {action}{' '}
-          </button>{' '}
-        </div>
-        <div className='col-sm-2'>{i18n.t('configuration:settings:brightness')}</div>
-        <div className='col-sm-6'>
+      <div className='reefpi-view'>
+        <div style={{ display: 'flex', gap: 'var(--reefpi-space-sm)', alignItems: 'center' }}>
+          <Button variant={variant} onClick={this.handleToggle} type='button'>
+            {action}
+          </Button>
+          <span>{i18n.t('configuration:settings:brightness')}</span>
           <input
             type='range'
             onChange={this.handleSetBrightness}
-            style={{ width: '100%' }}
+            style={{ flex: 1 }}
             min={0}
             max={255}
             value={this.state.brightness}

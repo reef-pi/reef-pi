@@ -5,6 +5,8 @@ import Chart from './chart'
 import i18next from 'i18next'
 import { fetchJournal, fetchJournalUsage, recordJournal, updateJournal } from 'redux/actions/journal'
 import { useDispatch } from 'react-redux'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { List, ListItem } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
 
 const Journal = (props) => {
   const [addEntry, setAddEntry] = useState(false)
@@ -42,8 +44,8 @@ const Journal = (props) => {
   }
 
   return (
-    <ul className='list-group list-group-flush'>
-      <li className='list-group-item'>
+    <List>
+      <ListItem>
         <JournalForm
           data={props.config}
           readOnly={props.readOnly}
@@ -51,22 +53,19 @@ const Journal = (props) => {
           onSubmit={handleSubmit}
         />
         <Chart journal_id={props.config.id} width={500} height={300} />
-      </li>
-      <li className='list-group-item'>
-        <div className='row'>
-          <div className='col'>
-            <input
-              id='add_entry'
-              type='button'
-              value={addEntry ? '-' : i18next.t('journal:add_entry')}
-              onClick={toggle}
-              className='btn btn-outline-success'
-            />
-          </div>
-        </div>
+      </ListItem>
+      <ListItem>
+        <Button
+          id='add_entry'
+          type='button'
+          variant='primary'
+          onClick={toggle}
+        >
+          {addEntry ? '-' : i18next.t('journal:add_entry')}
+        </Button>
         {newEntry}
-      </li>
-    </ul>
+      </ListItem>
+    </List>
   )
 }
 

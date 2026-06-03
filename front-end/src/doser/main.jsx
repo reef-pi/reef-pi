@@ -12,6 +12,8 @@ import i18n from 'utils/i18n'
 import { timestampToEpoch } from 'utils/timestamp'
 import RangeSelector from '../../design-system/ui_kits/reef-pi-app/primitives/RangeSelector'
 import Sparkline from '../../design-system/ui_kits/reef-pi-app/primitives/Sparkline'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { List, ListItem } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
 
 const RANGE_MS = { '1h': 3600000, '6h': 21600000, '1d': 86400000, '7d': 604800000, '30d': 2592000000 }
 
@@ -73,13 +75,15 @@ export class RawDoser extends React.Component {
       this.props.dosers.slice().sort((a, b) => SortByName(a, b))
         .map(doser => {
           const calibrationButton = (
-            <button
-              type='button' name={'calibrate-doser-' + doser.id}
-              className='btn btn-sm btn-outline-info float-right'
+            <Button
+              type='button'
+              name={'calibrate-doser-' + doser.id}
+              variant='secondary'
+              style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem', marginLeft: 'auto' }}
               onClick={(e) => this.calibrateDoser(e, doser)}
             >
               {i18n.t('doser:calibrate')}
-            </button>
+            </Button>
           )
           const handleTState = () => {
             doser.regiment.enable = !doser.regiment.enable
@@ -99,7 +103,7 @@ export class RawDoser extends React.Component {
               onToggleState={handleTState}
               enabled={doser.regiment.enable}
               buttons={calibrationButton}
-              title={<b className='ml-2 align-middle'>{doser.name} </b>}
+              title={<b style={{ marginLeft: 'var(--reefpi-space-xs)', verticalAlign: 'middle' }}>{doser.name}</b>}
               onDelete={this.handleDeleteDoser}
             >
               {enhancedView}
@@ -196,26 +200,23 @@ export class RawDoser extends React.Component {
     }
 
     return (
-      <ul className='list-group list-group-flush'>
+      <List>
         <CollapsibleList>
           {this.doserList()}
         </CollapsibleList>
-        <li className='list-group-item add-doser'>
-          <div className='row'>
-            <div className='col'>
-              <input
-                type='button'
-                id='add_doser'
-                data-testid='smoke-doser-add-toggle'
-                value={this.state.addDoser ? '-' : '+'}
-                onClick={this.handleToggleAddDoserDiv}
-                className='btn btn-outline-success'
-              />
-            </div>
-          </div>
+        <ListItem>
+          <Button
+            type='button'
+            variant='primary'
+            id='add_doser'
+            data-testid='smoke-doser-add-toggle'
+            onClick={this.handleToggleAddDoserDiv}
+          >
+            {this.state.addDoser ? '-' : '+'}
+          </Button>
           {newDoser}
-        </li>
-      </ul>
+        </ListItem>
+      </List>
     )
   }
 }

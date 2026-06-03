@@ -8,6 +8,8 @@ import Collapsible from '../ui_components/collapsible'
 import CollapsibleList from '../ui_components/collapsible_list'
 import { SortByName } from 'utils/sort_by_name'
 import i18n from 'utils/i18n'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { List, ListItem } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
 
 export class RawTimersMain extends React.Component {
   constructor (props) {
@@ -40,7 +42,7 @@ export class RawTimersMain extends React.Component {
             item={timer}
             onToggleState={handleToggleState}
             enabled={timer.enable}
-            title={<b className='ml-2 align-middle'>{timer.name}</b>}
+            title={<b style={{ marginLeft: 'var(--reefpi-space-xxs)', verticalAlign: 'middle' }}>{timer.name}</b>}
             onDelete={this.handleRemoveTimer}
           >
             <TimerForm
@@ -126,24 +128,22 @@ export class RawTimersMain extends React.Component {
     }
 
     return (
-      <ul className='list-group list-group-flush'>
+      <List>
         <CollapsibleList>{this.timerList()}</CollapsibleList>
-        <li className='list-group-item add-timer'>
-          <div className='row'>
-            <div className='col'>
-              <input
-                type='button'
-                id='add_timer'
-                data-testid='smoke-timer-add-toggle'
-                value={this.state.addTimer ? '-' : '+'}
-                onClick={this.handleToggleAddTimerDiv}
-                className='btn btn-outline-success'
-              />
-            </div>
+        <ListItem>
+          <div className='add-timer'>
+            <Button
+              id='add_timer'
+              data-testid='smoke-timer-add-toggle'
+              onClick={this.handleToggleAddTimerDiv}
+              variant='primary'
+            >
+              {this.state.addTimer ? '-' : '+'}
+            </Button>
           </div>
           {nT}
-        </li>
-      </ul>
+        </ListItem>
+      </List>
     )
   }
 }

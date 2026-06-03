@@ -1,5 +1,6 @@
 import React from 'react'
 import Confirm from './confirm'
+import Button from '../design-system/ui_kits/reef-pi-app/primitives/Button'
 
 const findAll = (node, predicate, acc = []) => {
   if (!node || typeof node !== 'object') {
@@ -22,7 +23,8 @@ describe('<Confirm />', () => {
     const tree = component.render()
     expect(JSON.stringify(tree)).toContain('Delete item?')
     expect(JSON.stringify(tree)).toContain('description')
-    expect(findAll(tree, node => node.type === 'button')).toHaveLength(2)
+    // Design-system Button is a forwardRef component — check for Button type, not native 'button'
+    expect(findAll(tree, node => node.type === Button)).toHaveLength(2)
   })
 
   it('uses custom labels and omits body without description', () => {
@@ -35,7 +37,8 @@ describe('<Confirm />', () => {
     const tree = component.render()
     expect(component.state.abortLabel).toBe('No')
     expect(component.state.confirmLabel).toBe('Yes')
-    expect(findAll(tree, node => node.type === 'button')).toHaveLength(2)
+    // Design-system Button is a forwardRef component — check for Button type, not native 'button'
+    expect(findAll(tree, node => node.type === Button)).toHaveLength(2)
     expect(JSON.stringify(tree)).not.toContain('modal-body')
   })
 
@@ -51,15 +54,14 @@ describe('<Confirm />', () => {
 
   it('resolves or rejects its promise from button handlers', () => {
     const component = new Confirm({ message: 'Continue?' })
-    component.promise = {
-      resolve: jest.fn(),
-      reject: jest.fn()
-    }
+    // Now uses native Promise with _resolve/_reject callbacks
+    component._resolve = jest.fn()
+    component._reject = jest.fn()
 
     component.handleConfirm()
     component.handleAbort()
 
-    expect(component.promise.resolve).toHaveBeenCalled()
-    expect(component.promise.reject).toHaveBeenCalled()
+    expect(component._resolve).toHaveBeenCalled()
+    expect(component._reject).toHaveBeenCalled()
   })
 })

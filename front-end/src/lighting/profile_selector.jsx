@@ -1,6 +1,23 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+const radioLabelStyle = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: 'var(--reefpi-space-xs)',
+  padding: '0 var(--reefpi-space-sm)',
+  minHeight: 'var(--reefpi-tap-target-min)',
+  background: 'var(--reefpi-color-surface-elevated)',
+  border: '1px solid var(--reefpi-color-border)',
+  borderRadius: 0,
+  color: 'var(--reefpi-color-text)',
+  cursor: 'pointer',
+  fontFamily: 'var(--reefpi-font-app)',
+  fontSize: '0.9375rem',
+  fontWeight: 600,
+  userSelect: 'none'
+}
+
 const ProfileSelector = (props) => {
   const uuid = Math.floor((1 + Math.random()) * 0x10000)
     .toString(16)
@@ -12,10 +29,9 @@ const ProfileSelector = (props) => {
   }
 
   return (
-    <div className='d-sm-inline-flex'>
-      <div className='d-sm-none'>
+    <div style={{ display: 'inline-flex', flexWrap: 'wrap' }}>
+      <div style={{ display: 'none' }}>
         <select
-          className='custom-select'
           name={props.name + uuid}
           value={props.value}
           onChange={handleChange}
@@ -32,127 +48,41 @@ const ProfileSelector = (props) => {
           <option value='solar'>Solar</option>
         </select>
       </div>
-      <div className='btn-group  d-none d-sm-inline'>
-        <label className='btn btn-secondary'>
-          <input
-            type='radio' value='fixed'
-            className='mr-1'
-            checked={props.value === 'fixed'}
-            name={props.name + uuid}
-            id={props.name + uuid + '-fixed'}
-            onChange={handleChange}
-            disabled={props.readOnly}
-          />
-          Fixed
-        </label>
-        <label className='btn btn-secondary'>
-          <input
-            type='radio' value='interval'
-            className='mr-1'
-            checked={props.value === 'interval'}
-            name={props.name + uuid}
-            id={props.name + uuid + '-interval'}
-            onChange={handleChange}
-            disabled={props.readOnly}
-          />
-          Interval
-        </label>
-        <label className='btn btn-secondary'>
-          <input
-            type='radio' value='diurnal'
-            className='mr-1'
-            checked={props.value === 'diurnal'}
-            name={props.name + uuid}
-            id={props.name + uuid + '-diurnal'}
-            onChange={handleChange}
-            disabled={props.readOnly}
-          />
-          Diurnal
-        </label>
-        <label className='btn btn-secondary'>
-          <input
-            type='radio' value='random'
-            className='mr-1'
-            checked={props.value === 'random'}
-            name={props.name + uuid}
-            id={props.name + uuid + '-random'}
-            onChange={handleChange}
-            disabled={props.readOnly}
-          />
-          Random
-        </label>
-        <label className='btn btn-secondary'>
-          <input
-            type='radio' value='sine'
-            className='mr-1'
-            checked={props.value === 'sine'}
-            name={props.name + uuid}
-            id={props.name + uuid + '-sine'}
-            onChange={handleChange}
-            disabled={props.readOnly}
-          />
-          Sine
-        </label>
-        <label className='btn btn-secondary'>
-          <input
-            type='radio' value='lunar'
-            className='mr-1'
-            checked={props.value === 'lunar'}
-            name={props.name + uuid}
-            id={props.name + uuid + '-lunar'}
-            onChange={handleChange}
-            disabled={props.readOnly}
-          />
-          Lunar
-        </label>
-        <label className='btn btn-secondary'>
-          <input
-            type='radio' value='circadian'
-            className='mr-1'
-            checked={props.value === 'circadian'}
-            name={props.name + uuid}
-            id={props.name + uuid + '-circadian'}
-            onChange={handleChange}
-            disabled={props.readOnly}
-          />
-          Circadian
-        </label>
-        <label className='btn btn-secondary'>
-          <input
-            type='radio' value='cyclic'
-            className='mr-1'
-            checked={props.value === 'cyclic'}
-            name={props.name + uuid}
-            id={props.name + uuid + '-cyclic'}
-            onChange={handleChange}
-            disabled={props.readOnly}
-          />
-          Cyclic
-        </label>
-        <label className='btn btn-secondary'>
-          <input
-            type='radio' value='lightning'
-            className='mr-1'
-            checked={props.value === 'lightning'}
-            name={props.name + uuid}
-            id={props.name + uuid + '-lightning'}
-            onChange={handleChange}
-            disabled={props.readOnly}
-          />
-          Lightning
-        </label>
-        <label className='btn btn-secondary'>
-          <input
-            type='radio' value='solar'
-            className='mr-1'
-            checked={props.value === 'solar'}
-            name={props.name + uuid}
-            id={props.name + uuid + '-solar'}
-            onChange={handleChange}
-            disabled={props.readOnly}
-          />
-          Solar
-        </label>
+      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+        {[
+          { value: 'fixed', label: 'Fixed' },
+          { value: 'interval', label: 'Interval' },
+          { value: 'diurnal', label: 'Diurnal' },
+          { value: 'random', label: 'Random' },
+          { value: 'sine', label: 'Sine' },
+          { value: 'lunar', label: 'Lunar' },
+          { value: 'circadian', label: 'Circadian' },
+          { value: 'cyclic', label: 'Cyclic' },
+          { value: 'lightning', label: 'Lightning' },
+          { value: 'solar', label: 'Solar' }
+        ].map(opt => (
+          <label
+            key={opt.value}
+            style={{
+              ...radioLabelStyle,
+              background: props.value === opt.value ? 'var(--reefpi-color-brand)' : 'var(--reefpi-color-surface-elevated)',
+              borderColor: props.value === opt.value ? 'var(--reefpi-color-brand)' : 'var(--reefpi-color-border)',
+              color: props.value === opt.value ? 'var(--reefpi-color-nav-text-strong)' : 'var(--reefpi-color-text)'
+            }}
+          >
+            <input
+              type='radio'
+              value={opt.value}
+              style={{ position: 'absolute', opacity: 0, width: 0, height: 0 }}
+              checked={props.value === opt.value}
+              name={props.name + uuid}
+              id={props.name + uuid + '-' + opt.value}
+              onChange={handleChange}
+              disabled={props.readOnly}
+            />
+            {opt.label}
+          </label>
+        ))}
       </div>
     </div>
   )

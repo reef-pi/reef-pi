@@ -2,6 +2,7 @@ import React from 'react'
 import { fetchJacks } from './redux/actions/jacks'
 import { connect } from 'react-redux'
 import i18next from 'i18next'
+import { Menu } from '../design-system/ui_kits/reef-pi-app/primitives/Interaction'
 
 export class RawJackSelector extends React.Component {
   constructor (props) {
@@ -29,39 +30,15 @@ export class RawJackSelector extends React.Component {
 
   jacks () {
     let title = ''
-    let id = ''
     if (this.state.jack !== undefined) {
       title = this.state.jack.name
-      id = this.state.jack.id
     }
-    const items = []
-    this.props.jacks.forEach((v, k) => {
-      let cName = 'dropdown-item'
-      if (v.id === id) {
-        cName += ' active'
-      }
-      items.push(
-        <a className={cName} href='#' onClick={this.setJack(k)} key={k}>
-          <span id={this.props.id + '-' + v.name}>{v.name}</span>
-        </a>
-      )
-    })
+    const items = this.props.jacks.map((v, k) => ({
+      label: v.name,
+      onSelect: this.setJack(k)
+    }))
     return (
-      <div className='dropdown'>
-        <button
-          className='btn btn-secondary dropdown-toggle'
-          type='button'
-          id={this.props.id + 'jack'}
-          data-toggle='dropdown'
-          aria-haspopup='true'
-          aria-expanded='false'
-        >
-          {title}
-        </button>
-        <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
-          {items}
-        </div>
-      </div>
+      <Menu buttonLabel={title} items={items} />
     )
   }
 
@@ -92,42 +69,22 @@ export class RawJackSelector extends React.Component {
     if (this.state.jack === undefined) {
       return
     }
-    const items = []
-    this.state.jack.pins.forEach((v, k) => {
-      items.push(
-        <a className='dropdown-item' href='#' key={k} onClick={this.setPin(v)}>
-          {v}
-        </a>
-      )
-    })
+    const items = this.state.jack.pins.map((v, k) => ({
+      label: String(v),
+      onSelect: this.setPin(v)
+    }))
     return (
-      <div className='dropdown'>
-        <button
-          className='btn btn-secondary dropdown-toggle'
-          type='button'
-          id={this.props.id + '-pin'}
-          data-toggle='dropdown'
-          aria-haspopup='true'
-          aria-expanded='false'
-        >
-          {this.state.pin.toString()}
-        </button>
-        <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
-          {items}
-        </div>
-      </div>
+      <Menu buttonLabel={this.state.pin.toString()} items={items} />
     )
   }
 
   render () {
     return (
-      <div className='container'>
-        <div className='row'>
-          <div className='col-lg-1'>{i18next.t('jack')}</div>
-          <div className='col-lg-1'>{this.jacks()}</div>
-          <div className='col-lg-1'>{i18next.t('pin')}</div>
-          <div className='col-lg-1'>{this.pins()}</div>
-        </div>
+      <div style={{ display: 'flex', gap: 'var(--reefpi-space-md)', alignItems: 'center' }}>
+        <span>{i18next.t('jack')}</span>
+        {this.jacks()}
+        <span>{i18next.t('pin')}</span>
+        {this.pins()}
       </div>
     )
   }

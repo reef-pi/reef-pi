@@ -6,6 +6,8 @@ import { showError, showSuccess, showUpdateSuccessful } from 'utils/alert'
 import { updateTelemetry, fetchTelemetry, sendTestMessage } from 'redux/actions/telemetry'
 import { connect } from 'react-redux'
 import i18n from '../utils/i18n'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { Field as FormField, Input } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
 
 const cloneTelemetryConfig = config => ({
   ...config,
@@ -168,35 +170,24 @@ class telemetry extends React.Component {
       return
     }
     return (
-      <div className='row'>
-        <div className='col-12 col-md-6'>
-          <NotificationSettings mailer={this.state.config.mailer} update={this.updateMailer} />
-        </div>
-        <div className='col-12 col-md-6'>
-          <div className='row'>
-            <div className='form-group col-12'>
-              <label htmlFor='limit-per-hour'>{i18n.t('telemetry:main:limit-per-hour')}</label>
-              <input
-                id='limit-per-hour'
-                type='text'
-                value={this.state.config.throttle}
-                onChange={this.handleUpdateThrottle}
-                className='form-control'
-              />
-            </div>
-          </div>
-          <div className='row'>
-            <div className='col'>
-              <div className='float-right'>
-                <input
-                  type='button'
-                  className='btn btn-outline-secondary'
-                  onClick={this.handleTestMessage}
-                  id='send-test-email'
-                  value={i18n.t('telemetry:main:send-test-message')}
-                />
-              </div>
-            </div>
+      <div className='telemetry-notification-row' style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(18rem, 1fr))', gap: 'var(--reefpi-space-md)', marginTop: 'var(--reefpi-space-sm)' }}>
+        <NotificationSettings mailer={this.state.config.mailer} update={this.updateMailer} />
+        <div>
+          <FormField label={i18n.t('telemetry:main:limit-per-hour')}>
+            <Input
+              id='limit-per-hour'
+              type='text'
+              value={this.state.config.throttle}
+              onChange={this.handleUpdateThrottle}
+            />
+          </FormField>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 'var(--reefpi-space-sm)' }}>
+            <Button
+              variant='secondary'
+              onClick={this.handleTestMessage}
+              id='send-test-email'
+            >{i18n.t('telemetry:main:send-test-message')}
+            </Button>
           </div>
         </div>
       </div>
@@ -235,33 +226,24 @@ class telemetry extends React.Component {
   }
 
   render () {
-    let updateButtonClass = 'btn btn-outline-success col-xs-12 col-md-3 offset-md-9'
-    if (this.state.updated) {
-      updateButtonClass = 'btn btn-outline-danger col-xs-12 col-md-3 offset-md-9'
-    }
     return (
-      <div className='container'>
-        <div className='row'>{this.showAdafruitIO()}</div>
-        <div className='row'>{this.showMqtt()}</div>
-        <div className='row'>
-          <div className='col-12'>
-            <div className='form-group'>
-              <label className='form-check-label'>
-                <input
-                  className='form-check-input'
-                  type='checkbox'
-                  id='enable-mailer'
-                  onClick={this.handleEnableMailer}
-                  defaultChecked={this.state.config.notify}
-                />
-                <b>{i18n.t('telemetry:main:email-alerts')}</b>
-              </label>
-            </div>
-          </div>
+      <div className='reefpi-view'>
+        <div style={{ marginBottom: 'var(--reefpi-space-sm)' }}>{this.showAdafruitIO()}</div>
+        <div style={{ marginBottom: 'var(--reefpi-space-sm)' }}>{this.showMqtt()}</div>
+        <div style={{ marginBottom: 'var(--reefpi-space-sm)' }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 'var(--reefpi-space-xs)' }}>
+            <input
+              type='checkbox'
+              id='enable-mailer'
+              onClick={this.handleEnableMailer}
+              defaultChecked={this.state.config.notify}
+            />
+            <b>{i18n.t('telemetry:main:email-alerts')}</b>
+          </label>
           {this.notification()}
         </div>
-        <div className='row'>
-          <div className='col'>
+        <div style={{ display: 'flex', gap: 'var(--reefpi-space-md)', marginBottom: 'var(--reefpi-space-sm)' }}>
+          <div>
             <label>{i18n.t('telemetry:main:current-limit')} </label>
             <input
               type='text'
@@ -270,7 +252,7 @@ class telemetry extends React.Component {
               defaultValue={this.state.config.current_limit}
             />
           </div>
-          <div className='col'>
+          <div>
             <label>{i18n.t('telemetry:main:historical-limit')} </label>
             <input
               type='text'
@@ -280,16 +262,13 @@ class telemetry extends React.Component {
             />
           </div>
         </div>
-        <div className='row'>
-          <div className='col'>
-            <input
-              type='button'
-              className={updateButtonClass}
-              onClick={this.handleSave}
-              id='updateTelemetry'
-              value={i18n.t('update')}
-            />
-          </div>
+        <div>
+          <Button
+            variant={this.state.updated ? 'danger' : 'primary'}
+            onClick={this.handleSave}
+            id='updateTelemetry'
+          >{i18n.t('update')}
+          </Button>
         </div>
       </div>
     )

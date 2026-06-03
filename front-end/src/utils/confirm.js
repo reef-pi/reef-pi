@@ -24,5 +24,9 @@ export function showModal (modal) {
     root.render(React.cloneElement(modal, { ref: modalRef }))
   })
 
-  return modalRef.current.promise.always(cleanup).promise()
+  // Use native Promise: call cleanup in both then and catch branches
+  return modalRef.current.promise.then(
+    function (result) { cleanup(); return result },
+    function (reason) { cleanup(); return Promise.reject(reason) }
+  )
 }

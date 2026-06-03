@@ -127,7 +127,7 @@ describe('Configuration ui', () => {
       switchDisplay: jest.fn(),
       setBrightness: jest.fn()
     })
-    expect(component.render().props.className).toBe('container')
+    expect(component.render().props.className).toBe('reefpi-view')
   })
 
   it('<Display /> mounts with no config (getDerivedStateFromProps guard)', () => {
@@ -138,15 +138,28 @@ describe('Configuration ui', () => {
     expect(RawDisplay.getDerivedStateFromProps({ config: {} }, {})).toBeNull()
   })
 
-  it('<Display /> render applies danger style when state.on is true', () => {
+  it('<Display /> render applies danger variant when state.on is true', () => {
     const component = new RawDisplay({
       config: { brightness: 50, on: true },
       fetchDisplay: jest.fn(),
       switchDisplay: jest.fn(),
       setBrightness: jest.fn()
     })
-    const button = component.render().props.children[0].props.children[0]
-    expect(button.props.className).toBe('btn btn-outline-danger')
+    const rendered = component.render()
+    // Find the Button component with variant='danger' using recursive search
+    const findButton = (node) => {
+      if (!node || typeof node !== 'object') return null
+      if (node.props && node.props.variant === 'danger') return node
+      const children = React.Children.toArray(node.props?.children)
+      for (const child of children) {
+        const found = findButton(child)
+        if (found) return found
+      }
+      return null
+    }
+    const dangerButton = findButton(rendered)
+    expect(dangerButton).not.toBeNull()
+    expect(dangerButton.props.variant).toBe('danger')
   })
 
   it('<Errors /> fetches, renders alert/count badges, deletes, and clears', () => {
@@ -172,7 +185,7 @@ describe('Configuration ui', () => {
 
     const rows = rendered.props.children[0]
     rows[0].props.children[2].props.children.props.onClick()
-    rendered.props.children[1].props.children.props.children.props.onClick()
+    rendered.props.children[1].props.children.props.onClick()
 
     expect(props.delete).toHaveBeenCalledWith('alert:1')
     expect(props.clear).toHaveBeenCalled()
@@ -354,7 +367,9 @@ describe('Configuration ui', () => {
     })
     patchSetState(component)
     const row = component.toRow('name')
-    row.props.children[1].props.onChange({ target: { value: 'new-name' } })
+    // toRow returns <FormField><Input onChange={fn} .../></FormField>
+    // row.props.children is the <Input> element (single child of FormField)
+    row.props.children.props.onChange({ target: { value: 'new-name' } })
     expect(component.state.settings.name).toBe('new-name')
   })
 
@@ -369,7 +384,9 @@ describe('Configuration ui', () => {
     const previousSettings = component.state.settings
     const row = component.toRow('name')
 
-    row.props.children[1].props.onChange({ target: { value: 'new-name' } })
+    // toRow returns <FormField><Input onChange={fn} .../></FormField>
+    // row.props.children is the <Input> element (single child of FormField)
+    row.props.children.props.onChange({ target: { value: 'new-name' } })
 
     expect(previousSettings.name).toBe('reef-pi')
     expect(component.state.settings).not.toBe(previousSettings)
@@ -447,7 +464,9 @@ describe('Configuration ui', () => {
     })
     patchSetState(component)
     const checkbox = component.checkBoxComponent('notification')
-    checkbox.props.children.props.children[0].props.onChange({ target: { checked: true } })
+    // checkBoxComponent returns <div><input onChange={...}/><label/></div>
+    // children[0] is the <input> element
+    checkbox.props.children[0].props.onChange({ target: { checked: true } })
     expect(component.state.settings.notification).toBe(true)
   })
 
@@ -462,7 +481,9 @@ describe('Configuration ui', () => {
     const previousSettings = component.state.settings
     const checkbox = component.checkBoxComponent('notification')
 
-    checkbox.props.children.props.children[0].props.onChange({ target: { checked: true } })
+    // checkBoxComponent returns <div><input onChange={...}/><label/></div>
+    // children[0] is the <input> element
+    checkbox.props.children[0].props.onChange({ target: { checked: true } })
 
     expect(previousSettings.notification).toBe(false)
     expect(component.state.settings).not.toBe(previousSettings)
@@ -590,7 +611,9 @@ describe('Configuration ui', () => {
 
   it('<Errors /> mounts with empty error list', () => {
     const component = new RawErrors({ errors: [], clear: jest.fn(), fetch: jest.fn(), delete: jest.fn() })
-    expect(renderToStaticMarkup(component.render())).toContain('btn btn-outline-secondary')
+    const html = renderToStaticMarkup(component.render())
+    // Design-system Button renders a <button> element with inline styles, no Bootstrap class names
+    expect(html).toContain('<button')
   })
 
   it('<Errors /> delete button dispatches deleteError', () => {

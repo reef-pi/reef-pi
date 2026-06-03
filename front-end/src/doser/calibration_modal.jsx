@@ -1,8 +1,9 @@
 import React from 'react'
-import $ from 'jquery'
 import Modal from 'modal'
 import CalibrateForm from './calibrate'
 import i18n from 'utils/i18n'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { Input } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
 
 export default class CalibrationModal extends React.Component {
   constructor (props) {
@@ -20,15 +21,18 @@ export default class CalibrationModal extends React.Component {
   }
 
   handleConfirm () {
-    return this.promise.resolve()
+    return this._resolve && this._resolve()
   }
 
   cancel () {
-    return this.promise.reject()
+    return this._reject && this._reject()
   }
 
   componentDidMount () {
-    this.promise = new $.Deferred()
+    this.promise = new Promise((resolve, reject) => {
+      this._resolve = resolve
+      this._reject = reject
+    })
   }
 
   handleCalibrate (duration, speed, volume) {
@@ -78,45 +82,48 @@ export default class CalibrationModal extends React.Component {
             pumpType={this.props.doser.type}
           />
           {isDCPump && this.state.ranCalibration && (
-            <div className='form-group row mt-2'>
-              <label className='col-4 col-form-label'>{i18n.t('doser:calibration:measured_volume')}</label>
-              <div className='col-4'>
-                <div className='input-group'>
-                  <input
-                    type='number'
-                    className='form-control'
-                    value={this.state.measuredVolume}
-                    onChange={e => this.setState({ measuredVolume: e.target.value })}
-                    placeholder='0.0'
-                  />
-                  <div className='input-group-append'>
-                    <span className='input-group-text'>mL</span>
-                  </div>
-                </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--reefpi-space-sm)', marginTop: 'var(--reefpi-space-xs)', flexWrap: 'wrap' }}>
+              <label style={{ whiteSpace: 'nowrap' }}>{i18n.t('doser:calibration:measured_volume')}</label>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 'var(--reefpi-space-xs)' }}>
+                <Input
+                  type='number'
+                  value={this.state.measuredVolume}
+                  onChange={e => this.setState({ measuredVolume: e.target.value })}
+                  placeholder='0.0'
+                />
+                <span>mL</span>
               </div>
-              <div className='col-4'>
-                <button
-                  type='button'
-                  className='btn btn-sm btn-success'
-                  onClick={this.handleSaveCalibration}
-                  disabled={!this.state.measuredVolume || parseFloat(this.state.measuredVolume) <= 0}
-                >
-                  {i18n.t('doser:calibration:save_result')}
-                </button>
-              </div>
+              <Button
+                type='button'
+                variant='primary'
+                style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
+                onClick={this.handleSaveCalibration}
+                disabled={!this.state.measuredVolume || parseFloat(this.state.measuredVolume) <= 0}
+              >
+                {i18n.t('doser:calibration:save_result')}
+              </Button>
             </div>
           )}
           {isDCPump && vps > 0 && (
-            <div className='alert alert-info mt-2 py-1'>
+            <div style={{
+              background: 'var(--reefpi-color-pending-bg)',
+              border: '1px solid var(--reefpi-color-border)',
+              borderRadius: 'var(--reefpi-radius-sm)',
+              color: 'var(--reefpi-color-text)',
+              fontSize: '0.875rem',
+              marginTop: 'var(--reefpi-space-xs)',
+              padding: 'var(--reefpi-space-xxs) var(--reefpi-space-xs)'
+            }}
+            >
               {i18n.t('doser:calibration:current_rate')}: {vps.toFixed(3)} mL/s
             </div>
           )}
         </div>
         <div className='modal-footer'>
-          <div className='text-center'>
-            <button role='confirm' type='button' className='btn btn-primary' ref={(r) => { this.confirm = r }} onClick={this.handleConfirm}>
+          <div style={{ textAlign: 'center' }}>
+            <Button role='confirm' type='button' variant='primary' ref={(r) => { this.confirm = r }} onClick={this.handleConfirm}>
               {i18n.t('close')}
-            </button>
+            </Button>
           </div>
         </div>
       </Modal>

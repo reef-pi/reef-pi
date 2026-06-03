@@ -64,7 +64,7 @@ export class RawGenericLightChart extends React.Component {
         return row
       })
     return (
-      <div className='container'>
+      <div className='reefpi-view'>
         <span className='h6'>{l.name}</span>
         <ResponsiveContainer height={this.props.height} width='100%'>
           <LineChart data={usage}>

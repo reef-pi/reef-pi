@@ -52,7 +52,7 @@ export class RawControlChart extends React.Component {
     }
     const c = this.props.config.chart
     return (
-      <div className='container'>
+      <div className='reefpi-view'>
         <span className='h6'>{this.props.config.name}({current})</span>
         <ResponsiveContainer height={this.props.height} width='100%'>
           <ComposedChart data={metrics}>

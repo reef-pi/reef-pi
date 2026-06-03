@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import i18n from 'utils/i18n'
+import { Menu } from '../../design-system/ui_kits/reef-pi-app/primitives/Interaction'
 
 export default class Subsystem extends React.Component {
   constructor (props) {
@@ -79,19 +80,10 @@ export default class Subsystem extends React.Component {
   }
 
   list () {
-    const menuItems = []
-    this.props.entities.forEach((v, k) => {
-      let cls = 'dropdown-item'
-      if (v.id === this.state.id) {
-        cls += ' active'
-      }
-      menuItems.push(
-        <a key={k} className={cls} onClick={this.set(k)}>
-          <span id={this.props.id_prefix + '-entity-' + v.id}>{v.name}</span>
-        </a>
-      )
-    })
-    return menuItems
+    return this.props.entities.map((v, k) => ({
+      label: v.name,
+      onSelect: this.set(k)
+    }))
   }
 
   render () {
@@ -100,80 +92,47 @@ export default class Subsystem extends React.Component {
     let durationUI = <div />
     if (this.state.revert) {
       durationUI = (
-        <div className='row'>
-          <div className='col'>
-            <label>{i18n.t('timers:duration')}</label>
-          </div>
-          <div className='col'>
-            <input
-              id={this.props.id_prefix + '-entity-action-duration'}
-              type='text'
-              onChange={this.handleSetDuration}
-              className='col-lg-6'
-              disabled={this.props.disabled}
-              defaultValue={this.state.duration}
-            />
-            ({i18n.t('second_s')})
-          </div>
+        <div style={{ display: 'flex', gap: 'var(--reefpi-space-sm)', alignItems: 'center', marginTop: 'var(--reefpi-space-xs)' }}>
+          <label>{i18n.t('timers:duration')}</label>
+          <input
+            id={this.props.id_prefix + '-entity-action-duration'}
+            type='text'
+            onChange={this.handleSetDuration}
+            disabled={this.props.disabled}
+            defaultValue={this.state.duration}
+          />
+          ({i18n.t('second_s')})
         </div>
       )
     }
     return (
-      <div className='container'>
-        <div className='row'>
-          <div className='col'>{i18n.t(this.props.kind)}</div>
-          <div className='col'>
-            <div className='dropdown'>
-              <button
-                className='btn btn-secondary dropdown-toggle'
-                type='button'
-                id={this.props.id_prefix + '-entity'}
-                data-toggle='dropdown'
-                disabled={this.props.disabled}
-              >
-                {eqName}
-              </button>
-              <div className='dropdown-menu'>{this.list()}</div>
-            </div>
-          </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--reefpi-space-sm)' }}>
+        <div style={{ display: 'flex', gap: 'var(--reefpi-space-md)', alignItems: 'center' }}>
+          <span>{i18n.t(this.props.kind)}</span>
+          <Menu
+            buttonLabel={eqName}
+            items={this.list()}
+          />
         </div>
-        <div className='row'>
-          <label className='col'>{i18n.t('timers:action')}</label>
-          <span className='col'>
-            <div className='dropdown'>
-              <button
-                className='btn btn-secondary dropdown-toggle'
-                type='button'
-                id={this.props.id_prefix + '-entity-action'}
-                disabled={this.props.disabled}
-                data-toggle='dropdown'
-              >
-                {eqAction}
-              </button>
-              <div className='dropdown-menu'>
-                <a className='dropdown-item' onClick={this.setAction(true)}>
-                  {i18n.t('on')}
-                </a>
-                <a className='dropdown-item' onClick={this.setAction(false)}>
-                  {i18n.t('off')}
-                </a>
-              </div>
-            </div>
-          </span>
+        <div style={{ display: 'flex', gap: 'var(--reefpi-space-md)', alignItems: 'center' }}>
+          <label>{i18n.t('timers:action')}</label>
+          <Menu
+            buttonLabel={eqAction}
+            items={[
+              { label: i18n.t('on'), onSelect: this.setAction(true) },
+              { label: i18n.t('off'), onSelect: this.setAction(false) }
+            ]}
+          />
         </div>
-        <div className='row'>
-          <div className='col'>
-            <label>{i18n.t('timers:revert')}</label>
-          </div>
-          <div className='col'>
-            <input
-              id={this.props.id_prefix + '-entity-revert'}
-              type='checkbox'
-              onClick={this.handleSetRevert}
-              defaultChecked={this.state.revert}
-              disabled={this.props.disabled}
-            />
-          </div>
+        <div style={{ display: 'flex', gap: 'var(--reefpi-space-md)', alignItems: 'center' }}>
+          <label>{i18n.t('timers:revert')}</label>
+          <input
+            id={this.props.id_prefix + '-entity-revert'}
+            type='checkbox'
+            onClick={this.handleSetRevert}
+            defaultChecked={this.state.revert}
+            disabled={this.props.disabled}
+          />
         </div>
         {durationUI}
       </div>
