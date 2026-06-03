@@ -35,9 +35,9 @@ function PhPrimitives ({ probe, readings, currentReading }) {
     : undefined
 
   return (
-    <div style={{ padding: '8px 0' }}>
+    <div style={{ padding: 'var(--reefpi-space-xs) 0' }}>
       <RangeSelector value={range} onChange={setRange} compact scope={`ph-${probe.id}`} />
-      <div style={{ marginTop: '8px' }}>
+      <div style={{ marginTop: 'var(--reefpi-space-xs)' }}>
         <Sparkline
           points={points}
           stroke='var(--reefpi-color-brand)'
@@ -48,7 +48,7 @@ function PhPrimitives ({ probe, readings, currentReading }) {
         />
       </div>
       {latestValue != null && (
-        <div style={{ marginTop: '8px' }}>
+        <div style={{ marginTop: 'var(--reefpi-space-xs)' }}>
           <ThresholdGauge
             value={latestValue}
             safe={safe}

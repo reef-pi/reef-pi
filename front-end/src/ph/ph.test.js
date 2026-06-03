@@ -6,6 +6,7 @@ import PhForm, { mapPhPropsToValues, phControlValue } from './ph_form'
 import { RawPhChart } from './chart'
 import { RawPhMain } from './main'
 import CalibrationWizard from './calibration_wizard'
+import { List } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
 import 'isomorphic-fetch'
 
 const mockStore = configureMockStore([])
@@ -534,7 +535,7 @@ describe('Ph ui', () => {
     }))
     const tree = component.render()
     expect(tree.type).toBe('div')
-    expect(tree.props.children[1].type).toBe('ul')
+    expect(tree.props.children[1].type).toBe(List)
   })
 
   it('<Main /> render includes add-probe input with minus when addProbe is true', () => {
@@ -548,7 +549,7 @@ describe('Ph ui', () => {
     const tree = component.render()
     expect(tree.type).toBe('div')
     const ul = tree.props.children[1]
-    expect(ul.type).toBe('ul')
+    expect(ul.type).toBe(List)
   })
 
   it('<Main /> PhPrimitives renders sparkline and range selector with readings', () => {

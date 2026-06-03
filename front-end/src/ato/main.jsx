@@ -15,7 +15,7 @@ import { timestampToEpoch } from 'utils/timestamp'
 import RangeSelector from '../../design-system/ui_kits/reef-pi-app/primitives/RangeSelector'
 import Sparkline from '../../design-system/ui_kits/reef-pi-app/primitives/Sparkline'
 import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
-import { List, ListItem } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
+import { List } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
 
 const RANGE_MS = { '1h': 3600000, '6h': 21600000, '1d': 86400000, '7d': 604800000, '30d': 2592000000 }
 
@@ -30,9 +30,9 @@ function AtoPrimitives ({ ato, usage }) {
     .sort((a, b) => a.t - b.t)
 
   return (
-    <div style={{ padding: '8px 0' }}>
+    <div style={{ padding: 'var(--reefpi-space-xs) 0' }}>
       <RangeSelector value={range} onChange={setRange} compact scope={`ato-${ato.id}`} />
-      <div style={{ marginTop: '8px' }}>
+      <div style={{ marginTop: 'var(--reefpi-space-xs)' }}>
         <Sparkline
           points={points}
           stroke='var(--reefpi-color-brand)'
@@ -197,7 +197,7 @@ export class RawATOMain extends React.Component {
       <div>
         <List>
           <CollapsibleList>{this.probeList()}</CollapsibleList>
-          <ListItem>{newATO}</ListItem>
+          {newATO}
         </List>
       </div>
     )

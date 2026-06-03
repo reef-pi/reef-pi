@@ -1,6 +1,7 @@
 import React from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { RawATOMain } from './main'
+import { List } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
 import 'isomorphic-fetch'
 
 jest.mock('utils/confirm', () => ({
@@ -74,7 +75,7 @@ describe('ATO Main', () => {
     const tree = component.render()
     const list = tree.props.children
 
-    expect(list.type).toBe('ul')
+    expect(list.type).toBe(List)
     expect(list.props.children).toHaveLength(2)
   })
 
