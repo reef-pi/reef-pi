@@ -52,7 +52,7 @@ export class auth extends React.Component {
 
   render () {
     return (
-      <div className='container'>
+      <div className='reefpi-view'>
         <div style={{ marginBottom: 'var(--reefpi-space-sm)' }}>
           <label>
             <b>{i18n.t('configuration:authentication:credentials')}</b>

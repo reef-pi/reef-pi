@@ -71,7 +71,7 @@ export default class Gallery extends React.Component {
     })
 
     return (
-      <div className='container'>
+      <div className='reefpi-view'>
         {this.state.isOpen && currentImage && (
           <div className='camera-gallery-lightbox'>
             <button type='button' className='btn btn-secondary' onClick={this.handleClose}>Close</button>

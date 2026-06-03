@@ -19,7 +19,7 @@ class BlankPanel extends React.Component {
 
   render () {
     return (
-      <div className='container'>
+      <div className='reefpi-view'>
         <ResponsiveContainer height={this.props.height} width='100%'>
           <p>&nbsp;</p>
         </ResponsiveContainer>

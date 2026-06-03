@@ -132,13 +132,15 @@ export default class AnalogInput extends React.Component {
             style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
             className='analog_input-remove'
             onClick={this.handleRemove}
-          >X</Button>
+          >X
+          </Button>
           <Button
             variant='secondary'
             style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
             className='analog_input-edit'
             onClick={this.handleEdit}
-          >{this.state.lbl}</Button>
+          >{this.state.lbl}
+          </Button>
         </div>
       </div>
     )

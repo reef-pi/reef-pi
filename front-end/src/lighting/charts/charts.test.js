@@ -120,7 +120,7 @@ describe('DiurnalChart', () => {
       profile: { config: { start: '08:00:00', end: '20:00:00' } }
     }
     const tree = new DiurnalChart({ channel: ch, height: 200 }).render()
-    expect(tree.props.className).toBe('container')
+    expect(tree.props.className).toBe('reefpi-view')
   })
 
   it('renders chart when start is after end (crosses midnight)', () => {
@@ -129,7 +129,7 @@ describe('DiurnalChart', () => {
       profile: { config: { start: '22:00:00', end: '06:00:00' } }
     }
     const tree = new DiurnalChart({ channel: ch, height: 200 }).render()
-    expect(tree.props.className).toBe('container')
+    expect(tree.props.className).toBe('reefpi-view')
   })
 
   it('uses black stroke when color is empty string', () => {
@@ -156,7 +156,7 @@ describe('FixedChart', () => {
       profile: { config: { start: '08:00:00', end: '20:00:00', value: 75 } }
     }
     const tree = new FixedChart({ channel: ch, height: 200 }).render()
-    expect(tree.props.className).toBe('container')
+    expect(tree.props.className).toBe('reefpi-view')
   })
 
   it('uses black fill when color is undefined', () => {
@@ -182,7 +182,7 @@ describe('IntervalChart', () => {
       profile: { config: { start: '08:00:00', interval: '3600', values: [10, 50, 90] } }
     }
     const tree = new IntervalChart({ channel: ch, height: 200 }).render()
-    expect(tree.props.className).toBe('container')
+    expect(tree.props.className).toBe('reefpi-view')
   })
 
   it('uses black stroke when color is empty string', () => {
@@ -247,7 +247,7 @@ describe('GenericLightChart', () => {
       fetch: jest.fn(),
       height: 200
     }).render()
-    expect(tree.props.className).toBe('container')
+    expect(tree.props.className).toBe('reefpi-view')
     const chart = collectElements(tree, child => child.type === LineChart)[0]
     expect(chart.props.data).toEqual([
       { time: 'Jul-01-10:00, 2024', channels: { 1: 50 }, 1: 50 },

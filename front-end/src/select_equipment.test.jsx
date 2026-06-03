@@ -1,4 +1,3 @@
-import React from 'react'
 import 'isomorphic-fetch'
 import SelectEquipment, { RawSelectEquipment } from './select_equipment'
 

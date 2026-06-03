@@ -146,13 +146,15 @@ export default class Inlet extends React.Component {
             variant='danger'
             style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
             onClick={this.handleRemove}
-          >X</Button>
+          >X
+          </Button>
           <Button
             variant='secondary'
             style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
             className='edit-inlet'
             onClick={this.handleEdit}
-          >{this.state.lbl}</Button>
+          >{this.state.lbl}
+          </Button>
         </div>
       </div>
     )

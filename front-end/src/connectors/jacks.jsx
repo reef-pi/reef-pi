@@ -107,7 +107,7 @@ class jacks extends React.Component {
     driverGroups.groups.forEach(group => {
       list.push(
         <div key={'driver-' + group.driverName} style={{ marginTop: 'var(--reefpi-space-xs)' }}>
-          <small className='text-muted font-weight-bold'>{group.driverName}</small>
+          <small style={{ color: 'var(--reefpi-color-text-muted)', fontWeight: 600 }}>{group.driverName}</small>
         </div>
       )
       group.connectors.forEach(j => {
@@ -137,7 +137,7 @@ class jacks extends React.Component {
       display: this.state.add ? '' : 'none'
     }
     return (
-      <div className='container'>
+      <div className='reefpi-view'>
         <div style={{ marginBottom: 'var(--reefpi-space-xxs)' }}>
           <div>
             <label className='h5'>{i18n.t('jacks')}</label>
@@ -152,7 +152,8 @@ class jacks extends React.Component {
               variant='secondary'
               style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
               onClick={this.handleAdd}
-            >{this.state.add ? '-' : '+'}</Button>
+            >{this.state.add ? '-' : '+'}
+            </Button>
           </div>
         </div>
         <div>
@@ -207,7 +208,8 @@ class jacks extends React.Component {
                     data-testid='smoke-jack-submit'
                     variant='primary'
                     onClick={this.handleSave}
-                  >{i18n.t('add')}</Button>
+                  >{i18n.t('add')}
+                  </Button>
                 </div>
               </div>
             </div>

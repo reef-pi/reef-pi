@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 export default class Motion extends React.PureComponent {
   render () {
     return (
-      <div className='container'>
+      <div className='reefpi-view'>
         <img
           width={this.props.width} height={this.props.height}
           src={this.props.url}

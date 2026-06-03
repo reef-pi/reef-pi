@@ -19,7 +19,7 @@ export default class IntervalChart extends React.Component {
     })
 
     return (
-      <div className='container'>
+      <div className='reefpi-view'>
         <span className='h6'>Light - {ch.name}</span>
         <ResponsiveContainer height={this.props.height} width='100%'>
           <LineChart data={data}>

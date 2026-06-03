@@ -80,7 +80,7 @@ class inletSelector extends React.Component {
 
   render () {
     return (
-      <div className='container'>
+      <div className='reefpi-view'>
         <div style={{ display: 'flex', gap: 'var(--reefpi-space-sm)', alignItems: 'center' }}>
           <div>{i18next.t('inlet')}</div>
           <div>{this.inlets()}</div>

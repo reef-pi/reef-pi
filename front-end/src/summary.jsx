@@ -22,7 +22,7 @@ export default class Summary extends React.Component {
       devModeWarning = <li className='list-inline-item'><span className='text-danger'>{i18n.t('devmode_warning')} </span>| </li>
     }
     return (
-      <nav className='bottom-bar navbar fixed-bottom navbar-light bg-light justify-content-center'>
+      <nav className='bottom-bar' style={{ display: 'flex', justifyContent: 'center', position: 'fixed', bottom: 0, left: 0, right: 0, background: 'var(--reefpi-color-surface-elevated)', borderTop: '1px solid var(--reefpi-color-border)', padding: 'var(--reefpi-space-xxs) var(--reefpi-space-sm)' }}>
         <ul className='list-inline'>
           <li className='list-inline-item'><a href='http://reef-pi.com' target='_blank' rel='noopener noreferrer'> {i18n.t('documentation')}</a> | </li>
           <li className='list-inline-item'>{this.props.info.current_time},</li>

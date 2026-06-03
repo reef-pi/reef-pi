@@ -1,5 +1,4 @@
 import JackSelector, { RawJackSelector } from './jack_selector'
-import React from 'react'
 import 'isomorphic-fetch'
 
 const jacks = [{ id: '1', name: 'Foo', pins: [1, 2] }]

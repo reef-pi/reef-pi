@@ -9,7 +9,7 @@ import { connect } from 'react-redux'
 import i18next from 'i18next'
 import { confirm } from 'utils/confirm'
 import { SortByName } from 'utils/sort_by_name'
-import { List, ListItem } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
+import { List } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
 
 export class RawJournalMain extends React.Component {
   constructor (props) {

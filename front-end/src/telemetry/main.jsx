@@ -170,7 +170,7 @@ class telemetry extends React.Component {
       return
     }
     return (
-      <div className='row' style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(18rem, 1fr))', gap: 'var(--reefpi-space-md)', marginTop: 'var(--reefpi-space-sm)' }}>
+      <div className='telemetry-notification-row' style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(18rem, 1fr))', gap: 'var(--reefpi-space-md)', marginTop: 'var(--reefpi-space-sm)' }}>
         <NotificationSettings mailer={this.state.config.mailer} update={this.updateMailer} />
         <div>
           <FormField label={i18n.t('telemetry:main:limit-per-hour')}>
@@ -186,7 +186,8 @@ class telemetry extends React.Component {
               variant='secondary'
               onClick={this.handleTestMessage}
               id='send-test-email'
-            >{i18n.t('telemetry:main:send-test-message')}</Button>
+            >{i18n.t('telemetry:main:send-test-message')}
+            </Button>
           </div>
         </div>
       </div>
@@ -226,7 +227,7 @@ class telemetry extends React.Component {
 
   render () {
     return (
-      <div className='container'>
+      <div className='reefpi-view'>
         <div style={{ marginBottom: 'var(--reefpi-space-sm)' }}>{this.showAdafruitIO()}</div>
         <div style={{ marginBottom: 'var(--reefpi-space-sm)' }}>{this.showMqtt()}</div>
         <div style={{ marginBottom: 'var(--reefpi-space-sm)' }}>
@@ -266,7 +267,8 @@ class telemetry extends React.Component {
             variant={this.state.updated ? 'danger' : 'primary'}
             onClick={this.handleSave}
             id='updateTelemetry'
-          >{i18n.t('update')}</Button>
+          >{i18n.t('update')}
+          </Button>
         </div>
       </div>
     )

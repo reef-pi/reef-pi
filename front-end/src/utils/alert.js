@@ -6,7 +6,7 @@ import { dispatchAlert as dispatchToAlertCenter } from '../../design-system/ui_k
 
 // Maps Redux MsgLevel to AlertCenter severity
 function toSeverity (type) {
-  if (type === MsgLevel.error)   return 'critical'
+  if (type === MsgLevel.error) return 'critical'
   if (type === MsgLevel.warning) return 'warn'
   return null // info + success don't surface in AlertCenter
 }

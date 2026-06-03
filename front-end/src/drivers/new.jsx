@@ -63,14 +63,15 @@ export default class New extends React.Component {
 
   render () {
     return (
-      <div className='container add-driver'>
+      <div className='add-driver'>
         <Button
           id='add_new_driver'
           data-testid='smoke-driver-add-toggle'
           variant='secondary'
           style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
           onClick={this.handleToggle}
-        >{this.state.add ? '-' : '+'}</Button>
+        >{this.state.add ? '-' : '+'}
+        </Button>
         {this.ui()}
       </div>
     )

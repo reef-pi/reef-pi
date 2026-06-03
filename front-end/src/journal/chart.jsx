@@ -46,7 +46,7 @@ export class RawJournalChart extends React.Component {
       current = metrics[metrics.length - 1].value
     }
     return (
-      <div className='container'>
+      <div className='reefpi-view'>
         <span className='h6'>{this.props.config.name}({current})</span>
         <ResponsiveContainer height={this.props.height}>
           <LineChart data={metrics}>

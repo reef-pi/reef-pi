@@ -434,7 +434,7 @@ describe('Ph ui', () => {
     instance.componentDidMount()
     expect(fetchProbeReadings).toHaveBeenCalledWith('1')
     const rendered = instance.render()
-    expect(rendered.props.className).toBe('container')
+    expect(rendered.props.className).toBe('reefpi-view')
     const chartData = rendered.props.children[1].props.children.props.data
     expect(chartData.map(reading => reading.time)).toEqual([
       'Jul-01-10:00, 2024',

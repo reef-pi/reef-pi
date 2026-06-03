@@ -387,7 +387,7 @@ class connectors extends React.Component {
   renderNewShell () {
     const groups = this.groups()
     return (
-      <div className='container connectors-shell'>
+      <div className='connectors-shell'>
         {this.renderFilterRow()}
         <div className='connector-groups'>
           {groups.length > 0
@@ -400,21 +400,20 @@ class connectors extends React.Component {
 
   renderLegacy () {
     return (
-      <div className='container'>
-        {/* Legacy layout — Bootstrap .row used as test selector, preserved until new_shell flag removes this path */}
-        <div className='row inlets'>
+      <div className='reefpi-view'>
+        <div className='legacy-inlets'>
           <Inlets />
         </div>
         <hr />
-        <div className='row outlets'>
+        <div className='legacy-outlets'>
           <Outlets />
         </div>
         <hr />
-        <div className='row analog-inputs'>
+        <div className='legacy-analog-inputs'>
           <AnalogInputs />
         </div>
         <hr />
-        <div className='row jacks'>
+        <div className='legacy-jacks'>
           <Jacks />
         </div>
 
@@ -426,7 +425,7 @@ class connectors extends React.Component {
     if (this.props.drivers === undefined ||
           this.props.drivers.length === 0) {
       return (
-        <div className='container'>
+        <div className='reefpi-view'>
           {i18n.t('loading')}
         </div>
       )

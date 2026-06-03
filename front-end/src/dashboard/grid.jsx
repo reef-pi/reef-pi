@@ -46,7 +46,7 @@ export default class Grid extends React.Component {
     }
 
     return (
-      <div className='grid-cell-container' style={{ flex: '1 1 0', minWidth: 0 }} key={'chart-type-' + i + '-' + j}>
+      <div className='grid-cell-wrap' style={{ flex: '1 1 0', minWidth: 0 }} key={'chart-type-' + i + '-' + j}>
         <div className='grid-cell'>
           <div style={{ marginBottom: 'var(--reefpi-space-xs)' }}>
             <Menu
@@ -134,7 +134,7 @@ export default class Grid extends React.Component {
         columns.push(this.cellUI(i, j, cell))
       }
       rows.push(
-        <div className='grid-row' style={{ display: 'flex', gap: 'var(--reefpi-space-sm)', flexWrap: 'wrap' }} key={'chart-row-' + i}>
+        <div className='grid-level' style={{ display: 'flex', gap: 'var(--reefpi-space-sm)', flexWrap: 'wrap' }} key={'chart-row-' + i}>
           <label style={{ display: 'block' }}>Row {i + 1}</label>
           {columns}
         </div>

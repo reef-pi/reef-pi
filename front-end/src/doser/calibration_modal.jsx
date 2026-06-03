@@ -113,13 +113,14 @@ export default class CalibrationModal extends React.Component {
               fontSize: '0.875rem',
               marginTop: 'var(--reefpi-space-xs)',
               padding: 'var(--reefpi-space-xxs) var(--reefpi-space-xs)'
-            }}>
+            }}
+            >
               {i18n.t('doser:calibration:current_rate')}: {vps.toFixed(3)} mL/s
             </div>
           )}
         </div>
         <div className='modal-footer'>
-          <div className='text-center'>
+          <div style={{ textAlign: 'center' }}>
             <Button role='confirm' type='button' variant='primary' ref={(r) => { this.confirm = r }} onClick={this.handleConfirm}>
               {i18n.t('close')}
             </Button>

@@ -198,7 +198,7 @@ describe('Camera module', () => {
 
     expect(takeImage).toHaveBeenCalled()
     expect(button.props.id).toBe('captureImage')
-    expect(placeholder.props.className).toBe('container')
+    expect(placeholder.props.className).toBe('reefpi-view')
   })
 
   it('cameraImageURL prefixes image route', () => {

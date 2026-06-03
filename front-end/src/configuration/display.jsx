@@ -51,7 +51,7 @@ export class RawDisplay extends React.Component {
     const variant = this.state.on ? 'danger' : 'primary'
     const action = this.state.on ? i18n.t('off') : i18n.t('on')
     return (
-      <div className='container'>
+      <div className='reefpi-view'>
         <div style={{ display: 'flex', gap: 'var(--reefpi-space-sm)', alignItems: 'center' }}>
           <Button variant={variant} onClick={this.handleToggle} type='button'>
             {action}

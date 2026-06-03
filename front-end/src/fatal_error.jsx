@@ -37,7 +37,7 @@ export default class FatalError extends React.Component {
       return null
     } else {
       return (
-        <div className='fatal-error-container'>
+        <div className='fatal-error-wrap'>
           <div className='fatal-error-background' />
           <div className='fatal-error-content'>
             <div style={{ display: 'grid', placeItems: 'center', height: '100%', padding: '1rem' }}>
@@ -47,7 +47,8 @@ export default class FatalError extends React.Component {
                   color: 'var(--reefpi-white)',
                   borderRadius: '0.5rem',
                   marginBottom: '1rem'
-                }}>
+                }}
+                >
                   <div style={{ padding: '0.75rem 1rem', borderBottom: '1px solid rgba(255,255,255,0.2)', fontWeight: 600 }}>
                     {i18next.t('fatal_error:fatal_error')}
                   </div>

@@ -49,8 +49,8 @@ const patchSetState = component => {
 
 describe('Connectors', () => {
   it('<Main />', () => {
-    expect(new RawConnectors({ drivers: [] }).render().props.className).toBe('container')
-    expect(new RawConnectors({ drivers: stockDrivers }).render().props.className).toBe('container')
+    expect(new RawConnectors({ drivers: [] }).render().props.className).toBe('reefpi-view')
+    expect(new RawConnectors({ drivers: stockDrivers }).render().props.className).toBe('reefpi-view')
   })
 
   it('<Main /> renders loading state and connector sections', () => {
@@ -59,13 +59,13 @@ describe('Connectors', () => {
 
     const rendered = new RawConnectors({ drivers: stockDrivers }).render()
     const sectionRows = React.Children.toArray(rendered.props.children)
-      .filter(child => child.props && String(child.props.className).includes('row'))
+      .filter(child => child.props && String(child.props.className).startsWith('legacy-'))
 
     expect(sectionRows.map(row => row.props.className)).toEqual([
-      'row inlets',
-      'row outlets',
-      'row analog-inputs',
-      'row jacks'
+      'legacy-inlets',
+      'legacy-outlets',
+      'legacy-analog-inputs',
+      'legacy-jacks'
     ])
   })
 

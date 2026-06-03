@@ -12,7 +12,7 @@ describe('<BlankPanel />', () => {
     const responsiveContainer = element.props.children
     const placeholder = responsiveContainer.props.children
 
-    expect(element.props.className).toBe('container')
+    expect(element.props.className).toBe('reefpi-view')
     expect(responsiveContainer.props.height).toBe(200)
     expect(responsiveContainer.props.width).toBe('100%')
     expect(placeholder.type).toBe('p')

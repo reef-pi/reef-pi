@@ -35,7 +35,7 @@ export class RawHealthChart extends React.Component {
       })
       .map(m => ({ ...m, ts: timestampToEpoch(m.time) }))
     return (
-      <div className='container'>
+      <div className='reefpi-view'>
         <span className='h6'>{i18next.t('health_chart:cpu_memory')} ({i18next.t('health_chart:' + this.props.trend)})</span>
         <ResponsiveContainer height={this.props.height} width='100%'>
           <LineChart data={healthStats}>

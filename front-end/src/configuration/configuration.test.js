@@ -127,7 +127,7 @@ describe('Configuration ui', () => {
       switchDisplay: jest.fn(),
       setBrightness: jest.fn()
     })
-    expect(component.render().props.className).toBe('container')
+    expect(component.render().props.className).toBe('reefpi-view')
   })
 
   it('<Display /> mounts with no config (getDerivedStateFromProps guard)', () => {

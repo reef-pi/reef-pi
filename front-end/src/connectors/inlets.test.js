@@ -114,7 +114,7 @@ describe('<Inlets />', () => {
 
     const tree = component.render()
     expect(tree.type).toBe('div')
-    expect(tree.props.className).toBe('container')
+    expect(tree.props.className).toBe('reefpi-view')
     const addButton = tree.props.children[1].props.children.props.children
     expect(addButton.props.id).toBe('add_inlet')
     expect(addButton.props.children).toBe('+')

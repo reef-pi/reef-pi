@@ -1,7 +1,6 @@
 import React from 'react'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
 import i18n from 'utils/i18n'
-import BooleanSelect from '../ui_components/boolean_select'
 import { Field as FormField, Input, Select } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
 
 const formGridStyle = {

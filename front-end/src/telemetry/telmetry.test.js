@@ -189,7 +189,7 @@ describe('Telemetry UI', () => {
     m.state = { ...m.state, ...Main.getDerivedStateFromProps({ config: m.props.config }, m.state) }
     const notification = m.notification()
 
-    expect(notification.props.className).toBe('row')
+    expect(notification.props.className).toBe('telemetry-notification-row')
     expect(renderToStaticMarkup(notification)).toContain('send-test-email')
 
     m.handleTestMessage()

@@ -18,7 +18,7 @@ export default class FixedChart extends React.Component {
     data[0][ch.name] = ch.profile.config.value
 
     return (
-      <div className='container'>
+      <div className='reefpi-view'>
         <span className='h6'>Light - {ch.name}</span>
         <ResponsiveContainer height={this.props.height} width='100%'>
           <BarChart data={data}>
