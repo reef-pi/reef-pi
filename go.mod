@@ -29,7 +29,7 @@ require (
 
 require (
 	github.com/getkin/kin-openapi v0.140.0
-	github.com/go-chi/chi/v5 v5.3.0
+	github.com/go-chi/chi/v5 v5.3.1
 	github.com/oapi-codegen/runtime v1.4.0
 )
 
