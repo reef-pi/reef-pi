@@ -48,7 +48,8 @@ type solar struct {
 func (s *solar) Name() string { return _solarProfileName }
 
 func (s *solar) refresh(now time.Time) {
-	today := now.Truncate(24 * time.Hour)
+	y, m, d := now.Date()
+	today := time.Date(y, m, d, 0, 0, 0, 0, now.Location()) // local day, same as the `date` we send
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	if !s.cacheDate.IsZero() && s.cacheDate.Equal(today) {

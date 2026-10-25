@@ -112,3 +112,22 @@ func TestSolar_InvalidConfig(t *testing.T) {
 		t.Error("expected error for invalid longitude")
 	}
 }
+
+func TestSolar_CacheUsesLocalDay(t *testing.T) {
+	loc, err := time.LoadLocation("America/Los_Angeles")
+	if err != nil {
+		t.Skip("time zone data not available:", err)
+	}
+	fetcher := func(lat, lng float64, date time.Time) (time.Time, time.Time, error) {
+		y, m, d := date.Date()
+		return time.Date(y, m, d, 7, 0, 0, 0, date.Location()), time.Date(y, m, d, 18, 0, 0, 0, date.Location()), nil
+	}
+	cfg, _ := json.Marshal(solarConfig{Latitude: 34.05, Longitude: -118.24})
+	s, _ := SolarWithFetcher(cfg, 0, 100, fetcher)
+
+	// 17:30 in Los Angeles is already the next day in UTC.
+	s.Get(time.Date(2026, 10, 24, 17, 30, 0, 0, loc))
+	if v := s.Get(time.Date(2026, 10, 25, 12, 0, 0, 0, loc)); v <= 0 {
+		t.Errorf("noon on the next local day: Get() = %v, want > 0 (stale sunrise/sunset from the previous day)", v)
+	}
+}
