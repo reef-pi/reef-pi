@@ -88,7 +88,7 @@ All stories live under `preview/primitives/`. Open with `?theme=dark` or `?theme
 
 ## Components (E3 · Dashboard v2)
 
-All stories live under `preview/dashboard/`. Flag: `dashboard_v2`. Open with `?theme=dark` or `?theme=actinic` for theme verification.
+All stories live under `preview/dashboard/`. Open with `?theme=dark` or `?theme=actinic` for theme verification.
 
 | Component | Stories | Preview card |
 |---|---|---|
@@ -96,7 +96,6 @@ All stories live under `preview/dashboard/`. Flag: `dashboard_v2`. Open with `?t
 | `TemperatureTile` | within range / too high / too low / loading | [dashboard/temperature-tile.html](dashboard/temperature-tile.html) |
 | `PhTile` + `AtoTile` | nominal / warning / critical / loading | [dashboard/ph-ato-tiles.html](dashboard/ph-ato-tiles.html) |
 | `EquipmentStrip` | mixed states / 12-item overflow / empty | [dashboard/equipment-strip.html](dashboard/equipment-strip.html) |
-| `DashboardV2` + flag wire-up | flag on / flag off (children fallback) | [dashboard/dashboard-v2-flag.html](dashboard/dashboard-v2-flag.html) |
 
 ## Components (E4 · Control trust)
 

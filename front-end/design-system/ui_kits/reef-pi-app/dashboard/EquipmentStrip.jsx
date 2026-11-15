@@ -5,8 +5,6 @@ import ToggleSwitch from '../primitives/ToggleSwitch'
 /*
  * Full-width 96px horizontal-scroll equipment footer.
  * Items sorted by last-toggled desc; scroll-snap per item.
- * Behind dashboard_v2 flag.
- *
  * Usage:
  *   <EquipmentStrip items={[{id,name,state,lastToggledAt,onSince}]} onToggle={(id,next)=>{}} />
  */

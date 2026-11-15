@@ -91,9 +91,7 @@ export class RawTemperatureMain extends React.Component {
     this.props.fetchAnalogInputs()
     this.props.probes.forEach(probe => {
       this.props.readTC(probe.id)
-      if (window.FEATURE_FLAGS?.dashboard_v2) {
-        this.props.fetchTCUsage(probe.id)
-      }
+      this.props.fetchTCUsage(probe.id)
     })
   }
 
@@ -153,11 +151,11 @@ export class RawTemperatureMain extends React.Component {
           probe.enable = !probe.enable
           this.props.update(probe.id, probe)
         }
-        const enhancedView = !!window.FEATURE_FLAGS?.dashboard_v2 && (
+        const enhancedView = (
           <TemperaturePrimitives
             probe={probe}
-            usage={this.props.tcUsage[probe.id]}
-            currentReading={this.props.currentReading[probe.id]}
+            usage={(this.props.tcUsage || {})[probe.id]}
+            currentReading={(this.props.currentReading || {})[probe.id]}
           />
         )
         return (
@@ -174,7 +172,7 @@ export class RawTemperatureMain extends React.Component {
             {enhancedView}
             <TemperatureForm
               tc={probe}
-              showChart={!window.FEATURE_FLAGS?.dashboard_v2}
+              showChart={false}
               sensors={this.props.sensors}
               analogInputs={this.props.analogInputs}
               equipment={this.props.equipment}

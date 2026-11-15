@@ -59,9 +59,7 @@ export class RawDoser extends React.Component {
   }
 
   componentDidMount () {
-    if (window.FEATURE_FLAGS?.dashboard_v2) {
-      this.props.dosers.forEach(doser => this.props.fetchDoserUsage(doser.id))
-    }
+    this.props.dosers.forEach(doser => this.props.fetchDoserUsage(doser.id))
   }
 
   handleToggleAddDoserDiv () {
@@ -89,10 +87,10 @@ export class RawDoser extends React.Component {
             doser.regiment.enable = !doser.regiment.enable
             this.props.update(doser.id, doser)
           }
-          const enhancedView = !!window.FEATURE_FLAGS?.dashboard_v2 && (
+          const enhancedView = (
             <DoserPrimitives
               doser={doser}
-              usage={this.props.doserUsage[doser.id]}
+              usage={(this.props.doserUsage || {})[doser.id]}
             />
           )
           return (

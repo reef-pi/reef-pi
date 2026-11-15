@@ -8,19 +8,7 @@ import AtoTile from './AtoTile'
 import EquipmentStrip from './EquipmentStrip'
 import { useAlertsStore } from '../hooks/useAlertsStore'
 
-/*
- * Composed dashboard layout for the dashboard_v2 flag.
- *
- * Usage (in the host app):
- *   <DashboardV2 equipment={items} onToggle={fn} sseEndpoint="/api/alerts">
- *     <LegacyDashboard />   ← rendered when flag is off
- *   </DashboardV2>
- *
- * The component self-guards: when window.FEATURE_FLAGS?.dashboard_v2 is falsy
- * it renders children (the original dashboard) unchanged.
- *
- * Removal ticket: schedule for 2 releases after QA sign-off (flag flipped to true).
- */
+/* Composed dashboard layout for the reef-pi overview. */
 
 // Maps tile metric keys → alert store title keywords for matching
 const METRIC_KEYWORDS = {
@@ -211,16 +199,11 @@ export default function DashboardV2 ({
   onConfigure,
   sseEndpoint,
   globalRange,
-  targetAtoLevel,
-  children
+  targetAtoLevel
 }) {
   const { alerts } = useAlertsStore({ sseEndpoint })
   const [configRevision, setConfigRevision] = useState(0)
   const [alertCenterOpen, setAlertCenterOpen] = useState(false)
-
-  if (!window.FEATURE_FLAGS?.dashboard_v2) {
-    return children ?? null
-  }
 
   const dashboardConfig = useMemo(() => readDashboardConfig(), [configRevision])
   const tempState = tileStateFor(dashboardConfig, 'temperature', temperatureControllers)
@@ -306,6 +289,5 @@ DashboardV2.propTypes = {
   onConfigure: PropTypes.func,
   sseEndpoint: PropTypes.string,
   globalRange: PropTypes.string,
-  targetAtoLevel: PropTypes.number,
-  children: PropTypes.node
+  targetAtoLevel: PropTypes.number
 }

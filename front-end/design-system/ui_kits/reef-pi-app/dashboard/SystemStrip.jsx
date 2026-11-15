@@ -1,11 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-if (!window.FEATURE_FLAGS?.dashboard_v2) {
-  // Guard: component is a no-op until the dashboard_v2 flag is enabled.
-  // Wired in issue #14.
-}
-
 /** Derives health pill state from a list of alert objects. */
 function healthFromAlerts (alerts) {
   if (!alerts || alerts.length === 0) return 'ok'

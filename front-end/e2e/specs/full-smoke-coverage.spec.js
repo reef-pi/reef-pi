@@ -24,26 +24,15 @@ async function expectPageText (page, values) {
 }
 
 async function expectDashboardSmokeContent (page) {
-  const dashboardV2 = page.getByTestId('smoke-dashboard-v2')
-  if (await dashboardV2.count()) {
-    await expect(dashboardV2).toBeVisible()
-    await expectPageText(page, [
-      'Temperature',
-      'pH',
-      'ATO',
-      'Return',
-      'Light',
-      'Heater'
-    ])
-  } else {
-    await expectPageText(page, [
-      'Biocube29 Temperature',
-      'Biocube29 pH',
-      'Biocube29 ATO',
-      'Kessil A360'
-    ])
-    await expect(page.getByTestId('smoke-dashboard-configure')).toBeVisible()
-  }
+  await expect(page.getByTestId('smoke-dashboard-v2')).toBeVisible()
+  await expectPageText(page, [
+    'Temperature',
+    'pH',
+    'ATO',
+    'Return',
+    'Light',
+    'Heater'
+  ])
 }
 
 test('full smoke configuration covers the major reef-pi modules', async ({ page, baseURL }) => {

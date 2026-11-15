@@ -18,78 +18,22 @@ describe('Dashboard', () => {
     })
   }
 
-  it('<Main /> smoke test via Provider (no config)', () => {
-    const props = { config: undefined, fetchDashboard: jest.fn() }
+  it('<Main /> renders the permanent dashboard', () => {
+    const props = { updateEquipment: jest.fn() }
     const component = new RawDashboardMain(props)
-    component.componentDidMount()
-    expect(props.fetchDashboard).toHaveBeenCalled()
-    expect(component.charts()).toBeUndefined()
-  })
-
-  it('<Main /> renders with empty grid_details', () => {
-    const config = { row: 1, column: 1, width: 400, height: 200 }
-    const component = new RawDashboardMain({ config, fetchDashboard: jest.fn() })
-    expect(component.charts()).toBeUndefined()
-  })
-
-  it('<Main /> renders all chart types (switch coverage)', () => {
-    const config = {
-      row: 3,
-      column: 4,
-      width: 400,
-      height: 200,
-      grid_details: [
-        [
-          { type: 'lights', id: '1' },
-          { type: 'equipment_barchart', id: '1' },
-          { type: 'equipment_ctrlpanel', id: '1' },
-          { type: 'blank_panel', id: '1' }
-        ],
-        [
-          { type: 'ato', id: '1' },
-          { type: 'journal', id: '1' },
-          { type: 'ph_current', id: '1' },
-          { type: 'ph_historical', id: '1' }
-        ],
-        [
-          { type: 'ph_usage', id: '1' },
-          { type: 'doser', id: '1' },
-          { type: 'health', id: 'current' },
-          { type: 'temp_current', id: '1' }
-        ]
-      ]
-    }
-    const component = new RawDashboardMain({ config, fetchDashboard: jest.fn() })
-    const rows = component.charts()
-    expect(rows).toHaveLength(3)
-    expect(rows[0].props.children).toHaveLength(4)
-    expect(rows[1].props.children).toHaveLength(4)
-    expect(rows[2].props.children).toHaveLength(4)
-  })
-
-  it('<Main /> renders temp_historical and default unknown types', () => {
-    const config = {
-      row: 1,
-      column: 2,
-      width: 400,
-      height: 200,
-      grid_details: [
-        [{ type: 'temp_historical', id: '1' }, { type: 'unknown_widget', id: '1' }]
-      ]
-    }
-    const component = new RawDashboardMain({ config, fetchDashboard: jest.fn() })
-    const rows = component.charts()
-    expect(rows).toHaveLength(1)
-    expect(rows[0].props.children).toHaveLength(1)
+    expect(component.render().props.sseEndpoint).toBe('/api/alerts')
   })
 
   it('<Main /> handleToggle switches to config view', () => {
     const config = { row: 1, column: 1, width: 400, height: 200, grid_details: [[]] }
-    const component = new RawDashboardMain({ config, fetchDashboard: jest.fn() })
+    const component = new RawDashboardMain({ config, updateEquipment: jest.fn() })
     component.setState = update => { component.state = { ...component.state, ...update } }
 
-    click(component.render().props.children.props.children[1].props.children)
+    component.render().props.onConfigure()
     expect(component.state.showConfig).toBe(true)
+
+    click(component.render().props.children[1])
+    expect(component.state.showConfig).toBe(false)
   })
 
   it('<Grid />', () => {

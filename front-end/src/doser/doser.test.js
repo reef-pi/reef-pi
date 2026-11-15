@@ -293,21 +293,11 @@ describe('Doser ui', () => {
     expect(tree).not.toBeNull()
   })
 
-  it('<Main /> componentDidMount fetches usage per doser when dashboard_v2 flag is on', () => {
-    window.FEATURE_FLAGS = { dashboard_v2: true }
+  it('<Main /> componentDidMount fetches usage per doser', () => {
     const fetchDoserUsage = jest.fn()
     const component = makeComponent({ fetchDoserUsage })
     component.componentDidMount()
     expect(fetchDoserUsage).toHaveBeenCalledWith('1')
-    window.FEATURE_FLAGS = {}
-  })
-
-  it('<Main /> componentDidMount skips usage fetch when dashboard_v2 flag is off', () => {
-    window.FEATURE_FLAGS = {}
-    const fetchDoserUsage = jest.fn()
-    const component = makeComponent({ fetchDoserUsage })
-    component.componentDidMount()
-    expect(fetchDoserUsage).not.toHaveBeenCalled()
   })
 
   it('<Main /> render returns EmptyState when dosers list is empty', () => {
@@ -317,7 +307,6 @@ describe('Doser ui', () => {
   })
 
   it('<Main /> DoserPrimitives renders sparkline with usage data', () => {
-    window.FEATURE_FLAGS = { dashboard_v2: true }
     const now = new Date()
     const dosers = [makeDoser()]
     const component = makeComponent({
@@ -332,17 +321,14 @@ describe('Doser ui', () => {
     const html = renderToStaticMarkup(primitives)
     expect(html).toContain('doser-1')
     expect(html).toContain('reefpi-range-selector')
-    window.FEATURE_FLAGS = {}
   })
 
   it('<Main /> DoserPrimitives returns null when usage history is absent', () => {
-    window.FEATURE_FLAGS = { dashboard_v2: true }
     const component = makeComponent({
       doserUsage: { 1: {} },
       fetchDoserUsage: jest.fn()
     })
     const primitives = component.doserList()[0].props.children[0]
     expect(renderToStaticMarkup(primitives)).toBe('')
-    window.FEATURE_FLAGS = {}
   })
 })
