@@ -1,9 +1,12 @@
 package device_manager
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"strings"
+	"sync"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/reef-pi/hal"
@@ -22,14 +25,61 @@ import (
 )
 
 type DeviceManager struct {
-	bus       i2c.Bus
-	store     storage.Store
-	jacks     *connectors.Jacks
-	outlets   *connectors.Outlets
-	inlets    *connectors.Inlets
-	ais       *connectors.AnalogInputs
-	drivers   *drivers.Drivers
-	telemetry telemetry.Telemetry
+	bus                i2c.Bus
+	store              storage.Store
+	jacks              *connectors.Jacks
+	outlets            *connectors.Outlets
+	inlets             *connectors.Inlets
+	ais                *connectors.AnalogInputs
+	drivers            *drivers.Drivers
+	telemetry          telemetry.Telemetry
+	inletMonitorCtx    context.Context
+	inletMonitorCancel context.CancelFunc
+	inletMonitorWG     sync.WaitGroup
+	inletMonitorOnce   sync.Once
+	inletStates        inletStatePublisher
+}
+
+// Inlets expose synchronous reads only, so publish their state from a small
+// background sampler. ATO keeps its existing cadence and topic; this sampler
+// adds the common inlet topic for consumers that need inlet-level telemetry.
+const inletTelemetryInterval = time.Second
+
+type metricEmitter interface {
+	EmitMetric(string, string, float64)
+}
+
+type inletState struct {
+	name  string
+	value int
+}
+
+type inletStatePublisher struct {
+	last map[string]inletState
+}
+
+func (p *inletStatePublisher) publish(inlets *connectors.Inlets, t metricEmitter) {
+	items, err := inlets.List()
+	if err != nil {
+		log.Printf("device-manager: failed to list inlets for telemetry: %v", err)
+		return
+	}
+	if p.last == nil {
+		p.last = make(map[string]inletState)
+	}
+	for _, inlet := range items {
+		value, err := inlets.Read(inlet.ID)
+		if err != nil {
+			log.Printf("device-manager: failed to read inlet %s for telemetry: %v", inlet.Name, err)
+			continue
+		}
+		state := inletState{name: inlet.Name, value: value}
+		if previous, ok := p.last[inlet.ID]; ok && previous == state {
+			continue
+		}
+		t.EmitMetric("inlet", inlet.Name+"-state", float64(value))
+		p.last[inlet.ID] = state
+	}
 }
 
 func New(s settings.Settings, store storage.Store, t telemetry.Telemetry) *DeviceManager {
@@ -50,6 +100,7 @@ func New(s settings.Settings, store storage.Store, t telemetry.Telemetry) *Devic
 		log.Println("ERROR: Invalid  RPI PWM frequency:", s.RPI_PWMFreq, " falling back on default 100Hz")
 		s.RPI_PWMFreq = 100
 	}
+	monitorCtx, monitorCancel := context.WithCancel(context.Background())
 
 	drvrs, err := drivers.NewDrivers(s, bus, store, t)
 	if err != nil {
@@ -59,13 +110,15 @@ func New(s settings.Settings, store storage.Store, t telemetry.Telemetry) *Devic
 	log.Println("device-manager subsystem initialized with", drvrs.Size(), "drivers")
 
 	dm := &DeviceManager{
-		bus:       bus,
-		drivers:   drvrs,
-		jacks:     connectors.NewJacks(drvrs, store),
-		outlets:   connectors.NewOutlets(drvrs, store),
-		inlets:    connectors.NewInlets(drvrs, store),
-		ais:       connectors.NewAnalogInputs(drvrs, store),
-		telemetry: t,
+		bus:                bus,
+		drivers:            drvrs,
+		jacks:              connectors.NewJacks(drvrs, store),
+		outlets:            connectors.NewOutlets(drvrs, store),
+		inlets:             connectors.NewInlets(drvrs, store),
+		ais:                connectors.NewAnalogInputs(drvrs, store),
+		telemetry:          t,
+		inletMonitorCtx:    monitorCtx,
+		inletMonitorCancel: monitorCancel,
 	}
 	drvrs.OnCreate = func(id string) {
 		if err := dm.Provision(id); err != nil {
@@ -88,7 +141,25 @@ func (dm *DeviceManager) Setup() error {
 	if err := dm.ais.Setup(); err != nil {
 		return err
 	}
+	dm.inletMonitorOnce.Do(func() {
+		dm.inletMonitorWG.Add(1)
+		go dm.monitorInlets()
+	})
 	return nil
+}
+
+func (dm *DeviceManager) monitorInlets() {
+	defer dm.inletMonitorWG.Done()
+	ticker := time.NewTicker(inletTelemetryInterval)
+	defer ticker.Stop()
+	for {
+		dm.inletStates.publish(dm.inlets, dm.telemetry)
+		select {
+		case <-dm.inletMonitorCtx.Done():
+			return
+		case <-ticker.C:
+		}
+	}
 }
 
 func (dm *DeviceManager) Inlets() *connectors.Inlets {
@@ -189,6 +260,8 @@ func (dm *DeviceManager) provisionHandler(w http.ResponseWriter, r *http.Request
 }
 
 func (dm *DeviceManager) Close() error {
+	dm.inletMonitorCancel()
+	dm.inletMonitorWG.Wait()
 	if err := dm.drivers.Close(); err != nil {
 		return err
 	}

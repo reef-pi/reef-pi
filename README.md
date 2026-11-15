@@ -33,6 +33,14 @@ reef-pi is an [award winning](https://makerfaire.com/maker/entry/60569/), modula
 - Email alerts, charts, and dashboard capabilities. [Adafruit.io](https://io.adafruit.com/) based telemetry for monitoring.
 - On-demand or automatic tank photo capture with google drive upload using pi camera
 
+## MQTT inlet telemetry
+
+When MQTT telemetry is enabled, reef-pi publishes inlet state as
+`{prefix}/inlet_<inlet-name>_state` (with the name normalized to lowercase
+underscores). State is sampled once per second and published initially and
+whenever it changes. ATO controllers continue publishing their existing
+`{prefix}/ato_<ato-name>_state` topic for compatibility.
+
 ## Author
  -[Ranjib Dey](https://ranjib.github.io/)
 
