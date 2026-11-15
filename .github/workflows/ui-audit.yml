@@ -30,7 +30,7 @@ on:
 jobs:
   ui-audit:
     name: UI Audit
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-go@v6
