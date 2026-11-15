@@ -154,8 +154,7 @@ describe('ATO Main', () => {
     expect(update).toHaveBeenCalledWith('1', expect.objectContaining({ enable: false }))
   })
 
-  it('fetches usage and renders dashboard primitives behind feature flag', () => {
-    window.FEATURE_FLAGS = { dashboard_v2: true }
+  it('fetches usage and renders monitoring primitives', () => {
     const fetchATOUsage = jest.fn()
     const now = new Date()
     const component = new RawATOMain(makeProps({
@@ -177,11 +176,9 @@ describe('ATO Main', () => {
     expect(children[0].props.ato).toBe(ato)
     expect(children[0].props.usage.historical).toHaveLength(2)
     expect(children[1].props.data).toBe(ato)
-    window.FEATURE_FLAGS = {}
   })
 
   it('renders dashboard primitives with filtered historical usage', () => {
-    window.FEATURE_FLAGS = { dashboard_v2: true }
     const now = new Date()
     const component = new RawATOMain(makeProps({
       atoUsage: {
@@ -200,15 +197,12 @@ describe('ATO Main', () => {
 
     expect(html).toContain('ato-1')
     expect(html).toContain('reefpi-range-selector')
-    window.FEATURE_FLAGS = {}
   })
 
   it('omits dashboard primitives when usage history is not available', () => {
-    window.FEATURE_FLAGS = { dashboard_v2: true }
     const component = new RawATOMain(makeProps({ atoUsage: { 1: {} } }))
 
     expect(renderToStaticMarkup(component.probeList()[0].props.children[0])).toBe('')
-    window.FEATURE_FLAGS = {}
   })
 
   it('render shows EmptyState when atos list is empty', () => {

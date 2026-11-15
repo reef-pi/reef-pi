@@ -82,9 +82,7 @@ class ph extends React.Component {
 
   componentDidMount () {
     this.props.fetchPhProbes()
-    if (window.FEATURE_FLAGS?.dashboard_v2) {
-      this.props.probes.forEach(probe => this.props.fetchProbeReadings(probe.id))
-    }
+    this.props.probes.forEach(probe => this.props.fetchProbeReadings?.(probe.id))
   }
 
   probeList () {
@@ -108,11 +106,11 @@ class ph extends React.Component {
             {i18next.t('ph:calibrate')}
           </Button>
         )
-        const enhancedView = !!window.FEATURE_FLAGS?.dashboard_v2 && (
+        const enhancedView = (
           <PhPrimitives
             probe={probe}
-            readings={this.props.phReadings[probe.id]}
-            currentReading={this.props.currentReading[probe.id]}
+            readings={(this.props.phReadings || {})[probe.id]}
+            currentReading={(this.props.currentReading || {})[probe.id]}
           />
         )
         return (

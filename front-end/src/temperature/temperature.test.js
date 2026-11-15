@@ -204,8 +204,7 @@ describe('Temperature controller ui', () => {
     expect(probes.map(probe => probe.name)).toEqual(['Water B', 'Water A'])
   })
 
-  it('<Main /> fetches usage and renders dashboard primitives behind feature flag', () => {
-    window.FEATURE_FLAGS = { dashboard_v2: true }
+  it('<Main /> fetches usage and renders monitoring primitives', () => {
     const fetchTCUsage = jest.fn()
     const now = new Date()
     const probe = {
@@ -253,11 +252,9 @@ describe('Temperature controller ui', () => {
     expect(children[0].props.usage.current).toHaveLength(2)
     expect(children[0].props.currentReading).toBe(78.2)
     expect(children[1].props.showChart).toBe(false)
-    window.FEATURE_FLAGS = {}
   })
 
   it('<Main /> renders dashboard primitives with readings and threshold gauge', () => {
-    window.FEATURE_FLAGS = { dashboard_v2: true }
     const now = new Date()
     const probe = {
       id: '1',
@@ -302,11 +299,9 @@ describe('Temperature controller ui', () => {
     expect(html).toContain('temp-1')
     expect(html).toContain('Water')
     expect(html).toContain('°C')
-    window.FEATURE_FLAGS = {}
   })
 
   it('<Main /> omits dashboard primitives when usage is unavailable', () => {
-    window.FEATURE_FLAGS = { dashboard_v2: true }
     const component = new RawTemperatureMain({
       probes: [{ id: '1', name: 'Water', chart: {}, enable: false, notify: { enable: false } }],
       currentReading: {},
@@ -328,7 +323,6 @@ describe('Temperature controller ui', () => {
     })
 
     expect(renderToStaticMarkup(component.probeList()[0].props.children[0])).toBe('')
-    window.FEATURE_FLAGS = {}
   })
 
   it('<Main /> toggles add probe form', () => {

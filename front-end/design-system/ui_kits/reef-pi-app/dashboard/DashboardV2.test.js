@@ -1,8 +1,5 @@
-import fs from 'fs'
-import path from 'path'
 import React, { act } from 'react'
 import { createRoot } from 'react-dom/client'
-import { renderToStaticMarkup } from 'react-dom/server'
 
 let mockAlerts = []
 jest.mock('../hooks/useAlertsStore', () => ({
@@ -40,9 +37,6 @@ import DashboardV2 from './DashboardV2'
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true
 
-const repoRoot = path.resolve(__dirname, '../../../../../')
-
-
 function renderDashboard (props = {}) {
   const container = document.createElement('div')
   document.body.appendChild(container)
@@ -66,45 +60,13 @@ function dataAlert (container, testId) {
   return JSON.parse(container.querySelector(`[data-testid="${testId}"]`).getAttribute('data-alert'))
 }
 
-describe('dashboard_v2 feature flag wiring', () => {
-  it('has dashboard_v2 enabled in the shipped server-rendered feature config', () => {
-    const html = fs.readFileSync(path.join(repoRoot, 'front-end/assets/home.html'), 'utf8')
-
-    expect(html).toContain('window.FEATURE_FLAGS')
-    expect(html).toContain('dashboard_v2: true')
-    expect(html).not.toContain('dashboard_v2: false')
-  })
-
-  it('exposes dashboard_v2 in the design-system Tweaks object and mirrors it to window.FEATURE_FLAGS', () => {
-    const html = fs.readFileSync(path.join(repoRoot, 'front-end/design-system/ui_kits/reef-pi-app/index.html'), 'utf8')
-
-    expect(html).toContain('"dashboardV2": false')
-    expect(html).toContain('window.FEATURE_FLAGS')
-    expect(html).toContain('dashboard_v2: TWEAKS.dashboardV2')
-    expect(html).toContain('Dashboard v2')
-  })
-})
-
 describe('design-system DashboardV2', () => {
   beforeEach(() => {
     mockAlerts = []
     window.localStorage.clear()
   })
 
-  afterEach(() => {
-    window.FEATURE_FLAGS = {}
-  })
-
-  it('renders children unchanged when dashboard_v2 is disabled', () => {
-    window.FEATURE_FLAGS = { dashboard_v2: false }
-    expect(renderToStaticMarkup(
-      <DashboardV2><span>Legacy dashboard</span></DashboardV2>
-    )).toContain('Legacy dashboard')
-    expect(renderToStaticMarkup(<DashboardV2 />)).toBe('')
-  })
-
-  it('composes dashboard v2 sections when enabled', () => {
-    window.FEATURE_FLAGS = { dashboard_v2: true }
+  it('composes dashboard sections', () => {
     const onToggle = jest.fn()
     const equipment = [{ id: 'pump', name: 'Pump', state: 'on' }]
     const { container, cleanup } = renderDashboard({
@@ -115,8 +77,7 @@ describe('design-system DashboardV2', () => {
       onToggle,
       sseEndpoint: '/api/alerts',
       globalRange: '7d',
-      targetAtoLevel: 50,
-      children: <span>Legacy dashboard</span>
+      targetAtoLevel: 50
     })
 
     expect(container.querySelector('[data-testid="smoke-dashboard-v2"]')).not.toBeNull()
@@ -131,7 +92,6 @@ describe('design-system DashboardV2', () => {
   })
 
   it('passes active alerts into the system strip and opens the alert center from the strip', () => {
-    window.FEATURE_FLAGS = { dashboard_v2: true }
     mockAlerts = [
       { id: '1', title: 'Temperature high', detail: 'Water temperature exceeded limit', severity: 'critical', ts: 101 },
       { id: '2', title: 'Old alert', detail: 'Already handled', severity: 'warn', ts: 102, acknowledged: true }
@@ -156,7 +116,6 @@ describe('design-system DashboardV2', () => {
   })
 
   it('maps unacknowledged alert-center messages to matching tiles', () => {
-    window.FEATURE_FLAGS = { dashboard_v2: true }
     mockAlerts = [
       { title: 'Temperature high', detail: 'Water temperature exceeded limit', severity: 'critical', ts: 101 },
       { title: 'pH warning', detail: '', severity: 'warn', ts: 102 },
@@ -192,7 +151,6 @@ describe('design-system DashboardV2', () => {
   })
 
   it('leaves tile alerts unset when no alert keywords match', () => {
-    window.FEATURE_FLAGS = { dashboard_v2: true }
     mockAlerts = [
       { title: 'Camera offline', detail: 'No recent images', severity: 'critical', ts: 105 }
     ]

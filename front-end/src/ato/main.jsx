@@ -62,9 +62,7 @@ export class RawATOMain extends React.Component {
     this.props.fetchATOs()
     this.props.fetchEquipment()
     this.props.fetchInlets()
-    if (window.FEATURE_FLAGS?.dashboard_v2) {
-      this.props.atos.forEach(ato => this.props.fetchATOUsage(ato.id))
-    }
+    this.props.atos.forEach(ato => this.props.fetchATOUsage(ato.id))
   }
 
   handleSubmit (values) {
@@ -139,7 +137,7 @@ export class RawATOMain extends React.Component {
             {i18n.t('ato:reset_usage')}
           </Button>
         )
-        const enhancedView = !!window.FEATURE_FLAGS?.dashboard_v2 && (
+        const enhancedView = (
           <AtoPrimitives
             ato={probe}
             usage={this.props.atoUsage[probe.id]}

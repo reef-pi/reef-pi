@@ -448,8 +448,7 @@ describe('Ph ui', () => {
     instance.componentWillUnmount()
   })
 
-  it('<Main /> fetches probe readings and renders primitives under dashboard_v2 flag', () => {
-    window.FEATURE_FLAGS = { dashboard_v2: true }
+  it('<Main /> fetches probe readings and renders monitoring primitives', () => {
     const fetchProbeReadings = jest.fn()
     const probe = { id: '1', name: 'Tank pH', enable: false, min: 7.8, max: 8.3, notify: { enable: true, min: 7.5, max: 8.5 }, notify_enable: false, control: false }
     const now = new Date()
@@ -475,11 +474,9 @@ describe('Ph ui', () => {
     expect(primitives.props.probe).toBe(probe)
     expect(primitives.props.readings.current).toHaveLength(2)
     expect(primitives.props.currentReading).toBe(8.1)
-    window.FEATURE_FLAGS = {}
   })
 
   it('<Main /> renders pH dashboard primitives with readings and threshold gauge', () => {
-    window.FEATURE_FLAGS = { dashboard_v2: true }
     const now = new Date()
     const probe = { id: '1', name: 'Tank pH', enable: false, min: 7.8, max: 8.3, notify: { enable: true, min: 7.5, max: 8.5 }, control: false }
     const component = new RawPhMain(createProps({
@@ -501,11 +498,9 @@ describe('Ph ui', () => {
     expect(html).toContain('ph-1')
     expect(html).toContain('Tank pH')
     expect(html).toContain('pH')
-    window.FEATURE_FLAGS = {}
   })
 
   it('<Main /> omits pH dashboard primitives when readings are unavailable', () => {
-    window.FEATURE_FLAGS = { dashboard_v2: true }
     const probe = { id: '1', name: 'Tank pH', enable: false, notify: { enable: false }, control: false }
     const component = new RawPhMain(createProps({
       probes: [probe],
@@ -514,7 +509,6 @@ describe('Ph ui', () => {
     }))
 
     expect(renderToStaticMarkup(component.probeList()[0].props.children[0])).toBe('')
-    window.FEATURE_FLAGS = {}
   })
 
   it('<Main /> renders EmptyState with calibration modal slot when no probes', () => {
@@ -553,7 +547,6 @@ describe('Ph ui', () => {
   })
 
   it('<Main /> PhPrimitives renders sparkline and range selector with readings', () => {
-    window.FEATURE_FLAGS = { dashboard_v2: true }
     const now = new Date()
     const probe = { id: '1', name: 'Tank pH', enable: false, min: 7.8, max: 8.3, notify: { enable: true, min: 7.5, max: 8.5 } }
     const component = new RawPhMain(createProps({
@@ -573,11 +566,9 @@ describe('Ph ui', () => {
     const html = renderToStaticMarkup(primitives)
     expect(html).toContain('ph-1')
     expect(html).toContain('reefpi-range-selector')
-    window.FEATURE_FLAGS = {}
   })
 
   it('<Main /> PhPrimitives returns empty when readings are absent', () => {
-    window.FEATURE_FLAGS = { dashboard_v2: true }
     const probe = { id: '1', name: 'Tank pH', enable: false, min: 7.8, max: 8.3, notify: { enable: false } }
     const component = new RawPhMain(createProps({
       probes: [probe],
@@ -587,6 +578,5 @@ describe('Ph ui', () => {
     }))
     const primitives = component.probeList()[0].props.children[0]
     expect(renderToStaticMarkup(primitives)).toBe('')
-    window.FEATURE_FLAGS = {}
   })
 })
