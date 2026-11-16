@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import ColorPicker from '../ui_components/color_picker'
-import { NameFor, ErrorFor, ShowError } from '../utils/validation_helper'
+import { NameFor, ErrorMessage, ShowError } from '../utils/validation_helper'
 import { showError, showUpdateSuccessful } from 'utils/alert'
 import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 import { Field as FormField, Input, Select } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
@@ -117,7 +117,7 @@ const EditTemperature = ({
           <div style={{ ...gridStyle, marginBottom: 'var(--reefpi-space-md)' }}>
             <FormField
               label={i18next.t('name')}
-              error={ShowError('name', touched, errors) ? ErrorFor(errors, 'name') : undefined}
+              error={ShowError('name', touched, errors) ? ErrorMessage(errors, 'name') : undefined}
             >
               <Input
                 name='name'
@@ -135,7 +135,7 @@ const EditTemperature = ({
         <div style={gridStyle}>
           <FormField
             label={i18next.t('temperature:sensor')}
-            error={ShowError('sensor', touched, errors) ? ErrorFor(errors, 'sensor') : undefined}
+            error={ShowError('sensor', touched, errors) ? ErrorMessage(errors, 'sensor') : undefined}
           >
             <Select
               name='sensor'
@@ -155,7 +155,7 @@ const EditTemperature = ({
 
           <FormField
             label={i18next.t('temperature:analog_input')}
-            error={ShowError('analog_input', touched, errors) ? ErrorFor(errors, 'analog_input') : undefined}
+            error={ShowError('analog_input', touched, errors) ? ErrorMessage(errors, 'analog_input') : undefined}
           >
             <Select
               name='analog_input'
@@ -174,7 +174,7 @@ const EditTemperature = ({
 
           <FormField
             label={i18next.t('temperature:unit')}
-            error={ShowError('fahrenheit', touched, errors) ? ErrorFor(errors, 'fahrenheit') : undefined}
+            error={ShowError('fahrenheit', touched, errors) ? ErrorMessage(errors, 'fahrenheit') : undefined}
           >
             <Select
               name='fahrenheit'
@@ -191,7 +191,7 @@ const EditTemperature = ({
 
           <FormField
             label={i18next.t('temperature:check_frequency')}
-            error={ShowError('period', touched, errors) ? ErrorFor(errors, 'period') : undefined}
+            error={ShowError('period', touched, errors) ? ErrorMessage(errors, 'period') : undefined}
             helpText={i18next.t('second_s')}
           >
             <Input
@@ -208,7 +208,7 @@ const EditTemperature = ({
 
           <FormField
             label={i18next.t('status')}
-            error={ShowError('enable', touched, errors) ? ErrorFor(errors, 'enable') : undefined}
+            error={ShowError('enable', touched, errors) ? ErrorMessage(errors, 'enable') : undefined}
           >
             <Select
               name='enable'
@@ -227,7 +227,7 @@ const EditTemperature = ({
         <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
           <FormField
             label={i18next.t('one_shot')}
-            error={ShowError('one_shot', touched, errors) ? ErrorFor(errors, 'one_shot') : undefined}
+            error={ShowError('one_shot', touched, errors) ? ErrorMessage(errors, 'one_shot') : undefined}
           >
             <Select
               name='one_shot'
@@ -244,7 +244,7 @@ const EditTemperature = ({
 
           <FormField
             label={i18next.t('temperature:fail_safe')}
-            error={ShowError('fail_safe', touched, errors) ? ErrorFor(errors, 'fail_safe') : undefined}
+            error={ShowError('fail_safe', touched, errors) ? ErrorMessage(errors, 'fail_safe') : undefined}
           >
             <Select
               name='fail_safe'
@@ -263,7 +263,7 @@ const EditTemperature = ({
         <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
           <FormField
             label={i18next.t('temperature:chart_ymin')}
-            error={ShowError('chart.ymin', touched, errors) ? ErrorFor(errors, 'chart.ymin') : undefined}
+            error={ShowError('chart.ymin', touched, errors) ? ErrorMessage(errors, 'chart.ymin') : undefined}
           >
             <Input
               name='chart.ymin'
@@ -277,7 +277,7 @@ const EditTemperature = ({
           </FormField>
           <FormField
             label={i18next.t('temperature:chart_ymax')}
-            error={ShowError('chart.ymax', touched, errors) ? ErrorFor(errors, 'chart.ymax') : undefined}
+            error={ShowError('chart.ymax', touched, errors) ? ErrorMessage(errors, 'chart.ymax') : undefined}
           >
             <Input
               name='chart.ymax'
@@ -302,7 +302,7 @@ const EditTemperature = ({
         <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
           <FormField
             label={i18next.t('alerts')}
-            error={ShowError('alerts', touched, errors) ? ErrorFor(errors, 'alerts') : undefined}
+            error={ShowError('alerts', touched, errors) ? ErrorMessage(errors, 'alerts') : undefined}
           >
             <Select
               name='alerts'
@@ -320,7 +320,7 @@ const EditTemperature = ({
           {values.alerts !== false && (
             <FormField
               label={i18next.t('temperature:alert_below')}
-              error={ShowError('minAlert', touched, errors) ? ErrorFor(errors, 'minAlert') : undefined}
+              error={ShowError('minAlert', touched, errors) ? ErrorMessage(errors, 'minAlert') : undefined}
               helpText={temperatureUnit()}
             >
               <Input
@@ -338,7 +338,7 @@ const EditTemperature = ({
           {values.alerts !== false && (
             <FormField
               label={i18next.t('temperature:alert_above')}
-              error={ShowError('maxAlert', touched, errors) ? ErrorFor(errors, 'maxAlert') : undefined}
+              error={ShowError('maxAlert', touched, errors) ? ErrorMessage(errors, 'maxAlert') : undefined}
               helpText={temperatureUnit()}
             >
               <Input
@@ -357,7 +357,7 @@ const EditTemperature = ({
         <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
           <FormField
             label={i18next.t('temperature:control')}
-            error={ShowError('control', touched, errors) ? ErrorFor(errors, 'control') : undefined}
+            error={ShowError('control', touched, errors) ? ErrorMessage(errors, 'control') : undefined}
           >
             <Select
               name='control'
@@ -376,7 +376,7 @@ const EditTemperature = ({
 
           <FormField
             label={i18next.t('temperature:lower_function')}
-            error={ShowError('heater', touched, errors) ? ErrorFor(errors, 'heater') : undefined}
+            error={ShowError('heater', touched, errors) ? ErrorMessage(errors, 'heater') : undefined}
           >
             <Select
               name='heater'
@@ -394,7 +394,7 @@ const EditTemperature = ({
 
           <FormField
             label={i18next.t('temperature:lower_threshold')}
-            error={ShowError('min', touched, errors) ? ErrorFor(errors, 'min') : undefined}
+            error={ShowError('min', touched, errors) ? ErrorMessage(errors, 'min') : undefined}
             helpText={temperatureUnit()}
           >
             <Input
@@ -412,7 +412,7 @@ const EditTemperature = ({
         <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
           <FormField
             label={i18next.t('temperature:upper_function')}
-            error={ShowError('cooler', touched, errors) ? ErrorFor(errors, 'cooler') : undefined}
+            error={ShowError('cooler', touched, errors) ? ErrorMessage(errors, 'cooler') : undefined}
           >
             <Select
               name='cooler'
@@ -430,7 +430,7 @@ const EditTemperature = ({
 
           <FormField
             label={i18next.t('temperature:upper_threshold')}
-            error={ShowError('max', touched, errors) ? ErrorFor(errors, 'max') : undefined}
+            error={ShowError('max', touched, errors) ? ErrorMessage(errors, 'max') : undefined}
             helpText={temperatureUnit()}
           >
             <Input
@@ -448,7 +448,7 @@ const EditTemperature = ({
         <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
           <FormField
             label={i18next.t('temperature:hysteresis')}
-            error={ShowError('hysteresis', touched, errors) ? ErrorFor(errors, 'hysteresis') : undefined}
+            error={ShowError('hysteresis', touched, errors) ? ErrorMessage(errors, 'hysteresis') : undefined}
             helpText={temperatureUnit()}
           >
             <Input

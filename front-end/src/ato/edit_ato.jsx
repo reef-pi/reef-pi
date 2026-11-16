@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { ErrorFor, ShowError } from '../utils/validation_helper'
+import { ErrorMessage, ShowError } from '../utils/validation_helper'
 import { showError, showUpdateSuccessful } from 'utils/alert'
 import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 import { Field as FormField, Input, Select } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
@@ -82,7 +82,7 @@ const EditAto = ({
         <div style={{ ...gridStyle, marginBottom: 'var(--reefpi-space-md)' }}>
           <FormField
             label={i18next.t('name')}
-            error={ShowError('name', touched, errors) ? ErrorFor(errors, 'name') : undefined}
+            error={ShowError('name', touched, errors) ? ErrorMessage(errors, 'name') : undefined}
           >
             <Input
               name='name'
@@ -100,7 +100,7 @@ const EditAto = ({
       <div style={gridStyle}>
         <FormField
           label={i18next.t('inlet')}
-          error={ShowError('inlet', touched, errors) ? ErrorFor(errors, 'inlet') : undefined}
+          error={ShowError('inlet', touched, errors) ? ErrorMessage(errors, 'inlet') : undefined}
         >
           <Select
             name='inlet'
@@ -120,7 +120,7 @@ const EditAto = ({
 
         <FormField
           label={i18next.t('ato:chk_freq')}
-          error={ShowError('period', touched, errors) ? ErrorFor(errors, 'period') : undefined}
+          error={ShowError('period', touched, errors) ? ErrorMessage(errors, 'period') : undefined}
           helpText={i18next.t('second_s')}
         >
           <Input
@@ -137,7 +137,7 @@ const EditAto = ({
 
         <FormField
           label={i18next.t('ato:debounce')}
-          error={ShowError('debounce', touched, errors) ? ErrorFor(errors, 'debounce') : undefined}
+          error={ShowError('debounce', touched, errors) ? ErrorMessage(errors, 'debounce') : undefined}
           helpText={i18next.t('second_s')}
         >
           <Input
@@ -154,7 +154,7 @@ const EditAto = ({
 
         <FormField
           label={i18next.t('status')}
-          error={ShowError('enable', touched, errors) ? ErrorFor(errors, 'enable') : undefined}
+          error={ShowError('enable', touched, errors) ? ErrorMessage(errors, 'enable') : undefined}
         >
           <Select
             name='enable'
@@ -173,7 +173,7 @@ const EditAto = ({
       <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
         <FormField
           label={i18next.t('ato:control')}
-          error={ShowError('control', touched, errors) ? ErrorFor(errors, 'control') : undefined}
+          error={ShowError('control', touched, errors) ? ErrorMessage(errors, 'control') : undefined}
         >
           <Select
             name='control'
@@ -192,7 +192,7 @@ const EditAto = ({
 
         <FormField
           label={i18next.t('ato:control_target')}
-          error={ShowError('pump', touched, errors) ? ErrorFor(errors, 'pump') : undefined}
+          error={ShowError('pump', touched, errors) ? ErrorMessage(errors, 'pump') : undefined}
         >
           <Select
             name='pump'
@@ -212,7 +212,7 @@ const EditAto = ({
 
         <FormField
           label={i18next.t('one_shot')}
-          error={ShowError('one_shot', touched, errors) ? ErrorFor(errors, 'one_shot') : undefined}
+          error={ShowError('one_shot', touched, errors) ? ErrorMessage(errors, 'one_shot') : undefined}
         >
           <Select
             name='one_shot'
@@ -231,7 +231,7 @@ const EditAto = ({
       <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
         <FormField
           label={i18next.t('alerts')}
-          error={ShowError('notify', touched, errors) ? ErrorFor(errors, 'notify') : undefined}
+          error={ShowError('notify', touched, errors) ? ErrorMessage(errors, 'notify') : undefined}
         >
           <Select
             name='notify'
@@ -249,7 +249,7 @@ const EditAto = ({
         {values.notify !== false && (
           <FormField
             label={i18next.t('ato:alert_after')}
-            error={ShowError('maxAlert', touched, errors) ? ErrorFor(errors, 'maxAlert') : undefined}
+            error={ShowError('maxAlert', touched, errors) ? ErrorMessage(errors, 'maxAlert') : undefined}
             helpText={i18next.t('second_s')}
           >
             <Input
@@ -267,7 +267,7 @@ const EditAto = ({
 
         <FormField
           label={i18next.t('ato:disable_on_alert')}
-          error={ShowError('disable_on_alert', touched, errors) ? ErrorFor(errors, 'disable_on_alert') : undefined}
+          error={ShowError('disable_on_alert', touched, errors) ? ErrorMessage(errors, 'disable_on_alert') : undefined}
         >
           <Select
             name='disable_on_alert'

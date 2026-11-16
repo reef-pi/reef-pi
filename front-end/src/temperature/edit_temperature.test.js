@@ -1,4 +1,6 @@
 import React from 'react'
+import { render, screen } from '@testing-library/react'
+import { Provider } from 'react-redux'
 import ControlChart from './control_chart'
 import EditTemperature from './edit_temperature'
 import ReadingsChart from './readings_chart'
@@ -138,5 +140,15 @@ describe('<EditTemperature />', () => {
     )
 
     expect(heaterField.props.disabled).toBe(false)
+  })
+
+  it('shows validation messages for touched invalid fields instead of crashing', () => {
+    const errors = { name: 'Name is required' }
+    const touched = { name: true }
+    let element
+    expect(() => { element = renderComponent({ errors, touched }) }).not.toThrow()
+    const store = { getState: () => ({ tcs: [], tc_usage: {}, tc_readings: {}, phprobes: [], ph_readings: {} }), subscribe: () => () => {}, dispatch: jest.fn() }
+    render(<Provider store={store}>{element}</Provider>)
+    expect(screen.getByText('Name is required')).toBeTruthy()
   })
 })

@@ -1,7 +1,7 @@
 import React from 'react'
 import ColorPicker from '../ui_components/color_picker'
 import PropTypes from 'prop-types'
-import { NameFor, ErrorFor, ShowError } from '../utils/validation_helper'
+import { NameFor, ErrorMessage, ShowError } from '../utils/validation_helper'
 import { showError, showUpdateSuccessful } from 'utils/alert'
 import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 import { Field as FormField, Input, Select } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
@@ -86,7 +86,7 @@ const EditPh = ({
         <div style={{ ...gridStyle, marginBottom: 'var(--reefpi-space-md)' }}>
           <FormField
             label={i18next.t('name')}
-            error={ShowError('name', touched, errors) ? ErrorFor(errors, 'name') : undefined}
+            error={ShowError('name', touched, errors) ? ErrorMessage(errors, 'name') : undefined}
           >
             <Input
               name='name'
@@ -104,7 +104,7 @@ const EditPh = ({
       <div style={gridStyle}>
         <FormField
           label={i18next.t('analog_input')}
-          error={ShowError('analog_input', touched, errors) ? ErrorFor(errors, 'analog_input') : undefined}
+          error={ShowError('analog_input', touched, errors) ? ErrorMessage(errors, 'analog_input') : undefined}
         >
           <Select
             name='analog_input'
@@ -124,7 +124,7 @@ const EditPh = ({
 
         <FormField
           label={i18next.t('ph:chart_unit')}
-          error={ShowError('chart.unit', touched, errors) ? ErrorFor(errors, 'chart.unit') : undefined}
+          error={ShowError('chart.unit', touched, errors) ? ErrorMessage(errors, 'chart.unit') : undefined}
         >
           <Input
             name='chart.unit'
@@ -139,7 +139,7 @@ const EditPh = ({
 
         <FormField
           label={i18next.t('ph:check_frequency')}
-          error={ShowError('period', touched, errors) ? ErrorFor(errors, 'period') : undefined}
+          error={ShowError('period', touched, errors) ? ErrorMessage(errors, 'period') : undefined}
           helpText={i18next.t('second_s')}
         >
           <Input
@@ -156,7 +156,7 @@ const EditPh = ({
 
         <FormField
           label={i18next.t('status')}
-          error={ShowError('enable', touched, errors) ? ErrorFor(errors, 'enable') : undefined}
+          error={ShowError('enable', touched, errors) ? ErrorMessage(errors, 'enable') : undefined}
         >
           <Select
             name='enable'
@@ -173,7 +173,7 @@ const EditPh = ({
 
         <FormField
           label={i18next.t('one_shot')}
-          error={ShowError('one_shot', touched, errors) ? ErrorFor(errors, 'one_shot') : undefined}
+          error={ShowError('one_shot', touched, errors) ? ErrorMessage(errors, 'one_shot') : undefined}
         >
           <Select
             name='one_shot'
@@ -192,7 +192,7 @@ const EditPh = ({
       <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
         <FormField
           label={i18next.t('ph:chart_ymin')}
-          error={ShowError('chart.ymin', touched, errors) ? ErrorFor(errors, 'chart.ymin') : undefined}
+          error={ShowError('chart.ymin', touched, errors) ? ErrorMessage(errors, 'chart.ymin') : undefined}
         >
           <Input
             name='chart.ymin'
@@ -206,7 +206,7 @@ const EditPh = ({
         </FormField>
         <FormField
           label={i18next.t('ph:chart_ymax')}
-          error={ShowError('chart.ymax', touched, errors) ? ErrorFor(errors, 'chart.ymax') : undefined}
+          error={ShowError('chart.ymax', touched, errors) ? ErrorMessage(errors, 'chart.ymax') : undefined}
         >
           <Input
             name='chart.ymax'
@@ -232,7 +232,7 @@ const EditPh = ({
       <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
         <FormField
           label={i18next.t('alerts')}
-          error={ShowError('notify', touched, errors) ? ErrorFor(errors, 'notify') : undefined}
+          error={ShowError('notify', touched, errors) ? ErrorMessage(errors, 'notify') : undefined}
         >
           <Select
             name='notify'
@@ -249,7 +249,7 @@ const EditPh = ({
 
         <FormField
           label={i18next.t('ph:alert_below')}
-          error={ShowError('minAlert', touched, errors) ? ErrorFor(errors, 'minAlert') : undefined}
+          error={ShowError('minAlert', touched, errors) ? ErrorMessage(errors, 'minAlert') : undefined}
           helpText={values.chart ? values.chart.unit : undefined}
         >
           <Input
@@ -264,7 +264,7 @@ const EditPh = ({
 
         <FormField
           label={i18next.t('ph:alert_above')}
-          error={ShowError('maxAlert', touched, errors) ? ErrorFor(errors, 'maxAlert') : undefined}
+          error={ShowError('maxAlert', touched, errors) ? ErrorMessage(errors, 'maxAlert') : undefined}
           helpText={values.chart ? values.chart.unit : undefined}
         >
           <Input
@@ -281,7 +281,7 @@ const EditPh = ({
       <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
         <FormField
           label={i18next.t('ph:control')}
-          error={ShowError('control', touched, errors) ? ErrorFor(errors, 'control') : undefined}
+          error={ShowError('control', touched, errors) ? ErrorMessage(errors, 'control') : undefined}
         >
           <Select
             name='control'
@@ -300,7 +300,7 @@ const EditPh = ({
 
         <FormField
           label={i18next.t('ph:upper_threshold')}
-          error={ShowError('upperThreshold', touched, errors) ? ErrorFor(errors, 'upperThreshold') : undefined}
+          error={ShowError('upperThreshold', touched, errors) ? ErrorMessage(errors, 'upperThreshold') : undefined}
           helpText={values.chart ? values.chart.unit : undefined}
         >
           <Input
@@ -316,7 +316,7 @@ const EditPh = ({
 
         <FormField
           label={i18next.t('ph:upper_function')}
-          error={ShowError('upperFunction', touched, errors) ? ErrorFor(errors, 'upperFunction') : undefined}
+          error={ShowError('upperFunction', touched, errors) ? ErrorMessage(errors, 'upperFunction') : undefined}
         >
           <Select
             name='upperFunction'
@@ -336,7 +336,7 @@ const EditPh = ({
       <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
         <FormField
           label={i18next.t('ph:lower_threshold')}
-          error={ShowError('lowerThreshold', touched, errors) ? ErrorFor(errors, 'lowerThreshold') : undefined}
+          error={ShowError('lowerThreshold', touched, errors) ? ErrorMessage(errors, 'lowerThreshold') : undefined}
           helpText={values.chart ? values.chart.unit : undefined}
         >
           <Input
@@ -352,7 +352,7 @@ const EditPh = ({
 
         <FormField
           label={i18next.t('ph:lower_function')}
-          error={ShowError('lowerFunction', touched, errors) ? ErrorFor(errors, 'lowerFunction') : undefined}
+          error={ShowError('lowerFunction', touched, errors) ? ErrorMessage(errors, 'lowerFunction') : undefined}
         >
           <Select
             name='lowerFunction'
@@ -372,7 +372,7 @@ const EditPh = ({
       <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
         <FormField
           label={i18next.t('ph:hysteresis')}
-          error={ShowError('hysteresis', touched, errors) ? ErrorFor(errors, 'hysteresis') : undefined}
+          error={ShowError('hysteresis', touched, errors) ? ErrorMessage(errors, 'hysteresis') : undefined}
           helpText={values.chart ? values.chart.unit : undefined}
         >
           <Input
@@ -389,7 +389,7 @@ const EditPh = ({
 
         <FormField
           label={i18next.t('ph:transformer')}
-          error={ShowError('transformer', touched, errors) ? ErrorFor(errors, 'transformer') : undefined}
+          error={ShowError('transformer', touched, errors) ? ErrorMessage(errors, 'transformer') : undefined}
         >
           <Input
             name='transformer'

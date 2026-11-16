@@ -1,4 +1,6 @@
 import React from 'react'
+import { render, screen } from '@testing-library/react'
+import { Provider } from 'react-redux'
 import Chart from './chart'
 import EditPh from './edit_ph'
 import 'isomorphic-fetch'
@@ -103,5 +105,15 @@ describe('<EditPh />', () => {
     const tree = renderEditPh({ isValid: true })
 
     expect(findAll(tree, node => node.type === Chart)).toHaveLength(2)
+  })
+
+  it('shows validation messages for touched invalid fields instead of crashing', () => {
+    const errors = { name: 'Name is required' }
+    const touched = { name: true }
+    let element
+    expect(() => { element = renderEditPh({ errors, touched }) }).not.toThrow()
+    const store = { getState: () => ({ tcs: [], tc_usage: {}, tc_readings: {}, phprobes: [], ph_readings: {} }), subscribe: () => () => {}, dispatch: jest.fn() }
+    render(<Provider store={store}>{element}</Provider>)
+    expect(screen.getByText('Name is required')).toBeTruthy()
   })
 })
