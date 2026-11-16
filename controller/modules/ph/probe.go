@@ -173,7 +173,7 @@ func (c *Controller) Read(p Probe) (float64, error) {
 	} else {
 		v1, err := c.ais.Read(p.AnalogInput)
 		if err != nil {
-			return 0, nil
+			return 0, fmt.Errorf("pH probe %q failed to read analog input %q: %w", p.Name, p.AnalogInput, err)
 		}
 		v = v1
 	}
