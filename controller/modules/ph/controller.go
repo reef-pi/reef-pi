@@ -20,18 +20,25 @@ const CalibrationBucket = storage.PhCalibrationBucket
 
 type Controller struct {
 	sync.Mutex
-	c           controller.Controller
-	repo        repository
-	quitters    map[string]chan struct{}
-	statsMgr    telemetry.StatsManager
-	devMode     bool
-	ais         *connectors.AnalogInputs
-	calibrators map[string]hal.Calibrator
+	lifecycleMu  sync.Mutex
+	c            controller.Controller
+	repo         repository
+	quitters     map[string]*pollerRun
+	statsMgr     telemetry.StatsManager
+	devMode      bool
+	ais          *connectors.AnalogInputs
+	calibrators  map[string]hal.Calibrator
+	pollerRunner func(Probe, chan struct{}) error
+}
+
+type pollerRun struct {
+	quit chan struct{}
+	done chan struct{}
 }
 
 func New(devMode bool, c controller.Controller) *Controller {
 	return &Controller{
-		quitters:    make(map[string]chan struct{}),
+		quitters:    make(map[string]*pollerRun),
 		c:           c,
 		repo:        newRepository(c.Store()),
 		devMode:     devMode,
@@ -71,6 +78,8 @@ func (c *Controller) Setup() error {
 }
 
 func (c *Controller) Start() {
+	c.lifecycleMu.Lock()
+	defer c.lifecycleMu.Unlock()
 	probes, err := c.List()
 	if err != nil {
 		log.Println("ERROR: ph subsystem: Failed to list probes. Error:", err)
@@ -88,21 +97,65 @@ func (c *Controller) Start() {
 		if err := c.statsMgr.Load(p.ID, fn); err != nil {
 			log.Println("ERROR: ph controller. Failed to load usage. Error:", err)
 		}
-		quit := make(chan struct{})
-		c.quitters[p.ID] = quit
-		go c.Run(p, quit)
+		c.replacePollerLocked(p)
 	}
 }
 
 func (c *Controller) Stop() {
-	for id, quit := range c.quitters {
-		close(quit)
+	c.lifecycleMu.Lock()
+	defer c.lifecycleMu.Unlock()
+	c.Lock()
+	runs := make(map[string]*pollerRun, len(c.quitters))
+	for id, run := range c.quitters {
+		runs[id] = run
+		delete(c.quitters, id)
+	}
+	c.Unlock()
+	for _, run := range runs {
+		close(run.quit)
+	}
+	for _, run := range runs {
+		<-run.done
+	}
+	for id := range runs {
 		if err := c.statsMgr.Save(id); err != nil {
 			log.Println("ERROR: ph controller. Failed to save usage. Error:", err)
 		}
 		log.Println("ph subsystem: Saved usage data of sensor:", id)
-		delete(c.quitters, id)
 	}
+}
+
+// replacePollerLocked must be called with lifecycleMu held. It never holds
+// the controller mutex while joining a worker, since workers use that mutex
+// while recording readings and applying control actions.
+func (c *Controller) replacePollerLocked(p Probe) {
+	c.Lock()
+	previous := c.quitters[p.ID]
+	delete(c.quitters, p.ID)
+	c.Unlock()
+	if previous != nil {
+		close(previous.quit)
+		<-previous.done
+	}
+	if !p.Enable {
+		return
+	}
+	run := &pollerRun{quit: make(chan struct{}), done: make(chan struct{})}
+	c.Lock()
+	c.quitters[p.ID] = run
+	c.Unlock()
+	go func() {
+		defer close(run.done)
+		var err error
+		if c.pollerRunner != nil {
+			err = c.pollerRunner(p, run.quit)
+		} else {
+			err = c.run(p, run.quit, true)
+		}
+		if err != nil {
+			log.Println("ERROR: ph subsystem: poller exited with error:", err)
+		}
+	}()
 }
 
 func (c *Controller) On(id string, b bool) error {

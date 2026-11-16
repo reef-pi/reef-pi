@@ -110,6 +110,8 @@ func (c *Controller) Create(p Probe) error {
 	if err := p.Validate(); err != nil {
 		return err
 	}
+	c.lifecycleMu.Lock()
+	defer c.lifecycleMu.Unlock()
 	p, err := c.repo.Create(p)
 	if err != nil {
 		return err
@@ -117,9 +119,7 @@ func (c *Controller) Create(p Probe) error {
 	c.statsMgr.Initialize(p.ID)
 	if p.Enable {
 		p.CreateFeed(c.c.Telemetry())
-		quit := make(chan struct{})
-		c.quitters[p.ID] = quit
-		go c.Run(p, quit)
+		c.replacePollerLocked(p)
 	}
 	return nil
 }
@@ -129,40 +129,32 @@ func (c *Controller) Update(id string, p Probe) error {
 	if err := p.Validate(); err != nil {
 		return err
 	}
+	c.lifecycleMu.Lock()
+	defer c.lifecycleMu.Unlock()
 	if err := c.repo.Update(id, p); err != nil {
 		return err
 	}
-	quit, ok := c.quitters[p.ID]
-	if ok {
-		close(quit)
-		delete(c.quitters, p.ID)
-	}
 	if p.Enable {
 		p.CreateFeed(c.c.Telemetry())
-		quit := make(chan struct{})
-		c.quitters[p.ID] = quit
-		go c.Run(p, quit)
 	}
+	c.replacePollerLocked(p)
 	return nil
 }
 
 func (c *Controller) Delete(id string) error {
-	c.Lock()
-	defer c.Unlock()
+	c.lifecycleMu.Lock()
+	defer c.lifecycleMu.Unlock()
 	if err := c.repo.Delete(id); err != nil {
 		return err
 	}
+	c.replacePollerLocked(Probe{ID: id})
 	if err := c.statsMgr.Delete(id); err != nil {
 		log.Println("ERROR: ph subsystem: Failed to delete readings for probe:", id)
 	}
 
+	c.Lock()
 	delete(c.calibrators, id)
-
-	quit, ok := c.quitters[id]
-	if ok {
-		close(quit)
-		delete(c.quitters, id)
-	}
+	c.Unlock()
 	return nil
 }
 
@@ -196,6 +188,10 @@ func (c *Controller) Read(p Probe) (float64, error) {
 }
 
 func (c *Controller) Run(p Probe, quit chan struct{}) error {
+	return c.run(p, quit, false)
+}
+
+func (c *Controller) run(p Probe, quit chan struct{}, managed bool) error {
 	if p.Period <= 0 {
 		log.Printf("ERROR: ph subsystem. Invalid period set for probe:%s. Expected positive, found:%d\n", p.Name, p.Period)
 		return fmt.Errorf("invalid period: %d for probe: %s", p.Period, p.Name)
@@ -216,6 +212,12 @@ func (c *Controller) Run(p Probe, quit chan struct{}) error {
 				}
 				if p.WithinRange(reading) {
 					p.Enable = false
+					if managed {
+						// The managed worker is joined while lifecycleMu is held.
+						// Persist its one-shot completion without re-entering Update,
+						// which would wait on that same lifecycle lock.
+						return c.repo.Update(p.ID, p)
+					}
 					return c.Update(p.ID, p)
 				}
 			}
