@@ -88,8 +88,20 @@ class ConnectorsPage {
   async remove (name) {
     await this.select(name)
     await this.page.getByTestId('smoke-connector-delete').click()
-    // The confirm dialog is unstyled and sits under the footer nav (#3196), so a real click is intercepted.
-    await this.page.locator('.modal-footer button[role="confirm"]').dispatchEvent('click')
+    const dialog = this.page.locator('.modal[role="dialog"]')
+    await expect(dialog).toBeVisible()
+    // The dialog layer must cover the summary footer and sidebar rather than sit beneath them.
+    const covered = await this.page.evaluate(() => {
+      const top = selector => {
+        const rect = document.querySelector(selector).getBoundingClientRect()
+        const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2)
+        return Boolean(hit && hit.closest('.modal, .modal-backdrop'))
+      }
+      return { footer: top('.bottom-bar'), nav: top('[data-testid="smoke-nav"]') }
+    })
+    expect(covered).toEqual({ footer: true, nav: true })
+    await dialog.locator('button[role="confirm"]').click()
+    await expect(dialog).toHaveCount(0)
     await expect(this.page.getByTestId(`smoke-connector-row-${name}`)).toHaveCount(0)
   }
 }

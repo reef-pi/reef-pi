@@ -44,9 +44,9 @@ export default class Confirm extends React.Component {
     }
 
     return (
-      <Modal>
+      <Modal labelledBy='confirm-title' onEscape={this.handleAbort}>
         <div className='modal-header'>
-          <h4 className='modal-title'>
+          <h4 className='modal-title' id='confirm-title'>
             {this.props.message}
           </h4>
         </div>
