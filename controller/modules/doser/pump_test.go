@@ -1,6 +1,7 @@
 package doser
 
 import (
+	"errors"
 	"reflect"
 	"strings"
 	"sync"
@@ -499,4 +500,84 @@ func waitForContinuousWrites(t *testing.T, mu *sync.Mutex, writes *[]float64, co
 		time.Sleep(time.Millisecond)
 	}
 	t.Fatalf("timed out waiting for %d continuous output writes", count)
+}
+
+func TestContinuousDeleteAndStopWaitForOutputOff(t *testing.T) {
+	for _, action := range []string{"delete", "stop"} {
+		t.Run(action, func(t *testing.T) {
+			con, err := controller.TestController()
+			if err != nil {
+				t.Fatal(err)
+			}
+			defer con.Store().Close()
+
+			ctrl, err := New(true, con)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if err := ctrl.Setup(); err != nil {
+				t.Fatal(err)
+			}
+
+			started := make(chan struct{})
+			stopping := make(chan struct{})
+			releaseStop := make(chan struct{})
+			ctrl.continuousControl = func(_ string, values map[int]float64) error {
+				if values[1] == 0 {
+					close(stopping)
+					<-releaseStop
+					return errors.New("simulated output-off failure")
+				}
+				close(started)
+				return nil
+			}
+
+			pump := Pump{
+				Name: "continuous",
+				Jack: "jack",
+				Pin:  1,
+				Regiment: DosingRegiment{
+					Enable: true, Continuous: true, Speed: 40,
+				},
+			}
+			if err := ctrl.Create(pump); err != nil {
+				t.Fatal(err)
+			}
+			select {
+			case <-started:
+			case <-time.After(time.Second):
+				t.Fatal("continuous pump did not start")
+			}
+
+			done := make(chan error, 1)
+			go func() {
+				if action == "delete" {
+					done <- ctrl.Delete("1")
+					return
+				}
+				ctrl.Stop()
+				done <- nil
+			}()
+			select {
+			case <-stopping:
+			case <-time.After(time.Second):
+				close(releaseStop)
+				t.Fatal("lifecycle action did not request output off")
+			}
+			select {
+			case err := <-done:
+				t.Fatalf("%s returned before output-off completed: %v", action, err)
+			case <-time.After(20 * time.Millisecond):
+			}
+			close(releaseStop)
+			select {
+			case err := <-done:
+				if err != nil {
+					t.Fatalf("%s failed after worker exited: %v", action, err)
+				}
+			case <-time.After(time.Second):
+				t.Fatalf("%s did not return after worker exited", action)
+			}
+		})
+	}
 }
