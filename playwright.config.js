@@ -55,6 +55,8 @@ module.exports = defineConfig({
       testMatch: /specs\/integration\/.*\.spec\.js/,
       timeout: 180000,
       use: {
+        // Fail a missing control in seconds with a clear message instead of hanging until the test timeout.
+        actionTimeout: 15000,
         browserName: 'chromium',
         storageState: 'front-end/e2e/.auth/user.json'
       }

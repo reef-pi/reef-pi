@@ -28,7 +28,7 @@ async function expectValidationVisible (page) {
     return
   }
 
-  await expect(page.getByText(/Failed to create|cannot be empty|is required|HTTP 500/i).first()).toBeVisible()
+  await expect(page.getByText(/Failed to create|cannot be empty|is required|select one entry|HTTP 500/i).first()).toBeVisible()
   await dismissAlertCenter(page)
   await expectNoFatalError(page)
 }

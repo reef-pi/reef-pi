@@ -27,23 +27,32 @@ class DashboardPage {
     await this.page.locator('#to-row-column').fill('2')
     await expect(this.page.locator('#to-row-row')).toHaveValue('3')
     await expect(this.page.locator('#to-row-column')).toHaveValue('2')
-    await expect(this.page.locator('#db-2-1')).toBeVisible()
+    await expect(this.page.locator('.grid-cell')).toHaveCount(6)
 
-    await this.selectGridType(0, 0, 'temp_current', /Temperature/i)
-    await this.selectGridType(0, 1, 'ph_current', /pH/i)
-    await this.selectGridType(1, 0, 'ato', /ATO/i)
-    await this.selectGridType(1, 1, 'equipment_ctrlpanel', /Equipment/i)
-    await this.selectGridType(2, 0, 'lights', /Lights/i)
-    await this.selectGridType(2, 1, 'health', /Health/i)
+    await this.selectGridType(0, 0, 'Temperature(recent)')
+    await this.selectGridType(0, 1, 'pH (latest)')
+    await this.selectGridType(1, 0, 'ATO')
+    await this.selectGridType(1, 1, 'Equipment(Switch Panel)')
+    await this.selectGridType(2, 0, 'Lights')
+    await this.selectGridType(2, 1, 'Health')
+    // Wait for the update to land before callers read /api/dashboard.
+    const saved = this.page.waitForResponse(response => (
+      response.url().endsWith('/api/dashboard') && response.request().method() !== 'GET'
+    ))
     await this.page.getByTestId('smoke-dashboard-save').click()
+    expect((await saved).ok()).toBeTruthy()
     await expect(this.page.getByTestId('smoke-dashboard-configure')).toBeVisible()
   }
 
-  async selectGridType (row, column, type, label) {
-    const cell = this.page.locator(`#db-${row}-${column}`)
-    await cell.click()
-    await this.page.locator(`#${type}-${row}-${column}`).click()
-    await expect(cell).toHaveText(label)
+  // Grid cells are laid out row-major with two columns; the first button in a cell is its type menu.
+  async selectGridType (row, column, label) {
+    const typeMenu = this.page.locator('.grid-cell').nth(row * 2 + column).getByRole('button').first()
+    await typeMenu.click()
+    await this.page.getByRole('menuitem', { name: label, exact: true }).click()
+    await expect(typeMenu).toHaveText(label)
+    // The menu stays open after a selection and would cover the controls below it.
+    await this.page.keyboard.press('Escape')
+    await expect(this.page.getByRole('menuitem').first()).toBeHidden()
   }
 
   async expectSavedLayoutIncludes (types) {

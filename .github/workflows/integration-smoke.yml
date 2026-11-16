@@ -1,5 +1,13 @@
 name: Frontend Integration Smoke
 on:
+  pull_request:
+    paths:
+      - 'front-end/src/**'
+      - 'front-end/e2e/**'
+      - 'front-end/assets/**'
+      - 'front-end/design-system/**'
+      - 'playwright.config.js'
+      - '.github/workflows/integration-smoke.yml'
   workflow_dispatch:
   schedule:
     - cron: '23 9 * * *'
