@@ -12,9 +12,13 @@ export function showModal (modal) {
   const wrapper = document.body.appendChild(document.createElement('div'))
   const root = createRoot(wrapper)
   const modalRef = React.createRef()
+  const opener = document.activeElement
 
   const cleanup = function () {
     root.unmount()
+    if (opener && typeof opener.focus === 'function' && document.contains(opener)) {
+      opener.focus()
+    }
     return setTimeout(function () {
       return wrapper.remove()
     })

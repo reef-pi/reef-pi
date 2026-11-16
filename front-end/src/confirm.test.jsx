@@ -1,4 +1,5 @@
 import React from 'react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import Confirm from './confirm'
 import Button from '../design-system/ui_kits/reef-pi-app/primitives/Button'
 
@@ -63,5 +64,18 @@ describe('<Confirm />', () => {
 
     expect(component._resolve).toHaveBeenCalled()
     expect(component._reject).toHaveBeenCalled()
+  })
+
+  it('is labelled by its title and aborts on Escape', async () => {
+    const ref = React.createRef()
+    render(<Confirm ref={ref} message='Delete item?' />)
+    const dialog = screen.getByRole('dialog')
+    expect(dialog.getAttribute('aria-labelledby')).toBe('confirm-title')
+    expect(document.getElementById('confirm-title').textContent).toBe('Delete item?')
+    expect(dialog.querySelector('button[role="confirm"]')).toBe(document.activeElement)
+
+    const rejected = ref.current.promise.then(() => 'resolved', () => 'rejected')
+    fireEvent.keyDown(dialog, { key: 'Escape' })
+    await expect(rejected).resolves.toBe('rejected')
   })
 })

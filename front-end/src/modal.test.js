@@ -1,4 +1,5 @@
 import React from 'react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import Modal from './modal'
 import 'isomorphic-fetch'
 
@@ -24,8 +25,8 @@ describe('<Modal />', () => {
 
     expect(modal.props.role).toBe('dialog')
     expect(modal.props.tabIndex).toBe('-1')
-    expect(modal.props['aria-hidden']).toBe('false')
-    expect(modal.props.style).toEqual({ display: 'block' })
+    expect(modal.props['aria-modal']).toBe('true')
+    expect(modal.props.style).toBeUndefined()
   })
 
   it('renders modal-dialog and modal-content around children', () => {
@@ -50,5 +51,36 @@ describe('<Modal />', () => {
 
     expect(content.props.className).toBe('modal-content')
     expect(content.props.children).toBeUndefined()
+  })
+
+  it('labels the dialog by the given element id', () => {
+    const tree = new Modal({ labelledBy: 'title-id' }).render()
+    expect(topLevelChildren(tree)[1].props['aria-labelledby']).toBe('title-id')
+  })
+
+  it('calls onEscape on Escape and ignores other keys', () => {
+    const onEscape = jest.fn()
+    render(<Modal onEscape={onEscape}><button>one</button></Modal>)
+    fireEvent.keyDown(screen.getByRole('dialog'), { key: 'a' })
+    expect(onEscape).not.toHaveBeenCalled()
+    fireEvent.keyDown(screen.getByRole('dialog'), { key: 'Escape' })
+    expect(onEscape).toHaveBeenCalledTimes(1)
+  })
+
+  it('traps Tab focus inside the dialog', () => {
+    render(<Modal><button>first</button><button>last</button></Modal>)
+    const dialog = screen.getByRole('dialog')
+    const first = screen.getByText('first')
+    const last = screen.getByText('last')
+
+    last.focus()
+    fireEvent.keyDown(last, { key: 'Tab' })
+    expect(document.activeElement).toBe(first)
+
+    first.focus()
+    fireEvent.keyDown(first, { key: 'Tab', shiftKey: true })
+    expect(document.activeElement).toBe(last)
+
+    fireEvent.keyDown(dialog, { key: 'Tab' })
   })
 })
