@@ -1,8 +1,11 @@
 package doser
 
 import (
+	"reflect"
 	"strings"
+	"sync"
 	"testing"
+	"time"
 
 	cron "github.com/robfig/cron/v3"
 
@@ -226,7 +229,7 @@ func TestControllerStartRegistersEnabledPumps(t *testing.T) {
 	ctrl.Stop()
 
 	ctrl.cronIDs = make(map[string]cron.EntryID)
-	ctrl.quitters = make(map[string]chan struct{})
+	ctrl.quitters = make(map[string]*continuousRun)
 	ctrl.runner = cron.New(cron.WithParser(cron.NewParser(_cronParserSpec)))
 
 	ctrl.Start()
@@ -446,4 +449,54 @@ func TestScheduleContinuousDoesNotAddCronEntry(t *testing.T) {
 	}
 
 	ctrl.stopContinuous("1")
+}
+
+func TestContinuousReplacementWaitsForOutputOff(t *testing.T) {
+	con, err := controller.TestController()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer con.Store().Close()
+	ctrl, err := New(true, con)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var mu sync.Mutex
+	var writes []float64
+	ctrl.continuousControl = func(_ string, values map[int]float64) error {
+		mu.Lock()
+		defer mu.Unlock()
+		writes = append(writes, values[1])
+		return nil
+	}
+	oldPump := Pump{ID: "1", Name: "old", Jack: "jack", Pin: 1, Regiment: DosingRegiment{Speed: 25}}
+	newPump := Pump{ID: "1", Name: "new", Jack: "jack", Pin: 1, Regiment: DosingRegiment{Speed: 50}}
+	ctrl.startContinuous(oldPump)
+	waitForContinuousWrites(t, &mu, &writes, 1)
+	ctrl.startContinuous(newPump)
+	waitForContinuousWrites(t, &mu, &writes, 3)
+	ctrl.stopContinuous("1")
+	waitForContinuousWrites(t, &mu, &writes, 4)
+
+	mu.Lock()
+	defer mu.Unlock()
+	want := []float64{25, 0, 50, 0}
+	if !reflect.DeepEqual(writes, want) {
+		t.Fatalf("continuous output writes = %v, want %v", writes, want)
+	}
+}
+
+func waitForContinuousWrites(t *testing.T, mu *sync.Mutex, writes *[]float64, count int) {
+	t.Helper()
+	deadline := time.Now().Add(time.Second)
+	for time.Now().Before(deadline) {
+		mu.Lock()
+		ready := len(*writes) >= count
+		mu.Unlock()
+		if ready {
+			return
+		}
+		time.Sleep(time.Millisecond)
+	}
+	t.Fatalf("timed out waiting for %d continuous output writes", count)
 }
