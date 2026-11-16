@@ -32,17 +32,18 @@ type ATO struct {
 func (a ATO) EName() string                { return a.Name }
 func (a ATO) Status() (interface{}, error) { return ATO{}, nil }
 
+// On enables or disables an ATO. It never blocks on the ATO's control loop:
+// the loop (including a one-shot loop) runs in its own goroutine, registered
+// in c.quitters so it can later be stopped by Update, Delete, Reset or Stop.
+// Previously, turning on a one-shot ATO ran its loop inline, which blocked the
+// caller (e.g. a macro step or API request) until the sensor read full, and left
+// a loop that nothing could stop. See issue #1356.
 func (c *Controller) On(id string, b bool) error {
 	a, err := c.Get(id)
 	if err != nil {
 		return err
 	}
 	a.Enable = b
-	if b && a.OneShot {
-		q := make(chan struct{})
-		defer close(q)
-		return c.Run(a, q)
-	}
 	return c.Update(id, a)
 }
 
@@ -51,6 +52,25 @@ func (c *Controller) Get(id string) (ATO, error) {
 }
 func (c *Controller) List() ([]ATO, error) {
 	return c.repo.List()
+}
+
+// startLocked launches the control loop for a. Caller must hold c.mu.
+func (c *Controller) startLocked(a ATO) {
+	quit := make(chan struct{})
+	c.quitters[a.ID] = quit
+	c.wg.Add(1)
+	go func(ato ATO, q chan struct{}) {
+		defer c.wg.Done()
+		c.Run(ato, q)
+	}(a, quit)
+}
+
+// stopLocked stops the control loop for id, if any. Caller must hold c.mu.
+func (c *Controller) stopLocked(id string) {
+	if quit, ok := c.quitters[id]; ok {
+		close(quit)
+		delete(c.quitters, id)
+	}
 }
 
 func (c *Controller) Create(a ATO) error {
@@ -66,13 +86,7 @@ func (c *Controller) Create(a ATO) error {
 	}
 	c.statsMgr.Initialize(a.ID)
 	if a.Enable {
-		quit := make(chan struct{})
-		c.quitters[a.ID] = quit
-		c.wg.Add(1)
-		go func(ato ATO, q chan struct{}) {
-			defer c.wg.Done()
-			c.Run(ato, q)
-		}(a, quit)
+		c.startLocked(a)
 	}
 	return nil
 }
@@ -87,58 +101,41 @@ func (c *Controller) Update(id string, a ATO) error {
 	if err := c.repo.Update(id, a); err != nil {
 		return err
 	}
-	quit, ok := c.quitters[a.ID]
-	if ok {
-		close(quit)
-		delete(c.quitters, a.ID)
-	}
+	c.stopLocked(a.ID)
 	if a.Enable {
-		quit := make(chan struct{})
-		c.quitters[a.ID] = quit
-		c.wg.Add(1)
-		go func(ato ATO, q chan struct{}) {
-			defer c.wg.Done()
-			c.Run(ato, q)
-		}(a, quit)
+		c.startLocked(a)
 	}
 	return nil
 }
+
 func (c *Controller) Reset(id string) error {
 	a, err := c.Get(id)
 	if err != nil {
 		return err
 	}
 	log.Println("ato-subsystem: resetting ato ", a.Name)
-	quit, ok := c.quitters[id]
-	if ok {
-		close(quit)
-		delete(c.quitters, id)
-	}
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	c.stopLocked(id)
 	if err := c.statsMgr.Delete(id); err != nil {
 		log.Println("ERROR:  ato-subsystem: Failed to delete usage details for ato:", id, "error:", err)
 	}
 	if err := c.repo.DeleteUsage(id); err != nil {
 		log.Println("ERROR:  ato-subsystem: Failed to delete usage details for ato:", id, "error:", err)
 	}
-	c.mu.Lock()
-	defer c.mu.Unlock()
 	if a.Enable {
-		quit := make(chan struct{})
-		c.quitters[a.ID] = quit
-		go c.Run(a, quit)
+		c.startLocked(a)
 	}
 	return nil
 }
 
 func (c *Controller) Delete(id string) error {
+	c.mu.Lock()
+	defer c.mu.Unlock()
 	if err := c.repo.Delete(id); err != nil {
 		return err
 	}
-	quit, ok := c.quitters[id]
-	if ok {
-		close(quit)
-		delete(c.quitters, id)
-	}
+	c.stopLocked(id)
 	return nil
 }
 
@@ -197,12 +194,6 @@ func (c *Controller) Run(a ATO, quit chan struct{}) error {
 	}
 	a.CreateFeed(c.c.Telemetry())
 	ticker := time.NewTicker(a.Period * time.Second)
-	defer func() {
-		if r := recover(); r != nil {
-			log.Printf("ERROR: ato-subsystem. Panic in Run goroutine for sensor:%s: %v\n", a.Name, r)
-			c.c.LogError("ato-"+a.ID, fmt.Sprintf("ato controller goroutine panicked: %v", r))
-		}
-	}()
 	defer ticker.Stop()
 	defer func() {
 		if r := recover(); r != nil {
