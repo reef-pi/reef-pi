@@ -27,58 +27,70 @@ class ConnectorsPage {
     await this.configurationPage.openConnectors()
   }
 
+  async openForm (kind) {
+    await this.page.getByTestId('smoke-connector-add').click()
+    await selectByLabelOrValue(this.page.getByTestId('smoke-connector-kind'), kind)
+  }
+
+  async submit (name) {
+    await this.page.getByTestId('smoke-connector-submit').click()
+    await expect(this.page.getByTestId('smoke-connector-form')).toHaveCount(0)
+    await expect(this.page.locator('body')).toContainText(name)
+  }
+
   async expectValidation () {
-    await this.page.getByTestId('smoke-outlet-add-toggle').click()
-    await this.page.getByTestId('smoke-outlet-submit').click()
+    await this.openForm('outlet')
+    await this.page.getByTestId('smoke-connector-submit').click()
     await expectValidationVisible(this.page)
   }
 
-  async createOutlet (outlet) {
-    const name = this.page.getByTestId('smoke-outlet-name')
-    if (!await name.isVisible()) {
-      await this.page.getByTestId('smoke-outlet-add-toggle').click()
+  async create (kind, { name, driver, pin, pins }) {
+    await this.openForm(kind)
+    await this.page.getByTestId('smoke-connector-name').fill(name)
+    if (driver) {
+      await selectByLabelOrValue(this.page.getByTestId('smoke-connector-driver'), driver)
     }
-    await name.fill(outlet.name)
-    await selectByLabelOrValue(this.page.locator('.outlets [name*="pin"]'), outlet.pin)
-    await this.page.getByTestId('smoke-outlet-submit').click()
-    await expect(this.page.locator('body')).toContainText(outlet.name)
+    if (pins !== undefined) {
+      await this.page.getByTestId('smoke-connector-pins').fill(pins)
+    } else if (pin !== undefined) {
+      await selectByLabelOrValue(this.page.getByTestId('smoke-connector-pin'), pin)
+    }
+    await this.submit(name)
+  }
+
+  async createOutlet (outlet) {
+    await this.create('Outlet', outlet)
   }
 
   async createInlet (inlet) {
-    const name = this.page.getByTestId('smoke-inlet-name')
-    if (!await name.isVisible()) {
-      await this.page.getByTestId('smoke-inlet-add-toggle').click()
-    }
-    await name.fill(inlet.name)
-    await selectByLabelOrValue(this.page.locator('.inlets [name*="pin"]'), inlet.pin)
-    await this.page.getByTestId('smoke-inlet-submit').click()
-    await expect(this.page.locator('body')).toContainText(inlet.name)
+    await this.create('Inlet', inlet)
   }
 
   async createJack (jack) {
-    const name = this.page.getByTestId('smoke-jack-name')
-    if (!await name.isVisible()) {
-      await this.page.getByTestId('smoke-jack-add-toggle').click()
-    }
-    await name.fill(jack.name)
-    await this.page.getByTestId('smoke-jack-pins').fill(jack.pins)
-    if (jack.driver) {
-      await selectByLabelOrValue(this.page.getByTestId('smoke-jack-driver'), jack.driver)
-    }
-    await this.page.getByTestId('smoke-jack-submit').click()
-    await expect(this.page.locator('body')).toContainText(jack.name)
+    await this.create('Jack', jack)
   }
 
   async createAnalogInput (input) {
-    const name = this.page.getByTestId('smoke-analog-name')
-    if (!await name.isVisible()) {
-      await this.page.getByTestId('smoke-analog-add-toggle').click()
-    }
-    await name.fill(input.name)
-    await selectByLabelOrValue(this.page.getByTestId('smoke-analog-driver'), input.driver)
-    await selectByLabelOrValue(this.page.locator('.analog-inputs [name*="pin"]'), input.pin)
-    await this.page.getByTestId('smoke-analog-submit').click()
-    await expect(this.page.locator('body')).toContainText(input.name)
+    await this.create('Analog input', input)
+  }
+
+  async select (name) {
+    await this.page.getByTestId(`smoke-connector-row-${name}`).click()
+  }
+
+  async rename (name, newName) {
+    await this.select(name)
+    await this.page.getByTestId('smoke-connector-edit').click()
+    await this.page.getByTestId('smoke-connector-name').fill(newName)
+    await this.submit(newName)
+  }
+
+  async remove (name) {
+    await this.select(name)
+    await this.page.getByTestId('smoke-connector-delete').click()
+    // The confirm dialog is unstyled and sits under the footer nav (#3196), so a real click is intercepted.
+    await this.page.locator('.modal-footer button[role="confirm"]').dispatchEvent('click')
+    await expect(this.page.getByTestId(`smoke-connector-row-${name}`)).toHaveCount(0)
   }
 }
 

@@ -393,14 +393,24 @@ textarea:focus,
   top: 0;
   z-index: 1010;
   min-height: 3.5rem;
-  display: grid;
-  grid-template-columns: minmax(12rem, 1fr) auto auto minmax(10rem, 12rem) auto auto;
+  display: flex;
+  flex-wrap: wrap;
   gap: var(--reefpi-space-sm);
   align-items: center;
   padding: var(--reefpi-space-sm);
   background: var(--reefpi-color-surface);
   border: 1px solid var(--reefpi-color-border);
   border-radius: var(--reefpi-radius-md);
+}
+
+.connectors-search {
+  flex: 1 1 12rem;
+  width: auto;
+}
+
+.connector-group-add {
+  color: var(--reefpi-color-brand);
+  white-space: nowrap;
 }
 
 .connectors-toggle {
@@ -428,7 +438,16 @@ textarea:focus,
   width: 100%;
   min-height: var(--reefpi-tap-target-min);
   display: grid;
-  grid-template-columns: minmax(8rem, 1fr) auto auto auto auto;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--reefpi-space-sm);
+  align-items: center;
+  padding: 0 var(--reefpi-space-sm) 0 0;
+}
+
+.connector-group-toggle {
+  min-height: var(--reefpi-tap-target-min);
+  display: grid;
+  grid-template-columns: minmax(8rem, 1fr) auto auto auto;
   gap: var(--reefpi-space-sm);
   align-items: center;
   padding: var(--reefpi-space-sm) var(--reefpi-space-md);
@@ -436,6 +455,26 @@ textarea:focus,
   background: transparent;
   color: var(--reefpi-color-text);
   text-align: left;
+}
+
+.connector-form-panel {
+  padding: var(--reefpi-space-md);
+  background: var(--reefpi-color-surface-elevated);
+  border: 1px solid var(--reefpi-color-border);
+  border-radius: var(--reefpi-radius-md);
+}
+
+.connector-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: var(--reefpi-space-md);
+}
+
+.connector-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--reefpi-space-sm);
+  margin-top: var(--reefpi-space-md);
 }
 
 .connector-group-title {
@@ -467,7 +506,6 @@ textarea:focus,
   background: var(--reefpi-color-warn-bg);
 }
 
-.connector-group-add,
 .connector-group-caret {
   color: var(--reefpi-color-brand);
   font-weight: var(--reefpi-weight-bold);
@@ -573,10 +611,14 @@ textarea:focus,
 
 @media screen and (max-width: 767.98px) {
   .connectors-filter-row {
-    grid-template-columns: 1fr;
+    position: static;
   }
 
-  .connector-group-header,
+  .connectors-filter-row > * {
+    flex: 1 1 100%;
+  }
+
+  .connector-group-toggle,
   .connector-list-row {
     grid-template-columns: 1fr auto;
   }

@@ -1,18 +1,9 @@
 import React from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
+import { render, screen, fireEvent, within } from '@testing-library/react'
 import { RawConnectors, mapDispatchToProps, mapStateToProps } from './main'
-import { RawInlets } from './inlets'
-import Inlet from './inlet'
-import Outlet from './outlet'
 import { RawInletSelector } from './inlet_selector'
-import { RawJacks } from './jacks'
-import Jack from './jack'
-import { RawOutlets } from './outlets'
-import Pin from './pin'
-import AnalogInput from './analog_input'
-import { RawAnalogInputs } from './analog_inputs'
 import { byCapability } from './driver_filter'
-import { groupByDriverName } from './driver_groups'
 import 'isomorphic-fetch'
 
 const stockDrivers = [
@@ -48,27 +39,6 @@ const patchSetState = component => {
 }
 
 describe('Connectors', () => {
-  it('<Main />', () => {
-    expect(new RawConnectors({ drivers: [] }).render().props.className).toBe('reefpi-view')
-    expect(new RawConnectors({ drivers: stockDrivers }).render().props.className).toBe('reefpi-view')
-  })
-
-  it('<Main /> renders loading state and connector sections', () => {
-    const loading = new RawConnectors({ drivers: undefined }).render()
-    expect(loading.props.children).toBe('loading')
-
-    const rendered = new RawConnectors({ drivers: stockDrivers }).render()
-    const sectionRows = React.Children.toArray(rendered.props.children)
-      .filter(child => child.props && String(child.props.className).startsWith('legacy-'))
-
-    expect(sectionRows.map(row => row.props.className)).toEqual([
-      'legacy-inlets',
-      'legacy-outlets',
-      'legacy-analog-inputs',
-      'legacy-jacks'
-    ])
-  })
-
   it('<Main /> maps state and fetch dispatch props', () => {
     expect(mapStateToProps({
       drivers: stockDrivers,
@@ -88,8 +58,7 @@ describe('Connectors', () => {
     expect(dispatch).toHaveBeenCalledTimes(1)
   })
 
-  it('<Main /> renders new shell connector groups behind the feature flag', () => {
-    window.FEATURE_FLAGS = { new_shell: true }
+  it('<Main /> renders connector groups', () => {
     const component = new RawConnectors({
       drivers: stockDrivers,
       outlets: [
@@ -134,11 +103,9 @@ describe('Connectors', () => {
     expect(html).toContain('J1')
     expect((html.match(/connector-channel-cell/g) || []).length).toBe(9)
     expect(html).toContain('connector-conflict')
-    window.FEATURE_FLAGS = {}
   })
 
   it('<Main /> filters, persists group state, and batch deletes selected channels', async () => {
-    window.FEATURE_FLAGS = { new_shell: true }
     const setItem = jest.fn()
     const getItem = jest.fn(() => 'false')
     Object.defineProperty(window, 'localStorage', {
@@ -192,7 +159,6 @@ describe('Connectors', () => {
     await Promise.resolve()
     expect(deleteOutlet).toHaveBeenCalledWith('out-1')
     expect(deleteJack).toHaveBeenCalledWith('jack-1')
-    window.FEATURE_FLAGS = {}
   })
 
   it('<InletSelector />', () => {
@@ -225,266 +191,6 @@ describe('Connectors', () => {
     expect(nextState.inlet).toBe(activeInlet)
   })
 
-  it('<Inlets />', () => {
-    const create = jest.fn()
-    const inlets = [
-      { id: '1', name: 'foo', pin: 1, reverse: true, driver: 'rpi' },
-      { id: '2', name: 'bar', pin: 2, reverse: false, driver: 'rpi' }
-    ]
-    const component = new RawInlets({
-      inlets,
-      drivers: stockDrivers,
-      fetch: jest.fn(),
-      create,
-      delete: jest.fn(),
-      update: jest.fn()
-    })
-    patchSetState(component)
-    component.componentDidMount()
-    component.handleAdd()
-    component.handleNameChange({ target: { value: 'foo' } })
-    component.handleDriverChange({ target: { value: 'rpi' } })
-    component.handleReverseChange()
-    component.handleSave()
-    expect(create).toHaveBeenCalled()
-    expect(component.list().length).toBeGreaterThan(0)
-    expect(inlets.map(i => i.name)).toEqual(['foo', 'bar'])
-  })
-
-  it('<Inlet />', () => {
-    const update = jest.fn()
-    const remove = jest.fn()
-    const m = new Inlet({
-      inlet_id: '1',
-      name: 'foo',
-      pin: 1,
-      reverse: false,
-      update,
-      remove,
-      drivers: stockDrivers,
-      driver: stockDrivers[0]
-    })
-    patchSetState(m)
-    m.handleEdit()
-    m.handleNameChange({ target: { value: 'foo' } })
-    m.handleDriverChange({ target: { value: 'rpi' } })
-    m.handleReverseChange()
-    m.handleEdit()
-    expect(update).toHaveBeenCalled()
-  })
-
-  it('<Jacks />', () => {
-    const create = jest.fn()
-    const component = new RawJacks({
-      jacks: [{ id: '1', name: 'J2', pins: [0, 2], reverse: false, driver: '1' }],
-      drivers: stockDrivers,
-      fetch: jest.fn(),
-      create,
-      delete: jest.fn(),
-      update: jest.fn()
-    })
-    patchSetState(component)
-    component.componentDidMount()
-    component.handleAdd()
-    component.handleNameChange({ target: { value: 'foo' } })
-    component.handlePinChange({ target: { value: '4,L' } })
-    component.handleSetDriver({ target: { value: '1' } })
-    component.handleSave()
-    expect(create).not.toHaveBeenCalled()
-    component.handlePinChange({ target: { value: '4' } })
-    component.handleSave()
-    expect(create).toHaveBeenCalled()
-  })
-
-  it('<Jacks /> handleReverseChange toggles reverse state', () => {
-    const component = new RawJacks({
-      jacks: [],
-      drivers: stockDrivers,
-      fetch: jest.fn(),
-      create: jest.fn(),
-      delete: jest.fn(),
-      update: jest.fn()
-    })
-    patchSetState(component)
-    expect(component.state.JackReverse).toBe(false)
-    component.handleReverseChange()
-    expect(component.state.JackReverse).toBe(true)
-  })
-
-  it('<Jacks /> remove calls confirm then delete', async () => {
-    const del = jest.fn()
-    const component = new RawJacks({
-      jacks: [{ id: '1', name: 'J2', pins: [0], reverse: false, driver: 'rpi' }],
-      drivers: stockDrivers,
-      fetch: jest.fn(),
-      create: jest.fn(),
-      delete: del,
-      update: jest.fn()
-    })
-    patchSetState(component)
-    const removeFn = component.remove({ id: '1', name: 'J2' })
-    removeFn()
-    await Promise.resolve()
-    expect(del).toHaveBeenCalledWith('1')
-  })
-
-  it('<Jacks /> list groups jacks by driver name', () => {
-    const fetch = jest.fn()
-    const update = jest.fn()
-    const jacks = [
-      { id: '1', name: 'J2', pins: [0], reverse: false, driver: 'rpi' },
-      { id: '2', name: 'J1', pins: [1], reverse: false, driver: '1' }
-    ]
-    const component = new RawJacks({
-      jacks,
-      drivers: stockDrivers,
-      fetch,
-      create: jest.fn(),
-      delete: jest.fn(),
-      update
-    })
-    patchSetState(component)
-    const items = component.list()
-    expect(items.length).toBeGreaterThan(0)
-    const updateFn = items.find(i => i.props && i.props.update)
-    if (updateFn) {
-      updateFn.props.update({ name: 'J1updated', pins: [0] })
-      expect(update).toHaveBeenCalled()
-    }
-    expect(jacks.map(j => j.name)).toEqual(['J2', 'J1'])
-  })
-
-  it('<Jacks /> render does not throw', () => {
-    const component = new RawJacks({
-      jacks: [{ id: '1', name: 'J1', pins: [0], reverse: false, driver: 'rpi' }],
-      drivers: stockDrivers,
-      fetch: jest.fn(),
-      create: jest.fn(),
-      delete: jest.fn(),
-      update: jest.fn()
-    })
-    patchSetState(component)
-    expect(() => component.render()).not.toThrow()
-  })
-
-  it('<Jack />', () => {
-    const update = jest.fn()
-    const m = new Jack({
-      jack_id: '1',
-      name: 'foo',
-      pins: [1, 2],
-      update,
-      remove: () => true,
-      driver: 'rpi',
-      drivers: stockDrivers,
-      reverse: false
-    })
-    patchSetState(m)
-    m.handleEdit()
-    m.handleNameChange({ target: { value: 'foo' } })
-    m.handlePinChange({ target: { value: '4,L' } })
-    m.handleEdit()
-    expect(update).not.toHaveBeenCalled()
-    m.handleSetDriver({ target: { value: '1' } })
-    m.handlePinChange({ target: { value: '4' } })
-    m.handleEdit()
-    expect(update).toHaveBeenCalled()
-  })
-
-  it('<Outlets />', () => {
-    const create = jest.fn()
-    const outlets = [
-      { id: '1', name: 'J2', pin: 1, reverse: true, driver: 'rpi' },
-      { id: '2', name: 'J1', pin: 2, reverse: false, driver: 'rpi' }
-    ]
-    const component = new RawOutlets({
-      outlets,
-      drivers: stockDrivers,
-      fetch: jest.fn(),
-      create,
-      delete: jest.fn(),
-      update: jest.fn()
-    })
-    patchSetState(component)
-    component.componentDidMount()
-    component.handleAdd()
-    component.handleNameChange({ target: { value: 'foo' } })
-    component.handleDriverChange({ target: { value: '1' } })
-    component.handleReverseChange()
-    component.handleSave()
-    expect(create).toHaveBeenCalled()
-    expect(component.list().length).toBeGreaterThan(0)
-    expect(outlets.map(o => o.name)).toEqual(['J2', 'J1'])
-  })
-
-  it('<Outlets /> handles driver, pin, reverse, update, and delete flows', async () => {
-    const create = jest.fn()
-    const update = jest.fn()
-    const fetch = jest.fn()
-    const del = jest.fn()
-    const outlets = [
-      { id: '1', name: 'J2', pin: 1, reverse: true, driver: 'rpi' },
-      { id: '2', name: 'J1', pin: 2, reverse: false, driver: 'missing' }
-    ]
-    const component = new RawOutlets({
-      outlets,
-      drivers: stockDrivers,
-      fetch,
-      create,
-      delete: del,
-      update
-    })
-    patchSetState(component)
-
-    component.handleAdd()
-    component.handleNameChange({ target: { value: 'Skimmer' } })
-    component.handleDriverChange({ target: { value: 'missing' } })
-    expect(component.state.driver).toEqual({})
-    component.handleDriverChange({ target: { value: 'rpi' } })
-    component.onPinChange(3)
-    component.handleReverseChange()
-    component.handleSave()
-
-    expect(create).toHaveBeenCalledWith({
-      name: 'Skimmer',
-      pin: 3,
-      reverse: true,
-      driver: 'rpi'
-    })
-    expect(component.state.add).toBe(false)
-
-    const outletNode = component.list().find(item => item.type === Outlet && item.props.outlet_id === '1')
-    outletNode.props.update({ name: 'Updated', pin: 4, reverse: false, driver: 'rpi' })
-    expect(update).toHaveBeenCalledWith('1', { name: 'Updated', pin: 4, reverse: false, driver: 'rpi' })
-    expect(fetch).toHaveBeenCalled()
-
-    component.remove({ id: '2', name: 'J1' })()
-    await Promise.resolve()
-    expect(del).toHaveBeenCalledWith('2')
-    expect(outlets.map(o => o.name)).toEqual(['J2', 'J1'])
-  })
-
-  it('<Outlet />', () => {
-    const update = jest.fn()
-    const m = new Outlet({
-      name: 'foo',
-      reverse: true,
-      pin: 1,
-      outlet_id: '1',
-      update,
-      remove: () => true,
-      driver: stockDrivers[0],
-      drivers: stockDrivers
-    })
-    patchSetState(m)
-    m.handleEdit()
-    m.handleNameChange({ target: { value: 'foo' } })
-    m.handleDriverChange({ target: { value: '1' } })
-    m.handleReverseChange()
-    m.handleEdit()
-    expect(update).toHaveBeenCalled()
-  })
-
   it('byCapability returns true for matching capability', () => {
     const driver = { id: '1', pinmap: { 'analog-input': [0, 1, 2], 'digital-output': [3, 4] } }
     expect(byCapability('analog-input')(driver)).toBe(true)
@@ -497,184 +203,137 @@ describe('Connectors', () => {
     expect(byCapability('analog-input')(driver)).toBe(false)
   })
 
-  it('groups connectors by display driver name without mutating input', () => {
-    const connectors = [
-      { id: '2', name: 'Outlet B', driver: 'missing' },
-      { id: '1', name: 'Outlet A', driver: 'rpi' },
-      { id: '3', name: 'Outlet C', driver: 'rpi' }
-    ]
-
-    const grouped = groupByDriverName(connectors, stockDrivers)
-
-    expect(grouped.driverMap.rpi).toBe(stockDrivers[0])
-    expect(grouped.groups.map(group => group.driverName)).toEqual(['Rasoverry Pi', 'missing'])
-    expect(grouped.groups[0].connectors.map(connector => connector.name)).toEqual(['Outlet A', 'Outlet C'])
-    expect(connectors.map(connector => connector.name)).toEqual(['Outlet B', 'Outlet A', 'Outlet C'])
-  })
-
-  it('<Pin /> renders options in numeric order without mutating the pinmap', () => {
-    const pins = [10, 2, 1]
-    const driver = { id: 'rpi', pinmap: { 'digital-output': pins } }
-    const component = new Pin({ driver, update: () => {}, type: 'digital-output', current: 1 })
-    const options = component.options()
-    const html = renderToStaticMarkup(<Pin driver={driver} update={() => {}} type='digital-output' current={1} />)
-    expect(options.map(option => option.props.value)).toEqual([1, 2, 10])
-    expect(html).toContain('<select')
-    expect((html.match(/<option/g) || []).length).toBe(3)
-    expect(pins).toEqual([10, 2, 1])
-  })
-
-  it('<Pin /> calls update with parsed numeric value on change', () => {
-    const driver = { id: 'rpi', pinmap: { 'digital-output': [1, 2, 3] } }
-    const update = jest.fn()
-    const m = new Pin({ driver, update, type: 'digital-output', current: 1 })
-    m.handleChange({ target: { value: '02' } })
-    expect(update).toHaveBeenCalledWith(2)
-  })
-
-  it('<Pin /> returns no options without a driver pinmap or matching type', () => {
-    expect(new Pin({ driver: undefined, update: () => {}, type: 'digital-output' }).options()).toBeUndefined()
-    expect(new Pin({ driver: { id: 'rpi' }, update: () => {}, type: 'digital-output' }).options()).toBeUndefined()
-    expect(new Pin({ driver: { id: 'rpi', pinmap: null }, update: () => {}, type: 'digital-output' }).options()).toBeUndefined()
-    expect(new Pin({ driver: { id: 'rpi', pinmap: { pwm: [1] } }, update: () => {}, type: 'digital-output' }).options()).toBeUndefined()
-  })
-
-  it('<AnalogInput /> renders view mode by default', () => {
-    const m = new AnalogInput({
-      name: 'pH Sensor',
-      pin: 0,
-      analog_input_id: '1',
-      driver: stockDrivers[0],
-      drivers: stockDrivers,
-      update: () => {},
-      remove: () => {}
+  describe('create and edit flows', () => {
+    const baseProps = () => ({
+      drivers: [
+        ...stockDrivers,
+        { id: 'ph', name: 'ph', pinmap: { 'analog-input': [0] } }
+      ],
+      outlets: [{ id: 'out-1', name: 'Return Pump', pin: 1, driver: 'rpi', reverse: true, equipment: 'eq-1' }],
+      inlets: [],
+      jacks: [],
+      analog_inputs: [],
+      fetchDrivers: jest.fn(),
+      fetchOutlets: jest.fn(),
+      fetchInlets: jest.fn(),
+      fetchJacks: jest.fn(),
+      fetchAnalogInputs: jest.fn(),
+      createOutlet: jest.fn(),
+      createInlet: jest.fn(),
+      createJack: jest.fn(),
+      createAnalogInput: jest.fn(),
+      updateOutlet: jest.fn(),
+      updateInlet: jest.fn(),
+      updateJack: jest.fn(),
+      updateAnalogInput: jest.fn(),
+      deleteOutlet: jest.fn(),
+      deleteInlet: jest.fn(),
+      deleteJack: jest.fn(),
+      deleteAnalogInput: jest.fn()
     })
-    expect(renderToStaticMarkup(m.render())).toContain('analog_input-edit')
-  })
+    const tid = id => screen.getByTestId(id)
 
-  it('<AnalogInput /> toggles to edit and saves', () => {
-    const update = jest.fn()
-    const m = new AnalogInput({
-      name: 'pH Sensor',
-      pin: 0,
-      analog_input_id: '1',
-      driver: stockDrivers[0],
-      drivers: stockDrivers,
-      update,
-      remove: () => {}
+    beforeEach(() => {
+      Object.defineProperty(window, 'localStorage', {
+        value: { getItem: () => null, setItem: jest.fn() },
+        configurable: true
+      })
     })
-    patchSetState(m)
-    m.handleEdit()
-    expect(m.state.edit).toBe(true)
-    m.handleNameChange({ target: { value: 'New Name' } })
-    expect(m.state.name).toBe('New Name')
-    m.handleEdit()
-    expect(update).toHaveBeenCalled()
-    expect(m.state.edit).toBe(false)
-  })
 
-  it('<AnalogInput /> updates pin and driver while editing', () => {
-    const update = jest.fn()
-    const m = new AnalogInput({
-      name: 'pH Sensor',
-      pin: 0,
-      analog_input_id: '1',
-      driver: stockDrivers[0],
-      drivers: stockDrivers,
-      update,
-      remove: () => {}
+    it('shows validation errors and does not create when the form is empty', () => {
+      const props = baseProps()
+      render(<RawConnectors {...props} />)
+      fireEvent.click(tid('smoke-connector-add'))
+      fireEvent.click(tid('smoke-connector-submit'))
+      expect(screen.getByText('Name cannot be empty')).toBeTruthy()
+      expect(props.createOutlet).not.toHaveBeenCalled()
     })
-    patchSetState(m)
-    m.handleEdit()
-    m.onPinChange(1)
-    m.handleSetDriver({ target: { value: 'missing' } })
-    expect(m.state.driver).toEqual({})
-    m.handleSetDriver({ target: { value: 'rpi' } })
-    m.handleEdit()
-    expect(update).toHaveBeenCalledWith({ name: 'pH Sensor', pin: 1, driver: 'rpi' })
-  })
 
-  it('<AnalogInput /> handleRemove calls remove', () => {
-    const remove = jest.fn()
-    const m = new AnalogInput({
-      name: 'Test',
-      pin: 0,
-      analog_input_id: '1',
-      driver: stockDrivers[0],
-      drivers: stockDrivers,
-      update: () => {},
-      remove
+    it('creates an outlet from the top-level add button', () => {
+      const props = baseProps()
+      render(<RawConnectors {...props} />)
+      fireEvent.click(tid('smoke-connector-add'))
+      fireEvent.change(tid('smoke-connector-name'), { target: { value: 'O1' } })
+      fireEvent.change(tid('smoke-connector-pin'), { target: { value: '3' } })
+      fireEvent.click(tid('smoke-connector-reverse'))
+      fireEvent.click(tid('smoke-connector-submit'))
+      expect(props.createOutlet).toHaveBeenCalledWith({ name: 'O1', pin: 3, reverse: true, driver: 'rpi' })
+      expect(screen.queryByTestId('smoke-connector-form')).toBeNull()
     })
-    m.handleRemove()
-    expect(remove).toHaveBeenCalled()
-  })
 
-  it('<AnalogInputs /> renders and adds analog input', () => {
-    const aiDrivers = [
-      { id: 'ads', name: 'ADS1115', pinmap: { 'analog-input': [0, 1, 2, 3] } }
-    ]
-    const create = jest.fn()
-    const analogInputs = [
-      { id: '1', name: 'pH', pin: 0, driver: 'ads' },
-      { id: '2', name: 'ORP', pin: 1, driver: 'ads' }
-    ]
-    const component = new RawAnalogInputs({
-      analog_inputs: analogInputs,
-      drivers: aiDrivers,
-      fetch: jest.fn(),
-      create,
-      delete: jest.fn(),
-      update: jest.fn()
+    it('creates an inlet, analog input and jack with the right payloads', () => {
+      const props = baseProps()
+      render(<RawConnectors {...props} />)
+
+      fireEvent.click(tid('smoke-connector-add'))
+      fireEvent.change(tid('smoke-connector-kind'), { target: { value: 'inlet' } })
+      fireEvent.change(tid('smoke-connector-name'), { target: { value: 'I1' } })
+      fireEvent.change(tid('smoke-connector-pin'), { target: { value: '2' } })
+      fireEvent.click(tid('smoke-connector-submit'))
+      expect(props.createInlet).toHaveBeenCalledWith({ name: 'I1', pin: 2, reverse: false, driver: 'rpi' })
+
+      fireEvent.click(tid('smoke-connector-add'))
+      fireEvent.change(tid('smoke-connector-kind'), { target: { value: 'analog' } })
+      fireEvent.change(tid('smoke-connector-name'), { target: { value: 'AI1' } })
+      fireEvent.change(tid('smoke-connector-driver'), { target: { value: 'ph' } })
+      fireEvent.click(tid('smoke-connector-submit'))
+      expect(props.createAnalogInput).toHaveBeenCalledWith({ name: 'AI1', pin: 0, driver: 'ph' })
+
+      fireEvent.click(tid('smoke-connector-add'))
+      fireEvent.change(tid('smoke-connector-kind'), { target: { value: 'jack' } })
+      fireEvent.change(tid('smoke-connector-name'), { target: { value: 'J0' } })
+      fireEvent.change(tid('smoke-connector-pins'), { target: { value: '0, 1' } })
+      fireEvent.click(tid('smoke-connector-submit'))
+      expect(props.createJack).toHaveBeenCalledWith({ name: 'J0', pins: [0, 1], reverse: false, driver: '1' })
     })
-    patchSetState(component)
-    component.componentDidMount()
-    component.handleAdd()
-    component.handleNameChange({ target: { value: 'New Sensor' } })
-    component.handleSave()
-    expect(create).toHaveBeenCalled()
-    expect(component.list().length).toBeGreaterThan(0)
-    expect(analogInputs.map(input => input.name)).toEqual(['pH', 'ORP'])
-  })
 
-  it('<AnalogInputs /> handles driver changes, updates, and deletes', async () => {
-    const fetch = jest.fn()
-    const update = jest.fn()
-    const del = jest.fn()
-    const analogInputs = [
-      { id: '1', name: 'pH', pin: 0, driver: 'ads' },
-      { id: '2', name: 'ORP', pin: 1, driver: 'missing' }
-    ]
-    const aiDrivers = [
-      { id: 'ads', name: 'ADS1115', pinmap: { 'analog-input': [0, 1, 2, 3] } },
-      { id: 'other', name: 'Other', pinmap: { 'analog-input': [4, 5] } }
-    ]
-    const component = new RawAnalogInputs({
-      analog_inputs: analogInputs,
-      drivers: aiDrivers,
-      fetch,
-      create: jest.fn(),
-      delete: del,
-      update
+    it('rejects non numeric jack pins', () => {
+      const props = baseProps()
+      render(<RawConnectors {...props} />)
+      fireEvent.click(tid('smoke-connector-add'))
+      fireEvent.change(tid('smoke-connector-kind'), { target: { value: 'jack' } })
+      fireEvent.change(tid('smoke-connector-name'), { target: { value: 'J0' } })
+      fireEvent.change(tid('smoke-connector-pins'), { target: { value: 'a,b' } })
+      fireEvent.click(tid('smoke-connector-submit'))
+      expect(props.createJack).not.toHaveBeenCalled()
+      expect(screen.getByRole('alert')).toBeTruthy()
     })
-    patchSetState(component)
 
-    component.componentDidMount()
-    component.handleSetDriver({ target: { value: 'other' } })
-    expect(component.state.driver.id).toBe('other')
-    component.handleSetDriver({ target: { value: 'missing' } })
-    expect(component.state.driver).toEqual({})
-    component.onPinChange(3)
-    expect(component.state.pin).toBe(3)
+    it('group add button preselects that driver', () => {
+      const props = baseProps()
+      render(<RawConnectors {...props} />)
+      fireEvent.click(tid('smoke-connector-add-Rasoverry Pi'))
+      expect(tid('smoke-connector-driver').value).toBe('rpi')
+      expect(tid('smoke-connector-kind').value).toBe('outlet')
+      fireEvent.click(tid('smoke-connector-cancel'))
+      expect(screen.queryByTestId('smoke-connector-form')).toBeNull()
+    })
 
-    const items = component.list()
-    const analogInput = items.find(item => item.type === AnalogInput)
-    analogInput.props.update({ name: 'pH updated', pin: 2, driver: 'ads' })
-    expect(update).toHaveBeenCalledWith('1', { name: 'pH updated', pin: 2, driver: 'ads' })
-    expect(fetch).toHaveBeenCalled()
+    it('edits the selected connector and keeps its equipment link', () => {
+      const props = baseProps()
+      render(<RawConnectors {...props} />)
+      expect(tid('smoke-connector-edit').disabled).toBe(true)
+      fireEvent.click(tid('smoke-connector-row-Return Pump'))
+      fireEvent.click(tid('smoke-connector-edit'))
+      expect(tid('smoke-connector-kind').disabled).toBe(true)
+      expect(tid('smoke-connector-name').value).toBe('Return Pump')
+      fireEvent.change(tid('smoke-connector-name'), { target: { value: 'Return' } })
+      fireEvent.click(tid('smoke-connector-submit'))
+      expect(props.updateOutlet).toHaveBeenCalledWith('out-1', {
+        name: 'Return', pin: 1, reverse: true, driver: 'rpi', equipment: 'eq-1'
+      })
+    })
 
-    component.remove({ id: '2', name: 'ORP' })()
-    await Promise.resolve()
-    expect(del).toHaveBeenCalledWith('2')
-    expect(analogInputs.map(input => input.name)).toEqual(['pH', 'ORP'])
+    it('clicking an available PCA9685 grid cell opens create with the pin prefilled', () => {
+      const props = baseProps()
+      const pca = { id: 'pca', name: 'PCA9685x', pinmap: { 'digital-output': [], pwm: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] } }
+      props.drivers = [pca]
+      props.jacks = [{ id: 'j-1', name: 'Moon', pins: [0], driver: 'pca' }]
+      render(<RawConnectors {...props} />)
+      fireEvent.click(tid('smoke-connector-cell-available-jack-4'))
+      expect(tid('smoke-connector-kind').value).toBe('jack')
+      expect(tid('smoke-connector-driver').value).toBe('pca')
+      expect(within(tid('smoke-connector-form')).getByDisplayValue('Jack')).toBeTruthy()
+    })
   })
 })
