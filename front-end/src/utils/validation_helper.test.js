@@ -68,4 +68,18 @@ describe('Validation Helper', () => {
     const html = renderToStaticMarkup(<v.ErrorFor name='field1' touched={touched} errors={errors} />)
     expect(html).toBe('')
   })
+
+  it('is never called as a plain function (it is a React component)', () => {
+    const fs = require('fs')
+    const path = require('path')
+    const offenders = []
+    const walk = dir => fs.readdirSync(dir, { withFileTypes: true }).forEach(entry => {
+      const full = path.join(dir, entry.name)
+      if (entry.isDirectory()) return walk(full)
+      if (!/\.jsx?$/.test(entry.name) || /\.test\.jsx?$/.test(entry.name)) return
+      if (/\bErrorFor\(/.test(fs.readFileSync(full, 'utf8'))) offenders.push(full)
+    })
+    walk(path.resolve(__dirname, '..'))
+    expect(offenders).toEqual([])
+  })
 })

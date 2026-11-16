@@ -4,7 +4,7 @@ import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 import { Field as FormField, Input } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
 import i18n from 'utils/i18n'
 import * as Yup from 'yup'
-import { ErrorFor, ShowError } from '../utils/validation_helper'
+import { ErrorMessage, ShowError } from '../utils/validation_helper'
 import { withFormik, Field as FormikField } from 'formik'
 
 export class CalibrationForm extends React.Component {
@@ -61,7 +61,7 @@ export class CalibrationForm extends React.Component {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--reefpi-space-md)' }}>
             <FormField
               label={i18n.t('temperature:calibration:set_temperature')}
-              error={ShowError('value', this.props.touched, this.props.errors) ? ErrorFor(this.props.errors, 'value') : undefined}
+              error={ShowError('value', this.props.touched, this.props.errors) ? ErrorMessage(this.props.errors, 'value') : undefined}
             >
               <FormikField name='value'>
                 {({ field }) => (

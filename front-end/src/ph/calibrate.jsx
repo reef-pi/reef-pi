@@ -1,6 +1,6 @@
 import React from 'react'
 import * as Yup from 'yup'
-import { ErrorFor, ShowError } from '../utils/validation_helper'
+import { ErrorMessage, ShowError } from '../utils/validation_helper'
 import { withFormik, Field as FormikField } from 'formik'
 import { FaCheck } from 'react-icons/fa'
 import { IconContext } from 'react-icons'
@@ -19,7 +19,7 @@ export const Calibrate = ({ values, errors, touched, label, submitForm, complete
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr auto', gap: 'var(--reefpi-space-md)', alignItems: 'end' }}>
         <FormField
           label={label}
-          error={ShowError('value', touched, errors) ? ErrorFor(errors, 'value') : undefined}
+          error={ShowError('value', touched, errors) ? ErrorMessage(errors, 'value') : undefined}
         >
           <FormikField name='value'>
             {({ field }) => (

@@ -1,4 +1,5 @@
 import React from 'react'
+import { render, screen } from '@testing-library/react'
 import EditAto from './edit_ato'
 import 'isomorphic-fetch'
 import * as Alert from '../utils/alert'
@@ -112,5 +113,14 @@ describe('<EditAto />', () => {
     })
 
     expect(findFieldByName(withControl, 'pump').props.disabled).toBe(false)
+  })
+
+  it('shows validation messages for touched invalid fields instead of crashing', () => {
+    const errors = { name: 'Name is required' }
+    const touched = { name: true }
+    let element
+    expect(() => { element = renderComponent({ errors, touched }) }).not.toThrow()
+    render(element)
+    expect(screen.getByText('Name is required')).toBeTruthy()
   })
 })
