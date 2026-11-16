@@ -250,6 +250,17 @@ func SanitizePrometheusMetricName(name string) string {
 }
 
 func (t *telemetry) EmitMetric(module, name string, v float64) {
+	_ = t.emitMetric(module, name, v)
+}
+
+// EmitMetricWithStatus emits a metric and returns an MQTT publish error, if
+// any. EmitMetric retains its historical fire-and-forget behavior for callers
+// that do not need delivery status.
+func (t *telemetry) EmitMetricWithStatus(module, name string, v float64) error {
+	return t.emitMetric(module, name, v)
+}
+
+func (t *telemetry) emitMetric(module, name string, v float64) error {
 	aio := t.config.AdafruitIO
 	pName := SanitizePrometheusMetricName(module + "_" + name)
 
@@ -273,12 +284,15 @@ func (t *telemetry) EmitMetric(module, name string, v float64) {
 			t.logError("telemetry-"+aFeed, err.Error())
 		}
 	}
+	var mqttErr error
 	if t.config.MQTT.Enable {
 		if err := t.EmitMQTT(pName, v); err != nil {
+			mqttErr = err
 			log.Println("ERROR: Failed to publish data via mqtt. Error:", err)
 			t.logError("telemetry-mqtt", err.Error())
 		}
 	}
+	return mqttErr
 }
 
 func (t *telemetry) EmitMQTT(topic string, v float64) error {
