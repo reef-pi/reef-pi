@@ -1,6 +1,7 @@
 package ph
 
 import (
+	"errors"
 	"strings"
 	"testing"
 	"time"
@@ -90,6 +91,40 @@ func TestReadPropagatesAnalogInputError(t *testing.T) {
 	probe.loadHomeostasis(ctrl.c)
 	if _, err := ctrl.checkAndControl(probe); err == nil {
 		t.Fatal("expected checkAndControl to stop on analog input read error")
+	}
+}
+
+func TestReadReturnsContextForInvalidStoredTransformer(t *testing.T) {
+	ctrl := setupPHController(t)
+	defer ctrl.c.Store().Close()
+
+	probe := Probe{Name: "Stored probe", Transformer: "v +++ invalid"}
+	_, err := ctrl.Read(probe)
+	if err == nil {
+		t.Fatal("expected invalid stored transformer to return an error")
+	}
+	if !strings.Contains(err.Error(), probe.Name) || !strings.Contains(err.Error(), probe.Transformer) {
+		t.Fatalf("expected probe and transformer context, got %v", err)
+	}
+	if errors.Unwrap(err) == nil {
+		t.Fatalf("expected parse error to be wrapped, got %v", err)
+	}
+	if _, err := ctrl.checkAndControl(probe); err == nil {
+		t.Fatal("expected polling read path to handle the invalid transformer as an error")
+	}
+}
+
+func TestReadEvaluatesValidTransformerAndRoundsResult(t *testing.T) {
+	ctrl := setupPHController(t)
+	defer ctrl.c.Store().Close()
+
+	probe := Probe{Name: "Transformed probe", Transformer: "v - v + 1.23456"}
+	reading, err := ctrl.Read(probe)
+	if err != nil {
+		t.Fatalf("Read() returned error: %v", err)
+	}
+	if reading != 1.23 {
+		t.Fatalf("Read() = %v, want 1.23", reading)
 	}
 }
 

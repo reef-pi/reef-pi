@@ -171,11 +171,14 @@ func (c *Controller) Read(p Probe) (float64, error) {
 	}
 	if p.Transformer != "" {
 		expr, err := govaluate.NewEvaluableExpression(p.Transformer)
+		if err != nil {
+			return -1, fmt.Errorf("pH probe %q has invalid transformer %q: %w", p.Name, p.Transformer, err)
+		}
 		parameters := make(map[string]interface{}, 1)
 		parameters["v"] = v
 		result, err := expr.Evaluate(parameters)
 		if err != nil {
-			return -1, err
+			return -1, fmt.Errorf("pH probe %q failed to evaluate transformer %q: %w", p.Name, p.Transformer, err)
 		}
 		log.Println("ph subsystem executing transform:", p.Transformer, "with value:", v, "result:", result)
 		v1, ok := result.(float64)
