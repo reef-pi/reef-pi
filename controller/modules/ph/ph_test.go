@@ -1,6 +1,7 @@
 package ph
 
 import (
+	"strings"
 	"testing"
 	"time"
 
@@ -68,6 +69,27 @@ func TestProbeWithinRange(t *testing.T) {
 	}
 	if p.WithinRange(8.5) {
 		t.Error("8.5 should be above range")
+	}
+}
+
+func TestReadPropagatesAnalogInputError(t *testing.T) {
+	ctrl := setupPHController(t)
+	defer ctrl.c.Store().Close()
+	ctrl.devMode = false
+
+	probe := Probe{Name: "Tank pH", AnalogInput: "missing-input"}
+	_, err := ctrl.Read(probe)
+	if err == nil {
+		t.Fatal("expected analog input read error")
+	}
+	if !strings.Contains(err.Error(), probe.Name) || !strings.Contains(err.Error(), probe.AnalogInput) {
+		t.Fatalf("expected error to include probe and analog input context, got %v", err)
+	}
+
+	probe.Control = true
+	probe.loadHomeostasis(ctrl.c)
+	if _, err := ctrl.checkAndControl(probe); err == nil {
+		t.Fatal("expected checkAndControl to stop on analog input read error")
 	}
 }
 
