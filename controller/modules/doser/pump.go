@@ -154,14 +154,15 @@ func (c *Controller) Update(id string, p Pump) error {
 		delete(c.cronIDs, id)
 	}
 	c.mu.Unlock()
-	c.stopContinuous(id)
 	if p.Regiment.Enable {
 		if p.Regiment.Continuous {
-			c.startContinuous(p)
+			c.replaceContinuous(id, &p)
 			return nil
 		}
+		c.stopContinuous(id)
 		return c.addToCron(p)
 	}
+	c.stopContinuous(id)
 	return nil
 }
 

@@ -21,21 +21,28 @@ const (
 )
 
 type Controller struct {
-	DevMode  bool
-	statsMgr telemetry.StatsManager
-	c        controller.Controller
-	repo     repository
-	mu       *sync.Mutex
-	runner   *cron.Cron
-	cronIDs  map[string]cron.EntryID
-	quitters map[string]chan struct{} // for continuous pumps
+	DevMode           bool
+	statsMgr          telemetry.StatsManager
+	c                 controller.Controller
+	repo              repository
+	mu                *sync.Mutex
+	runner            *cron.Cron
+	cronIDs           map[string]cron.EntryID
+	quitters          map[string]*continuousRun // for continuous pumps
+	continuousMu      sync.Mutex                // serializes lifecycle changes; workers never acquire it
+	continuousControl func(string, map[int]float64) error
+}
+
+type continuousRun struct {
+	quit chan struct{}
+	done chan struct{}
 }
 
 func New(devMode bool, c controller.Controller) (*Controller, error) {
 	return &Controller{
 		DevMode:  devMode,
 		cronIDs:  make(map[string]cron.EntryID),
-		quitters: make(map[string]chan struct{}),
+		quitters: make(map[string]*continuousRun),
 		mu:       &sync.Mutex{},
 		runner:   cron.New(cron.WithParser(cron.NewParser(_cronParserSpec))),
 		statsMgr: c.Telemetry().NewStatsManager(UsageBucket),
@@ -48,13 +55,22 @@ func (c *Controller) GetEntity(id string) (controller.Entity, error) {
 }
 
 func (c *Controller) Stop() {
-	c.runner.Stop()
+	<-c.runner.Stop().Done()
+	c.continuousMu.Lock()
 	c.mu.Lock()
-	for id, quit := range c.quitters {
-		close(quit)
+	runs := make([]*continuousRun, 0, len(c.quitters))
+	for id, run := range c.quitters {
+		runs = append(runs, run)
 		delete(c.quitters, id)
 	}
 	c.mu.Unlock()
+	for _, run := range runs {
+		close(run.quit)
+	}
+	for _, run := range runs {
+		<-run.done
+	}
+	c.continuousMu.Unlock()
 	log.Println("Stopped dosing subsystem")
 }
 
@@ -91,36 +107,55 @@ func (c *Controller) Start() {
 }
 
 func (c *Controller) startContinuous(p Pump) {
+	c.replaceContinuous(p.ID, &p)
+}
+
+// replaceContinuous fully joins the prior worker before making a replacement
+// visible or allowing it to write to the same output.
+func (c *Controller) replaceContinuous(id string, p *Pump) {
+	c.continuousMu.Lock()
+	defer c.continuousMu.Unlock()
 	c.mu.Lock()
-	defer c.mu.Unlock()
-	if quit, ok := c.quitters[p.ID]; ok {
-		close(quit)
+	previous := c.quitters[id]
+	delete(c.quitters, id)
+	c.mu.Unlock()
+	if previous != nil {
+		close(previous.quit)
+		<-previous.done
 	}
-	quit := make(chan struct{})
-	c.quitters[p.ID] = quit
+	if p == nil {
+		return
+	}
+	run := &continuousRun{quit: make(chan struct{}), done: make(chan struct{})}
+	c.mu.Lock()
+	c.quitters[id] = run
+	c.mu.Unlock()
 	go func() {
+		defer close(run.done)
 		log.Println("doser-subsystem: starting continuous pump:", p.Name, "at", p.Regiment.Speed, "%")
 		v := map[int]float64{p.Pin: p.Regiment.Speed}
-		if err := c.c.DM().Jacks().Control(p.Jack, v); err != nil {
+		if err := c.controlContinuous(p.Jack, v); err != nil {
 			log.Println("ERROR: doser-subsystem: failed to start continuous pump:", p.Name, "error:", err)
 			return
 		}
-		<-quit
+		<-run.quit
 		v[p.Pin] = 0
-		if err := c.c.DM().Jacks().Control(p.Jack, v); err != nil {
+		if err := c.controlContinuous(p.Jack, v); err != nil {
 			log.Println("ERROR: doser-subsystem: failed to stop continuous pump:", p.Name, "error:", err)
 		}
 		log.Println("doser-subsystem: stopped continuous pump:", p.Name)
 	}()
 }
 
-func (c *Controller) stopContinuous(id string) {
-	c.mu.Lock()
-	defer c.mu.Unlock()
-	if quit, ok := c.quitters[id]; ok {
-		close(quit)
-		delete(c.quitters, id)
+func (c *Controller) controlContinuous(jack string, values map[int]float64) error {
+	if c.continuousControl != nil {
+		return c.continuousControl(jack, values)
 	}
+	return c.c.DM().Jacks().Control(jack, values)
+}
+
+func (c *Controller) stopContinuous(id string) {
+	c.replaceContinuous(id, nil)
 }
 
 func (c *Controller) addToCron(p Pump) error {
