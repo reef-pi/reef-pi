@@ -1,24 +1,21 @@
 import React from 'react'
-import Outlets from './outlets'
-import Jacks from './jacks'
-import AnalogInputs from './analog_inputs'
-import Inlets from './inlets'
+import ConnectorForm, { kindsForDriver } from './connector_form'
 import i18n from 'utils/i18n'
 import { confirm } from 'utils/confirm'
 import { connect } from 'react-redux'
 import { fetchDrivers } from 'redux/actions/drivers'
-import { fetchOutlets, deleteOutlet, updateOutlet } from 'redux/actions/outlets'
-import { fetchInlets, deleteInlet, updateInlet } from 'redux/actions/inlets'
-import { fetchJacks, deleteJack, updateJack } from 'redux/actions/jacks'
-import { fetchAnalogInputs, deleteAnalogInput, updateAnalogInput } from 'redux/actions/analog_inputs'
+import { fetchOutlets, deleteOutlet, updateOutlet, createOutlet } from 'redux/actions/outlets'
+import { fetchInlets, deleteInlet, updateInlet, createInlet } from 'redux/actions/inlets'
+import { fetchJacks, deleteJack, updateJack, createJack } from 'redux/actions/jacks'
+import { fetchAnalogInputs, deleteAnalogInput, updateAnalogInput, createAnalogInput } from 'redux/actions/analog_inputs'
 import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 import { Input, Select } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
 
 const CONNECTOR_KINDS = {
-  inlet: { label: 'Inlet', deleteProp: 'deleteInlet', updateProp: 'updateInlet' },
-  outlet: { label: 'Outlet', deleteProp: 'deleteOutlet', updateProp: 'updateOutlet' },
-  analog: { label: 'Analog input', deleteProp: 'deleteAnalogInput', updateProp: 'updateAnalogInput' },
-  jack: { label: 'Jack', deleteProp: 'deleteJack', updateProp: 'updateJack' }
+  inlet: { label: 'Inlet', deleteProp: 'deleteInlet', updateProp: 'updateInlet', createProp: 'createInlet' },
+  outlet: { label: 'Outlet', deleteProp: 'deleteOutlet', updateProp: 'updateOutlet', createProp: 'createOutlet' },
+  analog: { label: 'Analog input', deleteProp: 'deleteAnalogInput', updateProp: 'updateAnalogInput', createProp: 'createAnalogInput' },
+  jack: { label: 'Jack', deleteProp: 'deleteJack', updateProp: 'updateJack', createProp: 'createJack' }
 }
 
 const getLocalStorage = () => {
@@ -143,6 +140,7 @@ class connectors extends React.Component {
       conflictsOnly: false,
       selected: {},
       batchDriver: '',
+      form: null,
       openGroups
     }
     this.handleFilterChange = this.handleFilterChange.bind(this)
@@ -153,6 +151,11 @@ class connectors extends React.Component {
     this.handleBatchDelete = this.handleBatchDelete.bind(this)
     this.handleBatchDriverChange = this.handleBatchDriverChange.bind(this)
     this.handleBatchMove = this.handleBatchMove.bind(this)
+    this.openCreate = this.openCreate.bind(this)
+    this.handleOpenEdit = this.handleOpenEdit.bind(this)
+    this.handleCloseForm = this.handleCloseForm.bind(this)
+    this.handleFormSubmit = this.handleFormSubmit.bind(this)
+    this.handleChannelClick = this.handleChannelClick.bind(this)
   }
 
   componentDidMount () {
@@ -237,6 +240,64 @@ class connectors extends React.Component {
     this.setState({ selected: {} })
   }
 
+  openCreate (driver) {
+    const kind = (driver ? kindsForDriver(driver) : [])[0] || 'outlet'
+    this.setState({
+      form: { mode: 'create', kind, key: 'create-' + Date.now(), initial: driver ? { driver: driver.id } : {} }
+    })
+  }
+
+  handleOpenEdit () {
+    const selected = this.selectedChannels()
+    if (selected.length !== 1) return
+    const channel = selected[0]
+    this.setState({
+      form: {
+        mode: 'edit',
+        kind: channel.kind,
+        key: selectedKey(channel),
+        channel,
+        initial: {
+          name: channel.name,
+          driver: channel.driver,
+          pin: channel.pin,
+          pins: channel.pins,
+          reverse: channel.reverse,
+          equipment: channel.equipment
+        }
+      }
+    })
+  }
+
+  handleCloseForm () {
+    this.setState({ form: null })
+  }
+
+  handleFormSubmit (kind, payload) {
+    const form = this.state.form
+    if (form.mode === 'edit') {
+      this.props[CONNECTOR_KINDS[kind].updateProp](form.channel.id, payload)
+    } else {
+      this.props[CONNECTOR_KINDS[kind].createProp](payload)
+    }
+    this.setState({ form: null, selected: {} })
+  }
+
+  handleChannelClick (channel) {
+    if (channel.placeholder) {
+      this.setState({
+        form: {
+          mode: 'create',
+          kind: channel.kind,
+          key: 'create-' + channel.id,
+          initial: { driver: channel.driver, pin: channel.pins[0] }
+        }
+      })
+      return
+    }
+    this.toggleSelection(channel)
+  }
+
   groups () {
     const driverMap = {}
     ;(this.props.drivers || []).forEach(driver => { driverMap[driver.id] = driver })
@@ -305,7 +366,9 @@ class connectors extends React.Component {
           {batchDrivers.map(driver => <option key={driver.id} value={driver.id}>{driver.name}</option>)}
         </Select>
         <Button variant='secondary' disabled={selectedCount === 0 || !this.state.batchDriver} onClick={this.handleBatchMove}>Move</Button>
-        <Button variant='danger' disabled={selectedCount === 0} onClick={this.handleBatchDelete}>Delete {selectedCount || ''}</Button>
+        <Button variant='secondary' data-testid='smoke-connector-edit' disabled={selectedCount !== 1} onClick={this.handleOpenEdit}>Edit</Button>
+        <Button variant='danger' data-testid='smoke-connector-delete' disabled={selectedCount === 0} onClick={this.handleBatchDelete}>Delete {selectedCount || ''}</Button>
+        <Button variant='primary' data-testid='smoke-connector-add' onClick={() => this.openCreate()}>Add connector</Button>
       </div>
     )
   }
@@ -320,6 +383,8 @@ class connectors extends React.Component {
               type='button'
               key={selectedKey(channel)}
               className={'connector-list-row' + (selected ? ' selected' : '') + (channel.conflict ? ' connector-conflict' : '')}
+              data-testid={'smoke-connector-row-' + channel.name}
+              aria-pressed={selected}
               onClick={() => this.toggleSelection(channel)}
             >
               <span className='connector-status-dot' />
@@ -346,8 +411,10 @@ class connectors extends React.Component {
               type='button'
               key={selectedKey(channel)}
               className={'connector-channel-cell' + (selected ? ' selected' : '') + (channel.conflict ? ' connector-conflict' : '') + (channel.placeholder ? ' available' : '')}
-              onClick={channel.placeholder ? undefined : () => this.toggleSelection(channel)}
-              title={channel.name}
+              data-testid={'smoke-connector-cell-' + (channel.placeholder ? 'available-' : '') + channel.kind + '-' + (channel.pins || [])[0]}
+              aria-pressed={channel.placeholder ? undefined : selected}
+              onClick={() => this.handleChannelClick(channel)}
+              title={channel.placeholder ? 'Add ' + CONNECTOR_KINDS[channel.kind].label.toLowerCase() : channel.name}
             >
               <span className='connector-cell-pin'>{channelDisplayName(channel)}</span>
               <span className='connector-status-dot' />
@@ -368,13 +435,26 @@ class connectors extends React.Component {
     const hasConflict = group.channels.some(channel => channel.conflict)
     return (
       <section className='connector-group' key={group.driverName}>
-        <button type='button' className='connector-group-header' onClick={() => this.toggleGroup(group.driverName)}>
-          <span className='connector-group-title'>{group.driverName}</span>
-          <span className='connector-count-pill'>{used} / {total} used</span>
-          {hasConflict ? <span className='connector-badge warning'>conflicts</span> : null}
-          <span className='connector-group-add'>+ Add</span>
-          <span className='connector-group-caret'>{open ? '-' : '+'}</span>
-        </button>
+        <div className='connector-group-header'>
+          <button
+            type='button'
+            className='connector-group-toggle'
+            aria-expanded={open}
+            onClick={() => this.toggleGroup(group.driverName)}
+          >
+            <span className='connector-group-title'>{group.driverName}</span>
+            <span className='connector-count-pill'>{used} / {total} used</span>
+            {hasConflict ? <span className='connector-badge warning'>conflicts</span> : null}
+            <span className='connector-group-caret'>{open ? '-' : '+'}</span>
+          </button>
+          <Button
+            variant='ghost'
+            className='connector-group-add'
+            data-testid={'smoke-connector-add-' + group.driverName}
+            onClick={() => this.openCreate(group.driver)}
+          >+ Add
+          </Button>
+        </div>
         {open
           ? highCount
             ? this.renderChannelGrid(gridChannelsForGroup(group))
@@ -384,40 +464,21 @@ class connectors extends React.Component {
     )
   }
 
-  renderNewShell () {
-    const groups = this.groups()
+  renderForm () {
+    const form = this.state.form
+    if (!form) return null
     return (
-      <div className='connectors-shell'>
-        {this.renderFilterRow()}
-        <div className='connector-groups'>
-          {groups.length > 0
-            ? groups.map(group => this.renderGroup(group))
-            : <div className='connector-empty-state'>No connectors match the current filters.</div>}
-        </div>
-      </div>
-    )
-  }
-
-  renderLegacy () {
-    return (
-      <div className='reefpi-view'>
-        <div className='legacy-inlets'>
-          <Inlets />
-        </div>
-        <hr />
-        <div className='legacy-outlets'>
-          <Outlets />
-        </div>
-        <hr />
-        <div className='legacy-analog-inputs'>
-          <AnalogInputs />
-        </div>
-        <hr />
-        <div className='legacy-jacks'>
-          <Jacks />
-        </div>
-
-      </div>
+      <section className='connector-form-panel' aria-label={form.mode === 'edit' ? 'Edit connector' : 'Add connector'}>
+        <ConnectorForm
+          key={form.key}
+          mode={form.mode}
+          kind={form.kind}
+          drivers={this.props.drivers}
+          initial={form.initial}
+          onSubmit={this.handleFormSubmit}
+          onCancel={this.handleCloseForm}
+        />
+      </section>
     )
   }
 
@@ -430,12 +491,18 @@ class connectors extends React.Component {
         </div>
       )
     }
-
-    if (typeof window !== 'undefined' && window.FEATURE_FLAGS && window.FEATURE_FLAGS.new_shell) {
-      return this.renderNewShell()
-    }
-
-    return this.renderLegacy()
+    const groups = this.groups()
+    return (
+      <div className='connectors-shell'>
+        {this.renderFilterRow()}
+        {this.renderForm()}
+        <div className='connector-groups'>
+          {groups.length > 0
+            ? groups.map(group => this.renderGroup(group))
+            : <div className='connector-empty-state'>No connectors match the current filters.</div>}
+        </div>
+      </div>
+    )
   }
 }
 
@@ -460,6 +527,10 @@ export const mapDispatchToProps = dispatch => {
     deleteInlet: id => dispatch(deleteInlet(id)),
     deleteJack: id => dispatch(deleteJack(id)),
     deleteAnalogInput: id => dispatch(deleteAnalogInput(id)),
+    createOutlet: outlet => dispatch(createOutlet(outlet)),
+    createInlet: inlet => dispatch(createInlet(inlet)),
+    createJack: jack => dispatch(createJack(jack)),
+    createAnalogInput: analogInput => dispatch(createAnalogInput(analogInput)),
     updateOutlet: (id, outlet) => dispatch(updateOutlet(id, outlet)),
     updateInlet: (id, inlet) => dispatch(updateInlet(id, inlet)),
     updateJack: (id, jack) => dispatch(updateJack(id, jack)),
