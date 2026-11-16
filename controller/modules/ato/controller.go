@@ -17,15 +17,22 @@ const Bucket = storage.ATOBucket
 const UsageBucket = storage.ATOUsageBucket
 
 type Controller struct {
-	statsMgr telemetry.StatsManager
-	devMode  bool
-	quitters map[string]chan struct{}
-	wg       sync.WaitGroup
-	mu       *sync.Mutex
-	inlets   *connectors.Inlets
-	c        controller.Controller
-	repo     repository
-	lowSince map[string]*time.Time
+	statsMgr     telemetry.StatsManager
+	devMode      bool
+	quitters     map[string]*workerRun
+	wg           sync.WaitGroup
+	mu           *sync.Mutex
+	lifecycleMu  sync.Mutex
+	inlets       *connectors.Inlets
+	c            controller.Controller
+	repo         repository
+	lowSince     map[string]*time.Time
+	workerRunner func(ATO, chan struct{}) error
+}
+
+type workerRun struct {
+	quit chan struct{}
+	done chan struct{}
 }
 
 func New(devMode bool, c controller.Controller) (*Controller, error) {
@@ -33,7 +40,7 @@ func New(devMode bool, c controller.Controller) (*Controller, error) {
 		devMode:  devMode,
 		mu:       &sync.Mutex{},
 		inlets:   c.DM().Inlets(),
-		quitters: make(map[string]chan struct{}),
+		quitters: make(map[string]*workerRun),
 		statsMgr: c.Telemetry().NewStatsManager(UsageBucket),
 		c:        c,
 		repo:     newRepository(c.Store()),
@@ -69,14 +76,15 @@ func (c *Controller) Setup() error {
 }
 
 func (c *Controller) Start() {
-	c.mu.Lock()
-	defer c.mu.Unlock()
+	c.lifecycleMu.Lock()
+	defer c.lifecycleMu.Unlock()
 	atos, err := c.List()
 	if err != nil {
 		log.Println("ERROR: ato subsystem: Failed to list sensors. Error:", err)
 		return
 	}
 	for _, a := range atos {
+		c.stopWorkerLocked(a.ID)
 		if !a.Enable {
 			continue
 		}
@@ -88,29 +96,60 @@ func (c *Controller) Start() {
 		if err := c.statsMgr.Load(a.ID, fn); err != nil {
 			log.Println("ERROR: ato controller. Failed to load usage. Error:", err)
 		}
-		quit := make(chan struct{})
-		c.quitters[a.ID] = quit
-		c.wg.Add(1)
-		go func(ato ATO, q chan struct{}) {
-			defer c.wg.Done()
-			c.Run(ato, q)
-		}(a, quit)
+		c.startWorkerLocked(a)
 	}
 }
 
 func (c *Controller) Stop() {
-	c.mu.Lock()
+	c.lifecycleMu.Lock()
+	defer c.lifecycleMu.Unlock()
 	quitters := c.quitters
-	c.quitters = make(map[string]chan struct{})
-	c.mu.Unlock()
-	for id, quit := range quitters {
-		close(quit)
+	c.quitters = make(map[string]*workerRun)
+	for _, run := range quitters {
+		close(run.quit)
+	}
+	c.wg.Wait()
+	for id := range quitters {
 		if err := c.statsMgr.Save(id); err != nil {
 			log.Println("ERROR: ato controller. Failed to save usage. Error:", err)
 		}
 		log.Println("ato subsystem: Saved usage data of sensor:", id)
 	}
-	c.wg.Wait()
+}
+
+// Worker lifecycle helpers must be called with lifecycleMu held. The worker
+// itself does not acquire lifecycleMu when exiting, so joining here cannot
+// block on the debounce mutex or the lifecycle mutex.
+func (c *Controller) startWorkerLocked(a ATO) {
+	run := &workerRun{quit: make(chan struct{}), done: make(chan struct{})}
+	c.quitters[a.ID] = run
+	c.wg.Add(1)
+	go func() {
+		defer c.wg.Done()
+		defer close(run.done)
+		if c.workerRunner != nil {
+			_ = c.workerRunner(a, run.quit)
+		} else {
+			_ = c.run(a, run.quit, true)
+		}
+	}()
+}
+
+func (c *Controller) stopWorkerLocked(id string) bool {
+	if run, ok := c.quitters[id]; ok {
+		delete(c.quitters, id)
+		close(run.quit)
+		<-run.done
+		return true
+	}
+	return false
+}
+
+func (c *Controller) replaceWorkerLocked(a ATO) {
+	c.stopWorkerLocked(a.ID)
+	if a.Enable {
+		c.startWorkerLocked(a)
+	}
 }
 
 func (c *Controller) Control(a ATO, reading int) error {

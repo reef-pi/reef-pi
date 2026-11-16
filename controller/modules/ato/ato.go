@@ -54,8 +54,8 @@ func (c *Controller) List() ([]ATO, error) {
 }
 
 func (c *Controller) Create(a ATO) error {
-	c.mu.Lock()
-	defer c.mu.Unlock()
+	c.lifecycleMu.Lock()
+	defer c.lifecycleMu.Unlock()
 	if a.Period <= 0 {
 		return fmt.Errorf("Check period for ato controller must be greater than zero")
 	}
@@ -65,21 +65,13 @@ func (c *Controller) Create(a ATO) error {
 		return err
 	}
 	c.statsMgr.Initialize(a.ID)
-	if a.Enable {
-		quit := make(chan struct{})
-		c.quitters[a.ID] = quit
-		c.wg.Add(1)
-		go func(ato ATO, q chan struct{}) {
-			defer c.wg.Done()
-			c.Run(ato, q)
-		}(a, quit)
-	}
+	c.replaceWorkerLocked(a)
 	return nil
 }
 
 func (c *Controller) Update(id string, a ATO) error {
-	c.mu.Lock()
-	defer c.mu.Unlock()
+	c.lifecycleMu.Lock()
+	defer c.lifecycleMu.Unlock()
 	a.ID = id
 	if a.Period <= 0 {
 		return fmt.Errorf("Period should be positive. Supplied:%d", a.Period)
@@ -87,57 +79,43 @@ func (c *Controller) Update(id string, a ATO) error {
 	if err := c.repo.Update(id, a); err != nil {
 		return err
 	}
-	quit, ok := c.quitters[a.ID]
-	if ok {
-		close(quit)
-		delete(c.quitters, a.ID)
-	}
-	if a.Enable {
-		quit := make(chan struct{})
-		c.quitters[a.ID] = quit
-		c.wg.Add(1)
-		go func(ato ATO, q chan struct{}) {
-			defer c.wg.Done()
-			c.Run(ato, q)
-		}(a, quit)
-	}
+	c.replaceWorkerLocked(a)
 	return nil
 }
 func (c *Controller) Reset(id string) error {
+	c.lifecycleMu.Lock()
+	defer c.lifecycleMu.Unlock()
 	a, err := c.Get(id)
 	if err != nil {
 		return err
 	}
 	log.Println("ato-subsystem: resetting ato ", a.Name)
-	quit, ok := c.quitters[id]
-	if ok {
-		close(quit)
-		delete(c.quitters, id)
-	}
+	c.stopWorkerLocked(id)
 	if err := c.statsMgr.Delete(id); err != nil {
 		log.Println("ERROR:  ato-subsystem: Failed to delete usage details for ato:", id, "error:", err)
 	}
 	if err := c.repo.DeleteUsage(id); err != nil {
 		log.Println("ERROR:  ato-subsystem: Failed to delete usage details for ato:", id, "error:", err)
 	}
-	c.mu.Lock()
-	defer c.mu.Unlock()
 	if a.Enable {
-		quit := make(chan struct{})
-		c.quitters[a.ID] = quit
-		go c.Run(a, quit)
+		c.startWorkerLocked(a)
 	}
 	return nil
 }
 
 func (c *Controller) Delete(id string) error {
-	if err := c.repo.Delete(id); err != nil {
+	c.lifecycleMu.Lock()
+	defer c.lifecycleMu.Unlock()
+	a, err := c.repo.Get(id)
+	if err != nil {
 		return err
 	}
-	quit, ok := c.quitters[id]
-	if ok {
-		close(quit)
-		delete(c.quitters, id)
+	hadWorker := c.stopWorkerLocked(id)
+	if err := c.repo.Delete(id); err != nil {
+		if hadWorker && a.Enable {
+			c.startWorkerLocked(a)
+		}
+		return err
 	}
 	return nil
 }
@@ -191,6 +169,10 @@ func (c *Controller) Check(a ATO) (int, error) {
 }
 
 func (c *Controller) Run(a ATO, quit chan struct{}) error {
+	return c.run(a, quit, false)
+}
+
+func (c *Controller) run(a ATO, quit chan struct{}, managed bool) error {
 	if a.Period <= 0 {
 		log.Printf("ERROR: ato-subsystem. Invalid period set for sensor:%s. Expected positive, found:%d\n", a.Name, a.Period)
 		return fmt.Errorf("invalid check period:%d", a.Period)
@@ -222,6 +204,11 @@ func (c *Controller) Run(a ATO, quit chan struct{}) error {
 				// Without pump control (Nothing): disable once low level detected (reading==0)
 				if (a.Control && reading == 1) || (!a.Control && reading == 0) {
 					a.Enable = false
+					if managed {
+						// This worker may be joined while lifecycleMu is held. Persist
+						// one-shot completion directly instead of re-entering Update.
+						return c.repo.Update(a.ID, a)
+					}
 					return c.Update(a.ID, a)
 				}
 			}
