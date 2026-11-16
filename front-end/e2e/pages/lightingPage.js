@@ -41,7 +41,8 @@ class LightingPage {
 
     await this.page.locator(`#edit-light-${savedLight.id}`).click()
     await expect(form).toBeVisible()
-    await form.locator(`input[type="radio"][value="${light.profile}"]`).check()
+    // The radio input is visually hidden; the styled wrapping label is the click target.
+    await form.locator(`label:has(input[type="radio"][value="${light.profile}"])`).click()
     await form.locator(`[name="config.channels.${channelKey}.profile.config.start"]`).fill(light.start)
     await form.locator(`[name="config.channels.${channelKey}.profile.config.end"]`).fill(light.end)
 
@@ -58,7 +59,12 @@ class LightingPage {
       }
     }
 
+    // Wait for the update to land; otherwise callers can read /api/lights before the profile is saved.
+    const saved = this.page.waitForResponse(response => (
+      response.url().endsWith(`/api/lights/${savedLight.id}`) && response.request().method() !== 'GET'
+    ))
     await this.page.locator(`#save-light-${savedLight.id}`).click()
+    expect((await saved).ok()).toBeTruthy()
     await expect(this.page.locator('body')).toContainText(light.name)
   }
 

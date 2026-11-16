@@ -58,6 +58,7 @@ const EditMacro = ({
         <FormField label={i18n.t('name')} error={ShowError('name', touched, errors) ? <ErrorFor errors={errors} touched={touched} name='name' /> : undefined}>
           <Input
             name='name'
+            data-testid='smoke-macro-name'
             disabled={readOnly}
             onChange={handleChange}
             onBlur={onBlur}

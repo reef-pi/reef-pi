@@ -19,7 +19,7 @@ class MacrosPage {
   }
 
   async openAddForm () {
-    const nameInput = this.page.locator('.add-macro [name="name"]')
+    const nameInput = this.page.getByTestId('smoke-macro-name')
     if (!await nameInput.isVisible()) {
       await this.page.getByTestId('smoke-macro-add-toggle').click()
     }
