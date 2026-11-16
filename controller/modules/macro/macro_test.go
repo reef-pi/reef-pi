@@ -1,10 +1,20 @@
 package macro
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/reef-pi/reef-pi/controller"
 )
+
+type listErrorRepository struct {
+	repository
+	err error
+}
+
+func (r listErrorRepository) List() ([]Macro, error) {
+	return nil, r.err
+}
 
 func TestMacro(t *testing.T) {
 	c, err := controller.TestController()
@@ -114,6 +124,26 @@ func TestMacroInUseAndGetEntity(t *testing.T) {
 	// GetEntity — not supported
 	if _, err := s.GetEntity("1"); err == nil {
 		t.Error("GetEntity should return error (not supported)")
+	}
+}
+
+func TestMacroInUsePropagatesListError(t *testing.T) {
+	c, err := controller.TestController()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer c.Store().Close()
+
+	s, err := New(true, c)
+	if err != nil {
+		t.Fatal(err)
+	}
+	wantErr := errors.New("list failed")
+	s.repo = listErrorRepository{repository: s.repo, err: wantErr}
+
+	_, err = s.InUse("equipment", "42")
+	if !errors.Is(err, wantErr) {
+		t.Fatalf("InUse error = %v, want %v", err, wantErr)
 	}
 }
 

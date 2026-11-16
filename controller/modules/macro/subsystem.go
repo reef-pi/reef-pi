@@ -95,7 +95,7 @@ func (s *Subsystem) InUse(depType, id string) ([]string, error) {
 	case storage.MacroBucket:
 		ms, err := s.List()
 		if err != nil {
-			return deps, nil
+			return deps, err
 		}
 		for _, m := range ms {
 			for i, step := range m.Steps {
