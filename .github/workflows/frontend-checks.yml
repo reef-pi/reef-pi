@@ -38,6 +38,8 @@ jobs:
             ${{ runner.os }}-node_modules-
       - name: Install
         run: yarn
+      - name: sass-lint
+        run: yarn run sass-lint
       - name: token-diff
         run: yarn run token-diff
       - name: contrast-check

@@ -1,8 +1,15 @@
+options:
+  merge-default-rules: false
 files:
   include: 'assets/sass/**/*.s+(a|c)ss'
 rules:
-  no-ids: 0
-  property-sort-order: 0
+  # Enforce correctness issues with low false-positive risk. Legacy style
+  # preferences (nesting, leading zeros, shorthand, etc.) remain advisory work.
+  no-debug: 2
+  no-empty-rulesets: 2
+  no-invalid-hex: 2
+  no-trailing-whitespace: 2
+  final-newline: 2
   indentation:
     - 2
     -
