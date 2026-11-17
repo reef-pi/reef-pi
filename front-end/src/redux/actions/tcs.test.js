@@ -1,4 +1,4 @@
-import { tcsLoaded, sensorsLoaded, tcUsageLoaded, fetchTCs, createTC, updateTC, deleteTC, fetchSensors, fetchTCUsage } from './tcs'
+import { readingValue, tcReadComplete, tcsLoaded, sensorsLoaded, tcUsageLoaded, fetchTCs, createTC, updateTC, deleteTC, fetchSensors, fetchTCUsage } from './tcs'
 import { thunk } from 'redux-thunk'
 import fetchMock from 'fetch-mock'
 import configureMockStore from 'redux-mock-store'
@@ -74,5 +74,16 @@ describe('temperature controller actions', () => {
     return store.dispatch(deleteTC('1')).then(() => {
       expect(store.getActions()).toEqual([tcsLoaded({})])
     })
+  })
+
+  it('readingValue unwraps the { value } API response and passes numbers through', () => {
+    expect(readingValue({ value: 78.2 })).toBe(78.2)
+    expect(readingValue(78.2)).toBe(78.2)
+    expect(readingValue(null)).toBeNull()
+    expect(readingValue(undefined)).toBeUndefined()
+  })
+
+  it('tcReadComplete stores the bare reading number', () => {
+    expect(tcReadComplete('1')({ value: 78.2 })).toEqual({ type: 'TC_READING_COMPLETE', payload: { reading: 78.2, id: '1' } })
   })
 })

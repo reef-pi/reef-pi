@@ -1,4 +1,4 @@
-import { phProbesLoaded, probeReadingsLoaded, fetchPhProbes, fetchProbeReadings, probeUpdated, probeCalibrated, updateProbe, calibrateProbe, deleteProbe, createProbe } from './phprobes'
+import { probeReadComplete, phProbesLoaded, probeReadingsLoaded, fetchPhProbes, fetchProbeReadings, probeUpdated, probeCalibrated, updateProbe, calibrateProbe, deleteProbe, createProbe } from './phprobes'
 import { thunk } from 'redux-thunk'
 import fetchMock from 'fetch-mock'
 import configureMockStore from 'redux-mock-store'
@@ -78,5 +78,10 @@ describe('probe actions', () => {
     return store.dispatch(deleteProbe('1')).then(() => {
       expect(store.getActions()).toEqual([phProbesLoaded({})])
     })
+  })
+
+  it('probeReadComplete stores the bare reading number', () => {
+    expect(probeReadComplete('1')({ value: 7.9 })).toEqual({ type: 'PH_PROBE_READING_COMPLETE', payload: { reading: 7.9, id: '1' } })
+    expect(probeReadComplete('1')(7.9).payload.reading).toBe(7.9)
   })
 })

@@ -1,4 +1,4 @@
-import React, { cloneElement } from 'react'
+import React, { Children, cloneElement, isValidElement } from 'react'
 import { FaAngleDown, FaAngleUp, FaEdit, FaTrashAlt } from 'react-icons/fa'
 import PropTypes from 'prop-types'
 import ToggleSwitch from '../../design-system/ui_kits/reef-pi-app/primitives/ToggleSwitch'
@@ -37,9 +37,13 @@ class Collapsible extends React.Component {
         {FaEdit()}
       </Button>
     )
+    // Callers pass either just the form, or a read-only view followed by the form. Only the last
+    // element (the form) receives readOnly/onSubmit; anything before it is rendered as given.
+    const elements = Children.toArray(children).filter(isValidElement)
+    const form = elements[elements.length - 1]
     const handleSubmit = (values) => {
       this.props.onSubmit(this.props.name)
-      children.props.onSubmit(values)
+      form.props.onSubmit(values)
     }
     let toggleStateButton = ''
     if (onToggleState) {
@@ -78,10 +82,11 @@ class Collapsible extends React.Component {
           {this.props.title}
         </div>
         {expanded
-          ? cloneElement(children, {
-            readOnly,
-            onSubmit: handleSubmit
-          })
+          ? elements.map(element => (
+            element === form
+              ? cloneElement(element, { readOnly, onSubmit: handleSubmit })
+              : element
+          ))
           : null}
       </ListItem>
     )
@@ -100,7 +105,7 @@ Collapsible.propTypes = {
   onEdit: PropTypes.func,
   onSubmit: PropTypes.func,
   onToggleState: PropTypes.func,
-  children: PropTypes.element.isRequired
+  children: PropTypes.node.isRequired
 }
 
 export default Collapsible
