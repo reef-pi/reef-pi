@@ -1,5 +1,5 @@
 const { expect } = require('@playwright/test')
-const { expectValidationVisible } = require('../fixtures/e2eAssertions')
+const { expectValidationVisible, confirmDialog } = require('../fixtures/e2eAssertions')
 const { selectByLabelOrValue } = require('./connectorsPage')
 
 class DoserPage {
@@ -59,6 +59,51 @@ class DoserPage {
     await this.page.getByTestId('smoke-cron-second').fill(doser.second)
     await this.page.getByTestId('smoke-doser-submit').click()
     await expect(this.page.locator('body')).toContainText(doser.name)
+  }
+
+  async findDoser (name) {
+    const response = await this.page.request.get('/api/doser/pumps')
+    await expect(response).toBeOK()
+    const doser = (await response.json()).find(item => item.name === name)
+    expect(doser).toBeTruthy()
+    return doser
+  }
+
+  async editSpeed (name, newName, speed) {
+    const doser = await this.findDoser(name)
+    await this.page.locator(`#edit-panel-doser-${doser.id}`).click()
+    await this.page.getByTestId('smoke-doser-name').fill(newName)
+    await this.page.getByTestId('smoke-doser-speed').fill(speed)
+    await this.page.getByTestId('smoke-doser-submit').click()
+    await expect(this.page.locator('body')).toContainText(newName)
+  }
+
+  async openCalibration (name) {
+    const doser = await this.findDoser(name)
+    await this.page.locator(`[name="calibrate-doser-${doser.id}"]`).click()
+    const dialog = this.page.locator('.modal[role="dialog"]')
+    await expect(dialog).toBeVisible()
+    return dialog
+  }
+
+  async closeCalibration (dialog) {
+    await dialog.locator('button[role="confirm"]').click()
+    await expect(dialog).toHaveCount(0)
+  }
+
+  async remove (name) {
+    const doser = await this.findDoser(name)
+    await this.page.locator(`#delete-panel-doser-${doser.id}`).click()
+    await confirmDialog(this.page)
+    await expect(this.page.locator(`#delete-panel-doser-${doser.id}`)).toHaveCount(0)
+  }
+
+  async expectStepperValidation () {
+    await this.page.getByTestId('smoke-doser-add-toggle').click()
+    await this.page.getByTestId('smoke-doser-type').selectOption('stepper')
+    await expect(this.page.locator('[name="stepper.step_pin"]')).toBeVisible()
+    await this.page.getByTestId('smoke-doser-submit').click()
+    await expectValidationVisible(this.page)
   }
 }
 
