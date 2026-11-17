@@ -163,4 +163,37 @@ describe('Collapsible', () => {
     expect(markup).toContain('role="switch"')
     expect(markup).toContain('aria-checked="true"')
   })
+
+  describe('with a read-only view followed by a form', () => {
+    const View = () => <div id='view'>chart area</div>
+
+    it('renders both children when expanded and only the form gets readOnly/onSubmit', () => {
+      const formSubmit = jest.fn()
+      const onSubmit = jest.fn()
+      const children = [
+        <View key='view' />,
+        <Content key='form' onSubmit={formSubmit} />
+      ]
+      const instance = makeCollapsible({ expanded: true, readOnly: false, onSubmit, children })
+      const rendered = instance.render()
+      const markup = renderToStaticMarkup(rendered)
+      expect(markup).toContain('chart area')
+      expect(markup).toContain('This is inner content')
+
+      const view = visitElements(rendered, element => element.type === View)[0]
+      expect(view.props.readOnly).toBeUndefined()
+      const form = visitElements(rendered, element => element.type === Content)[0]
+      expect(form.props.readOnly).toBe(false)
+      form.props.onSubmit({ a: 1 })
+      expect(onSubmit).toHaveBeenCalledWith('test')
+      expect(formSubmit).toHaveBeenCalledWith({ a: 1 })
+    })
+
+    it('renders neither child when collapsed', () => {
+      const children = [<View key='view' />, <Content key='form' onSubmit={jest.fn()} />]
+      const markup = renderToStaticMarkup(makeCollapsible({ expanded: false, children }).render())
+      expect(markup).not.toContain('chart area')
+      expect(markup).not.toContain('This is inner content')
+    })
+  })
 })

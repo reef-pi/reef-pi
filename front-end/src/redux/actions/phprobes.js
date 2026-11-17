@@ -1,4 +1,5 @@
 import { deleteAction, getAction, postAction, putAction } from './api'
+import { readingValue } from './tcs'
 
 export const phProbesLoaded = (s) => {
   return ({
@@ -39,7 +40,7 @@ export const probeReadComplete = (id) => {
   return (s) => {
     return ({
       type: 'PH_PROBE_READING_COMPLETE',
-      payload: { reading: s, id }
+      payload: { reading: readingValue(s), id }
     })
   }
 }

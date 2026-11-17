@@ -51,11 +51,16 @@ export const readTC = (id) => {
   return getAction(['tcs', id, 'read'], tcReadComplete(id))
 }
 
+// GET /api/tcs/{id}/read answers { value: <number> }; the store keeps the bare number.
+export const readingValue = (s) => {
+  return (s !== null && typeof s === 'object' && 'value' in s) ? s.value : s
+}
+
 export const tcReadComplete = (id) => {
   return (s) => {
     return ({
       type: 'TC_READING_COMPLETE',
-      payload: { reading: s, id }
+      payload: { reading: readingValue(s), id }
     })
   }
 }
