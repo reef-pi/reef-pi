@@ -29,26 +29,36 @@ class EquipmentPage {
     await expect(this.page.locator('body')).toContainText(equipment.name)
   }
 
-  // The name span sits in a name block inside the row div that also holds the toggle and actions.
-  row (name) {
-    return this.page.getByText(name, { exact: true }).locator('xpath=../..')
+  async findEquipment (name) {
+    const response = await this.page.request.get('/api/equipment')
+    await expect(response).toBeOK()
+    const equipment = (await response.json()).find(item => item.name === name)
+    expect(equipment).toBeTruthy()
+    return equipment
+  }
+
+  // Rows are addressed by id so a name that also appears elsewhere on the page cannot match.
+  async row (name) {
+    const equipment = await this.findEquipment(name)
+    return this.page.getByTestId(`equipment-row-${equipment.id}`)
   }
 
   async rename (name, newName) {
-    await this.row(name).getByTestId('equipment-edit').click()
+    await (await this.row(name)).getByTestId('equipment-edit').click()
     await this.page.getByTestId('smoke-equipment-name').fill(newName)
     await this.page.getByTestId('smoke-equipment-submit').click()
     await expect(this.page.getByText(newName, { exact: true })).toBeVisible()
   }
 
   async toggle (name) {
-    await this.row(name).getByRole('switch').click()
+    await (await this.row(name)).getByRole('switch').click()
   }
 
   async remove (name) {
-    await this.row(name).getByTestId('equipment-delete').click()
+    const row = await this.row(name)
+    await row.getByTestId('equipment-delete').click()
     await confirmDialog(this.page)
-    await expect(this.page.getByText(name, { exact: true })).toHaveCount(0)
+    await expect(row).toHaveCount(0)
   }
 }
 

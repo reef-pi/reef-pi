@@ -57,7 +57,7 @@ function PendingToggle ({ equipment, onStateChange }) {
 
 const ViewEquipment = ({ equipment, outletName, onStateChange, onDelete, onEdit }) => {
   return (
-    <div style={rowStyle}>
+    <div style={rowStyle} data-testid={`equipment-row-${equipment.id}`}>
       <div style={nameStyle}>
         <span>{equipment.name}</span>
         <small style={outletStyle}>{outletName}</small>
