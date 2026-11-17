@@ -1,5 +1,5 @@
 const { expect } = require('@playwright/test')
-const { expectValidationVisible } = require('../fixtures/e2eAssertions')
+const { expectValidationVisible, confirmDialog } = require('../fixtures/e2eAssertions')
 
 async function selectLightJack (page, jackName) {
   await page.getByTestId('smoke-light-jack').click()
@@ -42,7 +42,8 @@ class LightingPage {
     await this.page.locator(`#edit-light-${savedLight.id}`).click()
     await expect(form).toBeVisible()
     // The radio input is visually hidden; the styled wrapping label is the click target.
-    await form.locator(`label:has(input[type="radio"][value="${light.profile}"])`).click()
+    // Multi-pin jacks have one radio group per channel; configure the first channel.
+    await form.locator(`label:has(input[type="radio"][value="${light.profile}"])`).first().click()
     await form.locator(`[name="config.channels.${channelKey}.profile.config.start"]`).fill(light.start)
     await form.locator(`[name="config.channels.${channelKey}.profile.config.end"]`).fill(light.end)
 
@@ -75,6 +76,27 @@ class LightingPage {
     const light = lights.find(item => item.name === name)
     expect(light).toBeTruthy()
     return light
+  }
+
+  async setFixedValue (name, value) {
+    const light = await this.findLight(name)
+    const channelKey = Object.keys(light.channels)[0]
+    const form = this.page.locator(`#form-light-${light.id}`)
+    await this.page.locator(`#edit-light-${light.id}`).click()
+    await expect(form).toBeVisible()
+    await form.locator(`[name="config.channels.${channelKey}.profile.config.value"]`).first().fill(value)
+    const saved = this.page.waitForResponse(response => (
+      response.url().endsWith(`/api/lights/${light.id}`) && response.request().method() !== 'GET'
+    ))
+    await this.page.locator(`#save-light-${light.id}`).click()
+    expect((await saved).ok()).toBeTruthy()
+  }
+
+  async remove (name) {
+    const light = await this.findLight(name)
+    await this.page.locator(`#delete-light-${light.id}`).click()
+    await confirmDialog(this.page)
+    await expect(this.page.locator(`#delete-light-${light.id}`)).toHaveCount(0)
   }
 }
 

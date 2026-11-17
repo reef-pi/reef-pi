@@ -33,7 +33,15 @@ async function expectValidationVisible (page) {
   await expectNoFatalError(page)
 }
 
+async function confirmDialog (page) {
+  const dialog = page.locator('.modal[role="dialog"]')
+  await expect(dialog).toBeVisible()
+  await dialog.locator('button[role="confirm"]').click()
+  await expect(dialog).toHaveCount(0)
+}
+
 module.exports = {
+  confirmDialog,
   expectNoFatalError,
   expectBodyText,
   dismissAlertCenter,
