@@ -6,6 +6,7 @@ import { fetchConfig, updateConfig, listImages } from 'redux/actions/camera'
 import { connect } from 'react-redux'
 import Motion from './motion'
 import EmptyState from '../../design-system/ui_kits/reef-pi-app/shell/EmptyState'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 import i18next from 'i18next'
 
 export class RawCamera extends React.Component {
@@ -58,13 +59,14 @@ export class RawCamera extends React.Component {
     return (
       <div className='reefpi-view'>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--reefpi-space-sm)' }}>
-          <input
-            type='button'
+          <Button
             id='showConfig'
+            data-testid='camera-config-toggle'
             onClick={this.handleToggleConfig}
-            value={i18next.t('configure')}
-            className='btn btn-secondary'
-          />
+            variant='secondary'
+          >
+            {i18next.t('configure')}
+          </Button>
           {config}
         </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--reefpi-space-sm)' }}>

@@ -108,6 +108,20 @@ describe('Camera module', () => {
     expect(findByType(tree, EmptyState)).toBeDefined()
   })
 
+  it('<Main /> renders the configuration toggle with the design-system Button', () => {
+    const camera = new RawCamera({
+      config: {},
+      images: [],
+      fetchConfig: jest.fn(),
+      listImages: jest.fn(),
+      updateConfig: jest.fn()
+    })
+    const button = findAllByType(camera.render(), Button).find(node => node.props['data-testid'] === 'camera-config-toggle')
+
+    expect(button).toBeDefined()
+    expect(button.props.variant).toBe('secondary')
+  })
+
   it('<Main /> toggles config form rendering', () => {
     const updateConfig = jest.fn()
     const camera = new RawCamera({
@@ -308,13 +322,16 @@ describe('Camera module', () => {
     })
 
     gallery.open(0, { preventDefault: jest.fn() })
-    let buttons = findAllByType(gallery.render(), 'button')
-
+    let buttons = findAllByType(gallery.render(), Button)
+    const [close, previous, next] = buttons
+    expect(close.props['data-testid']).toBe('camera-gallery-close')
+    expect(previous.props['data-testid']).toBe('camera-gallery-previous')
+    expect(next.props['data-testid']).toBe('camera-gallery-next')
     expect(buttons[1].props.disabled).toBe(true)
     expect(buttons[2].props.disabled).toBe(false)
 
     gallery.handleGotoNext()
-    buttons = findAllByType(gallery.render(), 'button')
+    buttons = findAllByType(gallery.render(), Button)
 
     expect(buttons[1].props.disabled).toBe(false)
     expect(buttons[2].props.disabled).toBe(true)
