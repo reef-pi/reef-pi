@@ -45,6 +45,17 @@ test('full smoke configuration covers the major reef-pi modules', async ({ page,
     await api.dispose()
   }
 
+  // Camera is disabled in the smoke server's default capability set. Enable it
+  // only for this browser context so the smoke test can exercise its route.
+  await page.route('**/api/capabilities', async route => {
+    const response = await route.fetch()
+    const capabilities = await response.json()
+    await route.fulfill({
+      response,
+      json: { ...capabilities, camera: true }
+    })
+  })
+
   await page.goto('/')
   await navBar.expectShell()
   await expectDashboardSmokeContent(page)
@@ -104,4 +115,8 @@ test('full smoke configuration covers the major reef-pi modules', async ({ page,
   await navBar.open('macro')
   await expectPageText(page, ['Feed Start', 'Water Change'])
   await expect(page.getByTestId('smoke-macro-add-toggle')).toBeVisible()
+
+  await navBar.open('camera')
+  await expect(page.getByRole('button', { name: 'Configure' })).toBeVisible()
+  await expectNoFatalError(page)
 })

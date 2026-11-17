@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 
 export default class Gallery extends React.Component {
   constructor (props) {
@@ -74,9 +75,9 @@ export default class Gallery extends React.Component {
       <div className='reefpi-view'>
         {this.state.isOpen && currentImage && (
           <div className='camera-gallery-lightbox'>
-            <button type='button' className='btn btn-secondary' onClick={this.handleClose}>Close</button>
-            <button type='button' className='btn btn-secondary' onClick={this.handleGotoPrevious} disabled={this.state.current === 0}>Previous</button>
-            <button type='button' className='btn btn-secondary' onClick={this.handleGotoNext} disabled={this.state.current >= this.props.images.length - 1}>Next</button>
+            <Button data-testid='camera-gallery-close' variant='secondary' onClick={this.handleClose}>Close</Button>
+            <Button data-testid='camera-gallery-previous' variant='secondary' onClick={this.handleGotoPrevious} disabled={this.state.current === 0}>Previous</Button>
+            <Button data-testid='camera-gallery-next' variant='secondary' onClick={this.handleGotoNext} disabled={this.state.current >= this.props.images.length - 1}>Next</Button>
             <img
               src={currentImage.src}
               onClick={this.handleOnClick}
