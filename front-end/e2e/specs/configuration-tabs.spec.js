@@ -64,8 +64,7 @@ test.describe('configuration sub-tabs', () => {
     await expect(page.locator('#main-panel')).toContainText(`Version: ${info.version}`)
   })
 
-  // Blocked by #3213: the Settings page discards local edits, so the checkbox cannot be toggled.
-  test.fixme('settings change persists across reload and is restored', async () => {
+  test('settings change persists across reload and is restored', async () => {
     const originalResponse = await api.get('/api/settings')
     await expect(originalResponse).toBeOK()
     const original = await originalResponse.json()
@@ -87,7 +86,8 @@ test.describe('configuration sub-tabs', () => {
       const updated = await (await api.get('/api/settings')).json()
       expect(Boolean(updated.cors)).toBe(!before)
 
-      await page.reload()
+      // Deep links 404 on reload (no SPA fallback on the server), so reload at the root instead.
+      await page.goto('/')
       await configuration.open('nomatch')
       await expect(page.locator('#cors')).toBeChecked({ checked: !before })
     } finally {

@@ -17,6 +17,8 @@ export class RawSettings extends React.Component {
     this.state = {
       capabilities: props.capabilities,
       settings: props.settings,
+      settingsSource: props.settings,
+      capabilitiesSource: props.capabilities,
       currentLanguage: i18n.language,
       updated: false
     }
@@ -35,6 +37,8 @@ export class RawSettings extends React.Component {
     this.checkBoxComponent = this.checkBoxComponent.bind(this)
   }
 
+  // Adopt settings from props only when the props actually changed (e.g. after a fetch), and never
+  // while the user has unsaved edits. Re-deriving on every render would discard local edits.
   static getDerivedStateFromProps (props, oldState) {
     if (props.settings === undefined || props.settings === null) {
       return null
@@ -42,12 +46,18 @@ export class RawSettings extends React.Component {
     if (Object.keys(props.settings).length === 0) {
       return null
     }
-    return ({
+    if (props.settings === oldState.settingsSource && props.capabilities === oldState.capabilitiesSource) {
+      return null
+    }
+    const sources = { settingsSource: props.settings, capabilitiesSource: props.capabilities }
+    if (oldState.updated) {
+      return sources
+    }
+    return {
+      ...sources,
       capabilities: props.capabilities,
-      settings: props.settings,
-      currentLanguage: oldState.currentLanguage,
-      updated: false
-    })
+      settings: props.settings
+    }
   }
 
   checkBoxComponent (attr) {
