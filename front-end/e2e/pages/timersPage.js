@@ -1,5 +1,5 @@
 const { expect } = require('@playwright/test')
-const { expectValidationVisible } = require('../fixtures/e2eAssertions')
+const { expectValidationVisible, confirmDialog } = require('../fixtures/e2eAssertions')
 const { selectByLabelOrValue } = require('./connectorsPage')
 
 class TimersPage {
@@ -96,6 +96,29 @@ class TimersPage {
     await selectByLabelOrValue(this.page.locator('[name="target.id"]'), equipmentName)
     await this.fillSchedule('7', '15', '')
     await this.submitInvalidTimer()
+  }
+
+  async findTimer (name) {
+    const response = await this.page.request.get('/api/timers')
+    await expect(response).toBeOK()
+    const timer = (await response.json()).find(item => item.name === name)
+    expect(timer).toBeTruthy()
+    return timer
+  }
+
+  async rename (name, newName) {
+    const timer = await this.findTimer(name)
+    await this.page.locator(`#edit-panel-timer-${timer.id}`).click()
+    await this.page.getByTestId('smoke-timer-name').fill(newName)
+    await this.page.getByTestId('smoke-timer-submit').click()
+    await expect(this.page.locator('body')).toContainText(newName)
+  }
+
+  async remove (name) {
+    const timer = await this.findTimer(name)
+    await this.page.locator(`#delete-panel-timer-${timer.id}`).click()
+    await confirmDialog(this.page)
+    await expect(this.page.locator(`#delete-panel-timer-${timer.id}`)).toHaveCount(0)
   }
 }
 
