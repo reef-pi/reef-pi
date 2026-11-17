@@ -1,7 +1,7 @@
 // Minimal ESLint flat config — used only for Bootstrap Tier-1 ban (lint:no-bootstrap)
 // StandardJS (js-lint) remains the primary linter for style; this enforces migration guardrails.
 export default [
-  { ignores: ['**/*.test.js', '**/__snapshots__/**'] },
+  { ignores: ['/*.js', '**/*.test.js', '**/__snapshots__/**'] },
   {
     files: ['front-end/src/**/*.{js,jsx}'],
     languageOptions: {

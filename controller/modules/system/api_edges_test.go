@@ -79,6 +79,12 @@ func TestDBImportWritesUploadedDatabaseBeforeRestore(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer con.Store().Close()
+	temporaryDB := con.Store().Path() + ".new"
+	defer func() {
+		if err := os.Remove(temporaryDB); err != nil && !os.IsNotExist(err) {
+			t.Errorf("failed to remove temporary imported database: %v", err)
+		}
+	}()
 
 	var body bytes.Buffer
 	writer := multipart.NewWriter(&body)
@@ -103,7 +109,7 @@ func TestDBImportWritesUploadedDatabaseBeforeRestore(t *testing.T) {
 	if rr.Code != http.StatusOK {
 		t.Fatalf("expected status 200, got %d", rr.Code)
 	}
-	data, err := os.ReadFile(con.Store().Path() + ".new")
+	data, err := os.ReadFile(temporaryDB)
 	if err != nil {
 		t.Fatal(err)
 	}
