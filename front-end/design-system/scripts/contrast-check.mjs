@@ -13,7 +13,7 @@
  */
 
 import { readFileSync, writeFileSync } from 'fs';
-import { resolve, dirname } from 'path';
+import { resolve, dirname, relative } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -228,7 +228,6 @@ const failures = allResults.filter(r => !r.pass);
 
 // ── Report ────────────────────────────────────────────────────────────────────
 
-const now = new Date().toISOString();
 const summary = failures.length === 0
   ? `All ${allResults.length} pairs pass.`
   : `**${failures.length} of ${allResults.length} pairs failed.**`;
@@ -245,8 +244,7 @@ const tableRows = allResults.map(r => {
 const report = [
   '# reef-pi token contrast report',
   '',
-  `Generated: ${now}`,
-  `Tokens file: ${CSS_PATH}`,
+  `Tokens file: ${relative(process.cwd(), CSS_PATH)}`,
   '',
   '## Summary',
   '',
