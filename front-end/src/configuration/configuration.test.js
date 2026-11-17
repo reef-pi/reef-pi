@@ -1,5 +1,6 @@
 import React from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
+import { render, fireEvent } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import configureMockStore from 'redux-mock-store'
@@ -313,6 +314,57 @@ describe('Configuration ui', () => {
     })
     const display = component.showDisplay()
     expect(display.type).toBe('div')
+  })
+
+  describe('<Settings /> editing (real React state updates)', () => {
+    const baseProps = () => ({
+      settings: { ...fullSettings },
+      capabilities: fullCapabilities,
+      fetchSettings: jest.fn(),
+      updateSettings: jest.fn()
+    })
+
+    it('keeps a toggled checkbox and typed text across re-renders', () => {
+      const props = baseProps()
+      const { container } = render(<RawSettings {...props} />)
+      const cors = container.querySelector('#cors')
+      expect(cors.checked).toBe(false)
+
+      fireEvent.click(cors)
+      expect(container.querySelector('#cors').checked).toBe(true)
+
+      fireEvent.change(container.querySelector('#to-row-name'), { target: { value: 'my-tank' } })
+      expect(container.querySelector('#to-row-name').value).toBe('my-tank')
+      expect(container.querySelector('#cors').checked).toBe(true)
+    })
+
+    it('saves the edited values', () => {
+      const props = baseProps()
+      const { container } = render(<RawSettings {...props} />)
+      fireEvent.click(container.querySelector('#cors'))
+      fireEvent.click(container.querySelector('#systemUpdateSettings'))
+      expect(props.updateSettings).toHaveBeenCalledWith(expect.objectContaining({ cors: true }))
+    })
+
+    it('adopts new settings from props after a refetch but not over unsaved edits', () => {
+      const props = baseProps()
+      const { container, rerender } = render(<RawSettings {...props} />)
+
+      rerender(<RawSettings {...props} settings={{ ...fullSettings, pprof: true }} />)
+      expect(container.querySelector('#pprof').checked).toBe(true)
+
+      fireEvent.click(container.querySelector('#cors'))
+      rerender(<RawSettings {...props} settings={{ ...fullSettings, pprof: false }} />)
+      expect(container.querySelector('#cors').checked).toBe(true)
+    })
+
+    it('getDerivedStateFromProps only adopts changed props', () => {
+      const settings = { ...fullSettings }
+      const state = { settings: { ...settings, cors: true }, settingsSource: settings, capabilitiesSource: fullCapabilities, updated: true }
+      expect(RawSettings.getDerivedStateFromProps({ settings, capabilities: fullCapabilities }, state)).toBeNull()
+      expect(RawSettings.getDerivedStateFromProps({ settings: {}, capabilities: fullCapabilities }, state)).toBeNull()
+      expect(RawSettings.getDerivedStateFromProps({ settings: undefined }, state)).toBeNull()
+    })
   })
 
   it('<Settings /> handleUpdate valid settings calls updateSettings', () => {
