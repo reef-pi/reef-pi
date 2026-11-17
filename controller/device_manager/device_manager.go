@@ -44,6 +44,7 @@ type DeviceManager struct {
 // background sampler. ATO keeps its existing cadence and topic; this sampler
 // adds the common inlet topic for consumers that need inlet-level telemetry.
 const inletTelemetryInterval = time.Second
+const inletTelemetryRetryInterval = 5 * time.Second
 
 type metricEmitter interface {
 	EmitMetric(string, string, float64)
@@ -55,10 +56,20 @@ type inletState struct {
 }
 
 type inletStatePublisher struct {
-	last map[string]inletState
+	last    map[string]inletState
+	retries map[string]inletStateRetry
+}
+
+type inletStateRetry struct {
+	state       inletState
+	nextAttempt time.Time
 }
 
 func (p *inletStatePublisher) publish(inlets *connectors.Inlets, t metricEmitter) {
+	p.publishAt(inlets, t, time.Now())
+}
+
+func (p *inletStatePublisher) publishAt(inlets *connectors.Inlets, t metricEmitter, now time.Time) {
 	items, err := inlets.List()
 	if err != nil {
 		log.Printf("device-manager: failed to list inlets for telemetry: %v", err)
@@ -66,6 +77,9 @@ func (p *inletStatePublisher) publish(inlets *connectors.Inlets, t metricEmitter
 	}
 	if p.last == nil {
 		p.last = make(map[string]inletState)
+	}
+	if p.retries == nil {
+		p.retries = make(map[string]inletStateRetry)
 	}
 	for _, inlet := range items {
 		value, err := inlets.Read(inlet.ID)
@@ -77,8 +91,21 @@ func (p *inletStatePublisher) publish(inlets *connectors.Inlets, t metricEmitter
 		if previous, ok := p.last[inlet.ID]; ok && previous == state {
 			continue
 		}
-		t.EmitMetric("inlet", inlet.Name+"-state", float64(value))
+		if retry, ok := p.retries[inlet.ID]; ok && retry.state == state && now.Before(retry.nextAttempt) {
+			continue
+		}
+		if statusEmitter, ok := t.(interface {
+			EmitMetricWithStatus(string, string, float64) error
+		}); ok {
+			if err := statusEmitter.EmitMetricWithStatus("inlet", inlet.Name+"-state", float64(value)); err != nil {
+				p.retries[inlet.ID] = inletStateRetry{state: state, nextAttempt: now.Add(inletTelemetryRetryInterval)}
+				continue
+			}
+		} else {
+			t.EmitMetric("inlet", inlet.Name+"-state", float64(value))
+		}
 		p.last[inlet.ID] = state
+		delete(p.retries, inlet.ID)
 	}
 }
 

@@ -288,7 +288,9 @@ func TestEmitMetricMQTTErrorLogs(t *testing.T) {
 		client: &fakeMQTTClient{err: errors.New("publish failed")},
 	}
 
-	tele.EmitMetric("system", "load", 1.2)
+	if err := tele.EmitMetricWithStatus("system", "load", 1.2); err == nil || !strings.Contains(err.Error(), "publish failed") {
+		t.Fatalf("expected MQTT publish error, got %v", err)
+	}
 	if !logged {
 		t.Fatal("expected MQTT publish error to be logged")
 	}
