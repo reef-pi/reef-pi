@@ -15,7 +15,7 @@ func TestStopWaitsForWorkerStartedByReset(t *testing.T) {
 	releaseSecond := make(chan struct{})
 	var calls int
 	var callsMu sync.Mutex
-	ctrl.workerRunner = func(_ ATO, quit chan struct{}) error {
+	ctrl.workerRunner = func(_ ATO, quit <-chan struct{}) error {
 		callsMu.Lock()
 		calls++
 		call := calls
@@ -73,7 +73,7 @@ func TestConcurrentATOLifecycleOperations(t *testing.T) {
 	var mu sync.Mutex
 	active := make(map[string]int)
 	maxActive := make(map[string]int)
-	ctrl.workerRunner = func(a ATO, quit chan struct{}) error {
+	ctrl.workerRunner = func(a ATO, quit <-chan struct{}) error {
 		mu.Lock()
 		active[a.ID]++
 		if active[a.ID] > maxActive[a.ID] {
@@ -129,9 +129,7 @@ func TestConcurrentATOLifecycleOperations(t *testing.T) {
 			t.Errorf("worker %s remained active after Stop: %d", id, count)
 		}
 	}
-	ctrl.mu.Lock()
-	remaining := len(ctrl.quitters)
-	ctrl.mu.Unlock()
+	remaining := ctrl.workers.Count()
 	if remaining != 0 {
 		t.Fatalf("%d workers remained registered after Stop", remaining)
 	}

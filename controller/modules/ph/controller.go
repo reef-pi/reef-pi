@@ -13,6 +13,7 @@ import (
 
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 const Bucket = storage.PhBucket
@@ -23,22 +24,16 @@ type Controller struct {
 	lifecycleMu  sync.Mutex
 	c            controller.Controller
 	repo         repository
-	quitters     map[string]*pollerRun
+	workers      utils.KeyedWorkers
 	statsMgr     telemetry.StatsManager
 	devMode      bool
 	ais          *connectors.AnalogInputs
 	calibrators  map[string]hal.Calibrator
-	pollerRunner func(Probe, chan struct{}) error
-}
-
-type pollerRun struct {
-	quit chan struct{}
-	done chan struct{}
+	pollerRunner func(Probe, <-chan struct{}) error
 }
 
 func New(devMode bool, c controller.Controller) *Controller {
 	return &Controller{
-		quitters:    make(map[string]*pollerRun),
 		c:           c,
 		repo:        newRepository(c.Store()),
 		devMode:     devMode,
@@ -104,20 +99,7 @@ func (c *Controller) Start() {
 func (c *Controller) Stop() {
 	c.lifecycleMu.Lock()
 	defer c.lifecycleMu.Unlock()
-	c.Lock()
-	runs := make(map[string]*pollerRun, len(c.quitters))
-	for id, run := range c.quitters {
-		runs[id] = run
-		delete(c.quitters, id)
-	}
-	c.Unlock()
-	for _, run := range runs {
-		close(run.quit)
-	}
-	for _, run := range runs {
-		<-run.done
-	}
-	for id := range runs {
+	for _, id := range c.workers.StopAll() {
 		if err := c.statsMgr.Save(id); err != nil {
 			log.Println("ERROR: ph controller. Failed to save usage. Error:", err)
 		}
@@ -129,33 +111,21 @@ func (c *Controller) Stop() {
 // the controller mutex while joining a worker, since workers use that mutex
 // while recording readings and applying control actions.
 func (c *Controller) replacePollerLocked(p Probe) {
-	c.Lock()
-	previous := c.quitters[p.ID]
-	delete(c.quitters, p.ID)
-	c.Unlock()
-	if previous != nil {
-		close(previous.quit)
-		<-previous.done
-	}
+	c.workers.Stop(p.ID)
 	if !p.Enable {
 		return
 	}
-	run := &pollerRun{quit: make(chan struct{}), done: make(chan struct{})}
-	c.Lock()
-	c.quitters[p.ID] = run
-	c.Unlock()
-	go func() {
-		defer close(run.done)
+	c.workers.Start(p.ID, func(quit <-chan struct{}) {
 		var err error
 		if c.pollerRunner != nil {
-			err = c.pollerRunner(p, run.quit)
+			err = c.pollerRunner(p, quit)
 		} else {
-			err = c.run(p, run.quit, true)
+			err = c.run(p, quit, true)
 		}
 		if err != nil {
 			log.Println("ERROR: ph subsystem: poller exited with error:", err)
 		}
-	}()
+	})
 }
 
 func (c *Controller) On(id string, b bool) error {
