@@ -76,6 +76,12 @@ func TestInitializeSettingsPersistsDevModeDefaults(t *testing.T) {
 	if !initialized.Capabilities.DevMode {
 		t.Fatal("expected initialized settings to enable dev mode")
 	}
+	if !initialized.Capabilities.Camera {
+		t.Error("expected initialized dev mode settings to enable camera")
+	}
+	if !initialized.Capabilities.Journal {
+		t.Error("expected initialized dev mode settings to enable journal")
+	}
 
 	loaded, err := newSettingsRepository(store).Load()
 	if err != nil {
@@ -83,6 +89,12 @@ func TestInitializeSettingsPersistsDevModeDefaults(t *testing.T) {
 	}
 	if !loaded.Capabilities.DevMode {
 		t.Error("expected persisted settings to enable dev mode")
+	}
+	if !loaded.Capabilities.Camera {
+		t.Error("expected persisted dev mode settings to enable camera")
+	}
+	if !loaded.Capabilities.Journal {
+		t.Error("expected persisted dev mode settings to enable journal")
 	}
 	if loaded.Address != "0.0.0.0:8080" {
 		t.Errorf("expected persisted dev mode address, got %q", loaded.Address)
