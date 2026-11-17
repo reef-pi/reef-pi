@@ -31,3 +31,16 @@ export function buildEquipmentPayload (equipment, updates = {}) {
     ...updates
   }
 }
+
+// Turn equipment on or off. The update endpoint (POST /api/equipment/{id}) ignores `on`;
+// only /control changes the outlet state. Rejects on a non-2xx response.
+export function controlEquipment (id, on) {
+  return fetch(`/api/equipment/${id}/control`, {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ on })
+  }).then(r => {
+    if (!r.ok) throw new Error(`HTTP ${r.status}`)
+  })
+}

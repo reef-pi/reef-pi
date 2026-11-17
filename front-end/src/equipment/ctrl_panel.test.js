@@ -107,4 +107,33 @@ describe('<EquipmentCtrlPanel />', () => {
       expect.objectContaining({ id: equipment[0].id, name: equipment[0].name })
     )
   })
+
+  it('switch posts to the control endpoint once and refreshes equipment', async () => {
+    const { useEquipmentToggle } = require('../../design-system/ui_kits/reef-pi-app/hooks/useEquipmentToggle')
+    global.fetch = jest.fn(() => Promise.resolve({ ok: true }))
+    const dispatch = jest.fn()
+    render(
+      <RawEquipmentCtrlPanel equipment={[equipment[1]]} outlets={outlets} fetchEquipment={jest.fn()} dispatch={dispatch} />
+    )
+    const { send } = useEquipmentToggle.mock.calls[0][0]
+    await send('on')
+    expect(fetch).toHaveBeenCalledTimes(1)
+    expect(fetch).toHaveBeenCalledWith('/api/equipment/2/control', expect.objectContaining({
+      method: 'POST',
+      body: JSON.stringify({ on: true })
+    }))
+    expect(dispatch).toHaveBeenCalledTimes(1)
+  })
+
+  it('switch rejects without refreshing when the control request fails', async () => {
+    const { useEquipmentToggle } = require('../../design-system/ui_kits/reef-pi-app/hooks/useEquipmentToggle')
+    global.fetch = jest.fn(() => Promise.resolve({ ok: false, status: 500 }))
+    const dispatch = jest.fn()
+    render(
+      <RawEquipmentCtrlPanel equipment={[equipment[1]]} outlets={outlets} fetchEquipment={jest.fn()} dispatch={dispatch} />
+    )
+    const { send } = useEquipmentToggle.mock.calls[0][0]
+    await expect(send('on')).rejects.toThrow('HTTP 500')
+    expect(dispatch).not.toHaveBeenCalled()
+  })
 })

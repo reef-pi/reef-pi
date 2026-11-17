@@ -4,6 +4,7 @@ import { FaEdit, FaTrashAlt } from 'react-icons/fa'
 import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 import ToggleSwitch from '../../design-system/ui_kits/reef-pi-app/primitives/ToggleSwitch'
 import { useEquipmentToggle } from '../../design-system/ui_kits/reef-pi-app/hooks/useEquipmentToggle'
+import { controlEquipment } from './utils'
 
 const rowStyle = {
   alignItems: 'center',
@@ -33,21 +34,8 @@ const actionStyle = {
 
 function PendingToggle ({ equipment, onStateChange }) {
   const send = useCallback(next => {
-    const payload = {
-      name: equipment.name,
-      on: next === 'on',
-      outlet: equipment.outlet,
-      stay_off_on_boot: equipment.stay_off_on_boot
-    }
-    return fetch(`/api/equipment/${equipment.id}`, {
-      method: 'POST',
-      credentials: 'same-origin',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    }).then(r => {
-      if (!r.ok) throw new Error(`HTTP ${r.status}`)
-      onStateChange(equipment.id, payload)
-    })
+    const on = next === 'on'
+    return controlEquipment(equipment.id, on).then(() => onStateChange(equipment.id, { on }))
   }, [equipment, onStateChange])
 
   const { mutate, state, retry } = useEquipmentToggle({

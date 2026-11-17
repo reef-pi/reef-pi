@@ -16,6 +16,7 @@ export default class Equipment extends React.Component {
     this.handleToggleEdit = this.handleToggleEdit.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
     this.handleUpdate = this.handleUpdate.bind(this)
+    this.handleStateChange = this.handleStateChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
@@ -67,11 +68,16 @@ export default class Equipment extends React.Component {
     this.props.update(id, values)
   }
 
+  // The switch already sent the control request; only refresh the list.
+  handleStateChange () {
+    if (this.props.refresh) this.props.refresh()
+  }
+
   render () {
     return (
       <ListItem>
         {this.state.readOnly === true
-          ? <ViewEquipment equipment={this.props.equipment} outletName={this.selectedOutlet().name} onEdit={this.handleToggleEdit} onDelete={this.handleDelete} onStateChange={this.handleUpdate} />
+          ? <ViewEquipment equipment={this.props.equipment} outletName={this.selectedOutlet().name} onEdit={this.handleToggleEdit} onDelete={this.handleDelete} onStateChange={this.handleStateChange} />
           : <EquipmentForm equipment={this.props.equipment} outlets={this.props.outlets} actionLabel={i18next.t('save')} onSubmit={this.handleSubmit} onUpdate={this.handleUpdate} onDelete={this.handleDelete} />}
       </ListItem>
     )

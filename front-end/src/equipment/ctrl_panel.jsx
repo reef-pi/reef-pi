@@ -3,7 +3,7 @@ import { fetchEquipment } from '../redux/actions/equipment'
 import { connect } from 'react-redux'
 import ToggleSwitch from '../../design-system/ui_kits/reef-pi-app/primitives/ToggleSwitch'
 import { useEquipmentToggle } from '../../design-system/ui_kits/reef-pi-app/hooks/useEquipmentToggle'
-import { buildEquipmentPayload, EQUIPMENT_POLL_INTERVAL_MS, sortEquipment } from './utils'
+import { controlEquipment, EQUIPMENT_POLL_INTERVAL_MS, sortEquipment } from './utils'
 
 const panelStyle = {
   display: 'grid',
@@ -23,16 +23,7 @@ const itemStyle = {
 // Per-item toggle with pending states — must be its own component to call hooks
 function PendingEquipmentToggle ({ item, dispatch }) {
   const send = useCallback(next => {
-    const payload = buildEquipmentPayload(item, { on: next === 'on' })
-    return fetch(`/api/equipment/${item.id}`, {
-      method: 'POST',
-      credentials: 'same-origin',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    }).then(r => {
-      if (!r.ok) throw new Error(`HTTP ${r.status}`)
-      dispatch(fetchEquipment())
-    })
+    return controlEquipment(item.id, next === 'on').then(() => dispatch(fetchEquipment()))
   }, [item, dispatch])
 
   const { mutate, state, retry } = useEquipmentToggle({

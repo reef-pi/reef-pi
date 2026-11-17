@@ -108,6 +108,7 @@ export class RawEquipmentMain extends React.Component {
               equipment={item}
               outlets={this.props.outlets}
               update={this.props.update}
+              refresh={this.props.fetch}
               delete={this.props.delete}
             />
           )

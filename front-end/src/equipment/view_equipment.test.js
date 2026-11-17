@@ -68,23 +68,15 @@ describe('<ViewEquipment />', () => {
       await Promise.resolve()
     })
 
-    expect(fetch).toHaveBeenCalledWith('/api/equipment/1', expect.objectContaining({
+    // Only the control endpoint changes the outlet state; the update endpoint ignores `on`.
+    expect(fetch).toHaveBeenCalledTimes(1)
+    expect(fetch).toHaveBeenCalledWith('/api/equipment/1/control', expect.objectContaining({
       method: 'POST',
       credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name: 'Return Pump',
-        on: true,
-        outlet: 'outlet-1',
-        stay_off_on_boot: true
-      })
+      body: JSON.stringify({ on: true })
     }))
-    expect(onStateChange).toHaveBeenCalledWith('1', {
-      name: 'Return Pump',
-      on: true,
-      outlet: 'outlet-1',
-      stay_off_on_boot: true
-    })
+    expect(onStateChange).toHaveBeenCalledWith('1', { on: true })
 
     act(() => root.unmount())
   })
