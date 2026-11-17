@@ -163,6 +163,7 @@ api-doc:
 	'    <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"></script>' \
 	'  </body>' \
 	'</html>' > ui/assets/api.html
+	cp openapi/openapi.yaml ui/assets/openapi.yaml
 
 .PHONY: smoke
 smoke:
