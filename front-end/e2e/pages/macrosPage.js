@@ -1,5 +1,5 @@
 const { expect } = require('@playwright/test')
-const { expectValidationVisible } = require('../fixtures/e2eAssertions')
+const { expectValidationVisible, confirmDialog } = require('../fixtures/e2eAssertions')
 const { selectByLabelOrValue } = require('./connectorsPage')
 
 class MacrosPage {
@@ -68,6 +68,44 @@ class MacrosPage {
     await this.page.locator('[name="steps.2.title"]').fill('Feed complete')
     await this.page.locator('[name="steps.2.message"]').fill('Resume normal equipment schedule.')
     await this.submitMacro(name, nameInput)
+  }
+
+  async createEquipmentMacro (name, equipmentName, action) {
+    const nameInput = await this.openAddForm()
+    await nameInput.fill(name)
+    await this.page.getByTestId('smoke-macro-add-step').click()
+    await selectByLabelOrValue(this.page.locator('[name="steps.0.type"]'), 'equipment')
+    await selectByLabelOrValue(this.page.locator('[name="steps.0.id"]'), equipmentName)
+    await selectByLabelOrValue(this.page.locator('[name="steps.0.on"]'), action)
+    await this.submitMacro(name, nameInput)
+  }
+
+  async findMacro (name) {
+    const response = await this.page.request.get('/api/macros')
+    await expect(response).toBeOK()
+    const macro = (await response.json()).find(item => item.name === name)
+    expect(macro).toBeTruthy()
+    return macro
+  }
+
+  async run (name) {
+    const macro = await this.findMacro(name)
+    await this.page.locator(`[name="run-macro-${macro.id}"]`).click()
+  }
+
+  async rename (name, newName) {
+    const macro = await this.findMacro(name)
+    await this.page.locator(`#edit-panel-macro-${macro.id}`).click()
+    await this.page.getByTestId('smoke-macro-name').fill(newName)
+    await this.page.getByTestId('smoke-macro-submit').click()
+    await expect(this.page.locator('body')).toContainText(newName)
+  }
+
+  async remove (name) {
+    const macro = await this.findMacro(name)
+    await this.page.locator(`#delete-panel-macro-${macro.id}`).click()
+    await confirmDialog(this.page)
+    await expect(this.page.locator(`#delete-panel-macro-${macro.id}`)).toHaveCount(0)
   }
 
   async expectMissingStepValidation () {
