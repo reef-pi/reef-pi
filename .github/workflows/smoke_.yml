@@ -44,6 +44,7 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - run: make go
       - run: make ui
+      - run: make api-doc
       - run: make smoke
       - if: always()
         uses: actions/upload-artifact@v7
