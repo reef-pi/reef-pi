@@ -396,4 +396,16 @@ describe('Equipment ui', () => {
 
     expect(onSubmit).toHaveBeenCalledWith(expect.objectContaining({ name: 'Heater', outlet: '1' }))
   })
+
+  it('Equipment.handleStateChange refreshes the list without re-posting an update', () => {
+    const refresh = jest.fn()
+    const update = jest.fn()
+    const component = new Equipment({ equipment: { id: '1', name: 'A', outlet: '1' }, outlets: [], update, refresh, delete: jest.fn() })
+    component.handleStateChange('1', { on: true })
+    expect(refresh).toHaveBeenCalledTimes(1)
+    expect(update).not.toHaveBeenCalled()
+
+    const noRefresh = new Equipment({ equipment: { id: '1', name: 'A', outlet: '1' }, outlets: [], update, delete: jest.fn() })
+    expect(() => noRefresh.handleStateChange('1', { on: true })).not.toThrow()
+  })
 })

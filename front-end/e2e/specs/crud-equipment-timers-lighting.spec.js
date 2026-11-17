@@ -41,8 +41,7 @@ test.describe('create, edit and delete round trips', () => {
     await expect.poll(() => names(api, '/api/equipment')).not.toContain('Smoke Pump 2')
   })
 
-  // Blocked by the equipment switch bug: the UI posts to the update endpoint, which ignores `on`.
-  test.fixme('equipment switch turns the outlet on', async ({ page }) => {
+  test('equipment switch turns the outlet on', async ({ page }) => {
     const equipment = new EquipmentPage(page, navBar)
     await equipment.open()
     const stateOf = async () => (await (await api.get('/api/equipment')).json()).find(item => item.name === 'Skimmer').on
