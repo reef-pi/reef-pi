@@ -170,6 +170,8 @@ export default function Sidebar ({
       <div style={{ padding: '0.5rem', borderTop: '1px solid var(--reefpi-color-nav-border)', flexShrink: 0 }}>
         <button
           onClick={onSignOut}
+          aria-label='Sign out'
+          data-testid='smoke-sign-out'
           style={NAV_ITEM_STYLE(false, expanded)}
         >
           <SignOutIcon />
