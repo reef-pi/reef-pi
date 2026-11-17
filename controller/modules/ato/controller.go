@@ -11,6 +11,7 @@ import (
 	"github.com/reef-pi/reef-pi/controller/device_manager/connectors"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 const Bucket = storage.ATOBucket
@@ -19,20 +20,14 @@ const UsageBucket = storage.ATOUsageBucket
 type Controller struct {
 	statsMgr     telemetry.StatsManager
 	devMode      bool
-	quitters     map[string]*workerRun
-	wg           sync.WaitGroup
+	workers      utils.KeyedWorkers
 	mu           *sync.Mutex
 	lifecycleMu  sync.Mutex
 	inlets       *connectors.Inlets
 	c            controller.Controller
 	repo         repository
 	lowSince     map[string]*time.Time
-	workerRunner func(ATO, chan struct{}) error
-}
-
-type workerRun struct {
-	quit chan struct{}
-	done chan struct{}
+	workerRunner func(ATO, <-chan struct{}) error
 }
 
 func New(devMode bool, c controller.Controller) (*Controller, error) {
@@ -40,7 +35,6 @@ func New(devMode bool, c controller.Controller) (*Controller, error) {
 		devMode:  devMode,
 		mu:       &sync.Mutex{},
 		inlets:   c.DM().Inlets(),
-		quitters: make(map[string]*workerRun),
 		statsMgr: c.Telemetry().NewStatsManager(UsageBucket),
 		c:        c,
 		repo:     newRepository(c.Store()),
@@ -103,13 +97,7 @@ func (c *Controller) Start() {
 func (c *Controller) Stop() {
 	c.lifecycleMu.Lock()
 	defer c.lifecycleMu.Unlock()
-	quitters := c.quitters
-	c.quitters = make(map[string]*workerRun)
-	for _, run := range quitters {
-		close(run.quit)
-	}
-	c.wg.Wait()
-	for id := range quitters {
+	for _, id := range c.workers.StopAll() {
 		if err := c.statsMgr.Save(id); err != nil {
 			log.Println("ERROR: ato controller. Failed to save usage. Error:", err)
 		}
@@ -121,28 +109,17 @@ func (c *Controller) Stop() {
 // itself does not acquire lifecycleMu when exiting, so joining here cannot
 // block on the debounce mutex or the lifecycle mutex.
 func (c *Controller) startWorkerLocked(a ATO) {
-	run := &workerRun{quit: make(chan struct{}), done: make(chan struct{})}
-	c.quitters[a.ID] = run
-	c.wg.Add(1)
-	go func() {
-		defer c.wg.Done()
-		defer close(run.done)
+	c.workers.Start(a.ID, func(quit <-chan struct{}) {
 		if c.workerRunner != nil {
-			_ = c.workerRunner(a, run.quit)
+			_ = c.workerRunner(a, quit)
 		} else {
-			_ = c.run(a, run.quit, true)
+			_ = c.run(a, quit, true)
 		}
-	}()
+	})
 }
 
 func (c *Controller) stopWorkerLocked(id string) bool {
-	if run, ok := c.quitters[id]; ok {
-		delete(c.quitters, id)
-		close(run.quit)
-		<-run.done
-		return true
-	}
-	return false
+	return c.workers.Stop(id)
 }
 
 func (c *Controller) replaceWorkerLocked(a ATO) {

@@ -194,7 +194,7 @@ func (c *Controller) Run(p Probe, quit chan struct{}) error {
 	return c.run(p, quit, false)
 }
 
-func (c *Controller) run(p Probe, quit chan struct{}, managed bool) error {
+func (c *Controller) run(p Probe, quit <-chan struct{}, managed bool) error {
 	if p.Period <= 0 {
 		log.Printf("ERROR: ph subsystem. Invalid period set for probe:%s. Expected positive, found:%d\n", p.Name, p.Period)
 		return fmt.Errorf("invalid period: %d for probe: %s", p.Period, p.Name)

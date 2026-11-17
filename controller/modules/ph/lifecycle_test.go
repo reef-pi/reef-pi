@@ -13,7 +13,7 @@ func TestPHStopWaitsForPollerExit(t *testing.T) {
 	started := make(chan struct{})
 	readyToExit := make(chan struct{})
 	releaseExit := make(chan struct{})
-	ctrl.pollerRunner = func(_ Probe, quit chan struct{}) error {
+	ctrl.pollerRunner = func(_ Probe, quit <-chan struct{}) error {
 		close(started)
 		<-quit
 		close(readyToExit)
@@ -86,7 +86,7 @@ func TestConcurrentPHLifecycleOperations(t *testing.T) {
 	var mu sync.Mutex
 	active := make(map[string]int)
 	maxActive := make(map[string]int)
-	ctrl.pollerRunner = func(p Probe, quit chan struct{}) error {
+	ctrl.pollerRunner = func(p Probe, quit <-chan struct{}) error {
 		mu.Lock()
 		active[p.ID]++
 		if active[p.ID] > maxActive[p.ID] {
@@ -145,9 +145,7 @@ func TestConcurrentPHLifecycleOperations(t *testing.T) {
 			t.Errorf("poller %s remained active after Stop: %d", id, count)
 		}
 	}
-	ctrl.Lock()
-	remaining := len(ctrl.quitters)
-	ctrl.Unlock()
+	remaining := ctrl.workers.Count()
 	if remaining != 0 {
 		t.Fatalf("%d pollers remained registered after Stop", remaining)
 	}

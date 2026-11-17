@@ -172,7 +172,7 @@ func (c *Controller) Run(a ATO, quit chan struct{}) error {
 	return c.run(a, quit, false)
 }
 
-func (c *Controller) run(a ATO, quit chan struct{}, managed bool) error {
+func (c *Controller) run(a ATO, quit <-chan struct{}, managed bool) error {
 	if a.Period <= 0 {
 		log.Printf("ERROR: ato-subsystem. Invalid period set for sensor:%s. Expected positive, found:%d\n", a.Name, a.Period)
 		return fmt.Errorf("invalid check period:%d", a.Period)
