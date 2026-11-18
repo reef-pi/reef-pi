@@ -62,8 +62,7 @@ test.describe('sign-in and session handling', () => {
   })
 })
 
-// Blocked by #3218: signing out reloads the current URL, which 404s on any route other than '/'.
-test.fixme('sign out from a deep route returns to the sign-in page', async ({ page }) => {
+test('sign out from a deep route returns to the sign-in page', async ({ page }) => {
   const loginPage = new LoginPage(page)
   await loginPage.goto()
   await loginPage.login()
@@ -94,8 +93,6 @@ test.describe('credential change', () => {
       expect((await saved).ok()).toBeTruthy()
       credentialsChanged = true
 
-      // Sign out from the root: signing out reloads the current URL, and deep links 404 (#3218).
-      await page.goto('/')
       await page.getByTestId('smoke-sign-out').click()
       await expect(page.getByTestId('smoke-sign-in-form')).toBeVisible()
 

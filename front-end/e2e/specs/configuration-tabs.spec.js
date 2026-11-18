@@ -86,8 +86,7 @@ test.describe('configuration sub-tabs', () => {
       const updated = await (await api.get('/api/settings')).json()
       expect(Boolean(updated.cors)).toBe(!before)
 
-      // Deep links 404 on reload (no SPA fallback on the server), so reload at the root instead.
-      await page.goto('/')
+      await page.reload()
       await configuration.open('nomatch')
       await expect(page.locator('#cors')).toBeChecked({ checked: !before })
     } finally {
