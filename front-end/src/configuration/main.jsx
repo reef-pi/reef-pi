@@ -31,7 +31,7 @@ class Configuration extends React.Component {
       const to = route.path === '*' ? '/configuration' : `/configuration/${route.path}`.replace(/\/+/g, '/')
       return (
         <li key={'conf-tabs' + route.key}>
-          <NavLink id={'config-' + route.key} className='nav-link' to={to}>
+          <NavLink id={'config-' + route.key} className='nav-link' to={to} end={route.path === '*'}>
             {route.label}
           </NavLink>
         </li>

@@ -224,8 +224,44 @@ body {
 }
 
 .conf-nav {
-  margin-bottom: 10px;
-  row-gap: 0.25rem;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: var(--reefpi-space-xxs);
+  width: 100%;
+  margin: 0 0 var(--reefpi-space-sm);
+  padding: 0;
+  overflow-x: auto;
+  list-style: none;
+  border-bottom: 1px solid var(--reefpi-color-border);
+  -webkit-overflow-scrolling: touch;
+}
+
+.conf-nav li {
+  flex: 0 0 auto;
+}
+
+.conf-nav .nav-link {
+  padding: 0 var(--reefpi-space-sm);
+  margin-bottom: -1px;
+  color: var(--reefpi-color-text-muted);
+  font-weight: var(--reefpi-weight-bold);
+  text-decoration: none;
+  white-space: nowrap;
+  border-bottom: 3px solid transparent;
+}
+
+.conf-nav .nav-link:hover {
+  color: var(--reefpi-color-text);
+}
+
+.conf-nav .nav-link:focus-visible {
+  outline: 2px solid var(--reefpi-color-focus);
+  outline-offset: -2px;
+}
+
+.conf-nav .nav-link.active {
+  color: var(--reefpi-color-text);
+  border-bottom-color: var(--reefpi-color-brand);
 }
 
 .conf-nav .nav-link,
