@@ -702,9 +702,28 @@ textarea:focus,
     flex: 1 1 100%;
   }
 
-  .connector-group-toggle,
+  .connector-group-toggle {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .connector-group-title {
+    flex: 1 1 100%;
+  }
+
+  .connector-group-caret {
+    margin-left: auto;
+  }
+
   .connector-list-row {
-    grid-template-columns: 1fr auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .connector-list-main {
+    flex: 1 1 8rem;
   }
 
   .connector-channel-grid {

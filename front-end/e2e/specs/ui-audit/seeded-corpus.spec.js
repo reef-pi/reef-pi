@@ -179,6 +179,7 @@ test.describe('seeded UI audit screenshot corpus', () => {
     try {
       await openDashboard(page, navBar, mobileViewport, auditObserver)
       await openConfigurationTab(page, navBar, mobileViewport, '#config-nomatch', 'configuration-settings', ['Interface', 'Language'], auditObserver)
+      await openConfigurationTab(page, navBar, mobileViewport, '#config-connectors', 'configuration-connectors', ['Add connector', 'O1'], auditObserver)
       await openModule(page, navBar, mobileViewport, 'equipment', ['Return', 'Light', 'Heater'], auditObserver)
       await openModule(page, navBar, mobileViewport, 'lighting', ['Kessil A360'], auditObserver)
       await openModule(page, navBar, mobileViewport, 'temperature', ['Biocube29 Temperature'], auditObserver)
