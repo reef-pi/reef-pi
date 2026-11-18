@@ -38,20 +38,10 @@ async function seedForCapture (baseURL) {
 
 async function expectShellForViewport (page, viewport) {
   await expect(page.getByTestId('smoke-shell-root')).toBeVisible()
-  const brand = page.getByTestId('smoke-brand')
-  if (await brand.count()) {
-    await expect(brand.first()).toBeVisible()
-  }
 
   if (viewport.name === 'mobile') {
-    const currentTab = page.getByTestId('smoke-current-tab')
-    if (await currentTab.count()) {
-      await expect(currentTab).toBeVisible()
-      await expect(page.getByRole('button', { name: 'Toggle navigation' })).toBeVisible()
-    } else {
-      await expect(page.getByTestId('smoke-nav')).toBeVisible()
-      await expect(page.getByRole('button', { name: 'More routes' })).toBeVisible()
-    }
+    await expect(page.getByTestId('smoke-nav')).toBeVisible()
+    await expect(page.getByRole('button', { name: 'More routes' })).toBeVisible()
   } else {
     await expect(page.getByTestId('smoke-tab-dashboard')).toBeVisible()
   }
@@ -60,12 +50,7 @@ async function expectShellForViewport (page, viewport) {
 async function openRoute (page, navBar, viewport, moduleId) {
   const tab = navBar.tab(moduleId).first()
   if (!await tab.isVisible()) {
-    const toggleBtn = page.getByRole('button', { name: 'Toggle navigation' })
-    if (await toggleBtn.count()) {
-      await toggleBtn.click()
-    } else {
-      await page.getByRole('button', { name: 'More routes' }).click()
-    }
+    await page.getByRole('button', { name: 'More routes' }).click()
     await expect(tab).toBeVisible()
   }
   await tab.click()

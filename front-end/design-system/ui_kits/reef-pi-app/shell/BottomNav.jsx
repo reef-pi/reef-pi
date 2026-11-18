@@ -11,7 +11,6 @@ import PropTypes from 'prop-types'
  * "More" / hamburger opens a full-height left drawer with remaining
  * routes + Sign out. Drawer closes on route change.
  *
- * Behind new_shell flag.
  *
  * Usage:
  *   <BottomNav

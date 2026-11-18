@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 /*
  * Collapsible left sidebar — visible at ≥992px only.
  * Below 992px, render nothing; BottomNav (#21) takes over.
- * Behind new_shell flag.
  *
  * Rail: 72px wide, --reefpi-gradient-brand background.
  * Expanded: 240px wide, text labels alongside icons.

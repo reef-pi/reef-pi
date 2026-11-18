@@ -12,10 +12,6 @@ class NavBar {
 
   async expectShell () {
     await expect(this.page.getByTestId('smoke-shell-root')).toBeVisible()
-    const brand = this.page.getByTestId('smoke-brand')
-    if (await brand.count()) {
-      await expect(brand.first()).toBeVisible()
-    }
     await expect(this.tab('dashboard')).toBeVisible()
   }
 

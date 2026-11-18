@@ -55,7 +55,7 @@ E7 (UI audit pipeline) before broad route redesign
 ## Rules of engagement for the agent
 
 - **Stay inside the constraint set in `SKILL.md`.** No new accent colors, no emoji, no new fonts, navbar is the only gradient.
-- **Ship behind a flag** when the issue says so (`dashboard_v2`, `new_shell`, `pending_states`, `alert_center`). Default off until the parent epic's checklist is green.
+- **Ship behind a flag** when the issue says so (only `alert_center` remains; `dashboard_v2`, `new_shell` and `pending_states` were retired and are always on). Default off until the parent epic's checklist is green.
 - **Atomic PRs.** One PR per issue; never bundle two issues into one PR.
 - **No backend changes** unless the label includes `needs: api`. If you discover one, stop and file a follow-up issue rather than improvising.
 - **Always update the relevant `preview/` card** when you touch a token or component — the design-system tab is the user's source of truth.

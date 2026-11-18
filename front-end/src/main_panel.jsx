@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter, Routes, NavLink, useLocation, useNavigate } from 'react-router-dom'
+import { BrowserRouter, Routes, useLocation, useNavigate } from 'react-router-dom'
 import NotificationAlert from 'notifications/alert'
 import { AlertCenterBell } from '../design-system/ui_kits/reef-pi-app/dashboard/AlertCenter'
 import { fetchUIData } from 'redux/actions/ui'
@@ -17,13 +17,6 @@ import {
 } from './main_panel_routes'
 import Sidebar from '../design-system/ui_kits/reef-pi-app/shell/Sidebar'
 import BottomNav from '../design-system/ui_kits/reef-pi-app/shell/BottomNav'
-
-function CurrentPageHeader () {
-  const location = useLocation()
-  const route = currentRouteForPath(location.pathname)
-  const label = route ? route.label : location.pathname.slice(1)
-  return <span>{label}</span>
-}
 
 // Route icon paths reused from Sidebar defaults — keeps this self-contained
 function navSvg (path) {
@@ -90,67 +83,18 @@ function NewShellNav ({ capabilities }) {
 }
 
 export class RawMainPanel extends React.Component {
-  constructor (props) {
-    super(props)
-    this.navs = this.navs.bind(this)
-  }
-
   componentDidMount () {
     this.props.fetchUIData()
   }
 
-  navs (currentCaps) {
-    const panels = navigationRoutes(currentCaps).map(route => (
-      <li className='nav-item' key={'li-tab-' + route.key}>
-        <NavLink to={routeNavigationPath(route)} id={'tab-' + route.key} data-testid={'smoke-tab-' + route.key} className='nav-link'>
-          {route.label}
-        </NavLink>
-      </li>
-    ))
-    return (
-      <ul className='navbar-nav'>{panels}</ul>
-    )
-  }
-
   render () {
     const currentCaps = this.props.capabilities
-    const newShell = !!window.FEATURE_FLAGS?.new_shell
-
-    // When sidebar is active, offset content by rail width (72px) at ≥992px
-    const contentStyle = newShell ? { paddingLeft: '72px' } : {}
 
     return (
       <BrowserRouter>
         <div id='content' data-testid='smoke-shell-root'>
-          {newShell
-            ? <NewShellNav capabilities={currentCaps} />
-            : (
-              <nav className='navbar navbar-dark navbar-reefpi navbar-expand-lg'>
-                <span className='navbar-brand h1' data-testid='smoke-brand'>{this.props.info.name}</span>
-                <span className='navbar-brand h1 navbar-toggler current-tab' data-testid='smoke-current-tab'><CurrentPageHeader /></span>
-                <button
-                  className='navbar-toggler'
-                  type='button'
-                  data-toggle='collapse'
-                  data-target='#navbarNav'
-                  aria-controls='navbarNav'
-                  aria-expanded='false'
-                  aria-label='Toggle navigation'
-                >
-                  <span className='navbar-toggler-icon' />
-                </button>
-                <div
-                  className='collapse navbar-collapse navHeaderCollapse'
-                  id='navbarNav'
-                  data-testid='smoke-nav'
-                  data-toggle='collapse'
-                  data-target='.navbar-collapse'
-                >
-                  {this.navs(currentCaps)}
-                </div>
-              </nav>
-              )}
-          <div data-testid='smoke-content-panel' style={{ padding: '0 var(--reefpi-shell-gutter)', ...contentStyle }}>
+          <NewShellNav capabilities={currentCaps} />
+          <div data-testid='smoke-content-panel' style={{ padding: '0 var(--reefpi-shell-gutter)', paddingLeft: '72px' }}>
             <FatalError />
             {window.FEATURE_FLAGS?.alert_center ? <AlertCenterBell sseEndpoint='/api/alerts' /> : <NotificationAlert />}
             <div className='body-panel'>

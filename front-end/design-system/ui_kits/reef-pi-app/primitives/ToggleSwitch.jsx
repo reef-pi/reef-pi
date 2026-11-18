@@ -8,8 +8,6 @@ import PropTypes from 'prop-types'
  *   pending — thumb centered, spinner ring in --reefpi-color-pending
  *   error   — red ring + retry icon; track stays last-known color
  *
- * Flag: pending_states (E4). Component is exported normally; parent decides
- * whether to render it based on window.FEATURE_FLAGS?.pending_states.
  */
 
 const TRACK_W  = 44
