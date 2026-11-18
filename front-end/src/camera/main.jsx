@@ -57,11 +57,11 @@ export class RawCamera extends React.Component {
       config = <Config config={this.props.config} update={this.props.updateConfig} />
     }
     return (
-      <div className='reefpi-view'>
+      <div className='reefpi-view' data-testid='smoke-camera-root'>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--reefpi-space-sm)' }}>
           <Button
             id='showConfig'
-            data-testid='camera-config-toggle'
+            data-testid='smoke-camera-config-toggle'
             onClick={this.handleToggleConfig}
             variant='secondary'
           >
@@ -69,11 +69,12 @@ export class RawCamera extends React.Component {
           </Button>
           {config}
         </div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--reefpi-space-sm)' }}>
+        <div data-testid={images.length > 0 ? 'smoke-camera-list' : undefined} style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--reefpi-space-sm)' }}>
           {images.length > 0
             ? <Gallery images={images} />
             : !this.state.showConfig && (
               <EmptyState
+                testId='smoke-camera-empty'
                 title='No images yet'
                 body='Capture an image to get started.'
               />

@@ -63,15 +63,16 @@ export class RawJournalMain extends React.Component {
       }
       return (
         <EmptyState
+          testId='smoke-journal-empty'
           title='No journal entries'
           body='Log observations, parameter changes, and livestock additions.'
-          action={{ label: 'Add entry', onClick: this.handleAddFirstJournal }}
+          action={{ label: 'Add entry', onClick: this.handleAddFirstJournal, testId: 'smoke-journal-add-toggle' }}
         />
       )
     }
 
     return (
-      <List>
+      <List data-testid='smoke-journal-list'>
         <CollapsibleList>{this.list()}</CollapsibleList>
         <New />
       </List>

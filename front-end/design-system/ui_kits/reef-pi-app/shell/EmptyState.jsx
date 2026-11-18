@@ -14,12 +14,13 @@ import PropTypes from 'prop-types'
  *   />
  */
 
-export default function EmptyState ({ icon, title, body, action }) {
+export default function EmptyState ({ icon, title, body, action, testId }) {
   const handleActionClick = action?.onClick
 
   return (
     <div
       role='status'
+      data-testid={testId}
       style={{
         display: 'flex',
         flexDirection: 'column',
@@ -151,6 +152,7 @@ EmptyState.propTypes = {
   icon: PropTypes.node,
   title: PropTypes.string.isRequired,
   body: PropTypes.string,
+  testId: PropTypes.string,
   action: PropTypes.shape({
     label: PropTypes.string.isRequired,
     onClick: PropTypes.func.isRequired,

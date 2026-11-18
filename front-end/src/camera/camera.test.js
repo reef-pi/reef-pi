@@ -116,7 +116,7 @@ describe('Camera module', () => {
       listImages: jest.fn(),
       updateConfig: jest.fn()
     })
-    const button = findAllByType(camera.render(), Button).find(node => node.props['data-testid'] === 'camera-config-toggle')
+    const button = findAllByType(camera.render(), Button).find(node => node.props['data-testid'] === 'smoke-camera-config-toggle')
 
     expect(button).toBeDefined()
     expect(button.props.variant).toBe('secondary')

@@ -47,7 +47,12 @@ async function jsonRequest (api, method, path, payload) {
 }
 
 async function resetSmokeState (api) {
-  for (const path of resetCollections) {
+  const capabilities = await jsonRequest(api, 'GET', '/api/capabilities')
+  const collections = capabilities.journal
+    ? ['/api/journal', ...resetCollections]
+    : resetCollections
+
+  for (const path of collections) {
     const items = await listItems(api, path)
     for (const item of items) {
       if (item && item.id && item.id !== 'rpi' && !item.readonly) {
@@ -57,6 +62,7 @@ async function resetSmokeState (api) {
   }
 
   await jsonRequest(api, 'POST', '/api/dev/smoke/reset')
+  return capabilities
 }
 
 async function listItems (api, path) {
@@ -142,6 +148,12 @@ async function createTemperatureController (api, tc) {
   return tcs.find(item => item.name === tc.name)
 }
 
+async function createJournal (api, journal) {
+  await jsonRequest(api, 'PUT', '/api/journal', journal)
+  const journals = await listItems(api, '/api/journal')
+  return journals.find(item => item.name === journal.name)
+}
+
 async function updateDashboard (api, payload) {
   await jsonRequest(api, 'POST', '/api/dashboard', payload)
 }
@@ -194,7 +206,7 @@ async function seedConfiguration (api) {
 }
 
 async function seedFullSmokeConfiguration (api) {
-  await resetSmokeState(api)
+  const capabilities = await resetSmokeState(api)
 
   const pca9685 = await createDriver(api, {
     name: 'pca9685',
@@ -397,6 +409,14 @@ async function seedFullSmokeConfiguration (api) {
     chart: { ymin: 70, ymax: 90, color: '#ff0000' }
   })
 
+  const journal = capabilities.journal
+    ? await createJournal(api, {
+      name: 'Tank Notes',
+      description: 'Daily reef observations',
+      unit: 'note'
+    })
+    : null
+
   await updateDashboard(api, {
     row: 3,
     column: 2,
@@ -431,7 +451,8 @@ async function seedFullSmokeConfiguration (api) {
     phProbe,
     ato,
     doser,
-    temperature
+    temperature,
+    journal
   }
 }
 
