@@ -77,6 +77,14 @@ describe('Configuration ui', () => {
     expect(panels[6].props.children.props.id).toBe('config-admin')
   })
 
+  it('<Main /> only matches the Settings tab exactly so it is not active on every sub-route', () => {
+    const panels = new Main({}).render().props.children[0].props.children.props.children
+    const links = panels.map(panel => panel.props.children.props)
+    expect(links[0].end).toBe(true)
+    expect(links.slice(1).every(link => !link.end)).toBe(true)
+    expect(links.every(link => link.className === 'nav-link')).toBe(true)
+  })
+
   it('<Admin />', () => {
     const reload = jest.fn()
     const reboot = jest.fn()
