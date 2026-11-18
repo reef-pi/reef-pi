@@ -50,6 +50,23 @@ describe('<Main />', () => {
     const rendered = main.render()
 
     expect(findAll(rendered, node => node.type === Collapsible)).toHaveLength(0)
+    expect(findAll(rendered, node => node.type === New)).toHaveLength(0)
+  })
+
+  it('opens the new journal form from the empty-state action', () => {
+    const main = new RawJournalMain({ journals: [], delete: jest.fn() })
+    main.setState = jest.fn(update => {
+      main.state = { ...main.state, ...update }
+    })
+
+    const emptyState = main.render()
+    emptyState.props.action.onClick()
+    const rendered = main.render()
+    const newJournal = findAll(rendered, node => node.type === New)
+
+    expect(main.state.showNewJournal).toBe(true)
+    expect(newJournal).toHaveLength(1)
+    expect(newJournal[0].props.initiallyExpanded).toBe(true)
   })
 
   it('renders New sub-component for adding journals', () => {

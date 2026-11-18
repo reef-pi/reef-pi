@@ -14,8 +14,14 @@ import { List } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
 export class RawJournalMain extends React.Component {
   constructor (props) {
     super(props)
+    this.state = { showNewJournal: false }
     this.handleDelete = this.handleDelete.bind(this)
+    this.handleAddFirstJournal = this.handleAddFirstJournal.bind(this)
     this.list = this.list.bind(this)
+  }
+
+  handleAddFirstJournal () {
+    this.setState({ showNewJournal: true })
   }
 
   handleDelete (j) {
@@ -52,11 +58,14 @@ export class RawJournalMain extends React.Component {
 
   render () {
     if (this.props.journals.length === 0) {
+      if (this.state.showNewJournal) {
+        return <New initiallyExpanded />
+      }
       return (
         <EmptyState
           title='No journal entries'
           body='Log observations, parameter changes, and livestock additions.'
-          action={{ label: 'Add entry', onClick: () => {} }}
+          action={{ label: 'Add entry', onClick: this.handleAddFirstJournal }}
         />
       )
     }

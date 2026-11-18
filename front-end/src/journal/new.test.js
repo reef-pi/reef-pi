@@ -30,6 +30,13 @@ describe('<New />', () => {
     expect(children(component)[1].props.onSubmit).toBe(component.handleSubmit)
   })
 
+  it('starts expanded when opened from the empty state', () => {
+    const component = new RawNewJournal({ initiallyExpanded: true, createJournal: jest.fn() })
+
+    expect(component.state.add).toBe(true)
+    expect(children(component)[1].type).toBe(JournalForm)
+  })
+
   it('toggles expanded state and resets draft values', () => {
     const component = new RawNewJournal({ createJournal: jest.fn() })
     component.state = {
