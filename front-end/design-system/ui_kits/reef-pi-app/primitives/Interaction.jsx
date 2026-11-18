@@ -127,9 +127,10 @@ export function Dialog ({
   )
 }
 
-function MenuItemButton ({ item }) {
+function MenuItemButton ({ item, onClose }) {
   const handleSelect = event => {
     item.onSelect?.(event)
+    onClose?.()
   }
 
   return (
@@ -166,6 +167,11 @@ export function Menu ({
     return () => document.removeEventListener('mousedown', handleMouseDown)
   }, [open])
 
+  const handleClose = () => {
+    setOpen(false)
+    buttonRef.current?.focus()
+  }
+
   const focusItem = index => {
     const buttons = focusableElements(menuRef.current)
     buttons[index]?.focus()
@@ -175,8 +181,7 @@ export function Menu ({
     const buttons = focusableElements(menuRef.current)
     const current = buttons.indexOf(document.activeElement)
     if (event.key === 'Escape') {
-      setOpen(false)
-      buttonRef.current?.focus()
+      handleClose()
     } else if (event.key === 'ArrowDown') {
       event.preventDefault()
       focusItem((current + 1 + buttons.length) % buttons.length)
@@ -214,7 +219,7 @@ export function Menu ({
             zIndex: 20
           })}
         >
-          {children || items.map(item => <MenuItemButton item={item} key={item.label} />)}
+          {children || items.map(item => <MenuItemButton item={item} key={item.label} onClose={handleClose} />)}
         </div>
       )}
     </div>
