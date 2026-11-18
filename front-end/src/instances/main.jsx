@@ -46,7 +46,7 @@ export class RawInstancesMain extends React.Component {
       nEq = <InstanceForm onSubmit={this.handleCreate} actionLabel={i18next.t('save')} />
     }
     return (
-      <List>
+      <List data-testid={this.props.instances.length > 0 ? 'smoke-instances-list' : 'smoke-instances-empty'}>
         {this.props.instances.slice().sort((a, b) => parseInt(b.id) - parseInt(a.id)).map(item => {
           return (
             <Instance
@@ -59,7 +59,7 @@ export class RawInstancesMain extends React.Component {
         })}
         <ListItem>
           <div>
-            <Button id='add_instance' onClick={this.handleToggle}>
+            <Button id='add_instance' data-testid='smoke-instances-add-toggle' onClick={this.handleToggle}>
               {this.state.add ? '-' : '+'}
             </Button>
           </div>
