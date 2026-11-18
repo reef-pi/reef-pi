@@ -12,7 +12,7 @@ export class RawNewJournal extends React.Component {
       name: '',
       description: '',
       unit: '',
-      add: false
+      add: Boolean(props.initiallyExpanded)
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleToggle = this.handleToggle.bind(this)
