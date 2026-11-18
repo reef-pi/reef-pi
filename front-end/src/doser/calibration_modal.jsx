@@ -121,7 +121,7 @@ export default class CalibrationModal extends React.Component {
         </div>
         <div className='modal-footer'>
           <div style={{ textAlign: 'center' }}>
-            <Button role='confirm' type='button' variant='primary' ref={(r) => { this.confirm = r }} onClick={this.handleConfirm}>
+            <Button data-testid='smoke-doser-calibration-close' role='confirm' type='button' variant='primary' ref={(r) => { this.confirm = r }} onClick={this.handleConfirm}>
               {i18n.t('close')}
             </Button>
           </div>

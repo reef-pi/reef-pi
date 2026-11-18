@@ -1,6 +1,7 @@
 import EditDoser from './edit_doser'
 import 'isomorphic-fetch'
 import * as Alert from '../utils/alert'
+import Cron from '../ui_components/cron'
 
 const findAll = (node, predicate, acc = []) => {
   if (!node || typeof node !== 'object') {
@@ -57,6 +58,26 @@ describe('<EditPh />', () => {
       isValid: true
     }), node => node.props?.name === 'type')[0]
     expect(typeField).toBeTruthy()
+  })
+
+  it('<EditDoser /> wires schedule fields to Formik handlers', () => {
+    const handleBlur = jest.fn()
+    const handleChange = jest.fn()
+    const cron = findAll(EditDoser({
+      values,
+      jacks,
+      handleBlur,
+      handleChange,
+      submitForm: fn,
+      errors: {},
+      touched: {},
+      setFieldValue: fn,
+      dirty: true,
+      isValid: true
+    }), node => node.type === Cron)[0]
+
+    expect(cron.props.handleBlur).toBe(handleBlur)
+    expect(cron.props.handleChange).toBe(handleChange)
   })
 
   it('<EditDoser /> should submit', () => {

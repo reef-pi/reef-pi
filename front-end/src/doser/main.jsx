@@ -76,6 +76,7 @@ export class RawDoser extends React.Component {
             <Button
               type='button'
               name={'calibrate-doser-' + doser.id}
+              data-testid={'smoke-doser-calibrate-' + doser.id}
               variant='secondary'
               style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem', marginLeft: 'auto' }}
               onClick={(e) => this.calibrateDoser(e, doser)}

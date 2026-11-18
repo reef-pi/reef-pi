@@ -37,8 +37,24 @@ test.describe('doser and macro create, edit and delete round trips', () => {
     const dialog = await doser.openCalibration('Smoke Doser')
     await doser.closeCalibration(dialog)
 
-    await doser.editSpeed('Smoke Doser', 'Smoke Doser 2', '55')
-    await expect.poll(async () => (await list(api, '/api/doser/pumps')).find(item => item.name === 'Smoke Doser 2')?.regiment.speed).toBe(55)
+    await doser.editSchedule('Smoke Doser', {
+      name: 'Smoke Doser 2',
+      hour: '4',
+      minute: '10',
+      second: '15',
+      duration: '20',
+      speed: '55'
+    })
+    await expect.poll(async () => {
+      const updated = (await list(api, '/api/doser/pumps')).find(item => item.name === 'Smoke Doser 2')
+      return updated && {
+        hour: updated.regiment.schedule.hour,
+        minute: updated.regiment.schedule.minute,
+        second: updated.regiment.schedule.second,
+        duration: updated.regiment.duration,
+        speed: updated.regiment.speed
+      }
+    }).toEqual({ hour: '4', minute: '10', second: '15', duration: 20, speed: 55 })
 
     await doser.remove('Smoke Doser 2')
     await expect.poll(async () => (await list(api, '/api/doser/pumps')).some(item => item.name === 'Smoke Doser 2')).toBe(false)
