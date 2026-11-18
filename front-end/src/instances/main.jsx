@@ -31,7 +31,7 @@ export class RawInstancesMain extends React.Component {
       ignore_https: values.ignore_https
     }
     this.props.create(payload)
-    this.toggle()
+    this.handleToggle()
   }
 
   handleToggle () {

@@ -141,7 +141,6 @@ describe('Instances Main', () => {
     main.setState = jest.fn(update => {
       main.state = { ...main.state, ...update }
     })
-    main.toggle = () => main.handleToggle()
 
     main.handleCreate({
       id: '99',
