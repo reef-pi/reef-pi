@@ -90,7 +90,7 @@ class MacrosPage {
 
   async run (name) {
     const macro = await this.findMacro(name)
-    await this.page.locator(`[name="run-macro-${macro.id}"]`).click()
+    await this.page.getByTestId(`smoke-macro-run-${macro.id}`).click()
   }
 
   async rename (name, newName) {

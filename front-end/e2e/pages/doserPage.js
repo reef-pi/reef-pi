@@ -69,25 +69,29 @@ class DoserPage {
     return doser
   }
 
-  async editSpeed (name, newName, speed) {
+  async editSchedule (name, updates) {
     const doser = await this.findDoser(name)
     await this.page.locator(`#edit-panel-doser-${doser.id}`).click()
-    await this.page.getByTestId('smoke-doser-name').fill(newName)
-    await this.page.getByTestId('smoke-doser-speed').fill(speed)
+    await this.page.getByTestId('smoke-doser-name').fill(updates.name)
+    await this.page.getByTestId('smoke-cron-hour').fill(updates.hour)
+    await this.page.getByTestId('smoke-cron-minute').fill(updates.minute)
+    await this.page.getByTestId('smoke-cron-second').fill(updates.second)
+    await this.page.getByTestId('smoke-doser-duration').fill(updates.duration)
+    await this.page.getByTestId('smoke-doser-speed').fill(updates.speed)
     await this.page.getByTestId('smoke-doser-submit').click()
-    await expect(this.page.locator('body')).toContainText(newName)
+    await expect(this.page.locator('body')).toContainText(updates.name)
   }
 
   async openCalibration (name) {
     const doser = await this.findDoser(name)
-    await this.page.locator(`[name="calibrate-doser-${doser.id}"]`).click()
+    await this.page.getByTestId(`smoke-doser-calibrate-${doser.id}`).click()
     const dialog = this.page.locator('.modal[role="dialog"]')
     await expect(dialog).toBeVisible()
     return dialog
   }
 
   async closeCalibration (dialog) {
-    await dialog.locator('button[role="confirm"]').click()
+    await dialog.getByTestId('smoke-doser-calibration-close').click()
     await expect(dialog).toHaveCount(0)
   }
 

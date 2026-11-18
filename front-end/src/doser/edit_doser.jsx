@@ -24,7 +24,7 @@ const EditDoser = ({
   outlets,
   submitForm,
   isValid,
-  onBlur,
+  handleBlur,
   handleChange,
   setFieldValue,
   dirty,
@@ -51,7 +51,7 @@ const EditDoser = ({
           touched={touched}
           outlets={outlets}
           isValid={isValid}
-          onBlur={onBlur}
+          onBlur={handleBlur}
           handleChange={handleChange}
           setFieldValue={setFieldValue}
           dirty={dirty}
@@ -66,7 +66,7 @@ const EditDoser = ({
           touched={touched}
           jacks={jacks}
           isValid={isValid}
-          onBlur={onBlur}
+          onBlur={handleBlur}
           handleChange={handleChange}
           setFieldValue={setFieldValue}
           dirty={dirty}
@@ -84,7 +84,7 @@ const EditDoser = ({
             data-testid='smoke-doser-name'
             disabled={readOnly}
             onChange={handleChange}
-            onBlur={onBlur}
+            onBlur={handleBlur}
             value={values.name}
             invalid={ShowError('name', touched, errors)}
           />
@@ -97,7 +97,7 @@ const EditDoser = ({
             readOnly={readOnly}
             type='number'
             onChange={handleChange}
-            onBlur={onBlur}
+            onBlur={handleBlur}
             value={values.volume}
             invalid={ShowError('volume', touched, errors)}
           />
@@ -109,7 +109,7 @@ const EditDoser = ({
             data-testid='smoke-doser-type'
             disabled={readOnly}
             onChange={handleChange}
-            onBlur={onBlur}
+            onBlur={handleBlur}
             value={values.type}
             invalid={ShowError('type', touched, errors)}
           >
@@ -131,6 +131,8 @@ const EditDoser = ({
             touched={touched}
             errors={errors}
             readOnly={readOnly}
+            handleChange={handleChange}
+            handleBlur={handleBlur}
           />
         </div>
       )}

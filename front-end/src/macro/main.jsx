@@ -62,6 +62,7 @@ export class RawMacroMain extends React.Component {
             <Button
               type='button'
               name={'run-macro-' + macro.id}
+              data-testid={'smoke-macro-run-' + macro.id}
               variant='secondary'
               style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem', marginLeft: 'auto' }}
               disabled={macro.enable}
