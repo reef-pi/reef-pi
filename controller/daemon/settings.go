@@ -27,6 +27,8 @@ func initializeSettings(store storage.Store) (settings.Settings, error) {
 		settings.DefaultSettings.Capabilities.Macro = true
 		settings.DefaultSettings.Capabilities.Doser = true
 		settings.DefaultSettings.Capabilities.Ph = true
+		settings.DefaultSettings.Capabilities.Camera = true
+		settings.DefaultSettings.Capabilities.Journal = true
 
 		settings.DefaultSettings.Address = "0.0.0.0:8080"
 		log.Println("DEV_MODE environment variable set. Turning on dev_mode. Address set to localhost:8080")
