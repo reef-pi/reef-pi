@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { ErrorMessage, ErrorFor, ShowError } from '../utils/validation_helper'
+import { ErrorFor, ShowError } from '../utils/validation_helper'
 import i18next from 'i18next'
 import { showError, showUpdateSuccessful } from 'utils/alert'
 import Cron from '../ui_components/cron'
@@ -37,7 +37,7 @@ const EditDoser = ({
       showUpdateSuccessful()
     } else {
       submitForm()
-      showError(i18next.t('validation:error') + ErrorMessage(errors, ''))
+      showError(i18next.t('validation:error'))
     }
   }
 

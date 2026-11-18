@@ -111,5 +111,8 @@ describe('<EditPh />', () => {
     })
     form.props.onSubmit({ preventDefault: () => {} })
     expect(Alert.showError).toHaveBeenCalled()
+    // The message must not get a trailing "null" appended when there is no form-level error.
+    const message = Alert.showError.mock.calls[Alert.showError.mock.calls.length - 1][0]
+    expect(message).not.toMatch(/null|undefined/)
   })
 })
