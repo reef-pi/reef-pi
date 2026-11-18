@@ -80,8 +80,7 @@ test.describe('doser and macro create, edit and delete round trips', () => {
     await expect.poll(async () => (await list(api, '/api/macros')).some(item => item.name === 'Smoke Macro 2')).toBe(false)
   })
 
-  // Blocked by #3229: the API drops macro steps on create/update, so a UI-created macro runs nothing.
-  test.fixme('macro run applies its steps', async ({ page }) => {
+  test('macro run applies its steps', async ({ page }) => {
     const macros = new MacrosPage(page, navBar)
     await macros.open()
     await macros.createEquipmentMacro('Smoke Macro', 'Fan', 'Turn On')

@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"strings"
 
 	"github.com/reef-pi/hal"
@@ -548,6 +549,11 @@ func (s *ReefPiServer) CreateMacro(_ context.Context, request gen.CreateMacroReq
 	if request.Body.Reversible != nil {
 		m.Reversible = *request.Body.Reversible
 	}
+	steps, err := fromGenMacroSteps(request.Body.Steps)
+	if err != nil {
+		return gen.CreateMacro400JSONResponse{Message: err.Error()}, nil
+	}
+	m.Steps = steps
 	if err := s.macro.Create(m); err != nil {
 		return gen.CreateMacro400JSONResponse{Message: err.Error()}, nil
 	}
@@ -594,6 +600,14 @@ func (s *ReefPiServer) UpdateMacro(_ context.Context, request gen.UpdateMacroReq
 	existing.Name = request.Body.Name
 	if request.Body.Reversible != nil {
 		existing.Reversible = *request.Body.Reversible
+	}
+	// Steps are replaced only when the request carries them, so a rename-only update keeps them.
+	if request.Body.Steps != nil {
+		steps, err := fromGenMacroSteps(request.Body.Steps)
+		if err != nil {
+			return gen.UpdateMacro400JSONResponse{Message: err.Error()}, nil
+		}
+		existing.Steps = steps
 	}
 	if err := s.macro.Update(request.Id, existing); err != nil {
 		if isNotFound(err) {
@@ -653,6 +667,31 @@ func (s *ReefPiServer) RevertMacro(_ context.Context, request gen.RevertMacroReq
 		return gen.RevertMacro401JSONResponse{Message: err.Error()}, nil
 	}
 	return gen.RevertMacro200JSONResponse{Message: "ok"}, nil
+}
+
+// fromGenMacroSteps converts the request's free-form steps ({type, config}) into stored macro
+// steps. A nil list means no steps. Every step needs a type; its config is kept verbatim.
+func fromGenMacroSteps(in *[]map[string]interface{}) ([]macroModule.Step, error) {
+	if in == nil {
+		return nil, nil
+	}
+	steps := make([]macroModule.Step, 0, len(*in))
+	for i, raw := range *in {
+		stepType, _ := raw["type"].(string)
+		if stepType == "" {
+			return nil, fmt.Errorf("step %d: type is required", i+1)
+		}
+		config := json.RawMessage("{}")
+		if c, ok := raw["config"]; ok && c != nil {
+			encoded, err := json.Marshal(c)
+			if err != nil {
+				return nil, fmt.Errorf("step %d: invalid config: %w", i+1, err)
+			}
+			config = encoded
+		}
+		steps = append(steps, macroModule.Step{Type: stepType, Config: config})
+	}
+	return steps, nil
 }
 
 func toGenMacro(m macroModule.Macro) gen.Macro {
