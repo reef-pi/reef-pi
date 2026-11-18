@@ -9,6 +9,8 @@ import (
 	"time"
 
 	"github.com/reef-pi/reef-pi/controller"
+	phModule "github.com/reef-pi/reef-pi/controller/modules/ph"
+	temperatureModule "github.com/reef-pi/reef-pi/controller/modules/temperature"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
@@ -106,5 +108,44 @@ func TestLowestIDPrefersTheNumericallySmallest(t *testing.T) {
 	}
 	if id, _ := lowestID([]string{"b", "a"}); id != "a" {
 		t.Fatalf("non numeric ids fall back to string order, got %s", id)
+	}
+}
+
+func TestTelemetrySeriesResolvesTheFirstTemperatureAndPhProbe(t *testing.T) {
+	r := newHTTPCompositionTestReefPi(t)
+	con, err := controller.TestController()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	tcs, err := temperatureModule.New(true, con)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := tcs.Setup(); err != nil {
+		t.Fatal(err)
+	}
+	if err := tcs.Create(&temperatureModule.TC{Name: "Display", Period: 60, Sensor: "28-devmodeenable"}); err != nil {
+		t.Fatal(err)
+	}
+	r.subsystems.Load(temperatureModule.Bucket, tcs)
+
+	probes := phModule.New(true, con)
+	if err := probes.Setup(); err != nil {
+		t.Fatal(err)
+	}
+	if err := probes.Create(phModule.Probe{Name: "Display pH", Period: 60}); err != nil {
+		t.Fatal(err)
+	}
+	r.subsystems.Load(phModule.Bucket, probes)
+
+	// A temperature controller and a pH probe exist but nothing has been recorded yet.
+	handler := r.serverHandler()
+	cookies := signInCookies(t, handler)
+	for _, path := range []string{"/api/telemetry/temperature.display?range=6h", "/api/telemetry/ph.display?range=7d"} {
+		response := get(handler, path, cookies)
+		if response.Code != http.StatusOK || strings.TrimSpace(response.Body.String()) != "[]" {
+			t.Fatalf("GET %s: expected 200 [], got %d %q", path, response.Code, response.Body.String())
+		}
 	}
 }
