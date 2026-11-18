@@ -1,6 +1,5 @@
 @import './tokens';
 @import './auth-page';
-@import './navbar';
 @import './sign-in';
 @import './dashboard';
 @import './grid';
@@ -214,8 +213,7 @@ body {
 
 .list-group-item,
 .reef_pi_panel,
-.conf-nav,
-.navbar-reefpi {
+.conf-nav {
   border-color: var(--reefpi-color-border);
 }
 
@@ -265,7 +263,6 @@ body {
 }
 
 .conf-nav .nav-link,
-.navbar-reefpi .nav-link,
 .btn {
   min-height: var(--reefpi-tap-target-min);
   display: inline-flex;
@@ -345,12 +342,6 @@ textarea:focus,
 
   .body-panel {
     margin-bottom: 85px;
-  }
-  .navHeaderCollapse.collapsing{
-    transition:none;
-    -webkit-transition:none;
-    -moz-transition:none;
-    overflow:visible;
   }
 }
 

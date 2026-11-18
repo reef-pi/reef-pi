@@ -101,7 +101,7 @@ describe('MainPanel', () => {
     expect(panel.props.fetchUIData).toHaveBeenCalled()
     expect(() => panel.render()).not.toThrow()
     expect(MainPanel).toBeDefined()
-    expect(countByType(panel.render(), node => node.type === 'nav')).toBeGreaterThan(0)
+    expect(countByType(panel.render(), node => node.type && node.type.name === 'NewShellNav')).toBe(1)
   })
 
   it('renders shell chrome, summary, and route container with supplied state', () => {
@@ -119,66 +119,18 @@ describe('MainPanel', () => {
     })
     const rendered = panel.render()
     const smokeRoot = findAll(rendered, node => node.props?.['data-testid'] === 'smoke-shell-root')[0]
-    const brand = findAll(rendered, node => node.props?.['data-testid'] === 'smoke-brand')[0]
-    const nav = findAll(rendered, node => node.props?.['data-testid'] === 'smoke-nav')[0]
+    const shellNav = findAll(rendered, node => node.type && node.type.name === 'NewShellNav')[0]
     const summary = findAll(rendered, node => node.type?.name === 'Summary')[0]
 
     expect(smokeRoot.props.id).toBe('content')
-    expect(brand.props.children).toBe('reef-pi-test')
-    expect(nav.props.id).toBe('navbarNav')
+    expect(shellNav.props.capabilities.equipment).toBe(true)
     expect(summary.props.info.name).toBe('reef-pi-test')
     expect(summary.props.errors).toHaveLength(1)
     expect(summary.props.devMode).toBe(true)
     expect(countByType(rendered, node => node.type?.name === 'Routes')).toBe(1)
   })
 
-  it('renders DOM shell and current route label from browser location', () => {
-    jest.spyOn(console, 'warn').mockImplementation(() => {})
-    window.history.pushState({}, '', '/timers')
-    const fetchUIData = jest.fn()
-    const fetchInfo = jest.fn()
-    const { container, unmount } = renderDomPanel({
-      info: { name: 'reef-pi-dom' },
-      errors: [],
-      capabilities: {
-        dashboard: true,
-        timers: true,
-        configuration: true,
-        dev_mode: false
-      },
-      fetchUIData,
-      fetchInfo
-    })
-
-    expect(fetchUIData).toHaveBeenCalled()
-    expect(container.querySelector('[data-testid="smoke-brand"]').textContent).toBe('reef-pi-dom')
-    expect(container.querySelector('[data-testid="smoke-current-tab"]').textContent).toBe('timers')
-    expect(container.querySelector('[data-testid="smoke-nav"]').id).toBe('navbarNav')
-    expect(Array.from(container.querySelectorAll('.nav-link')).map(link => link.id)).toEqual([
-      'tab-dashboard',
-      'tab-timers',
-      'tab-configuration'
-    ])
-    unmount()
-  })
-
-  it('renders fallback current route label for unknown paths', () => {
-    jest.spyOn(console, 'warn').mockImplementation(() => {})
-    window.history.pushState({}, '', '/custom-page')
-    const { container, unmount } = renderDomPanel({
-      info: { name: 'reef-pi-dom' },
-      errors: [],
-      capabilities: {},
-      fetchUIData: jest.fn(),
-      fetchInfo: jest.fn()
-    })
-
-    expect(container.querySelector('[data-testid="smoke-current-tab"]').textContent).toBe('custom-page')
-    unmount()
-  })
-
-  it('renders new shell navigation when feature flag is enabled', () => {
-    window.FEATURE_FLAGS = { new_shell: true }
+  it('renders the sidebar and bottom navigation', () => {
     Object.defineProperty(window, 'innerWidth', { configurable: true, value: 480 })
     window.matchMedia = jest.fn(() => ({
       matches: false,
@@ -242,27 +194,6 @@ describe('MainPanel', () => {
     expect(routes.map(route => route.key)).toEqual(['dashboard', 'timers', 'configuration'])
   })
 
-  it('renders nav links with preserved ids, test ids, and paths', () => {
-    const panel = new RawMainPanel({
-      info: { name: 'reef-pi' },
-      errors: [],
-      capabilities: {},
-      fetchUIData: jest.fn(),
-      fetchInfo: jest.fn()
-    })
-
-    const nav = panel.navs({
-      dashboard: true,
-      timers: true,
-      configuration: true
-    })
-    const links = findAll(nav, node => node.props?.className === 'nav-link')
-
-    expect(links.map(link => link.props.id)).toEqual(['tab-dashboard', 'tab-timers', 'tab-configuration'])
-    expect(links.map(link => link.props['data-testid'])).toEqual(['smoke-tab-dashboard', 'smoke-tab-timers', 'smoke-tab-configuration'])
-    expect(links.map(link => link.props.to)).toEqual(['', '/timers', '/configuration'])
-  })
-
   it('matches current page routes including nested configuration pages', () => {
     const dashboard = mainPanelRoutes.find(route => route.key === 'dashboard')
     const configuration = mainPanelRoutes.find(route => route.key === 'configuration')
@@ -283,8 +214,7 @@ describe('MainPanel', () => {
     expect(routeNavigationPath(mainPanelRoutes[12])).toBe('/configuration')
   })
 
-  it('renders NewShellNav instead of navbar when new_shell flag is on', () => {
-    window.FEATURE_FLAGS = { new_shell: true }
+  it('renders NewShellNav as the only navigation', () => {
     const panel = new RawMainPanel({
       info: { name: 'reef-pi' },
       errors: [],
@@ -297,7 +227,6 @@ describe('MainPanel', () => {
     expect(newShellNav).toBeDefined()
     expect(newShellNav.props.capabilities).toEqual({ dashboard: true, equipment: true })
     expect(countByType(rendered, node => node.type === 'nav')).toBe(0)
-    window.FEATURE_FLAGS = {}
   })
 
   it('renders AlertCenterBell instead of NotificationAlert when alert_center flag is on', () => {
