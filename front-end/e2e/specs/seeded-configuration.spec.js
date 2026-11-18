@@ -73,4 +73,17 @@ test('configuration connectors bottom content is not hidden behind the summary f
   await page.setViewportSize({ width: 390, height: 844 })
   const mobilePanelPadding = await page.evaluate(() => parseFloat(window.getComputedStyle(document.querySelector('#main-panel')).paddingBottom))
   expect(mobilePanelPadding).toBe(0)
+
+  // On a phone the driver names must stay on one line and the last group must clear the bottom nav.
+  const titleHeights = await page.locator('.connector-group-title').evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().height))
+  expect(titleHeights.length).toBeGreaterThan(0)
+  for (const height of titleHeights) expect(height).toBeLessThan(40)
+  await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight))
+  const clearance = await page.evaluate(() => {
+    const groups = document.querySelectorAll('.connector-group')
+    const last = groups[groups.length - 1].getBoundingClientRect()
+    const nav = document.querySelector('nav[aria-label="Main navigation"]').getBoundingClientRect()
+    return Math.floor(nav.top - last.bottom)
+  })
+  expect(clearance).toBeGreaterThanOrEqual(0)
 })
