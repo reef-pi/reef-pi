@@ -50,8 +50,6 @@ class DashboardPage {
     await typeMenu.click()
     await this.page.getByRole('menuitem', { name: label, exact: true }).click()
     await expect(typeMenu).toHaveText(label)
-    // The menu stays open after a selection and would cover the controls below it.
-    await this.page.keyboard.press('Escape')
     await expect(this.page.getByRole('menuitem').first()).toBeHidden()
   }
 

@@ -59,9 +59,26 @@ describe('design-system interaction primitives', () => {
 
     act(() => items[0].click())
     expect(select).toHaveBeenCalled()
+    expect(document.querySelector('[role="menu"]')).toBeNull()
 
+    act(() => document.querySelector('button').click())
+    expect(document.querySelector('[role="menu"]')).toBeTruthy()
     act(() => document.body.dispatchEvent(new MouseEvent('mousedown', { bubbles: true })))
     expect(document.querySelector('[role="menu"]')).toBeNull()
+  })
+
+  it('closes Menu after an item is selected and returns focus to the trigger', () => {
+    const select = jest.fn()
+    render(<Menu buttonLabel='More' items={[{ label: 'Edit', onSelect: select }]} />)
+    const trigger = document.querySelector('button')
+
+    act(() => trigger.click())
+    act(() => document.querySelector('[role="menuitem"]').click())
+
+    expect(select).toHaveBeenCalledTimes(1)
+    expect(document.querySelector('[role="menu"]')).toBeNull()
+    expect(trigger.getAttribute('aria-expanded')).toBe('false')
+    expect(document.activeElement).toBe(trigger)
   })
 
   it('shows Tooltip on focus and hover with described-by wiring', () => {
