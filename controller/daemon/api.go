@@ -95,6 +95,7 @@ func (r *ReefPi) registerTelemetryAPI(router chi.Router) {
 	router.Get("/api/telemetry", r.telemetry.GetConfig)
 	router.Post("/api/telemetry", r.telemetry.UpdateConfig)
 	router.Post("/api/telemetry/test_message", r.telemetry.SendTestMessage)
+	router.Get("/api/telemetry/{metric}", r.telemetrySeries)
 }
 
 func (r *ReefPi) registerErrorAPI(router chi.Router) {

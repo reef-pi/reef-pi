@@ -32,7 +32,7 @@ module.exports = defineConfig({
     {
       name: 'smoke-chromium',
       dependencies: ['setup'],
-      testMatch: /specs\/(auth-and-shell|dashboard-and-responsive|seeded-configuration|full-smoke-coverage|connectors-crud|form-validation|configuration-tabs|crud-equipment-timers-lighting|panel-expand|error-surfaces|crud-temperature-ph-ato|crud-doser-macros|auth-flows|deep-links|modules-misc|alerts-stream)\.spec\.js/,
+      testMatch: /specs\/(auth-and-shell|dashboard-and-responsive|seeded-configuration|full-smoke-coverage|connectors-crud|form-validation|configuration-tabs|crud-equipment-timers-lighting|panel-expand|error-surfaces|crud-temperature-ph-ato|crud-doser-macros|auth-flows|deep-links|modules-misc|alerts-stream|dashboard-requests)\.spec\.js/,
       use: {
         browserName: 'chromium',
         storageState: 'front-end/e2e/.auth/user.json'
