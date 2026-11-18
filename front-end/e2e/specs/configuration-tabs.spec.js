@@ -28,8 +28,7 @@ test.describe('configuration sub-tabs', () => {
     problems = []
     page.on('pageerror', error => problems.push(`pageerror: ${error.message}`))
     page.on('response', response => {
-      // /api/alerts is polled by the alert center but has no backend route yet (#3214).
-      if (response.status() >= 400 && !response.url().includes('/api/alerts')) {
+      if (response.status() >= 400) {
         problems.push(`${response.status()} ${response.url()}`)
       }
     })

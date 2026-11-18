@@ -102,6 +102,7 @@ func (r *ReefPi) registerErrorAPI(router chi.Router) {
 	router.Delete("/api/errors/{id}", r.deleteError)
 	router.Get("/api/errors/{id}", r.getError)
 	router.Get("/api/errors", r.listErrors)
+	router.Get("/api/alerts", r.streamAlerts)
 }
 
 func (r *ReefPi) registerRuntimeAPI(router chi.Router) {
