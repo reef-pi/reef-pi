@@ -142,6 +142,46 @@ func TestServerHandlerComposesStaticAuthCORSAndPrometheus(t *testing.T) {
 	}
 }
 
+func TestServerHandlerServesAppShellForClientSideRoutes(t *testing.T) {
+	r := newHTTPCompositionTestReefPi(t)
+
+	root := t.TempDir()
+	if err := os.MkdirAll(filepath.Join(root, "ui", "assets"), 0755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "ui", "home.html"), []byte("app-shell"), 0644); err != nil {
+		t.Fatal(err)
+	}
+	wd, err := os.Getwd()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Chdir(root); err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() {
+		if err := os.Chdir(wd); err != nil {
+			t.Error(err)
+		}
+	})
+
+	handler := r.serverHandler()
+	for _, path := range []string{"/configuration", "/configuration/errors", "/equipment", "/timers/"} {
+		response := httptest.NewRecorder()
+		handler.ServeHTTP(response, httptest.NewRequest("GET", path, nil))
+		if response.Code != http.StatusOK || response.Body.String() != "app-shell" {
+			t.Fatalf("expected GET %s to serve the app shell, got %d %q", path, response.Code, response.Body.String())
+		}
+	}
+
+	// Server-owned paths and non-navigation methods still 404.
+	assertHTTPStatus(t, handler, "GET", "/api/does-not-exist", nil, http.StatusNotFound)
+	assertHTTPStatus(t, handler, "GET", "/assets/missing.js", nil, http.StatusNotFound)
+	assertHTTPStatus(t, handler, "GET", "/images/missing.png", nil, http.StatusNotFound)
+	assertHTTPStatus(t, handler, "GET", "/auth/unknown", nil, http.StatusNotFound)
+	assertHTTPStatus(t, handler, "POST", "/configuration", nil, http.StatusNotFound)
+}
+
 func assertHTTPStatus(t *testing.T, handler http.Handler, method, path string, body *bytes.Buffer, expected int) {
 	t.Helper()
 

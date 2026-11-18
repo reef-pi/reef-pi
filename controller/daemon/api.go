@@ -3,6 +3,7 @@ package daemon
 import (
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/go-chi/chi/v5"
 
@@ -136,6 +137,17 @@ func (r *ReefPi) serverHandler() http.Handler {
 	root.Handle("/assets/*", http.StripPrefix("/assets/", http.FileServer(http.Dir("ui/assets"))))
 	root.Handle("/images/*", http.StripPrefix("/images/", http.FileServer(http.Dir("images"))))
 
+	// The UI uses client-side routing (e.g. /configuration, /equipment), so a reload or a
+	// bookmarked link must get the app shell back instead of a 404. Paths that belong to
+	// the server (API, assets, images, auth, metrics) keep their normal 404.
+	root.NotFound(func(w http.ResponseWriter, req *http.Request) {
+		if isUIRoute(req) {
+			http.ServeFile(w, req, "ui/home.html")
+			return
+		}
+		http.NotFound(w, req)
+	})
+
 	r.UnAuthenticatedAPI(root)
 
 	root.Group(func(router chi.Router) {
@@ -153,6 +165,20 @@ func (r *ReefPi) serverHandler() http.Handler {
 	}
 
 	return root
+}
+
+// isUIRoute reports whether an otherwise unmatched request is a browser navigation to a
+// client-side route that the single page app should handle.
+func isUIRoute(req *http.Request) bool {
+	if req.Method != http.MethodGet && req.Method != http.MethodHead {
+		return false
+	}
+	for _, prefix := range []string{"/api/", "/assets/", "/images/", "/auth/", "/x/"} {
+		if strings.HasPrefix(req.URL.Path, prefix) {
+			return false
+		}
+	}
+	return true
 }
 
 func corsMiddleware(next http.Handler) http.Handler {
