@@ -15,6 +15,23 @@ const CONTROLLER = {
   period: '60'
 }
 
+// reef-pi's DefaultCapabilities (controller/settings/capabilities.go): what a reader's controller shows.
+const READER_CAPABILITIES = {
+  equipment: true,
+  timers: true,
+  lighting: false,
+  ato: true,
+  temperature: true,
+  camera: false,
+  doser: false,
+  ph: false,
+  journal: false,
+  macro: true,
+  health_check: true,
+  dashboard: true,
+  dev_mode: false
+}
+
 // On a phone, routes beyond the first four live behind "More routes".
 async function openTab (page, name) {
   const navBar = new NavBar(page)
@@ -38,9 +55,15 @@ test('Guide 3: Configuration & Testing', async ({ page, baseURL }, testInfo) => 
     await openTab(page, 'configuration')
     const capability = page.locator('#update-temperature')
     await expect(capability).toBeChecked()
-    // The dev server runs with the Dev Mode capability on; a reader's controller has it off.
-    // Show it unchecked in the image only (nothing is saved).
-    await page.locator('#update-dev_mode').evaluate(box => { box.checked = false })
+    // The dev server turns on extra capabilities (Dev Mode, Lighting, Dosers, pH). Show what a reader
+    // has after Guides 1-2 instead: reef-pi's DefaultCapabilities (controller/settings/capabilities.go),
+    // which include Temperature. Only the image changes; nothing is saved.
+    await page.evaluate(defaults => {
+      for (const [key, on] of Object.entries(defaults)) {
+        const box = document.getElementById('update-' + key)
+        if (box) box.checked = on
+      }
+    }, READER_CAPABILITIES)
     await capability.scrollIntoViewIfNeeded()
     await shot(page, testInfo, { guide: GUIDE, pageSlug: PAGE, index: 1, what: 'settings-capabilities' })
 
@@ -80,6 +103,9 @@ test('Guide 3: Configuration & Testing', async ({ page, baseURL }, testInfo) => 
     const tile = page.getByTestId('dashboard-tile-temperature')
     await expect(tile).toBeVisible()
     await expect(tile.getByRole('button', { name: /retry/i })).toHaveCount(0)
+    // The tile fetches its own series after navigation; its readout and chart render only once it has
+    // points, so wait for them instead of capturing a loading or empty tile.
+    await expect(tile.getByText(/vs 1h ago/)).toBeVisible()
     await shot(page, testInfo, { guide: GUIDE, pageSlug: PAGE, index: 5, what: 'dashboard-temperature-tile', locator: tile })
   } finally {
     await api.dispose()

@@ -31,18 +31,33 @@ Copy-back checklist, per Adafruit page.
 - Image 05 (dashboard temperature charts): replace with
   `configuration-testing-05-dashboard-temperature-tile-{desktop,mobile}.png`.
 - Image 06 (Adafruit IO dashboard): unchanged.
-- Text "make sure temperature capability is enabled ... Reload reef-pi every time settings are updated"
-  -> names the 7.0 locations: Configuration > Settings > Capabilities, then Configuration > Admin >
-  Reload.
+- Text "make sure temperature capability is enabled. If not, enable it under the settings section of the
+  configuration tab. Reload reef-pi every time settings are updated." -> names the 7.0 locations
+  (Configuration > Settings > Capabilities, tick **Temperatures**, click **Update**; then Configuration >
+  Admin > Reload) and says "every time capabilities are changed".
 - Text "Refresh your browser ... the temperature tab should appear ... clicking on the '+' button"
   -> the Temperature page is reached from the sidebar (on a phone: the bottom bar's "More" menu); the
-  form fields are named as in 7.0 (Sensor, Unit, Check Frequency, Status, Alerts, Control).
-- Section "Charts & Dashboard" rewritten: the old "configure the main dashboard, click update, Back to
-  dashboard" steps are replaced by the automatic Temperature tile and its range selector; the
-  retention numbers (1440 recent readings, 30 days of hourly averages) are unchanged.
-- Section "Adafruit IO": "a feed named the same as temperature controller name and with a tc- prefix"
-  -> feed `<prefix><controller name>-reading` (plus `-heater` / `-cooler` when control is on), with
-  the menu path Configuration > Telemetry.
+  form fields are named as in 7.0 (Sensor, Check Frequency, Status, Alerts, Control), "cooling devices"
+  -> "chiller devices", and the paragraph now ends with "then click **Save**".
+- Text "Once created, the new temperature controller will appear in the list. We can now use this new
+  temperature control to chart the sensor data." -> "temperature control" corrected to "temperature
+  controller".
+- Section "Charts & Dashboard" rewritten:
+  - "reef-pi provides two types of charts ... known as temperature ... known as tc" -> "reef-pi keeps
+    two kinds of data for each temperature controller"; the retention numbers (1440 recent readings,
+    30 days of hourly averages with heater and chiller usage) are unchanged.
+  - "Configure the main dashboard to enable both types of temperature chart ... Click on update ...
+    Back to dashboard. You should see the temperature charts in the main dashboard now." -> new
+    paragraph: the Temperature tile appears automatically (latest reading, gauge, chart, range buttons)
+    and expanding the controller on the Temperature page shows its readings and usage charts.
+  - "The example images are taken from a controller running for a few days." -> "... running for a
+    short time" (the generated images use a few minutes of readings).
+- Section "Adafruit IO":
+  - "You can enable adafruit.io in the telemetry section under the configuration tab" -> "under
+    **Configuration > Telemetry**".
+  - "a feed named the same as temperature controller name and with a tc- prefix. This feed will hold"
+    -> feed `<prefix><controller name>-reading` (for example `adafruittempsensor-reading`), plus
+    `-heater` / `-cooler` feeds when control is on; "These feeds hold".
 
 **Needs maintainer check**
 
@@ -240,10 +255,10 @@ at check interval granularity: reef-pi will store one days worth of data when ch
 usage (in seconds) for the past thirty days.
 
 There is nothing to configure: as soon as a temperature controller exists, the main dashboard shows a
-**Temperature** tile with the latest reading, a gauge against the safe range, and a chart of recent
-readings. Use the range buttons on the tile to switch between the last hour, 6 hours, day, 7 days and
-30 days. Expanding the controller on the **Temperature** page shows the same chart for that
-controller. For new builds, the charts will have limited data.
+**Temperature** tile with the latest reading, a gauge, and a chart of recent readings. Use the range
+buttons on the tile to switch between the last hour, 6 hours, day, 7 days and 30 days. Expanding the
+controller on the **Temperature** page shows its readings and usage charts. The example images are
+taken from a controller running for a short time; for new builds, the charts will have limited data.
 
 | Desktop | Mobile |
 |---|---|
