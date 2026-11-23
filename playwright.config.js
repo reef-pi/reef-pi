@@ -50,6 +50,32 @@ module.exports = defineConfig({
       }
     },
     {
+      name: 'guide-screenshots-desktop',
+      dependencies: ['setup'],
+      testMatch: /guides\/guide-\d+\.spec\.js/,
+      timeout: 180000,
+      use: {
+        browserName: 'chromium',
+        storageState: 'front-end/e2e/.auth/user.json',
+        viewport: { width: 1440, height: 900 },
+        deviceScaleFactor: 2
+      }
+    },
+    {
+      name: 'guide-screenshots-mobile',
+      dependencies: ['setup'],
+      testMatch: /guides\/guide-\d+\.spec\.js/,
+      timeout: 180000,
+      use: {
+        browserName: 'chromium',
+        storageState: 'front-end/e2e/.auth/user.json',
+        viewport: { width: 390, height: 844 },
+        deviceScaleFactor: 2,
+        isMobile: true,
+        hasTouch: true
+      }
+    },
+    {
       name: 'integration-chromium',
       dependencies: ['setup'],
       testMatch: /specs\/integration\/.*\.spec\.js/,

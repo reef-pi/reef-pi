@@ -173,6 +173,14 @@ smoke:
 ui-audit:
 	yarn run ui-audit
 
+.PHONY: guide-screenshots
+guide-screenshots:
+	make go
+	make ui
+	make api-doc
+	npx playwright test --project=guide-screenshots-desktop --project=guide-screenshots-mobile $(if $(GUIDE),front-end/e2e/guides/guide-0$(GUIDE).spec.js,)
+	@echo "Guide screenshots written to docs/guides/*/images/"
+
 .PHONY: integration-smoke
 integration-smoke:
 	yarn run integration
