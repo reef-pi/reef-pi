@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { ErrorMessage, ShowError } from '../utils/validation_helper'
 import { showError, showUpdateSuccessful } from 'utils/alert'
 import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import BooleanFormSelect from '../ui_components/boolean_form_select'
 import { Field as FormField, Input, Select } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
 import i18next from 'i18next'
 import ATOChart from './chart'
@@ -156,17 +157,17 @@ const EditAto = ({
           label={i18next.t('status')}
           error={ShowError('enable', touched, errors) ? ErrorMessage(errors, 'enable') : undefined}
         >
-          <Select
+          <BooleanFormSelect
             name='enable'
             disabled={readOnly}
-            value={String(values.enable)}
+            value={values.enable}
             onChange={handleChange}
             onBlur={handleBlur}
             invalid={ShowError('enable', touched, errors)}
           >
             <option value='true'>{i18next.t('enabled')}</option>
             <option value='false'>{i18next.t('disabled')}</option>
-          </Select>
+          </BooleanFormSelect>
         </FormField>
       </div>
 
@@ -214,17 +215,17 @@ const EditAto = ({
           label={i18next.t('one_shot')}
           error={ShowError('one_shot', touched, errors) ? ErrorMessage(errors, 'one_shot') : undefined}
         >
-          <Select
+          <BooleanFormSelect
             name='one_shot'
             disabled={readOnly}
-            value={String(values.one_shot)}
+            value={values.one_shot}
             onChange={handleChange}
             onBlur={handleBlur}
             invalid={ShowError('one_shot', touched, errors)}
           >
             <option value='true'>{i18next.t('enabled')}</option>
             <option value='false'>{i18next.t('disabled')}</option>
-          </Select>
+          </BooleanFormSelect>
         </FormField>
       </div>
 
@@ -233,17 +234,17 @@ const EditAto = ({
           label={i18next.t('alerts')}
           error={ShowError('notify', touched, errors) ? ErrorMessage(errors, 'notify') : undefined}
         >
-          <Select
+          <BooleanFormSelect
             name='notify'
             disabled={readOnly}
-            value={String(values.notify)}
+            value={values.notify}
             onChange={handleChange}
             onBlur={handleBlur}
             invalid={ShowError('notify', touched, errors)}
           >
             <option value='true'>{i18next.t('enabled')}</option>
             <option value='false'>{i18next.t('disabled')}</option>
-          </Select>
+          </BooleanFormSelect>
         </FormField>
 
         {values.notify !== false && (
@@ -269,17 +270,17 @@ const EditAto = ({
           label={i18next.t('ato:disable_on_alert')}
           error={ShowError('disable_on_alert', touched, errors) ? ErrorMessage(errors, 'disable_on_alert') : undefined}
         >
-          <Select
+          <BooleanFormSelect
             name='disable_on_alert'
             disabled={readOnly}
-            value={String(values.disable_on_alert)}
+            value={values.disable_on_alert}
             onChange={handleChange}
             onBlur={handleBlur}
             invalid={ShowError('disable_on_alert', touched, errors)}
           >
             <option value='true'>{i18next.t('enabled')}</option>
             <option value='false'>{i18next.t('disabled')}</option>
-          </Select>
+          </BooleanFormSelect>
         </FormField>
       </div>
 

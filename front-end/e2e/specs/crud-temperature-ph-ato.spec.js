@@ -41,6 +41,23 @@ test.describe('sensor module create, edit and delete round trips', () => {
     await api.dispose()
   })
 
+  test('temperature saves Yes/No selects as booleans', async ({ page }) => {
+    const temperature = new TemperaturePage(page, navBar)
+    await temperature.open()
+    await page.getByTestId('smoke-temperature-add-toggle').click()
+    await page.getByTestId('smoke-temperature-name').fill('Select Temp')
+    await page.getByTestId('smoke-temperature-sensor').selectOption('28-devmodeenable')
+    await page.getByTestId('smoke-temperature-period').fill('60')
+    await page.locator('select[name="fahrenheit"]').selectOption('false')
+    await page.locator('select[name="enable"]').selectOption('false')
+    await page.locator('select[name="alerts"]').selectOption('false')
+    await page.getByTestId('smoke-temperature-submit').click()
+
+    await expect.poll(() => findByName(api, '/api/tcs', 'Select Temp')).toBeTruthy()
+    const saved = await findByName(api, '/api/tcs', 'Select Temp')
+    expect([saved.fahrenheit, saved.enable, saved.notify.enable]).toEqual([false, false, false])
+  })
+
   test('temperature', async ({ page }) => {
     const temperature = new TemperaturePage(page, navBar)
     await temperature.open()
