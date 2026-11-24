@@ -8,7 +8,7 @@ to the code; changes are copied back to Adafruit by hand. Tracking issue: #3250.
 | # | Guide | Adafruit Learn | Folder | Status |
 |---|---|---|---|---|
 | 1 | Setup and Demonstration | [reef-pi-installation-and-configuration](https://learn.adafruit.com/reef-pi-installation-and-configuration) | `01-setup-and-demonstration` | to do |
-| 2 | Power Controller | [reef-pi-power-controller](https://learn.adafruit.com/reef-pi-power-controller) | `02-power-controller` | to do |
+| 2 | Power Controller | [reef-pi-power-controller](https://learn.adafruit.com/reef-pi-power-controller) | [`02-power-controller`](02-power-controller/README.md) | refreshed for 7.0 |
 | 3 | Temperature Controller | [reef-pi-guide-3-temperature-controller](https://learn.adafruit.com/reef-pi-guide-3-temperature-controller) | [`03-temperature-controller`](03-temperature-controller/README.md) | refreshed for 7.0 |
 | 4 | Water Level Controller | [reef-pi-water-level-controller](https://learn.adafruit.com/reef-pi-water-level-controller) | `04-water-level-controller` | to do |
 | 5 | Light Controller | [reef-pi-lighting-controller](https://learn.adafruit.com/reef-pi-lighting-controller) | `05-light-controller` | to do |
