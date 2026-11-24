@@ -72,7 +72,16 @@ class Collapsible extends React.Component {
     )
 
     return (
-      <ListItem trailing={trailing}>
+      <ListItem
+        trailing={trailing}
+        footer={expanded
+          ? elements.map(element => (
+            element === form
+              ? cloneElement(element, { readOnly, onSubmit: handleSubmit })
+              : element
+          ))
+          : null}
+      >
         <div
           className='collapsible-title'
           style={{ display: 'flex', alignItems: 'center', gap: 'var(--reefpi-space-xs)', cursor: 'pointer', minWidth: 0 }}
@@ -81,13 +90,6 @@ class Collapsible extends React.Component {
           {expanded ? FaAngleUp() : FaAngleDown()}
           <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{this.props.title}</span>
         </div>
-        {expanded
-          ? elements.map(element => (
-            element === form
-              ? cloneElement(element, { readOnly, onSubmit: handleSubmit })
-              : element
-          ))
-          : null}
       </ListItem>
     )
   }

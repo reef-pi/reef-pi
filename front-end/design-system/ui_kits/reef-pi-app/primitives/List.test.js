@@ -57,6 +57,14 @@ describe('design-system List primitives', () => {
     expect(html).toContain('flex-wrap:wrap')
   })
 
+  it('renders a footer across every column below the row', () => {
+    const html = renderToStaticMarkup(<List><ListItem trailing={<span>On</span>} footer={<p>Details</p>}>Heater</ListItem></List>)
+
+    expect(html).toContain('grid-column:1 / -1')
+    expect(html).toContain('<p>Details</p>')
+    expect(renderToStaticMarkup(<List><ListItem>Heater</ListItem></List>)).not.toContain('grid-column')
+  })
+
   it('renders empty-state handoff outside list markup', () => {
     const html = renderToStaticMarkup(<List empty='No equipment configured.' />)
 

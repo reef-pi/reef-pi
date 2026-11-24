@@ -89,6 +89,7 @@ export function ListItem ({
   children,
   density = 'roomy',
   first = false,
+  footer,
   leading,
   onClick,
   style,
@@ -114,6 +115,7 @@ export function ListItem ({
           {action}
         </div>
       )}
+      {footer && <div style={{ gridColumn: '1 / -1', minWidth: 0 }}>{footer}</div>}
     </li>
   )
 }
@@ -130,6 +132,7 @@ ListItem.propTypes = {
   children: PropTypes.node,
   density: PropTypes.oneOf(['compact', 'roomy']),
   first: PropTypes.bool,
+  footer: PropTypes.node,
   leading: PropTypes.node,
   onClick: PropTypes.func,
   style: PropTypes.object,
