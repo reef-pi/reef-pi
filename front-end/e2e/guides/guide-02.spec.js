@@ -74,15 +74,16 @@ test('Guide 2: Configure & Test', async ({ page, baseURL }, testInfo) => {
       const item = equipment.find(entry => entry.name === name)
       expect((await api.post(`/api/equipment/${item.id}/control`, { data: { on: true } })).ok()).toBeTruthy()
     }
+    // Reload so the app's equipment state reflects what was just switched on.
+    await page.reload()
     await openTab(page, 'dashboard')
     const strip = page.getByRole('list', { name: 'Equipment' })
     await expect(strip).toBeVisible()
     await expect(strip.getByRole('listitem')).toHaveCount(8)
     await shot(page, testInfo, { guide: GUIDE, pageSlug: PAGE, index: 6, what: 'dashboard-equipment-strip', locator: strip })
 
-    // 07: Timers: TestTimer turns Eq6 on, then back off after 2 seconds (form filled, not saved, so the
-    // timer does not keep running against the dev server). The schedule fields are left at their
-    // defaults because they currently cannot be edited (reef-pi issue #3257).
+    // 07: Timers: TestTimer turns Eq6 on every 10 seconds for 2 seconds (form filled, not saved, so the
+    // timer does not keep running against the dev server).
     await openTab(page, 'timers')
     await page.getByTestId('smoke-timer-add-toggle').click()
     await page.getByTestId('smoke-timer-name').fill('TestTimer')
@@ -90,6 +91,9 @@ test('Guide 2: Configure & Test', async ({ page, baseURL }, testInfo) => {
     await selectByLabelOrValue(page.locator('[name="target.id"]'), 'Eq6')
     await page.locator('[name="target.revert"]').selectOption('true')
     await page.locator('[name="target.duration"]').fill('2')
+    await page.getByTestId('smoke-cron-hour').fill('*')
+    await page.getByTestId('smoke-cron-minute').fill('*')
+    await page.getByTestId('smoke-cron-second').fill('*/10')
     await shot(page, testInfo, { guide: GUIDE, pageSlug: PAGE, index: 7, what: 'timer-new', locator: page.locator('form').filter({ has: page.getByTestId('smoke-timer-name') }) })
 
     // 08-09: Macro: TestMacro with the guide's six steps; then the saved macro in the list.
