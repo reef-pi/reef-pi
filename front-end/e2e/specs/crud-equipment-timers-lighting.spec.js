@@ -56,6 +56,9 @@ test.describe('create, edit and delete round trips', () => {
 
     await timers.createEquipmentTimer('Smoke Timer', 'Skimmer')
     expect(await names(api, '/api/timers')).toContain('Smoke Timer')
+    // The schedule typed into the form (22:02:05 every day) is what gets saved.
+    const saved = (await (await api.get('/api/timers')).json()).find(item => item.name === 'Smoke Timer')
+    expect([saved.hour, saved.minute, saved.second]).toEqual(['22', '2', '5'])
 
     await timers.rename('Smoke Timer', 'Smoke Timer 2')
     await expect.poll(() => names(api, '/api/timers')).toContain('Smoke Timer 2')

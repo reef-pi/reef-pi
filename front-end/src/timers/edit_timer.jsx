@@ -164,6 +164,8 @@ const EditTimer = ({
           touched={touched}
           errors={errors}
           readOnly={readOnly}
+          handleChange={handleChange}
+          handleBlur={handleBlur}
         />
       </div>
 
