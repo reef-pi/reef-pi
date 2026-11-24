@@ -56,7 +56,7 @@ class Collapsible extends React.Component {
     }
 
     const trailing = (
-      <div style={{ display: 'flex', gap: 'var(--reefpi-space-xs)', alignItems: 'center', flexShrink: 0 }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end', gap: 'var(--reefpi-space-xs)', alignItems: 'center' }}>
         <Button
           variant='secondary'
           style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
@@ -75,11 +75,11 @@ class Collapsible extends React.Component {
       <ListItem trailing={trailing}>
         <div
           className='collapsible-title'
-          style={{ display: 'flex', alignItems: 'center', gap: 'var(--reefpi-space-xs)', cursor: 'pointer' }}
+          style={{ display: 'flex', alignItems: 'center', gap: 'var(--reefpi-space-xs)', cursor: 'pointer', minWidth: 0 }}
           onClick={() => onToggle(name)}
         >
           {expanded ? FaAngleUp() : FaAngleDown()}
-          {this.props.title}
+          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{this.props.title}</span>
         </div>
         {expanded
           ? elements.map(element => (

@@ -28,7 +28,7 @@ function alertRelTime (ts) {
   return Math.floor(s / 3600) + 'h'
 }
 
-export default function TemperatureTile ({ metric = 'temperature.display', unit = '°F', alert, onAlertClick }) {
+export default function TemperatureTile ({ metric = 'temperature.display', unit = '°F', label = '', alert, onAlertClick }) {
   const [range, setRange] = useState('1d')
   const [hoverValue, setHoverValue] = useState(null)
 
@@ -87,7 +87,7 @@ export default function TemperatureTile ({ metric = 'temperature.display', unit 
                 warn={WARN}
                 critical={CRIT}
                 unit={unit}
-                label='Display Tank'
+                label={label}
               />
 
               {/* Numeric readout */}
@@ -256,6 +256,7 @@ function ErrorState ({ message, onRetry }) {
 TemperatureTile.propTypes = {
   metric: PropTypes.string,
   unit: PropTypes.string,
+  label: PropTypes.string,
   alert: PropTypes.shape({ severity: PropTypes.string, message: PropTypes.string, at: PropTypes.number }),
   onAlertClick: PropTypes.func
 }

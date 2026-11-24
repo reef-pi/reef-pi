@@ -187,6 +187,17 @@ body {
   min-height: 100vh;
 }
 
+// Page content: the gutter everywhere, plus room for the 72px sidebar rail when the sidebar is shown.
+.content-panel {
+  padding: 0 var(--reefpi-shell-gutter);
+}
+
+@media screen and (min-width: 992px) {
+  .content-panel {
+    padding-left: 72px;
+  }
+}
+
 .container-fluid {
   padding-left: var(--reefpi-shell-gutter);
   padding-right: var(--reefpi-shell-gutter);

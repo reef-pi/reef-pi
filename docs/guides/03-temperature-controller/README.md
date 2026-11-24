@@ -64,9 +64,6 @@ Copy-back checklist, per Adafruit page.
 - The example screenshots use alerts **off** (the guide only enables monitoring); the old image had
   alerts on at 77 / 81 °F. Turning alerts on from the form currently fails to save (reef-pi issue
   #3252).
-- On phones the 7.0 screenshots show known UI defects that are being fixed (reef-pi issue #3253: left
-  gutter, list rows hiding the controller name, range labels, tile label). Re-run the screenshots
-  after that issue is closed, before copying the mobile images.
 
 ## Overview
 

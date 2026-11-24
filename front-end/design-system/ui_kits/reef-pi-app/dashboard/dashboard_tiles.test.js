@@ -231,6 +231,18 @@ describe('design-system dashboard tiles', () => {
     expect(html).toContain('min-height: 260px')
   })
 
+it('labels the TemperatureTile gauge with the controller name, not a hard-coded tank', () => {
+  useTimeSeries.mockReturnValue({
+    points: Array.from({ length: 24 }, (_, i) => ({ t: i, v: 76 + i / 10 })),
+    loading: false,
+    error: null,
+    refetch: jest.fn()
+  })
+  const html = renderToStaticMarkup(<TemperatureTile metric='temp' unit='F' label='AdafruitTempSensor' />)
+  expect(html).toContain('AdafruitTempSensor')
+  expect(html).not.toContain('Display Tank')
+})
+
   it('renders TemperatureTile empty state and updates readout while scrubbing history', () => {
     useTimeSeries.mockReturnValueOnce({ points: [], loading: false, error: null, refetch: jest.fn() })
     expect(renderToStaticMarkup(<TemperatureTile metric='temp' unit='F' />)).toContain('No temperature data yet')

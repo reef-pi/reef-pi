@@ -21,7 +21,7 @@ jest.mock('./AlertCenter', () => ({
   AlertCenter: props => <section data-testid='alert-center' data-open={props.open ? 'yes' : 'no'} />
 }))
 jest.mock('./TemperatureTile', () => function MockTemperatureTile (props) {
-  return <section data-testid='temperature-tile' data-global-range={props.globalRange} data-alert={JSON.stringify(props.alert || null)} />
+  return <section data-testid='temperature-tile' data-global-range={props.globalRange} data-label={props.label} data-alert={JSON.stringify(props.alert || null)} />
 })
 jest.mock('./PhTile', () => function MockPhTile (props) {
   return <section data-testid='ph-tile' data-global-range={props.globalRange} data-alert={JSON.stringify(props.alert || null)} />
@@ -166,6 +166,19 @@ describe('design-system DashboardV2', () => {
     expect(dataAlert(container, 'ph-tile')).toBeNull()
     expect(dataAlert(container, 'ato-tile')).toBeNull()
 
+    cleanup()
+  })
+
+  it('names the temperature tile after the temperature controller', () => {
+    const { container, cleanup } = renderDashboard({
+      equipment: [],
+      temperatureControllers: [{ id: '1', name: 'AdafruitTempSensor' }],
+      phProbes: [],
+      atos: [],
+      sseEndpoint: '/api/alerts'
+    })
+
+    expect(container.querySelector('[data-testid="temperature-tile"]').getAttribute('data-label')).toBe('AdafruitTempSensor')
     cleanup()
   })
 })

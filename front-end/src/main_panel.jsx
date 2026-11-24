@@ -94,7 +94,7 @@ export class RawMainPanel extends React.Component {
       <BrowserRouter>
         <div id='content' data-testid='smoke-shell-root'>
           <NewShellNav capabilities={currentCaps} />
-          <div data-testid='smoke-content-panel' style={{ padding: '0 var(--reefpi-shell-gutter)', paddingLeft: '72px' }}>
+          <div data-testid='smoke-content-panel' className='content-panel'>
             <FatalError />
             {window.FEATURE_FLAGS?.alert_center ? <AlertCenterBell sseEndpoint='/api/alerts' /> : <NotificationAlert />}
             <div className='body-panel'>

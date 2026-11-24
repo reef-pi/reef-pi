@@ -255,7 +255,7 @@ export default function DashboardV2 ({
       <div className='row' style={{ margin: 0, gap: '1rem', display: 'flex', flexWrap: 'wrap' }}>
         <div style={{ flex: '2 1 300px', minWidth: 0 }}>
           {tempState.configured
-            ? <div data-testid='dashboard-tile-temperature'><TemperatureTile globalRange={globalRange} alert={tempAlert} /></div>
+            ? <div data-testid='dashboard-tile-temperature'><TemperatureTile globalRange={globalRange} label={temperatureControllers?.[0]?.name} alert={tempAlert} /></div>
             : <NotConfiguredTile resource='temperature' />}
         </div>
         <div style={{ flex: '1 1 200px', minWidth: 0 }}>

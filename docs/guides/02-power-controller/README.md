@@ -45,8 +45,6 @@ Copy-back checklist, per Adafruit page.
 
 - Equipment strip image (06): Eq1, Eq3, Eq4 and Eq6 are switched on before the capture, so the strip
   shows a mix of on and off switches.
-- Mobile images show known UI defects tracked in reef-pi issue #3253; regenerate them after it is
-  closed, before copying.
 
 ## Overview
 

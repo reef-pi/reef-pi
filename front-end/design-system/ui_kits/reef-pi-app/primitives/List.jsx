@@ -48,9 +48,9 @@ function itemStyle ({ density, interactive, style }) {
 }
 
 function contentStyle ({ hasLeading, hasTrailing }) {
-  if (hasLeading && hasTrailing) return { gridTemplateColumns: 'auto minmax(0, 1fr) auto' }
+  if (hasLeading && hasTrailing) return { gridTemplateColumns: 'auto minmax(0, 1fr) fit-content(60%)' }
   if (hasLeading) return { gridTemplateColumns: 'auto minmax(0, 1fr)' }
-  if (hasTrailing) return { gridTemplateColumns: 'minmax(0, 1fr) auto' }
+  if (hasTrailing) return { gridTemplateColumns: 'minmax(0, 1fr) fit-content(60%)' }
   return null
 }
 
@@ -109,7 +109,7 @@ export function ListItem ({
       {hasLeading && <span aria-hidden='true' style={{ display: 'inline-flex', flexShrink: 0 }}>{leading}</span>}
       <div style={{ minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis' }}>{children}</div>
       {hasTrailing && (
-        <div style={{ alignItems: 'center', display: 'inline-flex', flexShrink: 0, gap: 'var(--reefpi-space-xs)' }}>
+        <div style={{ alignItems: 'center', display: 'inline-flex', flexWrap: 'wrap', gap: 'var(--reefpi-space-xs)', justifyContent: 'flex-end' }}>
           {trailing}
           {action}
         </div>
