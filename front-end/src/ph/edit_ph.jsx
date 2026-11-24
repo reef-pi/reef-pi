@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { NameFor, ErrorMessage, ShowError } from '../utils/validation_helper'
 import { showError, showUpdateSuccessful } from 'utils/alert'
 import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import BooleanFormSelect from '../ui_components/boolean_form_select'
 import { Field as FormField, Input, Select } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
 import Chart from './chart'
 import i18next from 'i18next'
@@ -158,34 +159,34 @@ const EditPh = ({
           label={i18next.t('status')}
           error={ShowError('enable', touched, errors) ? ErrorMessage(errors, 'enable') : undefined}
         >
-          <Select
+          <BooleanFormSelect
             name='enable'
             disabled={readOnly}
-            value={String(values.enable)}
+            value={values.enable}
             onChange={handleChange}
             onBlur={handleBlur}
             invalid={ShowError('enable', touched, errors)}
           >
             <option value='true'>{i18next.t('enabled')}</option>
             <option value='false'>{i18next.t('disabled')}</option>
-          </Select>
+          </BooleanFormSelect>
         </FormField>
 
         <FormField
           label={i18next.t('one_shot')}
           error={ShowError('one_shot', touched, errors) ? ErrorMessage(errors, 'one_shot') : undefined}
         >
-          <Select
+          <BooleanFormSelect
             name='one_shot'
             disabled={readOnly}
-            value={String(values.one_shot)}
+            value={values.one_shot}
             onChange={handleChange}
             onBlur={handleBlur}
             invalid={ShowError('one_shot', touched, errors)}
           >
             <option value='true'>{i18next.t('enabled')}</option>
             <option value='false'>{i18next.t('disabled')}</option>
-          </Select>
+          </BooleanFormSelect>
         </FormField>
       </div>
 
@@ -234,17 +235,17 @@ const EditPh = ({
           label={i18next.t('alerts')}
           error={ShowError('notify', touched, errors) ? ErrorMessage(errors, 'notify') : undefined}
         >
-          <Select
+          <BooleanFormSelect
             name='notify'
             disabled={readOnly}
-            value={String(values.notify)}
+            value={values.notify}
             onChange={handleChange}
             onBlur={handleBlur}
             invalid={ShowError('notify', touched, errors)}
           >
             <option value='true'>{i18next.t('enabled')}</option>
             <option value='false'>{i18next.t('disabled')}</option>
-          </Select>
+          </BooleanFormSelect>
         </FormField>
 
         <FormField
