@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test')
-const { createSmokeApi, seedDashboard, updateDashboard } = require('../fixtures/apiSeed')
+const { createSmokeApi, seedDashboard, seedFullSmokeConfiguration, updateDashboard } = require('../fixtures/apiSeed')
 const { NavBar } = require('../pages/navBar')
 
 async function expectDashboardReady (page) {
@@ -99,4 +99,25 @@ test.describe('mobile shell', () => {
     await expect(page.getByRole('button', { name: 'More routes' })).toBeVisible()
     await expectDashboardReady(page)
   })
+})
+
+test('dashboard equipment strip shows equipment that is on', async ({ page, baseURL }) => {
+  const api = await createSmokeApi(baseURL)
+  const navBar = new NavBar(page)
+
+  try {
+    await seedFullSmokeConfiguration(api)
+    const equipment = await (await api.get('/api/equipment')).json()
+    const item = equipment.find(entry => entry.name === 'Skimmer')
+    expect((await api.post(`/api/equipment/${item.id}/control`, { data: { on: true } })).ok()).toBeTruthy()
+
+    await page.goto('/')
+    await navBar.expectShell()
+    const strip = page.getByRole('list', { name: 'Equipment' })
+    await expect(strip).toBeVisible()
+    await expect(strip.getByRole('listitem').filter({ hasText: 'Skimmer' }).getByRole('switch')).toHaveAttribute('aria-checked', 'true')
+    await expect(strip.getByRole('switch', { checked: true })).toHaveCount(1)
+  } finally {
+    await api.dispose()
+  }
 })

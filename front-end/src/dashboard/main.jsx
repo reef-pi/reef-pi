@@ -7,6 +7,10 @@ import DashboardV2 from '../../design-system/ui_kits/reef-pi-app/dashboard/Dashb
 import { buildEquipmentPayload } from 'equipment/utils'
 import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 
+// The API reports equipment as { on: boolean }; the dashboard strip renders { state: 'on' | 'off' }.
+export const equipmentStripItems = (equipment = []) =>
+  equipment.map(item => ({ ...item, state: item.on ? 'on' : 'off' }))
+
 export class RawDashboardMain extends React.Component {
   constructor (props) {
     super(props)
@@ -49,7 +53,7 @@ export class RawDashboardMain extends React.Component {
 
     return (
       <DashboardV2
-        equipment={this.props.equipment}
+        equipment={equipmentStripItems(this.props.equipment)}
         temperatureControllers={this.props.temperatureControllers}
         phProbes={this.props.phProbes}
         atos={this.props.atos}
