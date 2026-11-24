@@ -43,12 +43,8 @@ Copy-back checklist, per Adafruit page.
 
 **Needs maintainer check**
 
-- Equipment strip image (06): the strip currently shows every switch off even when equipment is on
-  (reef-pi issue #3255). Re-run the screenshots after it is fixed, then turn some equipment on first
-  (Eq1, Eq3, Eq4, Eq6 are on in the generated image's setup).
-- Timer image (07): the schedule fields cannot be edited yet (reef-pi issue #3257), so the image shows
-  the default schedule (`* * * * * 0`), not the guide's "every 10 seconds" (`*/10` in Second). Re-run
-  the screenshots after that issue is closed.
+- Equipment strip image (06): Eq1, Eq3, Eq4 and Eq6 are switched on before the capture, so the strip
+  shows a mix of on and off switches.
 - Mobile images show known UI defects tracked in reef-pi issue #3253; regenerate them after it is
   closed, before copying.
 
