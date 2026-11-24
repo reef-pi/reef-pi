@@ -169,4 +169,23 @@ describe('<EditTimer />', () => {
     expect(changeHandler.mock.calls.length).toBe(2)
     expect(changeHandler.mock.calls[1][0].target.value).toEqual({ id: '', on: true, revert: false, duration: 60 })
   })
+
+  it('<EditTimer /> wires the schedule fields to the form handlers', () => {
+    const onChange = jest.fn()
+    const onBlur = jest.fn()
+    const form = EditTimer({
+      values,
+      equipment,
+      macros,
+      handleBlur: onBlur,
+      handleChange: onChange,
+      submitForm: fn,
+      errors: {},
+      touched: {}
+    })
+    const cron = findAll(form, node => node.props && node.props.values === values && node.props.touched && 'readOnly' in node.props && node.props.handleChange !== undefined)
+    expect(cron).toHaveLength(1)
+    expect(cron[0].props.handleChange).toBe(onChange)
+    expect(cron[0].props.handleBlur).toBe(onBlur)
+  })
 })
