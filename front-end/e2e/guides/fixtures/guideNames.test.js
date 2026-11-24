@@ -1,5 +1,5 @@
 const path = require('path')
-const { GUIDE_FOLDERS, VIEWPORTS, viewportName, guideImagePath, CAPTURE_CSS } = require('./guideCapture')
+const { GUIDE_FOLDERS, VIEWPORTS, viewportName, guideImagePath, CAPTURE_CSS } = require('./guideNames')
 
 test('builds stable image paths per guide, page, slot and viewport', () => {
   const desktop = guideImagePath(3, 'configuration-testing', 2, 'temperature-new-controller', 'desktop')
