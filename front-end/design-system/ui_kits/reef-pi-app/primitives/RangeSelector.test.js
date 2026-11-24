@@ -59,14 +59,14 @@ describe('design-system RangeSelector and ToggleSwitch', () => {
   })
 
 
-  it('renders RangeSelector as a radio fieldset and trims compact labels', () => {
+  it('renders RangeSelector as a radio fieldset and keeps the unit in compact labels', () => {
     const html = renderToStaticMarkup(<RangeSelector value='1h' options={['1h', '6h']} compact />)
 
     expect(html).toContain('<fieldset')
     expect(html).toContain('type="radio"')
     expect(html).toContain('name="reefpi-range-global"')
-    expect(html).toContain('>1</label>')
-    expect(html).toContain('>6</label>')
+    expect(html).toContain('>1h</label>')
+    expect(html).toContain('>6h</label>')
     expect(html).not.toContain('>1H</label>')
   })
 

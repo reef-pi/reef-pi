@@ -7,8 +7,9 @@ function storageKey (scope) {
   return `reefpi.range.${scope || 'global'}`
 }
 
+// Compact keeps the unit ("1h", "7d"): without it 1h and 1d both read "1".
 function compactLabel (opt) {
-  return opt.replace(/[a-z]/g, '')
+  return opt
 }
 
 function getStoredRange (scope) {

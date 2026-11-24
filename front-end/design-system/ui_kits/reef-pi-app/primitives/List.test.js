@@ -44,10 +44,17 @@ describe('design-system List primitives', () => {
       </List>
     )
 
-    expect(html).toContain('grid-template-columns:auto minmax(0, 1fr) auto')
+    expect(html).toContain('grid-template-columns:auto minmax(0, 1fr) fit-content(60%)')
     expect(html).toContain('min-width:0')
     expect(html).toContain('Auto top off reservoir sensor')
     expect(html).toContain('Edit')
+  })
+
+  it('lets trailing actions wrap so the title keeps room on a narrow screen', () => {
+    const html = renderToStaticMarkup(<List><ListItem trailing={<span>Enabled</span>}>Heater</ListItem></List>)
+
+    expect(html).toContain('grid-template-columns:minmax(0, 1fr) fit-content(60%)')
+    expect(html).toContain('flex-wrap:wrap')
   })
 
   it('renders empty-state handoff outside list markup', () => {

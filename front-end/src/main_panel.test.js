@@ -156,7 +156,10 @@ describe('MainPanel', () => {
     expect(container.querySelector('[data-testid="smoke-nav"]')).not.toBeNull()
     expect(container.querySelector('[data-testid="smoke-tab-dashboard"]')).not.toBeNull()
     expect(container.querySelector('[aria-label="Main navigation"]')).not.toBeNull()
-    expect(container.querySelector('[data-testid="smoke-content-panel"]').style.paddingLeft).toBe('72px')
+    // The 72px sidebar offset is a >= 992px media query (no inline style), so phones keep the plain gutter.
+    const contentPanel = container.querySelector('[data-testid="smoke-content-panel"]')
+    expect(contentPanel.classList.contains('content-panel')).toBe(true)
+    expect(contentPanel.style.paddingLeft).toBe('')
     expect(Array.from(container.querySelectorAll('[aria-label]')).map(node => node.getAttribute('aria-label'))).toContain('equipment')
 
     unmount()
