@@ -2,6 +2,7 @@ const { test, expect } = require('@playwright/test')
 const { createSmokeApi, resetSmokeState } = require('../fixtures/apiSeed')
 const { NavBar } = require('../pages/navBar')
 const { shot } = require('./fixtures/guideCapture')
+const { openTab } = require('./fixtures/guideSteps')
 
 // reef-pi Guide 3: Temperature Controller
 // https://learn.adafruit.com/reef-pi-guide-3-temperature-controller/configuration-testing
@@ -30,16 +31,6 @@ const READER_CAPABILITIES = {
   health_check: true,
   dashboard: true,
   dev_mode: false
-}
-
-// On a phone, routes beyond the first four live behind "More routes".
-async function openTab (page, name) {
-  const navBar = new NavBar(page)
-  const tab = navBar.tab(name).first()
-  if (!await tab.isVisible()) {
-    await page.getByRole('button', { name: 'More routes' }).click()
-  }
-  await navBar.tab(name).first().click()
 }
 
 test('Guide 3: Configuration & Testing', async ({ page, baseURL }, testInfo) => {
