@@ -1,0 +1,51 @@
+name: Guide Screenshots
+# Manual only: regenerates the reef-pi Adafruit guide screenshots (docs/guides/*/images) for desktop and
+# mobile and uploads them as an artifact. Nothing is committed; download the artifact and copy what changed.
+on:
+  workflow_dispatch:
+    inputs:
+      guide:
+        description: 'Guide number 1-7 (leave empty for all guides)'
+        required: false
+        default: ''
+jobs:
+  guide-screenshots:
+    name: Generate guide screenshots
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Validate input
+        env:
+          GUIDE: ${{ inputs.guide }}
+        run: |
+          if [ -n "$GUIDE" ] && ! printf '%s' "$GUIDE" | grep -Eq '^[1-7]$'; then
+            echo "guide must be a number from 1 to 7 or empty, got: $GUIDE" >&2
+            exit 1
+          fi
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: '1.26.2'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: 'npm'
+      - run: make install
+      - run: npx playwright install --with-deps chromium
+      # The make target builds the binary and UI and generates the API docs itself.
+      - name: Generate screenshots
+        env:
+          GUIDE: ${{ inputs.guide }}
+        run: make guide-screenshots GUIDE="$GUIDE"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: guide-screenshots
+          path: docs/guides/*/images
+          if-no-files-found: error
+      - if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: guide-screenshots-failure
+          path: |
+            playwright-report
+            test-results/playwright
+          if-no-files-found: ignore
