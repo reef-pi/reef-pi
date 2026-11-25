@@ -7,7 +7,7 @@ on:
       - '**/*.css'
       - '**/*.scss'
       - '*.json'
-      - 'yarn.lock'
+      - 'package-lock.json'
       - 'Makefile'
       - '.github/workflows/*.yml'
   pull_request:
@@ -17,7 +17,7 @@ on:
       - '**/*.css'
       - '**/*.scss'
       - '*.json'
-      - 'yarn.lock'
+      - 'package-lock.json'
       - 'Makefile'
       - '.github/workflows/*.yml'
 
@@ -30,26 +30,21 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 22
-      - uses: actions/cache@v6.1.0
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node_modules-
+          cache: 'npm'
       - name: Install
-        run: yarn
+        run: npm ci
       - name: sass-lint
-        run: yarn run sass-lint
+        run: npm run sass-lint
       - name: token-diff
-        run: yarn run token-diff
+        run: npm run token-diff
       - name: contrast-check
-        run: yarn run contrast-check
+        run: npm run contrast-check
       - name: bootstrap-class-check
-        run: yarn run bootstrap-class-check
+        run: npm run bootstrap-class-check
       - name: standard
         run: make standard
       - name: jest
-        run: yarn run jest-update-snapshot
+        run: npm run jest-update-snapshot
 
   translations:
     name: Translations
@@ -59,13 +54,8 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 22
-      - uses: actions/cache@v6.1.0
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node_modules-
+          cache: 'npm'
       - name: Install
-        run: yarn
+        run: npm ci
       - name: Check Translations
-        run: yarn run translations:chk
+        run: npm run translations:chk

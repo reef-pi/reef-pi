@@ -12,7 +12,7 @@ bin:
 
 .PHONY:build-ui
 build-ui:
-	yarn run build
+	npm run build
 
 .PHONY:go
 go:
@@ -40,15 +40,15 @@ coverage:
 
 .PHONY: js-lint
 js-lint:
-	yarn run js-lint
+	npm run js-lint
 
 .PHONY: sass-lint
 sass-lint:
-	yarn run sass-lint
+	npm run sass-lint
 
 .PHONY: install
 install:
-	yarn
+	npm ci
 
 .PHONY: lint
 lint:
@@ -61,11 +61,11 @@ build: clean go-get test bin
 
 .PHONY: ui
 ui:
-	yarn run ui
+	npm run ui
 
 .PHONY: ui-dev
 ui-dev:
-	yarn run ui-dev
+	npm run ui-dev
 
 .PHONY: common_deb
 common_deb: ui api-doc _dist_layout
@@ -109,11 +109,11 @@ clean:
 
 .PHONY: standard
 standard:
-	yarn run standard
+	npm run standard
 
 .PHONY: jest
 jest:
-	yarn run jest
+	npm run jest
 
 .PHONY: start-dev
 start-dev:
@@ -167,11 +167,11 @@ api-doc:
 
 .PHONY: smoke
 smoke:
-	yarn run smoke
+	npm run smoke
 
 .PHONY: ui-audit
 ui-audit:
-	yarn run ui-audit
+	npm run ui-audit
 
 .PHONY: guide-screenshots
 guide-screenshots:
@@ -183,4 +183,4 @@ guide-screenshots:
 
 .PHONY: integration-smoke
 integration-smoke:
-	yarn run integration
+	npm run integration

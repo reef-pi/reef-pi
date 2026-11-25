@@ -12,8 +12,6 @@ RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
 RUN curl -L https://go.dev/dl/go1.13.15.linux-amd64.tar.gz > /tmp/go1.13.15.linux-amd64.tar.gz && \
     tar xvzf /tmp/go1.13.15.linux-amd64.tar.gz -C /usr/local
 
-RUN npm install --global yarn
-
 RUN gem install bundler
 
 ENV GOPATH=/gopath
@@ -26,8 +24,8 @@ COPY Gemfile Gemfile.lock /gopath/src/github.com/reef-pi/reef-pi/
 RUN bundle install
 
 # Bootstrap dependencies
-COPY Makefile package.json /gopath/src/github.com/reef-pi/reef-pi/
-RUN npm install
+COPY Makefile package.json package-lock.json /gopath/src/github.com/reef-pi/reef-pi/
+RUN npm ci
 
 COPY controller/ /gopath/src/github.com/reef-pi/reef-pi/controller/
 RUN make go-get

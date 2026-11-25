@@ -20,9 +20,9 @@ make race
 Workflow: `.github/workflows/jest.yml`
 
 ```bash
-yarn
+npm ci
 make standard
-yarn run jest-update-snapshot
+npm run jest-update-snapshot
 ```
 
 ## Frontend Smoke
@@ -46,7 +46,7 @@ Workflow: `.github/workflows/deb.yml`
 Shared setup:
 
 ```bash
-yarn
+npm ci
 gem install bundler -v 2.4 --no-document
 bundle install
 ```
@@ -73,8 +73,8 @@ make pi_deb
 Workflow: `.github/workflows/translations.yml`
 
 ```bash
-yarn
-yarn run translations:chk
+npm ci
+npm run translations:chk
 ```
 
 ## CodeQL
@@ -86,7 +86,7 @@ CodeQL itself runs inside GitHub Actions, but the most common local checks for t
 ```bash
 go test ./...
 make lint
-yarn
+npm ci
 make standard
 make jest
 ```
@@ -100,7 +100,7 @@ The UI audit captures the seeded reef-pi module corpus, checks objective browser
 Run locally from the repo root:
 
 ```bash
-rtk yarn run ui-audit
+npm run ui-audit
 ```
 
 Artifacts are written to:

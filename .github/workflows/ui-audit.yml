@@ -10,7 +10,7 @@ on:
       - '**/*.css'
       - '**/*.scss'
       - '*.json'
-      - 'yarn.lock'
+      - 'package-lock.json'
       - 'Makefile'
       - '.github/workflows/*.yml'
   pull_request:
@@ -23,7 +23,7 @@ on:
       - '**/*.css'
       - '**/*.scss'
       - '*.json'
-      - 'yarn.lock'
+      - 'package-lock.json'
       - 'Makefile'
       - '.github/workflows/*.yml'
 
@@ -39,12 +39,7 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 22
-      - uses: actions/cache@v6.1.0
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node_modules-
+          cache: 'npm'
       - run: make install
       - run: npx playwright install --with-deps chromium
       - run: make go

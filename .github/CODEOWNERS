@@ -10,7 +10,7 @@
 # Frontend
 /front-end/ @ranjib
 /package.json @ranjib
-/yarn.lock @ranjib
+/package-lock.json @ranjib
 /webpack.config.js @ranjib
 
 # CI and release automation
