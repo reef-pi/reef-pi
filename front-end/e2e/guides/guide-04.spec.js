@@ -36,11 +36,6 @@ test('Guide 4: Configuration & Testing', async ({ page, baseURL }, testInfo) => 
     await expect(page.getByTestId('smoke-connector-row-Optical Sensor')).toBeVisible()
     await shot(page, testInfo, { guide: GUIDE, pageSlug: PAGE, index: 2, what: 'connectors-inlets' })
 
-    // Back to the dashboard first: on a phone the Connectors filter row currently covers the navigation
-    // drawer (reef-pi issue #3266).
-    await page.goto('/')
-    await new NavBar(page).expectShell()
-
     // 03: ATO tab, "+", the new ATO form filled in (inlet, 120 second check, pump equipment).
     await openTab(page, 'ato')
     await page.getByTestId('smoke-ato-add-toggle').click()

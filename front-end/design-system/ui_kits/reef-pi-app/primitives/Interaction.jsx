@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useRef, useState } from 'react'
+import React, { useLayoutEffect, useEffect, useId, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import PropTypes from 'prop-types'
 
@@ -155,8 +155,19 @@ export function Menu ({
   items = []
 }) {
   const [open, setOpen] = useState(false)
+  const [alignLeft, setAlignLeft] = useState(false)
   const buttonRef = useRef(null)
   const menuRef = useRef(null)
+
+  // The panel is right-aligned to its trigger. A trigger near the left edge (a phone, a form field) would
+  // push it off-screen, so when it starts left of the viewport anchor it to the trigger's left edge instead.
+  useLayoutEffect(() => {
+    if (!open || !menuRef.current) {
+      setAlignLeft(false)
+      return
+    }
+    if (!alignLeft && menuRef.current.getBoundingClientRect().left < 0) setAlignLeft(true)
+  }, [open, alignLeft])
 
   useEffect(() => {
     if (!open) return undefined
@@ -206,6 +217,7 @@ export function Menu ({
       {open && (
         <div
           className='reefpi-menu-panel'
+          onClick={event => { if (event.target.closest?.('[role="menuitem"]')) handleClose() }}
           onKeyDown={handleMenuKeyDown}
           ref={menuRef}
           role='menu'
@@ -214,7 +226,9 @@ export function Menu ({
             minWidth: '12rem',
             padding: 'var(--reefpi-space-xxs)',
             position: 'absolute',
-            right: 0,
+            left: alignLeft ? 0 : 'auto',
+            right: alignLeft ? 'auto' : 0,
+            maxWidth: 'calc(100vw - 2 * var(--reefpi-space-sm))',
             top: 'calc(100% + var(--reefpi-space-xxs))',
             zIndex: 20
           })}

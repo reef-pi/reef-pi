@@ -477,7 +477,7 @@ textarea:focus,
 .connectors-filter-row {
   position: sticky;
   top: 0;
-  z-index: 1010;
+  z-index: 10; // above its own list only: the nav shell (drawer 170) must stay on top
   min-height: 3.5rem;
   display: flex;
   flex-wrap: wrap;

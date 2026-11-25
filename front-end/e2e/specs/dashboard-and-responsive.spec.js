@@ -99,6 +99,51 @@ test.describe('mobile shell', () => {
     await expect(page.getByRole('button', { name: 'More routes' })).toBeVisible()
     await expectDashboardReady(page)
   })
+
+  test('the navigation drawer opens above the Connectors page and its links work', async ({ page, baseURL }) => {
+    const api = await createSmokeApi(baseURL)
+    try {
+      await seedFullSmokeConfiguration(api)
+    } finally {
+      await api.dispose()
+    }
+
+    // The Connectors page has a sticky filter row; it must not paint over the drawer.
+    await page.goto('/configuration/connectors')
+    await new NavBar(page).expectShell()
+    await page.getByRole('button', { name: 'More routes' }).click()
+    const link = page.getByTestId('smoke-tab-ato').locator('visible=true').first()
+    await expect(link).toBeVisible()
+    await link.click()
+    await expect(page).toHaveURL(/\/ato$/)
+  })
+
+  test('a light can be created by choosing a jack from the menu', async ({ page, baseURL }) => {
+    const api = await createSmokeApi(baseURL)
+    try {
+      await seedFullSmokeConfiguration(api)
+    } finally {
+      await api.dispose()
+    }
+
+    await page.goto('/lighting')
+    await new NavBar(page).expectShell()
+    await page.getByTestId('smoke-light-add-toggle').click()
+    await page.getByTestId('smoke-light-jack').getByRole('button').click()
+
+    // The menu stays inside the 390px viewport and its options can be tapped with a real click.
+    const option = page.locator('[id^="select-jack-"]').first()
+    await expect(option).toBeVisible()
+    const box = await page.getByRole('menu').boundingBox()
+    expect(box.x).toBeGreaterThanOrEqual(0)
+    expect(box.x + box.width).toBeLessThanOrEqual(390)
+    const jack = await option.textContent()
+    await option.click()
+
+    // Choosing closes the menu and shows the jack on the trigger.
+    await expect(page.getByRole('menu')).toHaveCount(0)
+    await expect(page.getByTestId('smoke-light-jack')).toContainText(jack)
+  })
 })
 
 test('dashboard equipment strip shows equipment that is on', async ({ page, baseURL }) => {
