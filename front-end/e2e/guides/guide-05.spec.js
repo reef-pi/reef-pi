@@ -28,10 +28,7 @@ async function addLight (page, light) {
   await page.getByTestId('smoke-light-add-toggle').click()
   await page.getByTestId('smoke-light-name').fill(light.name)
   await page.getByTestId('smoke-light-jack').click()
-  // dispatchEvent: on a phone the menu opens partly off-screen (reef-pi issue #3268), so a real click is refused.
-  await page.locator(`#select-jack-${light.jack}`).dispatchEvent('click')
-  // The menu can stay open after choosing; clicking elsewhere closes it so the form is usable.
-  await page.getByTestId('smoke-light-name').click()
+  await page.locator(`#select-jack-${light.jack}`).click()
 }
 
 test('Guide 5: Configuration & Testing', async ({ page, baseURL }, testInfo) => {

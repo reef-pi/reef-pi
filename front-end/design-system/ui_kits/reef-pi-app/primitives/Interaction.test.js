@@ -81,6 +81,44 @@ describe('design-system interaction primitives', () => {
     expect(document.activeElement).toBe(trigger)
   })
 
+  it('closes Menu when a custom child menu item is chosen', () => {
+    const choose = jest.fn()
+    render(<Menu buttonLabel='Select'><button role='menuitem' onClick={choose}>J1</button></Menu>)
+
+    act(() => document.querySelector('button').click())
+    act(() => document.querySelector('[role="menuitem"]').click())
+
+    expect(choose).toHaveBeenCalledTimes(1)
+    expect(document.querySelector('[role="menu"]')).toBeNull()
+  })
+
+  it('keeps the Menu panel inside the viewport by anchoring it to the trigger edge that has room', () => {
+    const original = Element.prototype.getBoundingClientRect
+    // The panel (anchored to the right of a trigger near the left edge) would start off-screen.
+    Element.prototype.getBoundingClientRect = function () {
+      return this.getAttribute('role') === 'menu'
+        ? { left: this.style.left === '0px' ? 8 : -120, right: 200, top: 0, bottom: 0, width: 192, height: 0, x: 0, y: 0 }
+        : original.call(this)
+    }
+    try {
+      render(<Menu buttonLabel='Select'><button role='menuitem'>J1</button></Menu>)
+      act(() => document.querySelector('button').click())
+
+      const panel = document.querySelector('[role="menu"]')
+      expect(panel.style.left).toBe('0px')
+      expect(panel.style.right).toBe('auto')
+    } finally {
+      Element.prototype.getBoundingClientRect = original
+    }
+  })
+
+  it('leaves the Menu panel right-aligned when it fits', () => {
+    render(<Menu buttonLabel='More' items={[{ label: 'Edit' }]} />)
+    act(() => document.querySelector('button').click())
+
+    expect(document.querySelector('[role="menu"]').style.right).toBe('0px')
+  })
+
   it('shows Tooltip on focus and hover with described-by wiring', () => {
     render(<Tooltip text='Retry command'><button>Retry</button></Tooltip>)
     const button = document.querySelector('button')

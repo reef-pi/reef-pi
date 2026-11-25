@@ -52,9 +52,6 @@ Copy-back checklist, per Adafruit page.
 
 **Needs maintainer check**
 
-- On phones the jack menu on the Lights form opens partly off-screen and stays open over the form
-  (reef-pi issue #3268), so the mobile image 03 shows the form with the jack already chosen; the menu is
-  not shown. Re-run the screenshots after the issue is closed.
 - The channel colour swatches are black: the lights created from the form have no colour set. The old
   screenshots showed real colours (they had been customised).
 - Intervals: the guide's auto profile example (values per two-hour step) is not reproduced; the image
