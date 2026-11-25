@@ -11,7 +11,7 @@ to the code; changes are copied back to Adafruit by hand. Tracking issue: #3250.
 | 2 | Power Controller | [reef-pi-power-controller](https://learn.adafruit.com/reef-pi-power-controller) | [`02-power-controller`](02-power-controller/README.md) | refreshed for 7.0 |
 | 3 | Temperature Controller | [reef-pi-guide-3-temperature-controller](https://learn.adafruit.com/reef-pi-guide-3-temperature-controller) | [`03-temperature-controller`](03-temperature-controller/README.md) | refreshed for 7.0 |
 | 4 | Water Level Controller | [reef-pi-water-level-controller](https://learn.adafruit.com/reef-pi-water-level-controller) | [`04-water-level-controller`](04-water-level-controller/README.md) | refreshed for 7.0 |
-| 5 | Light Controller | [reef-pi-lighting-controller](https://learn.adafruit.com/reef-pi-lighting-controller) | `05-light-controller` | to do |
+| 5 | Light Controller | [reef-pi-lighting-controller](https://learn.adafruit.com/reef-pi-lighting-controller) | [`05-light-controller`](05-light-controller/README.md) | refreshed for 7.0 |
 | 6 | pH Monitoring | [reef-pi-guide-7-ph-monitoring](https://learn.adafruit.com/reef-pi-guide-7-ph-monitoring) | `06-ph-monitoring` | to do |
 | 7 | Dosing Controller | [reef-pi-guide-5-dosing-controller](https://learn.adafruit.com/reef-pi-guide-5-dosing-controller) | `07-dosing-controller` | to do |
 
