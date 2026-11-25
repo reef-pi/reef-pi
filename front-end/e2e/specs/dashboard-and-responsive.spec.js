@@ -48,36 +48,53 @@ test('stale dashboard config shows no error toasts', async ({ page, baseURL }) =
   await expect(page.locator('.alert-danger')).toHaveCount(0)
 })
 
-test('prunes orphaned dashboard chart subscriptions from local storage', async ({ page, baseURL }) => {
+test('renders the grid configured under Dashboard › Configure', async ({ page, baseURL }) => {
   const api = await createSmokeApi(baseURL)
-
   try {
-    await seedDashboard(api)
+    await seedFullSmokeConfiguration(api)
   } finally {
     await api.dispose()
   }
 
-  await page.addInitScript(() => {
-    window.localStorage.setItem('dashboard_config', JSON.stringify({
-      subscriptions: [
-        { resource: 'temperature', id: '999', metric: 'temperature.display' }
-      ]
-    }))
-  })
-
-  const navBar = new NavBar(page)
   await page.goto('/')
-  await navBar.expectShell()
+  await new NavBar(page).expectShell()
 
-  const dashboard = page.getByTestId('smoke-dashboard-v2')
-  await expect(dashboard).toBeVisible()
-  const temperatureTile = page.getByTestId('dashboard-tile-temperature')
-  await expect(temperatureTile).toContainText('Not configured')
-  await expect(temperatureTile).toContainText('Configure temperature probe')
-  await expect(temperatureTile).not.toContainText('HTTP 404')
-  await expect(temperatureTile).not.toContainText('Retry')
+  // seedFullSmokeConfiguration saves a 3 × 2 grid; every cell renders, in order, with its chart.
+  const grid = page.getByTestId('dashboard-grid')
+  await expect(grid).toBeVisible()
+  const cells = grid.locator('[data-testid^="dashboard-cell-"]')
+  await expect(cells).toHaveCount(6)
+  await expect.poll(() => cells.evaluateAll(nodes => nodes.map(node => node.getAttribute('data-chart-type')))).toEqual([
+    'temp_current', 'ph_current', 'ato', 'equipment_ctrlpanel', 'lights', 'health'
+  ])
+  await expect(grid.getByTestId('dashboard-cell-2-1')).toContainText(/CPU|Memory/i)
+  await expect(page.getByRole('list', { name: 'Equipment' })).toBeVisible()
+})
 
-  await expect.poll(async () => page.evaluate(() => window.localStorage.getItem('dashboard_config'))).not.toContain('999')
+test('a layout saved in Configure shows up on returning to the dashboard', async ({ page, baseURL }) => {
+  const api = await createSmokeApi(baseURL)
+  try {
+    await seedFullSmokeConfiguration(api)
+  } finally {
+    await api.dispose()
+  }
+
+  await page.goto('/')
+  await new NavBar(page).expectShell()
+  await expect(page.getByTestId('dashboard-grid').locator('[data-testid^="dashboard-cell-"]')).toHaveCount(6)
+
+  await page.getByRole('button', { name: 'System menu' }).click()
+  await page.getByRole('menuitem', { name: 'Configure' }).click()
+  await page.locator('#to-row-row').fill('1')
+  await page.locator('#to-row-column').fill('1')
+  const saved = page.waitForResponse(response => response.url().endsWith('/api/dashboard') && response.request().method() === 'POST')
+  await page.getByTestId('smoke-dashboard-save').click()
+  expect((await saved).ok()).toBeTruthy()
+  await page.getByTestId('smoke-dashboard-configure').click()
+
+  const cells = page.getByTestId('dashboard-grid').locator('[data-testid^="dashboard-cell-"]')
+  await expect(cells).toHaveCount(1)
+  await expect(cells.first()).toHaveAttribute('data-chart-type', 'temp_current')
 })
 
 test.describe('mobile shell', () => {

@@ -45,7 +45,7 @@ test.describe('dashboard tile series', () => {
     const navBar = new NavBar(page)
     await page.goto('/')
     await navBar.expectShell()
-    await expect(page.getByTestId('dashboard-tile-temperature')).toBeVisible()
+    await expect(page.getByTestId('dashboard-cell-0-0')).toHaveAttribute('data-chart-type', 'temp_current')
     await expect(page.getByRole('button', { name: /retry/i })).toHaveCount(0)
   })
 })

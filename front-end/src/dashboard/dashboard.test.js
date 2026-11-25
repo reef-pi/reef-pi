@@ -26,7 +26,8 @@ describe('Dashboard', () => {
 
   it('<Main /> handleToggle switches to config view', () => {
     const config = { row: 1, column: 1, width: 400, height: 200, grid_details: [[]] }
-    const component = new RawDashboardMain({ config, updateEquipment: jest.fn() })
+    const fetchDashboard = jest.fn()
+    const component = new RawDashboardMain({ config, updateEquipment: jest.fn(), fetchDashboard })
     component.setState = update => { component.state = { ...component.state, ...update } }
 
     component.render().props.onConfigure()
@@ -34,6 +35,7 @@ describe('Dashboard', () => {
 
     click(component.render().props.children[1])
     expect(component.state.showConfig).toBe(false)
+    expect(fetchDashboard).toHaveBeenCalledTimes(1)
   })
 
   it('<Grid />', () => {

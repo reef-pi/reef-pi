@@ -149,10 +149,11 @@ test('brand-new user can configure reef-pi through the UI', async ({ page, baseU
     await dashboardPage.expectSavedLayoutIncludes(['lights', 'health'])
 
     await page.reload()
+    // The dashboard renders the layout just saved under Configure, cell for cell.
+    await dashboardPage.expectRenderedLayout([
+      'temp_current', 'ph_current', 'ato', 'equipment_ctrlpanel', 'lights', 'health'
+    ])
     await expectBodyText(page, [
-      'Temperature',
-      'pH',
-      'ATO',
       'Return',
       'Light',
       'ATO Pump'

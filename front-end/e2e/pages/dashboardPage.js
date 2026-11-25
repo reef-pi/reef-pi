@@ -53,6 +53,12 @@ class DashboardPage {
     await expect(this.page.getByRole('menuitem').first()).toBeHidden()
   }
 
+  async expectRenderedLayout (types) {
+    const cells = this.page.getByTestId('dashboard-grid').locator('[data-testid^="dashboard-cell-"]')
+    await expect(cells).toHaveCount(types.length)
+    await expect.poll(() => cells.evaluateAll(nodes => nodes.map(node => node.getAttribute('data-chart-type')))).toEqual(types)
+  }
+
   async expectSavedLayoutIncludes (types) {
     const response = await this.page.request.get('/api/dashboard')
     await expect(response).toBeOK()

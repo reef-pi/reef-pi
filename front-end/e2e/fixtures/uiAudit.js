@@ -9,7 +9,13 @@ const defaultUiAuditEventAllowlist = [
   { type: 'consoleError', pattern: '/api/alerts?since=0', reason: 'dev-mode alert stream endpoint is optional' },
   { type: 'consoleError', pattern: '/api/telemetry/', reason: 'dev-mode telemetry endpoint is optional' },
   { type: 'failedRequest', pattern: '/api/alerts?since=0', reason: 'dev-mode alert stream endpoint is optional' },
-  { type: 'failedRequest', pattern: '/api/telemetry/', reason: 'dev-mode telemetry endpoint is optional' }
+  { type: 'failedRequest', pattern: '/api/telemetry/', reason: 'dev-mode telemetry endpoint is optional' },
+  // Dashboard charts ask for a probe's readings before it has recorded any; the API answers 404 and the
+  // chart stays empty (silent404). Only the 404 is expected: a 401 here is a real bug.
+  { type: 'consoleError', pattern: '/usage', status: 404, reason: 'no readings recorded yet for a freshly seeded entity' },
+  { type: 'consoleError', pattern: '/readings', status: 404, reason: 'no readings recorded yet for a freshly seeded entity' },
+  { type: 'failedRequest', pattern: '/usage', status: 404, reason: 'no readings recorded yet for a freshly seeded entity' },
+  { type: 'failedRequest', pattern: '/readings', status: 404, reason: 'no readings recorded yet for a freshly seeded entity' }
 ]
 
 function stableId (value) {
@@ -84,10 +90,18 @@ function createEmptyUiAuditEvents () {
   return { consoleErrors: [], failedRequests: [] }
 }
 
+// Failed requests carry their status; console errors only mention it in the browser's message.
+function eventHasStatus (event, status) {
+  if (event.status !== undefined) return event.status === status
+  const text = event.text || event.message || ''
+  return text.includes(`status of ${status} `)
+}
+
 function isAllowedUiAuditEvent (event = {}, allowlist = []) {
   return allowlist.some(rule => {
     if (!rule || typeof rule !== 'object') return false
     if (rule.type && rule.type !== event.type) return false
+    if (rule.status !== undefined && !eventHasStatus(event, rule.status)) return false
     const text = event.url || event.location?.url || event.text || event.message || ''
     return Boolean(rule.pattern && text.includes(rule.pattern))
   })
@@ -261,6 +275,7 @@ module.exports = {
   collectObjectiveFindings,
   createEmptyUiAuditEvents,
   createUiAuditObserver,
+  defaultUiAuditEventAllowlist,
   emptyObjectiveFindings,
   isAllowedUiAuditEvent,
   normalizeObjectiveFindings,

@@ -17,11 +17,8 @@ test('loading the dashboard makes no failing requests and no tile shows an error
 
   await page.goto('/')
   await new NavBar(page).expectShell()
-  for (const tile of ['temperature', 'ph', 'ato']) {
-    await expect(page.getByTestId(`dashboard-tile-${tile}`)).toBeVisible()
-  }
-  // Each tile requests its series on mount; wait until all three have been answered.
-  await expect.poll(() => page.evaluate(() => performance.getEntriesByType('resource').filter(entry => entry.name.includes('/api/telemetry/')).length)).toBeGreaterThanOrEqual(3)
+  await expect(page.getByTestId('dashboard-grid').locator('[data-testid^="dashboard-cell-"]')).toHaveCount(6)
+  await page.waitForLoadState('networkidle')
 
   expect(failed).toEqual([])
   await expect(page.getByRole('button', { name: /retry/i })).toHaveCount(0)

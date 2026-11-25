@@ -77,27 +77,28 @@ test('Guide 3: Configuration & Testing', async ({ page, baseURL }, testInfo) => 
     await page.evaluate(() => window.scrollTo(0, 0))
     await shot(page, testInfo, { guide: GUIDE, pageSlug: PAGE, index: 3, what: 'temperature-controller-list' })
 
-    // 04 is removed in 7.0: there is no dashboard chart configuration for temperature any more.
-
-    // 05: the dashboard's Temperature tile with real readings. Sample every second so the chart
-    // has history, then restore the guide's check frequency.
+    // 05: the controller's chart on the dashboard. Sample every second so the chart has history,
+    // then restore the guide's check frequency.
     const controller = (await (await api.get('/api/tcs')).json()).find(item => item.name === CONTROLLER.name)
     expect(controller).toBeTruthy()
     expect((await api.post(`/api/tcs/${controller.id}`, { data: { ...controller, period: 1 } })).ok()).toBeTruthy()
     await expect.poll(async () => {
-      const response = await api.get('/api/telemetry/temperature.display?range=1h')
-      return response.ok() ? (await response.json()).length : 0
+      const response = await api.get(`/api/tcs/${controller.id}/usage`)
+      return response.ok() ? ((await response.json()).current || []).length : 0
     }, { message: 'temperature readings should accumulate', timeout: 60000 }).toBeGreaterThanOrEqual(10)
     expect((await api.post(`/api/tcs/${controller.id}`, { data: { ...controller, period: Number(CONTROLLER.period) } })).ok()).toBeTruthy()
 
+    // The dashboard shows the charts configured under Dashboard › Configure; show this controller.
+    expect((await api.post('/api/dashboard', {
+      data: { row: 1, column: 1, width: 500, height: 300, grid_details: [[{ type: 'temp_current', id: controller.id }]] }
+    })).ok()).toBeTruthy()
+
     await openTab(page, 'dashboard')
-    const tile = page.getByTestId('dashboard-tile-temperature')
-    await expect(tile).toBeVisible()
-    await expect(tile.getByRole('button', { name: /retry/i })).toHaveCount(0)
-    // The tile fetches its own series after navigation; its readout and chart render only once it has
-    // points, so wait for them instead of capturing a loading or empty tile.
-    await expect(tile.getByText(/vs 1h ago/)).toBeVisible()
-    await shot(page, testInfo, { guide: GUIDE, pageSlug: PAGE, index: 5, what: 'dashboard-temperature-tile', locator: tile })
+    const cell = page.getByTestId('dashboard-cell-0-0')
+    await expect(cell).toBeVisible()
+    await expect(cell).toContainText(CONTROLLER.name)
+    await expect(cell.locator('.recharts-surface')).toBeVisible()
+    await shot(page, testInfo, { guide: GUIDE, pageSlug: PAGE, index: 5, what: 'dashboard-temperature-tile', locator: cell })
   } finally {
     await api.dispose()
   }

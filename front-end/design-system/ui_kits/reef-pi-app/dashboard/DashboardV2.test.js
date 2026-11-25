@@ -20,15 +20,6 @@ jest.mock('./SystemStrip', () => function MockSystemStrip (props) {
 jest.mock('./AlertCenter', () => ({
   AlertCenter: props => <section data-testid='alert-center' data-open={props.open ? 'yes' : 'no'} />
 }))
-jest.mock('./TemperatureTile', () => function MockTemperatureTile (props) {
-  return <section data-testid='temperature-tile' data-global-range={props.globalRange} data-label={props.label} data-alert={JSON.stringify(props.alert || null)} />
-})
-jest.mock('./PhTile', () => function MockPhTile (props) {
-  return <section data-testid='ph-tile' data-global-range={props.globalRange} data-alert={JSON.stringify(props.alert || null)} />
-})
-jest.mock('./AtoTile', () => function MockAtoTile (props) {
-  return <section data-testid='ato-tile' data-global-range={props.globalRange} data-target-level={props.targetLevel} data-alert={JSON.stringify(props.alert || null)} />
-})
 jest.mock('./EquipmentStrip', () => function MockEquipmentStrip (props) {
   return <section data-testid='equipment-strip' data-items={props.items?.length || 0} data-toggle={props.onToggle ? 'yes' : 'no'} />
 })
@@ -56,38 +47,38 @@ function renderDashboard (props = {}) {
   }
 }
 
-function dataAlert (container, testId) {
-  return JSON.parse(container.querySelector(`[data-testid="${testId}"]`).getAttribute('data-alert'))
-}
 
 describe('design-system DashboardV2', () => {
   beforeEach(() => {
     mockAlerts = []
-    window.localStorage.clear()
   })
 
-  it('composes dashboard sections', () => {
+  it('renders the system strip, then the configured content, then the equipment strip', () => {
     const onToggle = jest.fn()
     const equipment = [{ id: 'pump', name: 'Pump', state: 'on' }]
     const { container, cleanup } = renderDashboard({
       equipment,
-      temperatureControllers: [{ id: '1' }],
-      phProbes: [{ id: '1' }],
-      atos: [{ id: '1' }],
       onToggle,
       sseEndpoint: '/api/alerts',
-      globalRange: '7d',
-      targetAtoLevel: 50
+      children: <section data-testid='configured-grid' />
     })
 
-    expect(container.querySelector('[data-testid="smoke-dashboard-v2"]')).not.toBeNull()
+    const dashboard = container.querySelector('[data-testid="smoke-dashboard-v2"]')
+    expect(dashboard).not.toBeNull()
     expect(container.querySelector('[data-testid="system-strip"]').getAttribute('data-sse-endpoint')).toBe('/api/alerts')
-    expect(container.querySelector('[data-testid="temperature-tile"]').getAttribute('data-global-range')).toBe('7d')
-    expect(container.querySelector('[data-testid="ph-tile"]').getAttribute('data-global-range')).toBe('7d')
-    expect(container.querySelector('[data-testid="ato-tile"]').getAttribute('data-target-level')).toBe('50')
     expect(container.querySelector('[data-testid="equipment-strip"]').getAttribute('data-items')).toBe('1')
     expect(container.querySelector('[data-testid="equipment-strip"]').getAttribute('data-toggle')).toBe('yes')
 
+    const order = Array.from(dashboard.querySelectorAll('[data-testid="system-strip"], [data-testid="configured-grid"], [data-testid="equipment-strip"]'))
+      .map(node => node.getAttribute('data-testid'))
+    expect(order).toEqual(['system-strip', 'configured-grid', 'equipment-strip'])
+
+    cleanup()
+  })
+
+  it('does not render fixed temperature, pH or ATO tiles of its own', () => {
+    const { container, cleanup } = renderDashboard({ equipment: [] })
+    expect(container.querySelector('[data-testid^="dashboard-tile-"]')).toBeNull()
     cleanup()
   })
 
@@ -99,9 +90,6 @@ describe('design-system DashboardV2', () => {
 
     const { container, cleanup } = renderDashboard({
       equipment: [],
-      temperatureControllers: [{ id: '1' }],
-      phProbes: [{ id: '1' }],
-      atos: [{ id: '1' }],
       sseEndpoint: '/api/alerts'
     })
 
@@ -112,73 +100,6 @@ describe('design-system DashboardV2', () => {
     expect(container.querySelector('[data-testid="alert-center"]').getAttribute('data-open')).toBe('yes')
     expect(container.querySelector('#configure-dashboard')).toBeNull()
 
-    cleanup()
-  })
-
-  it('maps unacknowledged alert-center messages to matching tiles', () => {
-    mockAlerts = [
-      { title: 'Temperature high', detail: 'Water temperature exceeded limit', severity: 'critical', ts: 101 },
-      { title: 'pH warning', detail: '', severity: 'warn', ts: 102 },
-      { title: 'ATO reservoir', detail: 'Water level low', severity: 'warn', ts: 103 },
-      { title: 'Temperature old', detail: 'acknowledged alert', severity: 'critical', ts: 104, acknowledged: true }
-    ]
-
-    const { container, cleanup } = renderDashboard({
-      equipment: [],
-      temperatureControllers: [{ id: '1' }],
-      phProbes: [{ id: '1' }],
-      atos: [{ id: '1' }],
-      sseEndpoint: '/api/alerts'
-    })
-
-    expect(dataAlert(container, 'temperature-tile')).toEqual({
-      severity: 'critical',
-      message: 'Water temperature exceeded limit',
-      at: 101
-    })
-    expect(dataAlert(container, 'ph-tile')).toEqual({
-      severity: 'warn',
-      message: 'pH warning',
-      at: 102
-    })
-    expect(dataAlert(container, 'ato-tile')).toEqual({
-      severity: 'warn',
-      message: 'Water level low',
-      at: 103
-    })
-
-    cleanup()
-  })
-
-  it('leaves tile alerts unset when no alert keywords match', () => {
-    mockAlerts = [
-      { title: 'Camera offline', detail: 'No recent images', severity: 'critical', ts: 105 }
-    ]
-
-    const { container, cleanup } = renderDashboard({
-      equipment: [],
-      temperatureControllers: [{ id: '1' }],
-      phProbes: [{ id: '1' }],
-      atos: [{ id: '1' }]
-    })
-
-    expect(dataAlert(container, 'temperature-tile')).toBeNull()
-    expect(dataAlert(container, 'ph-tile')).toBeNull()
-    expect(dataAlert(container, 'ato-tile')).toBeNull()
-
-    cleanup()
-  })
-
-  it('names the temperature tile after the temperature controller', () => {
-    const { container, cleanup } = renderDashboard({
-      equipment: [],
-      temperatureControllers: [{ id: '1', name: 'AdafruitTempSensor' }],
-      phProbes: [],
-      atos: [],
-      sseEndpoint: '/api/alerts'
-    })
-
-    expect(container.querySelector('[data-testid="temperature-tile"]').getAttribute('data-label')).toBe('AdafruitTempSensor')
     cleanup()
   })
 })

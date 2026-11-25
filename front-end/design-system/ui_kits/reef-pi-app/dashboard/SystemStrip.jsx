@@ -22,7 +22,6 @@ export default function SystemStrip ({
   alerts = [],
   onAlertClick,
   onConfigure,
-  onResetDashboardConfig,
   onSignOut
 }) {
   const [menuOpen, setMenuOpen] = React.useState(false)
@@ -194,13 +193,6 @@ export default function SystemStrip ({
               </button>
               <button
                 role='menuitem'
-                onClick={() => { setMenuOpen(false); onResetDashboardConfig?.() }}
-                style={{ ...menuItemStyle, borderTop: '1px solid var(--reefpi-color-border)' }}
-              >
-                Reset dashboard config
-              </button>
-              <button
-                role='menuitem'
                 onClick={() => { setMenuOpen(false); onSignOut?.() }}
                 style={{ ...menuItemStyle, color: 'var(--reefpi-color-error)', borderTop: '1px solid var(--reefpi-color-border)' }}
               >
@@ -237,6 +229,5 @@ SystemStrip.propTypes = {
   })),
   onAlertClick: PropTypes.func,
   onConfigure: PropTypes.func,
-  onResetDashboardConfig: PropTypes.func,
   onSignOut: PropTypes.func
 }

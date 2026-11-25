@@ -1,7 +1,9 @@
 import React from 'react'
 import { updateEquipment } from 'redux/actions/equipment'
+import { fetchDashboard } from 'redux/actions/dashboard'
 import { connect } from 'react-redux'
 import Config from './config'
+import ConfiguredGrid from './configured_grid'
 import i18n from 'utils/i18n'
 import DashboardV2 from '../../design-system/ui_kits/reef-pi-app/dashboard/DashboardV2'
 import { buildEquipmentPayload } from 'equipment/utils'
@@ -21,8 +23,17 @@ export class RawDashboardMain extends React.Component {
     this.handleEquipmentToggle = this.handleEquipmentToggle.bind(this)
   }
 
+  componentDidMount () {
+    this.props.fetchDashboard()
+  }
+
   handleToggle () {
-    this.setState({ showConfig: !this.state.showConfig })
+    const leavingConfig = this.state.showConfig
+    this.setState({ showConfig: !leavingConfig })
+    // Saving in Configure only POSTs the layout; reload it so the dashboard shows what was saved.
+    if (leavingConfig) {
+      this.props.fetchDashboard()
+    }
   }
 
   handleEquipmentToggle (id, next) {
@@ -54,28 +65,26 @@ export class RawDashboardMain extends React.Component {
     return (
       <DashboardV2
         equipment={equipmentStripItems(this.props.equipment)}
-        temperatureControllers={this.props.temperatureControllers}
-        phProbes={this.props.phProbes}
-        atos={this.props.atos}
         onToggle={this.handleEquipmentToggle}
         onConfigure={this.handleToggle}
         sseEndpoint='/api/alerts'
-      />
+      >
+        <ConfiguredGrid config={this.props.config} />
+      </DashboardV2>
     )
   }
 }
 
 const mapStateToProps = state => {
   return {
-    equipment: state.equipment,
-    temperatureControllers: state.tcs,
-    phProbes: state.phprobes,
-    atos: state.atos
+    config: state.dashboard,
+    equipment: state.equipment
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
+    fetchDashboard: () => dispatch(fetchDashboard()),
     updateEquipment: (id, payload) => dispatch(updateEquipment(id, payload))
   }
 }

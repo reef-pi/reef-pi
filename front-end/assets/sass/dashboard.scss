@@ -2,3 +2,24 @@
   margin: 10px 0 10px 0;
   width: 100%;
 }
+
+// Dashboard › Configure grid: rows × columns of charts, one column on phones.
+.reefpi-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--dashboard-columns, 1), minmax(0, 1fr));
+  gap: var(--reefpi-space-md);
+}
+
+.reefpi-dashboard-grid .dashboard-cell {
+  min-width: 0;
+  padding: var(--reefpi-space-sm);
+  background: var(--reefpi-color-surface-elevated);
+  border: 1px solid var(--reefpi-color-border-strong);
+  border-radius: var(--reefpi-radius-md);
+}
+
+@media screen and (max-width: 767.98px) {
+  .reefpi-dashboard-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
