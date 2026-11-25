@@ -40,6 +40,13 @@ and runs the `guide-screenshots-desktop` (1440x900) and `guide-screenshots-mobil
 guides would have set up, and walks through the guide's own steps in the UI. The dev-only footer is
 hidden while capturing. Running it again only changes image bytes, never file names.
 
+### In CI
+
+The **Guide Screenshots** workflow (Actions > Guide Screenshots > Run workflow) does the same on a clean
+runner, for one guide (enter its number) or all of them (leave the input empty), and uploads
+`docs/guides/*/images` as the `guide-screenshots` artifact. It never commits: download the artifact and
+copy the images that changed into the repo or straight to Adafruit.
+
 File names: `images/<adafruit-page-slug>-<nn>-<what>-<desktop|mobile>.png`. `<nn>` is the image's
 position on that Adafruit page; an extra screen gets a letter (`03a`), and the number of a removed
 screenshot is left unused.
