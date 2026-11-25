@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"sort"
 	"sync"
+
+	"github.com/reef-pi/reef-pi/controller/storage"
 )
 
 type Metric interface {
@@ -62,7 +64,7 @@ func (m *mgr) Get(id string) (StatsResponse, error) {
 	}
 	stats, ok := m.inMemory[id]
 	if !ok {
-		return resp, fmt.Errorf("stats for id: '%s' not found", id)
+		return resp, fmt.Errorf("stats for id: '%s' not found: %w", id, storage.ErrDoesNotExist)
 	}
 	stats.Current.Do(func(i interface{}) {
 		if i != nil {

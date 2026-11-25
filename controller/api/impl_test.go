@@ -165,3 +165,28 @@ func TestUpdateMacroReplacesStepsOnlyWhenProvided(t *testing.T) {
 		t.Fatalf("steps were not replaced: %#v", stored.Steps)
 	}
 }
+
+// A temperature controller that has not recorded any readings yet has no usage stats. That is a
+// 404 (the dashboard chart treats it as "no data yet"), not a 401, which the UI reads as a lost session.
+func TestGetTemperatureUsageWithoutReadingsIsNotFound(t *testing.T) {
+	con, err := controller.TestController()
+	if err != nil {
+		t.Fatal(err)
+	}
+	temperature, err := temperatureModule.New(true, con)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := temperature.Setup(); err != nil {
+		t.Fatal(err)
+	}
+	server := NewReefPiServer(ServerConfig{Temperature: temperature})
+
+	response, err := server.GetTemperatureUsage(context.Background(), gen.GetTemperatureUsageRequestObject{Id: "1"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, ok := response.(gen.GetTemperatureUsage404JSONResponse); !ok {
+		t.Fatalf("expected 404 response, got %T", response)
+	}
+}

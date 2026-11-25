@@ -2,6 +2,7 @@ package telemetry
 
 import (
 	"encoding/json"
+	"errors"
 	"testing"
 	"time"
 
@@ -221,5 +222,16 @@ func TestStatsManagerSaveMissingStats(t *testing.T) {
 	m := newTestMgr(store)
 	if err := m.Save("missing"); err == nil {
 		t.Fatal("expected saving missing stats to fail")
+	}
+}
+
+func TestStatsManagerGetUnknownIDIsNotFound(t *testing.T) {
+	store, err := storage.TestDB()
+	if err != nil {
+		t.Fatal(err)
+	}
+	m := newTestMgr(store)
+	if _, err := m.Get("no-such-id"); !errors.Is(err, storage.ErrDoesNotExist) {
+		t.Fatalf("expected storage.ErrDoesNotExist for an id without stats, got %v", err)
 	}
 }
