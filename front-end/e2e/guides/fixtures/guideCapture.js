@@ -9,7 +9,7 @@ async function shot (page, testInfo, { guide, pageSlug, index, what, locator }) 
   const file = guideImagePath(guide, pageSlug, index, what, viewportName(testInfo.project.name))
   await page.addStyleTag({ content: CAPTURE_CSS })
   // While a dialog is open (e.g. calibration) Escape and blur would close it, so leave it alone.
-  const dialogOpen = await page.locator('.reefpi-dialog').count() > 0
+  const dialogOpen = await page.locator('.reefpi-dialog, .modal[role="dialog"]').count() > 0
   if (!dialogOpen) await dismissAlertCenter(page)
   // No hover tooltips or focus rings left over from the steps that led here.
   const size = page.viewportSize()

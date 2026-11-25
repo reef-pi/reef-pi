@@ -13,7 +13,7 @@ to the code; changes are copied back to Adafruit by hand. Tracking issue: #3250.
 | 4 | Water Level Controller | [reef-pi-water-level-controller](https://learn.adafruit.com/reef-pi-water-level-controller) | [`04-water-level-controller`](04-water-level-controller/README.md) | refreshed for 7.0 |
 | 5 | Light Controller | [reef-pi-lighting-controller](https://learn.adafruit.com/reef-pi-lighting-controller) | [`05-light-controller`](05-light-controller/README.md) | refreshed for 7.0 |
 | 6 | pH Monitoring | [reef-pi-guide-7-ph-monitoring](https://learn.adafruit.com/reef-pi-guide-7-ph-monitoring) | [`06-ph-monitoring`](06-ph-monitoring/README.md) | refreshed for 7.0 |
-| 7 | Dosing Controller | [reef-pi-guide-5-dosing-controller](https://learn.adafruit.com/reef-pi-guide-5-dosing-controller) | `07-dosing-controller` | to do |
+| 7 | Dosing Controller | [reef-pi-guide-5-dosing-controller](https://learn.adafruit.com/reef-pi-guide-5-dosing-controller) | [`07-dosing-controller`](07-dosing-controller/README.md) | refreshed for 7.0 |
 
 Folders follow the guide number in each title. Note that two Adafruit URLs carry a different
 number (the dosing guide is Guide 7, the pH guide is Guide 6).
