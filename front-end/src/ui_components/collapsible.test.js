@@ -57,6 +57,7 @@ describe('Collapsible', () => {
         matches.push(node)
       }
       visitElements(node.props && node.props.children, predicate, matches)
+      visitElements(node.props && node.props.footer, predicate, matches)
     }
     return matches
   }
