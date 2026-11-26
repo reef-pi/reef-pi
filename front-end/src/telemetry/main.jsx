@@ -264,7 +264,7 @@ class telemetry extends React.Component {
         </div>
         <div>
           <Button
-            variant={this.state.updated ? 'danger' : 'primary'}
+            variant={this.state.updated ? 'primary' : 'secondary'}
             onClick={this.handleSave}
             id='updateTelemetry'
           >{i18n.t('update')}

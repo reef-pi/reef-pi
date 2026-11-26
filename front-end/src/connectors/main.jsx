@@ -1,6 +1,7 @@
 import React from 'react'
 import ConnectorForm, { kindsForDriver } from './connector_form'
 import i18n from 'utils/i18n'
+import { FaChevronDown, FaChevronUp } from 'react-icons/fa6'
 import { confirm } from 'utils/confirm'
 import { connect } from 'react-redux'
 import { fetchDrivers } from 'redux/actions/drivers'
@@ -445,7 +446,7 @@ class connectors extends React.Component {
             <span className='connector-group-title'>{group.driverName}</span>
             <span className='connector-count-pill'>{used} / {total} used</span>
             {hasConflict ? <span className='connector-badge warning'>conflicts</span> : null}
-            <span className='connector-group-caret'>{open ? '-' : '+'}</span>
+            <span className='connector-group-caret' aria-hidden='true'>{open ? <FaChevronUp /> : <FaChevronDown />}</span>
           </button>
           <Button
             variant='ghost'

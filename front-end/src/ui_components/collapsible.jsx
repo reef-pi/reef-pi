@@ -28,14 +28,15 @@ class Collapsible extends React.Component {
 
     const editButton = (
       <Button
-        variant='secondary'
-        style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
+        variant='ghost'
         onClick={this.handleEdit}
         disabled={disableEdit}
         id={'edit-' + name}
-      >
-        {FaEdit()}
-      </Button>
+        icon={<FaEdit />}
+        iconOnly
+        aria-label='Edit'
+        title='Edit'
+      />
     )
     // Callers pass either just the form, or a read-only view followed by the form. Only the last
     // element (the form) receives readOnly/onSubmit; anything before it is rendered as given.
@@ -56,18 +57,19 @@ class Collapsible extends React.Component {
     }
 
     const trailing = (
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end', gap: 'var(--reefpi-space-xs)', alignItems: 'center' }}>
-        <Button
-          variant='secondary'
-          style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
-          onClick={this.handleDelete}
-          id={'delete-' + name}
-        >
-          {FaTrashAlt()}
-        </Button>
+      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end', gap: 'var(--reefpi-space-xxs)', alignItems: 'center' }}>
+        {this.props.buttons}
         {readOnly ? toggleStateButton : null}
         {readOnly ? editButton : null}
-        {this.props.buttons}
+        <Button
+          variant='ghost'
+          onClick={this.handleDelete}
+          id={'delete-' + name}
+          icon={<FaTrashAlt />}
+          iconOnly
+          aria-label='Delete'
+          title='Delete'
+        />
       </div>
     )
 
@@ -84,11 +86,13 @@ class Collapsible extends React.Component {
       >
         <div
           className='collapsible-title'
-          style={{ display: 'flex', alignItems: 'center', gap: 'var(--reefpi-space-xs)', cursor: 'pointer', minWidth: 0 }}
+          style={{ display: 'flex', alignItems: 'center', gap: 'var(--reefpi-space-xs)', cursor: 'pointer', minWidth: 0, minHeight: 'var(--reefpi-tap-target-min)' }}
           onClick={() => onToggle(name)}
         >
-          {expanded ? FaAngleUp() : FaAngleDown()}
-          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{this.props.title}</span>
+          <span aria-hidden='true' style={{ display: 'inline-flex', color: 'var(--reefpi-color-text-muted)' }}>
+            {expanded ? <FaAngleUp /> : <FaAngleDown />}
+          </span>
+          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontWeight: 600 }}>{this.props.title}</span>
         </div>
       </ListItem>
     )

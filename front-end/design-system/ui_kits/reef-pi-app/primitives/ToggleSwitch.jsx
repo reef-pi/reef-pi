@@ -24,7 +24,7 @@ function thumbX (state) {
 
 const TRACK_COLOR = {
   on:      'var(--reefpi-color-brand)',
-  off:     'var(--reefpi-color-border-strong)',
+  off:     'var(--reefpi-color-pending)',
   pending: null,   // inherits last-known; set by parent via lastKnown
   error:   null
 }
@@ -38,13 +38,13 @@ export default function ToggleSwitch ({
   const isInteractive = state === 'on' || state === 'off'
   const lastKnownTrack = state === 'on' || state === 'pending'
     ? 'var(--reefpi-color-brand)'
-    : 'var(--reefpi-color-border-strong)'
+    : 'var(--reefpi-color-pending)'
 
   // For pending, keep track at last-known. We approximate by storing it.
   const trackColor = state === 'on'
     ? 'var(--reefpi-color-brand)'
     : state === 'off'
-      ? 'var(--reefpi-color-border-strong)'
+      ? 'var(--reefpi-color-pending)'
       : lastKnownTrack
 
   const tx = thumbX(state)

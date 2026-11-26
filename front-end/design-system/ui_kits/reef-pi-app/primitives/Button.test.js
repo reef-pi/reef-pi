@@ -17,6 +17,14 @@ describe('design-system Button primitive', () => {
     expect(html).not.toContain('btn')
   })
 
+  it('exposes variant classes so CSS can render hover, active and disabled states', () => {
+    expect(renderToStaticMarkup(<Button>Save</Button>)).toContain('class="reefpi-button reefpi-button--primary"')
+    expect(renderToStaticMarkup(<Button variant='secondary' className='extra'>Cancel</Button>))
+      .toContain('class="reefpi-button reefpi-button--secondary extra"')
+    expect(renderToStaticMarkup(<Button variant='ghost' iconOnly icon={<span>x</span>} aria-label='Close' />))
+      .toContain('reefpi-button--icon')
+  })
+
   it('supports submit and reset button types', () => {
     expect(renderToStaticMarkup(<Button type='submit'>Apply</Button>)).toContain('type="submit"')
     expect(renderToStaticMarkup(<Button type='reset'>Reset</Button>)).toContain('type="reset"')

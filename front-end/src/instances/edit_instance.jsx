@@ -37,7 +37,6 @@ const EditInstance = ({
             type='button'
             variant='danger'
             onClick={onDelete}
-            style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
           >
             {i18next.t('delete')}
           </Button>
@@ -97,8 +96,7 @@ const EditInstance = ({
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 'var(--reefpi-space-sm)' }}>
         <Button
           type='submit'
-          variant='primary'
-          style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
+          variant={dirty ? 'primary' : 'secondary'}
         >
           {actionLabel}
         </Button>

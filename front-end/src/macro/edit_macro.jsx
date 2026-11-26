@@ -170,10 +170,9 @@ const EditMacro = ({
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 'var(--reefpi-space-xxs)' }}>
           <Button
             type='submit'
-            variant='primary'
+            variant={dirty ? 'primary' : 'secondary'}
             data-testid='smoke-macro-submit'
             disabled={readOnly}
-            style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
           >
             {i18n.t('save')}
           </Button>

@@ -1,4 +1,5 @@
 import React from 'react'
+import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 import PropTypes from 'prop-types'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
 import { showError, showUpdateSuccessful } from 'utils/alert'
@@ -125,13 +126,14 @@ const EditDriver = ({
       {driverConfig()}
       {!readOnly && (
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 'var(--reefpi-space-sm)' }}>
-          <input
+          <Button
             type='submit'
             data-testid='smoke-driver-submit'
-            value={i18n.t('save')}
+            variant={dirty ? 'primary' : 'secondary'}
             disabled={readOnly}
-            style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem', cursor: 'pointer' }}
-          />
+          >
+            {i18n.t('save')}
+          </Button>
         </div>
       )}
     </form>

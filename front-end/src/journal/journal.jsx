@@ -3,6 +3,7 @@ import JournalForm from './form'
 import EntryForm from './entry_form'
 import Chart from './chart'
 import i18next from 'i18next'
+import { FaPlus, FaXmark } from 'react-icons/fa6'
 import { fetchJournal, fetchJournalUsage, recordJournal, updateJournal } from 'redux/actions/journal'
 import { useDispatch } from 'react-redux'
 import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
@@ -58,10 +59,12 @@ const Journal = (props) => {
         <Button
           id='add_entry'
           type='button'
-          variant='primary'
+          variant={addEntry ? 'secondary' : 'primary'}
+          aria-expanded={addEntry}
+          icon={addEntry ? <FaXmark /> : <FaPlus />}
           onClick={toggle}
         >
-          {addEntry ? '-' : i18next.t('journal:add_entry')}
+          {addEntry ? i18next.t('cancel') : i18next.t('journal:add_entry')}
         </Button>
         {newEntry}
       </ListItem>

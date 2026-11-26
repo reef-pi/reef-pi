@@ -23,13 +23,13 @@ const nameStyle = {
 const outletStyle = {
   color: 'var(--reefpi-color-text-muted)',
   fontSize: '0.8125rem',
-  fontStyle: 'italic'
+  fontFamily: 'var(--reefpi-font-mono)'
 }
 
 const actionStyle = {
   alignItems: 'center',
   display: 'inline-flex',
-  gap: 'var(--reefpi-space-xs)'
+  gap: 'var(--reefpi-space-xxs)'
 }
 
 function PendingToggle ({ equipment, onStateChange }) {
@@ -59,7 +59,7 @@ const ViewEquipment = ({ equipment, outletName, onStateChange, onDelete, onEdit 
   return (
     <div style={rowStyle} data-testid={`equipment-row-${equipment.id}`}>
       <div style={nameStyle}>
-        <span>{equipment.name}</span>
+        <span style={{ fontWeight: 600 }}>{equipment.name}</span>
         <small style={outletStyle}>{outletName}</small>
       </div>
       <PendingToggle equipment={equipment} onStateChange={onStateChange} />

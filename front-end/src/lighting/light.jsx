@@ -105,8 +105,7 @@ const EditLight = ({
           type='submit'
           disabled={readOnly}
           id={'save-light-' + config.id}
-          variant='primary'
-          style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
+          variant={dirty ? 'primary' : 'secondary'}
         >
           {i18next.t('save')}
         </Button>

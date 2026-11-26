@@ -106,7 +106,7 @@ describe('<Journal />', () => {
       addEntryButton.dispatchEvent(new MouseEvent('click', { bubbles: true }))
     })
 
-    expect(addEntryButton.textContent).toBe('-')
+    expect(addEntryButton.getAttribute('aria-expanded')).toBe('true')
     expect(container.querySelector('[data-testid="entry-form-submit"]')).toBeDefined()
 
     unmount()

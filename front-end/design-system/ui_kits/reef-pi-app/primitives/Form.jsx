@@ -1,8 +1,12 @@
 import React, { cloneElement, isValidElement, useId } from 'react'
 import PropTypes from 'prop-types'
 
+// alignContent: 'start' keeps the label snug on its control. Without it the
+// grid's default stretch spreads a sibling field's extra height (help text)
+// into this field's tracks, so selects grew to 55px and labels drifted away.
 const fieldStyle = {
   display: 'grid',
+  alignContent: 'start',
   gap: 'var(--reefpi-space-xxs)',
   minWidth: 0,
   fontFamily: 'var(--reefpi-font-app)'

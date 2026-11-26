@@ -4,8 +4,8 @@ import { updateInstance, fetchInstances, createInstance, deleteInstance } from '
 import { connect } from 'react-redux'
 import InstanceForm from './instance_form'
 import i18next from 'i18next'
-import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 import { List, ListItem } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
+import AddToggle from '../ui_components/add_toggle'
 
 export class RawInstancesMain extends React.Component {
   constructor (props) {
@@ -59,9 +59,7 @@ export class RawInstancesMain extends React.Component {
         })}
         <ListItem>
           <div>
-            <Button id='add_instance' data-testid='smoke-instances-add-toggle' onClick={this.handleToggle}>
-              {this.state.add ? '-' : '+'}
-            </Button>
+            <AddToggle id='add_instance' testId='smoke-instances-add-toggle' open={this.state.add} onClick={this.handleToggle} />
           </div>
           {nEq}
         </ListItem>

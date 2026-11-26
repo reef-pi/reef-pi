@@ -5,10 +5,21 @@ export default class Capabilities extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      capabilities: props.capabilities
+      capabilities: props.capabilities,
+      source: props.capabilities
     }
     this.updateCapability = this.updateCapability.bind(this)
     this.toLi = this.toLi.bind(this)
+  }
+
+  // Re-sync when the parent hands over a different capabilities object (e.g.
+  // settings arriving after first render). Without this the checkboxes kept
+  // the constructor-time snapshot and showed every capability unchecked.
+  static getDerivedStateFromProps (props, state) {
+    if (props.capabilities === state.source) {
+      return null
+    }
+    return { capabilities: props.capabilities, source: props.capabilities }
   }
 
   updateCapability (cap) {
@@ -24,7 +35,7 @@ export default class Capabilities extends React.Component {
 
   toLi (label) {
     return (
-      <div style={{ display: 'flex', gap: 'var(--reefpi-space-xs)', alignItems: 'center' }} key={label}>
+      <div className='reefpi-check' key={label}>
         <input
           type='checkbox'
           id={'update-' + label}
@@ -40,7 +51,7 @@ export default class Capabilities extends React.Component {
 
   render () {
     return (
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(10rem, 1fr))', gap: 'var(--reefpi-space-sm)' }}>
+      <div className='reefpi-check-grid'>
         {this.toLi('equipment')}
         {this.toLi('timers')}
         {this.toLi('lighting')}

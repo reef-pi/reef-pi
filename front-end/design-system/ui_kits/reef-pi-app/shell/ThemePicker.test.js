@@ -37,7 +37,7 @@ describe('design-system ThemePicker', () => {
     expect([...container.querySelectorAll('input[name="reefpi-theme"]')].map(input => input.value))
       .toEqual(['system', 'light', 'dark', 'actinic'])
     expect(container.querySelector('input[value="actinic"]').checked).toBe(true)
-    expect(container.textContent).toContain('active')
+    expect(container.querySelector('label[data-selected]').textContent).toContain('Actinic')
 
     act(() => root.unmount())
   })

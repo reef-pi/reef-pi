@@ -41,3 +41,14 @@ describe('render capabilities component', () => {
     expect(update).toHaveBeenCalled()
   })
 })
+
+describe('Capabilities prop sync', () => {
+  it('re-syncs checkbox state when the parent passes new capabilities', () => {
+    const initial = { equipment: false }
+    const loaded = { equipment: true }
+    const state = { capabilities: initial, source: initial }
+    expect(Capabilities.getDerivedStateFromProps({ capabilities: initial }, state)).toBeNull()
+    expect(Capabilities.getDerivedStateFromProps({ capabilities: loaded }, state))
+      .toEqual({ capabilities: loaded, source: loaded })
+  })
+})

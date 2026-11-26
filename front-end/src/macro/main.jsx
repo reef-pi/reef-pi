@@ -17,6 +17,7 @@ import { SortByName } from 'utils/sort_by_name'
 import i18n from 'utils/i18n'
 import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 import { List, ListItem } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
+import AddToggle from '../ui_components/add_toggle'
 
 export class RawMacroMain extends React.Component {
   constructor (props) {
@@ -64,7 +65,7 @@ export class RawMacroMain extends React.Component {
               name={'run-macro-' + macro.id}
               data-testid={'smoke-macro-run-' + macro.id}
               variant='secondary'
-              style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem', marginLeft: 'auto' }}
+              style={{ marginLeft: 'auto' }}
               disabled={macro.enable}
               onClick={(e) => this.runMacro(e, macro)}
               key='run'
@@ -78,7 +79,7 @@ export class RawMacroMain extends React.Component {
                 type='button'
                 name={'reverse-macro-' + macro.id}
                 variant='secondary'
-                style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem', marginLeft: 'auto' }}
+                style={{ marginLeft: 'auto' }}
                 disabled={macro.enable}
                 onClick={(e) => this.revertMacro(e, macro)}
                 key='revert'
@@ -188,15 +189,7 @@ export class RawMacroMain extends React.Component {
           {this.macroList()}
         </CollapsibleList>
         <ListItem>
-          <Button
-            type='button'
-            variant='primary'
-            id='add_macro'
-            data-testid='smoke-macro-add-toggle'
-            onClick={this.handleToggleAddMacroDiv}
-          >
-            {this.state.addMacro ? '-' : '+'}
-          </Button>
+          <AddToggle id='add_macro' testId='smoke-macro-add-toggle' open={this.state.addMacro} onClick={this.handleToggleAddMacroDiv} />
           {newMacro}
         </ListItem>
       </List>

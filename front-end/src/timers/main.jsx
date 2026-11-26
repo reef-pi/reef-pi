@@ -8,8 +8,8 @@ import Collapsible from '../ui_components/collapsible'
 import CollapsibleList from '../ui_components/collapsible_list'
 import { SortByName } from 'utils/sort_by_name'
 import i18n from 'utils/i18n'
-import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 import { List, ListItem } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
+import AddToggle from '../ui_components/add_toggle'
 
 export class RawTimersMain extends React.Component {
   constructor (props) {
@@ -132,14 +132,7 @@ export class RawTimersMain extends React.Component {
         <CollapsibleList>{this.timerList()}</CollapsibleList>
         <ListItem>
           <div className='add-timer'>
-            <Button
-              id='add_timer'
-              data-testid='smoke-timer-add-toggle'
-              onClick={this.handleToggleAddTimerDiv}
-              variant='primary'
-            >
-              {this.state.addTimer ? '-' : '+'}
-            </Button>
+            <AddToggle id='add_timer' testId='smoke-timer-add-toggle' open={this.state.addTimer} onClick={this.handleToggleAddTimerDiv} />
           </div>
           {nT}
         </ListItem>

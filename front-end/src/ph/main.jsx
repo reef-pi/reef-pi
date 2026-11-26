@@ -15,6 +15,7 @@ import Sparkline from '../../design-system/ui_kits/reef-pi-app/primitives/Sparkl
 import ThresholdGauge from '../../design-system/ui_kits/reef-pi-app/primitives/ThresholdGauge'
 import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 import { List, ListItem } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
+import AddToggle from '../ui_components/add_toggle'
 
 const RANGE_MS = { '1h': 3600000, '6h': 21600000, '1d': 86400000, '7d': 604800000, '30d': 2592000000 }
 
@@ -100,7 +101,7 @@ class ph extends React.Component {
             disabled={probe.enable}
             title={probe.enable ? 'Ph probe must be disabled before calibration' : null}
             variant='secondary'
-            style={{ marginLeft: 'auto', padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
+            style={{ marginLeft: 'auto' }}
             onClick={e => this.calibrateProbe(e, probe)}
           >
             {i18next.t('ph:calibrate')}
@@ -268,15 +269,7 @@ class ph extends React.Component {
           <CollapsibleList>{this.probeList()}</CollapsibleList>
           <ListItem>
             <div>
-              <Button
-                type='button'
-                id='add_probe'
-                data-testid='smoke-ph-add-toggle'
-                variant='primary'
-                onClick={this.handleToggleAddProbeDiv}
-              >
-                {this.state.addProbe ? '-' : '+'}
-              </Button>
+              <AddToggle id='add_probe' testId='smoke-ph-add-toggle' open={this.state.addProbe} onClick={this.handleToggleAddProbeDiv} />
             </div>
             {newProbe}
           </ListItem>
