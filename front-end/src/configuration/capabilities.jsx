@@ -50,21 +50,26 @@ export default class Capabilities extends React.Component {
   }
 
   render () {
+    const hidden = new Set(this.props.hidden || [])
+    const capabilities = [
+      'equipment',
+      'timers',
+      'lighting',
+      'ato',
+      'temperature',
+      'camera',
+      'doser',
+      'ph',
+      'journal',
+      'macro',
+      'health_check',
+      'dashboard',
+      'dev_mode'
+    ].filter(capability => !hidden.has(capability))
+
     return (
       <div className='reefpi-check-grid'>
-        {this.toLi('equipment')}
-        {this.toLi('timers')}
-        {this.toLi('lighting')}
-        {this.toLi('ato')}
-        {this.toLi('temperature')}
-        {this.toLi('camera')}
-        {this.toLi('doser')}
-        {this.toLi('ph')}
-        {this.toLi('journal')}
-        {this.toLi('macro')}
-        {this.toLi('health_check')}
-        {this.toLi('dashboard')}
-        {this.toLi('dev_mode')}
+        {capabilities.map(this.toLi)}
       </div>
     )
   }

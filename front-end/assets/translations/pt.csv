@@ -133,6 +133,7 @@ configuration:admin:sign_out,Desligar o Login
 configuration:authentication:credentials,Credenciais
 configuration:authentication:error_pass,Tens que inserir uma password
 configuration:authentication:error_user,Tens que inserir um nome de utilizador
+configuration:changes_saved,
 configuration:connectors:title_delete,Apagar
 configuration:connectors:warn_delete,Aviso Apagar
 configuration:drivers:provision,
@@ -141,6 +142,13 @@ configuration:drivers:title_delete,Apaga
 configuration:drivers:type,Tipo
 configuration:drivers:warn_delete, Aviso apagar
 configuration:errors:alert,Alert
+configuration:save_changes,
+configuration:save_failed,
+configuration:saving,
+configuration:section_advanced,
+configuration:section_appearance,
+configuration:section_capabilities,
+configuration:section_controller,
 configuration:settings:address,Endereço
 configuration:settings:alert_health_check,Avisos de Estado Geral
 configuration:settings:brightness,Brilho
@@ -171,6 +179,7 @@ configuration:tab:drivers,Controladores
 configuration:tab:errors,Erros
 configuration:tab:settings,Configurações
 configuration:tab:telemetry,Telemetria
+configuration:unsaved_changes,
 cron:day_of_month,dias do mês
 cron:hour,Horas
 cron:minute,Minutos

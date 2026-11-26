@@ -133,6 +133,7 @@ configuration:admin:sign_out,Abmelden
 configuration:authentication:credentials,Benutzer
 configuration:authentication:error_pass,falsches Passwort
 configuration:authentication:error_user,falscher Benutzername
+configuration:changes_saved,
 configuration:connectors:title_delete,{{name}} löschen?
 configuration:connectors:warn_delete,Wollen Sie den Anschluss {{name}} wirklich löschen?
 configuration:drivers:provision,
@@ -141,6 +142,13 @@ configuration:drivers:title_delete,{{name}} entfernen?
 configuration:drivers:type,Typ
 configuration:drivers:warn_delete,Wollen Sie den Treiber für {{name}} wirklich entfernen?
 configuration:errors:alert,Alert
+configuration:save_changes,
+configuration:save_failed,
+configuration:saving,
+configuration:section_advanced,
+configuration:section_appearance,
+configuration:section_capabilities,
+configuration:section_controller,
 configuration:settings:address,Protokoll / IP-Adresse und Port
 configuration:settings:alert_health_check,Überlastwarnung
 configuration:settings:brightness,Brightness
@@ -171,6 +179,7 @@ configuration:tab:drivers,Treiber
 configuration:tab:errors,Fehler
 configuration:tab:settings,Einstellungen
 configuration:tab:telemetry,Telemetrie
+configuration:unsaved_changes,
 cron:day_of_month,Kalendertag
 cron:hour,Stunde
 cron:minute,Minute

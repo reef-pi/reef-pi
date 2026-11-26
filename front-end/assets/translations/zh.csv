@@ -133,6 +133,7 @@ configuration:admin:sign_out,登出
 configuration:authentication:credentials,认证
 configuration:authentication:error_pass,你必须提供一个密码
 configuration:authentication:error_user,你必须提供一个用户名
+configuration:changes_saved,
 configuration:connectors:title_delete,
 configuration:connectors:warn_delete,
 configuration:drivers:provision,
@@ -141,6 +142,13 @@ configuration:drivers:title_delete,
 configuration:drivers:type,
 configuration:drivers:warn_delete,
 configuration:errors:alert,Alert
+configuration:save_changes,
+configuration:save_failed,
+configuration:saving,
+configuration:section_advanced,
+configuration:section_appearance,
+configuration:section_capabilities,
+configuration:section_controller,
 configuration:settings:address,日志
 configuration:settings:alert_health_check,健康检查警告
 configuration:settings:brightness,
@@ -171,6 +179,7 @@ configuration:tab:drivers,驱动
 configuration:tab:errors,错误
 configuration:tab:settings,设置
 configuration:tab:telemetry,遥测
+configuration:unsaved_changes,
 cron:day_of_month,这个月的第几天
 cron:hour,小时
 cron:minute,分钟

@@ -133,6 +133,7 @@ configuration:admin:sign_out,Sair
 configuration:authentication:credentials,Credenciais
 configuration:authentication:error_pass,Você deve inserir uma senha
 configuration:authentication:error_user,Você deve inserir um nome de usuário
+configuration:changes_saved,
 configuration:connectors:title_delete,Excluir
 configuration:connectors:warn_delete,Aviso de exclusão
 configuration:drivers:provision,Provisionar
@@ -141,6 +142,13 @@ configuration:drivers:title_delete,Excluir
 configuration:drivers:type,Tipo
 configuration:drivers:warn_delete,Aviso de exclusão
 configuration:errors:alert,Alerta
+configuration:save_changes,
+configuration:save_failed,
+configuration:saving,
+configuration:section_advanced,
+configuration:section_appearance,
+configuration:section_capabilities,
+configuration:section_controller,
 configuration:settings:address,Endereço
 configuration:settings:alert_health_check,Alertas de Saúde Geral
 configuration:settings:brightness,Brilho
@@ -171,6 +179,7 @@ configuration:tab:drivers,Controladores
 configuration:tab:errors,Erros
 configuration:tab:settings,Configurações
 configuration:tab:telemetry,Telemetria
+configuration:unsaved_changes,
 cron:day_of_month,dias do mês
 cron:hour,Horas
 cron:minute,Minutos
