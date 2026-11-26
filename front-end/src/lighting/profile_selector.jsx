@@ -67,7 +67,7 @@ const ProfileSelector = (props) => {
               ...radioLabelStyle,
               background: props.value === opt.value ? 'var(--reefpi-color-brand)' : 'var(--reefpi-color-surface-elevated)',
               borderColor: props.value === opt.value ? 'var(--reefpi-color-brand)' : 'var(--reefpi-color-border)',
-              color: props.value === opt.value ? 'var(--reefpi-color-nav-text-strong)' : 'var(--reefpi-color-text)'
+              color: props.value === opt.value ? 'var(--reefpi-color-on-brand)' : 'var(--reefpi-color-text)'
             }}
           >
             <input

@@ -53,7 +53,7 @@ export function AlertCenterBell ({ sseEndpoint }) {
             height: '16px',
             borderRadius: '8px',
             background: 'var(--reefpi-color-error)',
-            color: 'var(--reefpi-color-nav-text-strong)',
+            color: 'var(--reefpi-color-on-error)',
             fontSize: '0.6rem',
             fontFamily: 'var(--reefpi-font-app)',
             fontWeight: 600,

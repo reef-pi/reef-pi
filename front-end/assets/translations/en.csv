@@ -306,6 +306,29 @@ macro:turn_off,Turn Off
 macro:turn_on,Turn On
 macro:wait:duration,Duration
 macro:warn_delete,This action will delete macro {{name}}
+nav:collapse,Collapse navigation
+nav:configure,Configure
+nav:expand,Expand navigation
+nav:main,Main navigation
+nav:more,More
+nav:observe,Observe
+nav:operate,Operate
+nav:sign_out,Sign out
+nav:skip_to_content,Skip to main content
+nav:tagline,Aquarium controller
+page:ato,Water level sensing and automatic top-off
+page:camera,Tank photos captured on a schedule
+page:configuration,Controller settings and connected hardware
+page:dashboard,Live readings and equipment for this controller
+page:doser,Dosing pumps and their schedules
+page:equipment,Outlets and the equipment they power
+page:journal,Notes and manual measurements for your tank
+page:lighting,Light channels and their daily profiles
+page:macro,Multi-step routines you can run on demand
+page:manager,Other reef-pi controllers on your network
+page:ph,pH probes and their calibration
+page:temperature,Temperature probes with heater and chiller control
+page:timers,Scheduled actions for equipment and macros
 ph:alert_above,Alert Above
 ph:alert_below,Alert Below
 ph:calibrate,Calibrate
@@ -337,8 +360,16 @@ ph:warn_delete,This action will delete probe {{name}}
 ph:warn_reset,This action will reset usage data for probe {{name}}
 signin:invalidcredentials,Invalid Credentials
 signin:password,Password
-signin:signin,Sign In
+signin:signin,Sign in
 signin:username,Username
+status:details,System details
+status:error_count,Errors: {{count}}
+status:ip,IP address
+status:no_errors,No errors logged
+status:time,Controller time
+status:title,Controller status
+status:uptime,Up since
+status:version,Version
 telemetry:main:current-limit,Current limit
 telemetry:main:email-alerts,Email alerts
 telemetry:main:historical-limit,Historical limit

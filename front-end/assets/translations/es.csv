@@ -306,6 +306,29 @@ macro:turn_off,Apagar
 macro:turn_on,Encender
 macro:wait:duration,
 macro:warn_delete,
+nav:collapse,
+nav:configure,
+nav:expand,
+nav:main,
+nav:more,
+nav:observe,
+nav:operate,
+nav:sign_out,
+nav:skip_to_content,
+nav:tagline,
+page:ato,
+page:camera,
+page:configuration,
+page:dashboard,
+page:doser,
+page:equipment,
+page:journal,
+page:lighting,
+page:macro,
+page:manager,
+page:ph,
+page:temperature,
+page:timers,
 ph:alert_above,Alerta Sobre
 ph:alert_below,Alerta Bajo
 ph:calibrate,Calibrar
@@ -339,6 +362,14 @@ signin:invalidcredentials,Usuario o Contraseña Incorrectos
 signin:password,Contraseña
 signin:signin,Iniciar Sesion
 signin:username,Usuario
+status:details,
+status:error_count,
+status:ip,
+status:no_errors,
+status:time,
+status:title,
+status:uptime,
+status:version,
 telemetry:main:current-limit,Límite actual
 telemetry:main:email-alerts,Alertas por email
 telemetry:main:historical-limit,Límite del histórico

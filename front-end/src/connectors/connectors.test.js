@@ -234,10 +234,10 @@ describe('Connectors', () => {
     const tid = id => screen.getByTestId(id)
 
     beforeEach(() => {
-      Object.defineProperty(window, 'localStorage', {
-        value: { getItem: () => null, setItem: jest.fn() },
-        configurable: true
-      })
+      // The persistence test above intentionally replaces localStorage. Reset that
+      // same object so these interaction tests always start with expanded groups.
+      window.localStorage.getItem = jest.fn(() => null)
+      window.localStorage.setItem = jest.fn()
     })
 
     it('shows validation errors and does not create when the form is empty', () => {

@@ -64,6 +64,12 @@ var config = {
         ]
       },
       {
+        // Self-hosted fonts referenced from the Sass (front-end/assets/fonts)
+        test: /\.woff2$/,
+        type: 'asset/resource',
+        generator: { filename: 'assets/fonts/[name].[contenthash][ext]' }
+      },
+      {
         test: /\.json$/,
         loader: 'json-loader',
         type: 'javascript/auto'

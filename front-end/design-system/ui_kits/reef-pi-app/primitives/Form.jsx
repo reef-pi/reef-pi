@@ -73,9 +73,11 @@ export function Field ({
   children
 }) {
   const generatedId = useId()
-  const controlId = id || 'reefpi-field-' + generatedId.replace(/:/g, '')
-  const helpId = helpText ? controlId + '-help' : undefined
-  const errorId = error ? controlId + '-error' : undefined
+  const childId = isValidElement(children) ? children.props.id : undefined
+  const fieldId = id || childId || 'reefpi-field-' + generatedId.replace(/:/g, '')
+  const controlId = childId || fieldId
+  const helpId = helpText ? fieldId + '-help' : undefined
+  const errorId = error ? fieldId + '-error' : undefined
   const childDescribedBy = describedBy([helpId, errorId])
   const invalid = Boolean(error)
 

@@ -90,16 +90,16 @@ class ConnectorsPage {
     await this.page.getByTestId('smoke-connector-delete').click()
     const dialog = this.page.locator('.modal[role="dialog"]')
     await expect(dialog).toBeVisible()
-    // The dialog layer must cover the summary footer and sidebar rather than sit beneath them.
+    // The dialog layer must cover the sidebar rather than sit beneath it.
     const covered = await this.page.evaluate(() => {
       const top = selector => {
         const rect = document.querySelector(selector).getBoundingClientRect()
         const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2)
         return Boolean(hit && hit.closest('.modal, .modal-backdrop'))
       }
-      return { footer: top('.bottom-bar'), nav: top('[data-testid="smoke-nav"]') }
+      return { nav: top('[data-testid="smoke-nav"]') }
     })
-    expect(covered).toEqual({ footer: true, nav: true })
+    expect(covered).toEqual({ nav: true })
     await dialog.locator('button[role="confirm"]').click()
     await expect(dialog).toHaveCount(0)
     await expect(this.page.getByTestId(`smoke-connector-row-${name}`)).toHaveCount(0)

@@ -39,9 +39,8 @@ export default function SignInConfidenceCard ({ endpoint = '/api/meta' }) {
     <footer
       aria-label='Controller info'
       style={{
-        marginTop: '1.25rem',
         padding: '0.75rem 1rem',
-        background: 'var(--reefpi-color-surface)',
+        background: 'var(--reefpi-color-surface-sunken)',
         border: '1px solid var(--reefpi-color-border)',
         borderRadius: 'var(--reefpi-radius-md)',
         textAlign: 'center',

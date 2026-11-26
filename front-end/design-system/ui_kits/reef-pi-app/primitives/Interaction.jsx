@@ -319,7 +319,7 @@ export function Tabs ({ tabs = [], value, onChange }) {
                 ? {
                     background: 'var(--reefpi-color-brand)',
                     border: '1px solid var(--reefpi-color-brand)',
-                    color: 'var(--reefpi-color-nav-text-strong)'
+                    color: 'var(--reefpi-color-on-brand)'
                   }
                 : null)}
               tabIndex={selected ? 0 : -1}

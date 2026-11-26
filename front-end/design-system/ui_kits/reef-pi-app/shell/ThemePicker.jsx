@@ -4,16 +4,42 @@ import { useTheme } from '../hooks/useTheme'
 
 /*
  * Appearance section for Configuration › Settings.
- * Radios: Light / Dark / Actinic / System.
+ * Radios: System / Light / Dark / Actinic / Classic, each with a swatch that previews the
+ * theme by scoping its tokens (data-theme on the swatch itself).
  * Writes <html data-theme>, localStorage, fires reefpi:theme-change.
  */
 
 const OPTIONS = [
-  { value: 'system',   label: 'System',   desc: 'Follow device preference' },
-  { value: 'light',    label: 'Light',    desc: 'Always light'             },
-  { value: 'dark',     label: 'Dark',     desc: 'Low-light general mode'   },
-  { value: 'actinic',  label: 'Actinic',  desc: 'Reef blue night mode'     }
+  { value: 'system', label: 'System', desc: 'Follow device preference' },
+  { value: 'light', label: 'Light', desc: 'Always light' },
+  { value: 'dark', label: 'Dark', desc: 'Low-light general mode' },
+  { value: 'actinic', label: 'Actinic', desc: 'Reef blue night mode' },
+  { value: 'classic', label: 'Classic', desc: 'Original reef-pi green' }
 ]
+
+// Canvas, panel and action colour of one theme, read from that theme's own tokens.
+function Swatch ({ theme }) {
+  return (
+    <span
+      data-theme={theme}
+      aria-hidden='true'
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '3px',
+        padding: '3px',
+        borderRadius: 'var(--reefpi-radius-sm)',
+        background: 'var(--reefpi-color-surface)',
+        border: '1px solid var(--reefpi-color-border)'
+      }}
+    >
+      <span style={{ width: '14px', height: '14px', borderRadius: '3px', background: 'var(--reefpi-color-surface-elevated)', border: '1px solid var(--reefpi-color-border)' }} />
+      <span style={{ width: '14px', height: '14px', borderRadius: '3px', background: 'var(--reefpi-color-brand)' }} />
+    </span>
+  )
+}
+
+Swatch.propTypes = { theme: PropTypes.string.isRequired }
 
 export default function ThemePicker ({ onSessionOverride } = {}) {
   const { theme, setTheme } = useTheme()
@@ -50,7 +76,7 @@ export default function ThemePicker ({ onSessionOverride } = {}) {
                 border: selected
                   ? '1px solid var(--reefpi-color-brand)'
                   : '1px solid var(--reefpi-color-border)',
-                transition: 'background 0.12s, border-color 0.12s'
+                transition: 'background-color 120ms ease, border-color 120ms ease'
               }}
             >
               <input
@@ -61,13 +87,18 @@ export default function ThemePicker ({ onSessionOverride } = {}) {
                 onChange={() => handleChange(opt.value)}
                 style={{ marginTop: '0.125rem' }}
               />
-              <span style={{ display: 'grid', gap: '0.125rem' }}>
+              <span style={{ display: 'grid', gap: '0.125rem', flex: '1 1 auto' }}>
                 <span style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--reefpi-color-text)' }}>
                   {opt.label}
                 </span>
                 <span style={{ fontSize: '0.8125rem', color: 'var(--reefpi-color-text-muted)' }}>
                   {opt.desc}
                 </span>
+              </span>
+              <span style={{ display: 'inline-flex', gap: '2px', flexShrink: 0 }}>
+                {opt.value === 'system'
+                  ? <><Swatch theme='light' /><Swatch theme='dark' /></>
+                  : <Swatch theme={opt.value} />}
               </span>
             </label>
           )

@@ -306,6 +306,29 @@ macro:turn_off,Ausschalten
 macro:turn_on,Einschalten
 macro:wait:duration,Dauer
 macro:warn_delete,Wollen Sie das Makro {{name}} wirklich löschen?
+nav:collapse,
+nav:configure,
+nav:expand,
+nav:main,
+nav:more,
+nav:observe,
+nav:operate,
+nav:sign_out,
+nav:skip_to_content,
+nav:tagline,
+page:ato,
+page:camera,
+page:configuration,
+page:dashboard,
+page:doser,
+page:equipment,
+page:journal,
+page:lighting,
+page:macro,
+page:manager,
+page:ph,
+page:temperature,
+page:timers,
 ph:alert_above,obere Warnschwelle
 ph:alert_below,untere Warnschwelle
 ph:calibrate,Kalibrieren
@@ -339,6 +362,14 @@ signin:invalidcredentials,Anmeldefehler!
 signin:password,Passwort
 signin:signin,Anmelden
 signin:username,Name
+status:details,
+status:error_count,
+status:ip,
+status:no_errors,
+status:time,
+status:title,
+status:uptime,
+status:version,
 telemetry:main:current-limit,Einträge im Diagr. 'aktuell' (1/min)
 telemetry:main:email-alerts,Email Alarme
 telemetry:main:historical-limit,Einträge im Diagr. 'Verlauf' (1/h)

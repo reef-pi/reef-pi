@@ -52,6 +52,7 @@ walk(root)
 const designTokens = fs.readFileSync(path.join(root, 'front-end/design-system/colors_and_type.css'), 'utf8')
 const appStyles = fs.readFileSync(path.join(root, 'front-end/assets/sass/style.scss'), 'utf8')
 const appTokens = fs.readFileSync(path.join(root, 'front-end/assets/sass/_tokens.scss'), 'utf8')
+const fontStyles = fs.readFileSync(path.join(root, 'front-end/assets/sass/_fonts.scss'), 'utf8')
 const appTemplate = fs.readFileSync(path.join(root, 'front-end/assets/home.html'), 'utf8')
 
 if (!designTokens.includes("--reefpi-font-app:  'Manrope'")) issues.push("colors_and_type.css: --reefpi-font-app must start with Manrope")
@@ -67,8 +68,23 @@ for (const [name, text] of [["colors_and_type.css", designTokens], ["_tokens.scs
 if (!appStyles.includes("--reefpi-font-weight-medium: #{$reefpi-font-weight-medium};")) issues.push("style.scss: missing medium weight token")
 if (!appStyles.includes("--reefpi-font-weight-semibold: #{$reefpi-font-weight-semibold};")) issues.push("style.scss: missing semibold weight token")
 
-if (!appTemplate.includes('family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500')) {
-  issues.push('front-end/assets/home.html: missing Manrope + JetBrains Mono Google Fonts link')
+if (appTemplate.includes('fonts.googleapis.com') || appTemplate.includes('fonts.gstatic.com')) {
+  issues.push('front-end/assets/home.html: runtime font CDN reference is not allowed')
+}
+
+for (const family of ['Manrope', 'JetBrains Mono']) {
+  if (!fontStyles.includes("font-family: '" + family + "'")) issues.push('_fonts.scss: missing local ' + family + ' @font-face')
+}
+
+for (const name of [
+  'manrope-latin.woff2',
+  'manrope-latin-ext.woff2',
+  'jetbrains-mono-latin.woff2',
+  'jetbrains-mono-latin-ext.woff2',
+  'OFL-Manrope.txt',
+  'OFL-JetBrainsMono.txt'
+]) {
+  if (!fs.existsSync(path.join(root, 'front-end/assets/fonts', name))) issues.push('front-end/assets/fonts/' + name + ': missing self-hosted font asset or licence')
 }
 
 if (issues.length > 0) {

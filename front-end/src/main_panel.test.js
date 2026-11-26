@@ -120,13 +120,15 @@ describe('MainPanel', () => {
     const rendered = panel.render()
     const smokeRoot = findAll(rendered, node => node.props?.['data-testid'] === 'smoke-shell-root')[0]
     const shellNav = findAll(rendered, node => node.type && node.type.name === 'NewShellNav')[0]
-    const summary = findAll(rendered, node => node.type?.name === 'Summary')[0]
+    // The controller status lives in the navigation; the panel hands the shell a renderer for it.
+    const summary = shellNav.props.status(true)
 
     expect(smokeRoot.props.id).toBe('content')
     expect(shellNav.props.capabilities.equipment).toBe(true)
     expect(summary.props.info.name).toBe('reef-pi-test')
     expect(summary.props.errors).toHaveLength(1)
     expect(summary.props.devMode).toBe(true)
+    expect(summary.props.compact).toBe(true)
     expect(countByType(rendered, node => node.type?.name === 'Routes')).toBe(1)
   })
 
@@ -155,12 +157,35 @@ describe('MainPanel', () => {
 
     expect(container.querySelector('[data-testid="smoke-nav"]')).not.toBeNull()
     expect(container.querySelector('[data-testid="smoke-tab-dashboard"]')).not.toBeNull()
-    expect(container.querySelector('[aria-label="Main navigation"]')).not.toBeNull()
-    // The 72px sidebar offset is a >= 992px media query (no inline style), so phones keep the plain gutter.
+    expect(container.querySelector('nav.reefpi-bottom-nav')).not.toBeNull()
+    // The sidebar offset is a >= 992px media query (no inline style), so phones keep the plain gutter.
     const contentPanel = container.querySelector('[data-testid="smoke-content-panel"]')
     expect(contentPanel.classList.contains('content-panel')).toBe(true)
     expect(contentPanel.style.paddingLeft).toBe('')
     expect(Array.from(container.querySelectorAll('[aria-label]')).map(node => node.getAttribute('aria-label'))).toContain('equipment')
+
+    unmount()
+  })
+
+  it('lets keyboard users skip the shell navigation to the main route content', () => {
+    Object.defineProperty(window, 'innerWidth', { configurable: true, value: 480 })
+    window.matchMedia = jest.fn(() => ({
+      matches: false,
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn()
+    }))
+    const { container, unmount } = renderDomPanel({
+      info: {},
+      errors: [],
+      capabilities: { dashboard: true, dev_mode: false },
+      fetchUIData: jest.fn(),
+      fetchInfo: jest.fn()
+    })
+
+    const skipLink = container.querySelector('.reefpi-skip-link')
+    const main = container.querySelector('main#main-content')
+    expect(skipLink?.getAttribute('href')).toBe('#main-content')
+    expect(main?.getAttribute('tabindex')).toBe('-1')
 
     unmount()
   })

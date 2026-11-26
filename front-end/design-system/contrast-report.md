@@ -4,45 +4,72 @@ Tokens file: front-end/design-system/colors_and_type.css
 
 ## Summary
 
-All 33 pairs pass.
+All 60 pairs pass.
 
 ## Results
 
 | Theme | Pair | Ratio | Target | Result |
 |---|---|---|---|---|
-| light | text on surface | 14.09:1 | ≥4.5:1 | ✅ PASS |
-| light | text on surface-elevated | 14.90:1 | ≥4.5:1 | ✅ PASS |
-| light | text on surface-auth | 13.62:1 | ≥4.5:1 | ✅ PASS |
-| light | text-muted on surface | 6.46:1 | ≥4.5:1 | ✅ PASS |
-| light | nav-text on brand | 3.03:1 | ≥3:1 | ✅ PASS |
-| light | nav-text on brand-alt | 4.98:1 | ≥3:1 | ✅ PASS |
-| light | error on surface-elevated | 4.53:1 | ≥3:1 | ✅ PASS |
-| light | warn on surface-elevated | 3.81:1 | ≥3:1 | ✅ PASS |
-| light | pending on surface-elevated | 6.84:1 | ≥3:1 | ✅ PASS |
-| light | focus on brand | 3.18:1 | ≥3:1 | ✅ PASS |
-| light | focus on brand-alt | 1.92:1 | ≥3:1 | ⚠️ SKIP (known — see script) |
-| dark | text on surface | 15.77:1 | ≥4.5:1 | ✅ PASS |
-| dark | text on surface-elevated | 13.94:1 | ≥4.5:1 | ✅ PASS |
-| dark | text on surface-auth | 16.36:1 | ≥4.5:1 | ✅ PASS |
-| dark | text-muted on surface | 7.48:1 | ≥4.5:1 | ✅ PASS |
-| dark | nav-text on brand | 3.03:1 | ≥3:1 | ✅ PASS |
-| dark | nav-text on brand-alt | 2.33:1 | ≥3:1 | ⚠️ SKIP (known — see script) |
-| dark | error on surface-elevated | 3.63:1 | ≥3:1 | ✅ PASS |
-| dark | warn on surface-elevated | 4.32:1 | ≥3:1 | ✅ PASS |
-| dark | pending on surface-elevated | 7.03:1 | ≥3:1 | ✅ PASS |
-| dark | focus on brand | 3.18:1 | ≥3:1 | ✅ PASS |
-| dark | focus on brand-alt | 4.15:1 | ≥3:1 | ✅ PASS |
-| actinic | text on surface | 14.62:1 | ≥4.5:1 | ✅ PASS |
-| actinic | text on surface-elevated | 13.31:1 | ≥4.5:1 | ✅ PASS |
-| actinic | text on surface-auth | 15.21:1 | ≥4.5:1 | ✅ PASS |
-| actinic | text-muted on surface | 5.89:1 | ≥4.5:1 | ✅ PASS |
-| actinic | nav-text on brand | 3.03:1 | ≥3:1 | ✅ PASS |
-| actinic | nav-text on brand-alt | 4.98:1 | ≥3:1 | ✅ PASS |
-| actinic | error on surface-elevated | 3.84:1 | ≥3:1 | ✅ PASS |
-| actinic | warn on surface-elevated | 4.56:1 | ≥3:1 | ✅ PASS |
-| actinic | pending on surface-elevated | 7.42:1 | ≥3:1 | ✅ PASS |
-| actinic | focus on brand | 3.18:1 | ≥3:1 | ✅ PASS |
-| actinic | focus on brand-alt | 1.92:1 | ≥3:1 | ⚠️ SKIP (known — see script) |
+| light | text on surface | 17.06:1 | ≥4.5:1 | ✅ PASS |
+| light | text on surface-elevated | 17.85:1 | ≥4.5:1 | ✅ PASS |
+| light | text on surface-auth | 16.30:1 | ≥4.5:1 | ✅ PASS |
+| light | text-muted on surface | 4.55:1 | ≥4.5:1 | ✅ PASS |
+| light | brand on surface-elevated | 5.47:1 | ≥4.5:1 | ✅ PASS |
+| light | on-brand on brand | 5.47:1 | ≥4.5:1 | ✅ PASS |
+| light | error on surface-elevated | 6.47:1 | ≥4.5:1 | ✅ PASS |
+| light | error on error-bg | 5.91:1 | ≥4.5:1 | ✅ PASS |
+| light | on-error on error | 6.47:1 | ≥4.5:1 | ✅ PASS |
+| light | warn on surface-elevated | 5.02:1 | ≥4.5:1 | ✅ PASS |
+| light | warn on warn-bg | 4.84:1 | ≥4.5:1 | ✅ PASS |
+| light | success on surface-elevated | 5.02:1 | ≥3:1 | ✅ PASS |
+| light | pending on surface-elevated | 4.76:1 | ≥3:1 | ✅ PASS |
+| light | border-strong on surface-elevated | 4.76:1 | ≥3:1 | ✅ PASS |
+| light | focus on surface-elevated | 5.47:1 | ≥3:1 | ✅ PASS |
+| dark | text on surface | 16.02:1 | ≥4.5:1 | ✅ PASS |
+| dark | text on surface-elevated | 14.64:1 | ≥4.5:1 | ✅ PASS |
+| dark | text on surface-auth | 16.02:1 | ≥4.5:1 | ✅ PASS |
+| dark | text-muted on surface | 6.15:1 | ≥4.5:1 | ✅ PASS |
+| dark | brand on surface-elevated | 9.29:1 | ≥4.5:1 | ✅ PASS |
+| dark | on-brand on brand | 10.17:1 | ≥4.5:1 | ✅ PASS |
+| dark | error on surface-elevated | 5.16:1 | ≥4.5:1 | ✅ PASS |
+| dark | error on error-bg | 5.05:1 | ≥4.5:1 | ✅ PASS |
+| dark | on-error on error | 5.65:1 | ≥4.5:1 | ✅ PASS |
+| dark | warn on surface-elevated | 6.85:1 | ≥4.5:1 | ✅ PASS |
+| dark | warn on warn-bg | 6.33:1 | ≥4.5:1 | ✅ PASS |
+| dark | success on surface-elevated | 6.81:1 | ≥3:1 | ✅ PASS |
+| dark | pending on surface-elevated | 5.62:1 | ≥3:1 | ✅ PASS |
+| dark | border-strong on surface-elevated | 5.62:1 | ≥3:1 | ✅ PASS |
+| dark | focus on surface-elevated | 9.29:1 | ≥3:1 | ✅ PASS |
+| actinic | text on surface | 13.36:1 | ≥4.5:1 | ✅ PASS |
+| actinic | text on surface-elevated | 12.47:1 | ≥4.5:1 | ✅ PASS |
+| actinic | text on surface-auth | 13.36:1 | ≥4.5:1 | ✅ PASS |
+| actinic | text-muted on surface | 6.49:1 | ≥4.5:1 | ✅ PASS |
+| actinic | brand on surface-elevated | 5.76:1 | ≥4.5:1 | ✅ PASS |
+| actinic | on-brand on brand | 6.17:1 | ≥4.5:1 | ✅ PASS |
+| actinic | error on surface-elevated | 6.61:1 | ≥4.5:1 | ✅ PASS |
+| actinic | error on error-bg | 6.24:1 | ≥4.5:1 | ✅ PASS |
+| actinic | on-error on error | 7.08:1 | ≥4.5:1 | ✅ PASS |
+| actinic | warn on surface-elevated | 8.00:1 | ≥4.5:1 | ✅ PASS |
+| actinic | warn on warn-bg | 7.53:1 | ≥4.5:1 | ✅ PASS |
+| actinic | success on surface-elevated | 7.64:1 | ≥3:1 | ✅ PASS |
+| actinic | pending on surface-elevated | 6.06:1 | ≥3:1 | ✅ PASS |
+| actinic | border-strong on surface-elevated | 6.06:1 | ≥3:1 | ✅ PASS |
+| actinic | focus on surface-elevated | 5.76:1 | ≥3:1 | ✅ PASS |
+| classic | text on surface | 14.09:1 | ≥4.5:1 | ✅ PASS |
+| classic | text on surface-elevated | 14.90:1 | ≥4.5:1 | ✅ PASS |
+| classic | text on surface-auth | 13.62:1 | ≥4.5:1 | ✅ PASS |
+| classic | text-muted on surface | 6.46:1 | ≥4.5:1 | ✅ PASS |
+| classic | brand on surface-elevated | 5.61:1 | ≥4.5:1 | ✅ PASS |
+| classic | on-brand on brand | 5.61:1 | ≥4.5:1 | ✅ PASS |
+| classic | error on surface-elevated | 6.47:1 | ≥4.5:1 | ✅ PASS |
+| classic | error on error-bg | 5.67:1 | ≥4.5:1 | ✅ PASS |
+| classic | on-error on error | 6.47:1 | ≥4.5:1 | ✅ PASS |
+| classic | warn on surface-elevated | 5.02:1 | ≥4.5:1 | ✅ PASS |
+| classic | warn on warn-bg | 4.74:1 | ≥4.5:1 | ✅ PASS |
+| classic | success on surface-elevated | 5.61:1 | ≥3:1 | ✅ PASS |
+| classic | pending on surface-elevated | 6.84:1 | ≥3:1 | ✅ PASS |
+| classic | border-strong on surface-elevated | 4.55:1 | ≥3:1 | ✅ PASS |
+| classic | focus on surface-elevated | 9.95:1 | ≥3:1 | ✅ PASS |
 
 ---
 _Generated by `scripts/contrast-check.mjs`. Re-run with `node scripts/contrast-check.mjs` from the design-system root._

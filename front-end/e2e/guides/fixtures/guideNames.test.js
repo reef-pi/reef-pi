@@ -21,5 +21,5 @@ test('maps project names to viewports', () => {
   expect(VIEWPORTS.desktop).toEqual({ width: 1440, height: 900 })
   expect(VIEWPORTS.mobile).toEqual({ width: 390, height: 844 })
   expect(Object.keys(GUIDE_FOLDERS)).toHaveLength(7)
-  expect(CAPTURE_CSS).toContain('.bottom-bar')
+  expect(CAPTURE_CSS).toContain('.reefpi-status-dev')
 })

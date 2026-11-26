@@ -1,22 +1,49 @@
-#sign-in-form {
-  .container {
-    display: flex;
-    text-align: center;
-    justify-content: center;
-    padding-top: 40px;
-    padding-bottom: 40px;
-    height: 100%;
-  }
+// Sign-in — Aquatic Precision (#3289): a single calm panel on the auth canvas.
+.sign-in-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--reefpi-space-lg) var(--reefpi-space-md);
+  font-family: var(--reefpi-font-app);
+}
 
-  .form {
-    width: 100%;
-    max-width: 330px;
-    padding: 15px;
-    margin: 0 auto;
-    text-align: center;
-  }
+.sign-in-panel {
+  display: grid;
+  gap: var(--reefpi-space-lg);
+  width: 100%;
+  max-width: 24rem;
+  padding: 2rem;
+  border: 1px solid var(--reefpi-color-border);
+  border-radius: 0.75rem;
+  background: var(--reefpi-color-surface-elevated);
+}
 
-  .form-control {
-    margin-bottom: 10px;
+.sign-in-form {
+  display: grid;
+  gap: var(--reefpi-space-md);
+}
+
+.sign-in-title {
+  margin: 0;
+  font-size: 1.375rem;
+  font-weight: var(--reefpi-font-weight-semibold);
+  line-height: 1.2;
+  color: var(--reefpi-color-text);
+}
+
+.sign-in-error {
+  padding: var(--reefpi-space-xs) var(--reefpi-space-sm);
+  border: 1px solid var(--reefpi-color-error-border);
+  border-radius: var(--reefpi-radius-sm);
+  background: var(--reefpi-color-error-bg);
+  color: var(--reefpi-color-error);
+  font-size: var(--reefpi-font-size-body);
+}
+
+@media screen and (max-width: 420px) {
+  .sign-in-panel {
+    padding: var(--reefpi-space-lg);
+    border-radius: var(--reefpi-radius-md);
   }
 }

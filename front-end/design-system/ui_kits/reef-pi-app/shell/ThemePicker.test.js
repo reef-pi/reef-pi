@@ -35,9 +35,12 @@ describe('design-system ThemePicker', () => {
 
     expect(container.querySelector('legend').textContent).toBe('Appearance')
     expect([...container.querySelectorAll('input[name="reefpi-theme"]')].map(input => input.value))
-      .toEqual(['system', 'light', 'dark', 'actinic'])
+      .toEqual(['system', 'light', 'dark', 'actinic', 'classic'])
     expect(container.querySelector('input[value="actinic"]').checked).toBe(true)
     expect(container.querySelector('label[data-selected]').textContent).toContain('Actinic')
+    // Each option previews its own palette by scoping the theme tokens to a swatch.
+    expect(container.querySelector('input[value="classic"]').closest('label').querySelector('[data-theme="classic"]')).not.toBeNull()
+    expect(container.querySelector('input[value="system"]').closest('label').querySelectorAll('[data-theme]')).toHaveLength(2)
 
     act(() => root.unmount())
   })

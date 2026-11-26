@@ -37,8 +37,8 @@ make guide-screenshots GUIDE=3    # one guide
 This builds reef-pi (`make go`, `make ui`, `make api-doc`), starts the dev server through Playwright
 and runs the `guide-screenshots-desktop` (1440x900) and `guide-screenshots-mobile` (390x844) projects
 (`front-end/e2e/guides/guide-0N.spec.js`). Each spec resets the dev server state, seeds what earlier
-guides would have set up, and walks through the guide's own steps in the UI. The dev-only footer is
-hidden while capturing. Running it again only changes image bytes, never file names.
+guides would have set up, and walks through the guide's own steps in the UI. The dev-mode badge in the
+controller status is hidden while capturing. Running it again only changes image bytes, never file names.
 
 ### In CI
 

@@ -98,7 +98,7 @@ export default function RangeSelector ({
                 fontFamily: 'var(--reefpi-font-app)',
                 fontWeight: selected ? 500 : 400,
                 background: selected ? 'var(--reefpi-color-brand)' : 'transparent',
-                color: selected ? 'var(--reefpi-color-nav-text-strong)' : 'var(--reefpi-color-text)',
+                color: selected ? 'var(--reefpi-color-on-brand)' : 'var(--reefpi-color-text)',
                 transition: 'background-color 0.12s, color 0.12s',
                 userSelect: 'none'
               }}

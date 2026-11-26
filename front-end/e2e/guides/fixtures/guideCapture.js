@@ -16,7 +16,7 @@ async function shot (page, testInfo, { guide, pageSlug, index, what, locator }) 
   await page.mouse.move(size.width - 2, 2)
   if (!dialogOpen) await page.evaluate(() => document.activeElement && document.activeElement.blur())
   await expect(page.getByText('Something went wrong')).toHaveCount(0)
-  await expect(page.locator('.bottom-bar')).toBeHidden()
+  await expect(page.locator('.reefpi-status-dev')).toBeHidden()
   await page.evaluate(() => document.fonts.ready)
   fs.mkdirSync(path.dirname(file), { recursive: true })
   if (locator) {

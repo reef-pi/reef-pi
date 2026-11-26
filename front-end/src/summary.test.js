@@ -1,4 +1,5 @@
 import React from 'react'
+import { renderToStaticMarkup } from 'react-dom/server'
 import Summary from './summary'
 import 'isomorphic-fetch'
 
@@ -19,21 +20,6 @@ describe('Summary', () => {
     ...props
   })
 
-  const textContent = (node) => {
-    if (node === null || node === undefined || typeof node === 'boolean') {
-      return ''
-    }
-    if (typeof node === 'string' || typeof node === 'number') {
-      return String(node)
-    }
-    if (Array.isArray(node)) {
-      return node.map(textContent).join('')
-    }
-    if (React.isValidElement(node)) {
-      return textContent(node.props.children)
-    }
-    return ''
-  }
 
   beforeEach(() => {
     jest.spyOn(window, 'setInterval').mockReturnValue(123)
@@ -53,26 +39,37 @@ describe('Summary', () => {
     expect(window.setInterval).toHaveBeenCalledWith(fetch, 1800 * 1000)
   })
 
-  it('renders current system summary details', () => {
-    const summary = new Summary(summaryProps())
-    const rendered = summary.render()
-    const text = textContent(rendered)
+  it('renders the controller status: error count, details and links', () => {
+    const html = renderToStaticMarkup(<Summary {...summaryProps()} />)
 
-    expect(rendered.type).toBe('nav')
-    expect(text).toContain('2024-07-04 10:11:12')
-    expect(text).toContain('7.0.0')
-    expect(text).toContain('reef-pi pico')
-    expect(text).toContain('12h34m')
-    expect(text).toContain('IP 192.168.1.10')
-    expect(text).toContain('errors(2)')
+    expect(html).toContain('href="/configuration/errors"')
+    expect(html).toContain('2024-07-04 10:11:12')
+    expect(html).toContain('7.0.0 · reef-pi pico')
+    expect(html).toContain('12h34m')
+    expect(html).toContain('192.168.1.10')
+    expect(html).toContain('href="/assets/api.html"')
+    expect(html).toContain('href="http://reef-pi.com"')
+    expect(html).toContain('reefpi-status-errors--error')
   })
 
-  it('shows the dev mode warning only when devMode is true', () => {
-    const production = new Summary(summaryProps({ devMode: false }))
-    const development = new Summary(summaryProps({ devMode: true }))
+  it('never calls the controller healthy: no errors is a neutral statement', () => {
+    const html = renderToStaticMarkup(<Summary {...summaryProps({ errors: [] })} />)
 
-    expect(textContent(production.render())).not.toContain('devmode_warning')
-    expect(textContent(development.render())).toContain('devmode_warning')
+    expect(html).toContain('reefpi-status-errors--neutral')
+    expect(html).not.toContain('reefpi-status-count')
+  })
+
+  it('shows the dev mode badge only when devMode is true', () => {
+    expect(renderToStaticMarkup(<Summary {...summaryProps({ devMode: false })} />)).not.toContain('reefpi-status-dev')
+    expect(renderToStaticMarkup(<Summary {...summaryProps({ devMode: true })} />)).toContain('reefpi-status-dev')
+  })
+
+  it('renders only the error link, with its count, in the collapsed rail', () => {
+    const html = renderToStaticMarkup(<Summary {...summaryProps({ compact: true })} />)
+
+    expect(html).toContain('reefpi-status--compact')
+    expect(html).toContain('reefpi-status-count')
+    expect(html).not.toContain('<details')
   })
 
   it('clears the polling timer on unmount when present', () => {

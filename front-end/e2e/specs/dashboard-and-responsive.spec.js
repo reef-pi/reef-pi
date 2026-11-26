@@ -100,6 +100,41 @@ test.describe('mobile shell', () => {
     await expectDashboardReady(page)
   })
 
+  test('fits small portrait and landscape viewports with dark theme and reduced motion', async ({ page, baseURL }) => {
+    const api = await createSmokeApi(baseURL)
+
+    try {
+      await seedDashboard(api)
+    } finally {
+      await api.dispose()
+    }
+
+    await page.emulateMedia({ colorScheme: 'dark', reducedMotion: 'reduce' })
+    await page.addInitScript(() => window.localStorage.setItem('reefpi.theme', 'dark'))
+
+    for (const viewport of [{ width: 375, height: 667 }, { width: 667, height: 375 }]) {
+      await page.setViewportSize(viewport)
+      await page.goto('/')
+
+      await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
+      await expect(page.getByTestId('smoke-nav')).toBeVisible()
+      await expectDashboardReady(page)
+      await expect.poll(() => page.evaluate(() => ({
+        documentWidth: document.documentElement.scrollWidth,
+        viewportWidth: document.documentElement.clientWidth
+      }))).toEqual({ documentWidth: viewport.width, viewportWidth: viewport.width })
+
+      await page.getByRole('button', { name: 'More routes' }).click()
+      const drawer = page.getByRole('dialog', { name: 'Navigation drawer' })
+      await expect(drawer).toBeVisible()
+      await expect(drawer).toHaveCSS('animation-name', 'none')
+      const drawerBox = await drawer.boundingBox()
+      expect(drawerBox.x).toBeGreaterThanOrEqual(0)
+      expect(drawerBox.x + drawerBox.width).toBeLessThanOrEqual(viewport.width)
+      await page.getByRole('button', { name: 'Close navigation' }).click()
+    }
+  })
+
   test('the navigation drawer opens above the Connectors page and its links work', async ({ page, baseURL }) => {
     const api = await createSmokeApi(baseURL)
     try {

@@ -74,10 +74,10 @@ export default function EmptyState ({ icon, title, body, action, testId }) {
           onClick={handleActionClick}
           data-testid={action.testId}
           style={{
-            background: 'var(--reefpi-gradient-brand)',
+            background: 'var(--reefpi-color-brand)',
             border: 'none',
             borderRadius: 'var(--reefpi-radius-sm)',
-            color: 'var(--reefpi-color-nav-text-strong)',
+            color: 'var(--reefpi-color-on-brand)',
             fontSize: '0.875rem',
             fontWeight: 500,
             fontFamily: 'var(--reefpi-font-app)',
