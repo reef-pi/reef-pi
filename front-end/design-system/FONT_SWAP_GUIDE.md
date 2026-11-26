@@ -203,11 +203,11 @@ gh pr create --title "[claude design] adopt Manrope + JetBrains Mono · reef-pi"
 | Symptom | Cause | Fix |
 |---|---|---|
 | Type-scale card shows all weights identical | Google Fonts import missing or misspelled | Open the preview HTML, check `<link>` href in DevTools Network tab |
-| Fonts work in dev, fail in production build | Webpack font-loader not configured for woff2 | Check `webpack.config.js` — woff2 should be in the asset rule's test regex |
+| Fonts work in dev, fail in production build | woff2 not emitted under `assets/fonts/` | Check `assetFileNames` in `vite.config.mjs` — woff2 should map to `assets/fonts/` |
 | Manrope renders fine but JetBrains Mono falls back to monospace | Wrong `font-family` casing | Must be `'JetBrains Mono'` with space, not `'JetBrainsMono'` |
 | Navbar wordmark looks too thin | Loading weight 400 only; wordmark expects 500 | Either load 500 + 600, or change the wordmark CSS to use 400 |
 | FOIT (flash of invisible text) on first load | `font-display` not set | Add `font-display: swap` to every `@font-face` |
-| Self-hosted fonts 404 on Pi | Path mismatch between `_tokens.scss` URL and webpack output | Check the woff2 lands at `front-end/dist/assets/fonts/`; adjust `url(...)` accordingly |
+| Self-hosted fonts 404 on Pi | Path mismatch between `_fonts.scss` URL and Vite output | Check the woff2 lands at `ui/assets/fonts/`; adjust `url(...)` accordingly |
 
 ---
 
