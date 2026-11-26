@@ -81,6 +81,31 @@ describe('design-system interaction primitives', () => {
     expect(document.activeElement).toBe(trigger)
   })
 
+  it('gives an icon-only Menu trigger an explicit accessible name', () => {
+    render(
+      <Menu
+        buttonAriaLabel='Equipment actions'
+        buttonLabel={<span aria-hidden='true'>...</span>}
+        items={[{ label: 'Edit' }]}
+      />
+    )
+
+    expect(document.querySelector('button').getAttribute('aria-label')).toBe('Equipment actions')
+  })
+
+  it('closes Menu on Escape and returns focus to the trigger', () => {
+    render(<Menu buttonLabel='More' items={[{ label: 'Edit' }]} />)
+    const trigger = document.querySelector('button')
+
+    act(() => trigger.click())
+    const menu = document.querySelector('[role="menu"]')
+    menu.querySelector('[role="menuitem"]').focus()
+    act(() => menu.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true })))
+
+    expect(document.querySelector('[role="menu"]')).toBeNull()
+    expect(document.activeElement).toBe(trigger)
+  })
+
   it('closes Menu when a custom child menu item is chosen', () => {
     const choose = jest.fn()
     render(<Menu buttonLabel='Select'><button role='menuitem' onClick={choose}>J1</button></Menu>)
