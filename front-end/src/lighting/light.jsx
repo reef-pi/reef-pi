@@ -52,64 +52,65 @@ const EditLight = ({
   }
 
   return (
-    <form onSubmit={handleFormSubmit} id={'form-light-' + values.config.id}>
-
-      <div style={{ display: readOnly ? 'none' : 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))', gap: 'var(--reefpi-space-md)', marginBottom: 'var(--reefpi-space-sm)' }}>
-        <div>
-          <div>
-            <label htmlFor='config.name'>{i18next.t('name')}</label>
-            <Field
-              name='config.name'
-              disabled={readOnly}
-              className={classNames({ 'is-invalid': ShowError('config.name', touched, errors) })}
-              style={{ display: 'block', width: '100%', padding: 'var(--reefpi-space-xs)', border: '1px solid var(--reefpi-color-border)', borderRadius: 'var(--reefpi-radius-sm)', fontFamily: 'var(--reefpi-font-app)' }}
-            />
-            <ErrorFor errors={errors} touched={touched} name='config.name' />
+    <form onSubmit={handleFormSubmit} id={'form-light-' + values.config.id} className='reefpi-lighting-form'>
+      {!readOnly && (
+        <section className='reefpi-section-card reefpi-lighting-fixture' aria-label={i18next.t('lighting:fixture_settings', { defaultValue: 'Light settings' })}>
+          <div className='reefpi-controller-section__header'>
+            <h3>{i18next.t('lighting:fixture_settings', { defaultValue: 'Light settings' })}</h3>
+            <p>{i18next.t('lighting:fixture_help', { defaultValue: 'Name the fixture, choose its jack, and configure each PWM channel below.' })}</p>
           </div>
-        </div>
-        <div>
-          <div>
-            <label htmlFor='config.enable'>
+          <div className='reefpi-lighting-fixture__settings'>
+            <div>
+              <label htmlFor='config.name'>{i18next.t('name')}</label>
+              <Field
+                id='config.name'
+                name='config.name'
+                disabled={readOnly}
+                className={classNames({ 'is-invalid': ShowError('config.name', touched, errors) })}
+              />
+              <ErrorFor errors={errors} touched={touched} name='config.name' />
+            </div>
+            <div className='reefpi-check reefpi-lighting-fixture__toggle'>
               <Field
                 type='checkbox'
                 name='config.enable'
                 id='config.enable'
                 disabled={readOnly}
               />
-              &nbsp;{i18next.t('enabled')}
-            </label>
+              <label htmlFor='config.enable'>{i18next.t('enabled')}</label>
+            </div>
+            <div>
+              <label htmlFor='config.jack'>{i18next.t('lighting:jack')}</label>
+              <Field
+                id='config.jack'
+                name='config.jack'
+                component='select'
+                disabled={readOnly}
+                className={classNames({ 'is-invalid': ShowError('config.jack', touched, errors) })}
+              >
+                {(jacks || []).map(j => (
+                  <option key={j.id} value={String(j.id)}>{j.name}</option>
+                ))}
+              </Field>
+              <ErrorFor errors={errors} touched={touched} name='config.jack' />
+            </div>
           </div>
-        </div>
-        <div>
-          <div>
-            <label htmlFor='config.jack'>{i18next.t('lighting:jack')}</label>
-            <Field
-              name='config.jack'
-              component='select'
-              disabled={readOnly}
-              className={classNames({ 'is-invalid': ShowError('config.jack', touched, errors) })}
-              style={{ display: 'block', width: '100%', padding: 'var(--reefpi-space-xs)', border: '1px solid var(--reefpi-color-border)', borderRadius: 'var(--reefpi-radius-sm)', fontFamily: 'var(--reefpi-font-app)' }}
-            >
-              {(jacks || []).map(j => (
-                <option key={j.id} value={String(j.id)}>{j.name}</option>
-              ))}
-            </Field>
-            <ErrorFor errors={errors} touched={touched} name='config.jack' />
-          </div>
-        </div>
-      </div>
+        </section>
+      )}
 
-      {channels()}
-      <div style={{ display: readOnly ? 'none' : 'flex', justifyContent: 'flex-end', marginTop: 'var(--reefpi-space-xs)' }}>
-        <Button
-          type='submit'
-          disabled={readOnly}
-          id={'save-light-' + config.id}
-          variant={dirty ? 'primary' : 'secondary'}
-        >
-          {i18next.t('save')}
-        </Button>
-      </div>
+      <div className='reefpi-lighting-form__channels'>{channels()}</div>
+      {!readOnly && (
+        <div className='reefpi-controller-form__actions'>
+          <Button
+            type='submit'
+            disabled={readOnly}
+            id={'save-light-' + config.id}
+            variant={dirty ? 'primary' : 'secondary'}
+          >
+            {i18next.t('save')}
+          </Button>
+        </div>
+      )}
     </form>
   )
 }

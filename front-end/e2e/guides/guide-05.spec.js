@@ -84,10 +84,10 @@ test('Guide 5: Configuration & Testing', async ({ page, baseURL }, testInfo) => 
       const form = page.locator(`#form-light-${light.id}`)
       await page.locator(`#edit-light-${light.id}`).click()
       await expect(form).toBeVisible()
-      // One radio group per channel: apply the profile to each of the light's channels.
-      const choices = form.locator(`label:has(input[type="radio"][value="${profile}"])`)
-      for (let i = 0; i < await choices.count(); i++) {
-        await choices.nth(i).click()
+      // One profile selector per channel: apply the profile to each of the light's channels.
+      const selectors = form.getByTestId('lighting-profile-selector')
+      for (let i = 0; i < await selectors.count(); i++) {
+        await selectors.nth(i).selectOption(profile)
       }
       await form.scrollIntoViewIfNeeded()
       await shot(page, testInfo, { guide: GUIDE, pageSlug: PAGE, index, what, locator: form })

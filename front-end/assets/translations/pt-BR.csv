@@ -301,22 +301,60 @@ language:nl,Nederlands
 language:pt,Português
 language:pt-BR,Português (Brasil)
 language:zh,
+lighting:actions,
 lighting:add_point,Adicionar Ponto
 lighting:change_mode,Mudar Modo
+lighting:channel,
 lighting:channel_name,Nome do Canal
 lighting:chart_color,Cor
 lighting:cyclic_period,
 lighting:cyclic_phase_shift,
+lighting:fixture_help,
+lighting:fixture_settings,
+lighting:intensity_at,
+lighting:intensity_limit,
+lighting:intensity_percent,
+lighting:intensity_slider,
+lighting:interval_preview,
+lighting:interval_preview_caption,
+lighting:interval_preview_description,
 lighting:jack,Jack
 lighting:lightning_flash_slot,
 lighting:lightning_frequency,
 lighting:lightning_intensity,
+lighting:maximum_percent,
+lighting:minimum_percent,
 lighting:mode_auto,Modo Automático
 lighting:mode_manual,Modo Manual
 lighting:mode_mixed,Modo Misto
+lighting:pin,
+lighting:profile_circadian,
+lighting:profile_cyclic,
+lighting:profile_diurnal,
+lighting:profile_fixed,
+lighting:profile_help_circadian,
+lighting:profile_help_cyclic,
+lighting:profile_help_diurnal,
+lighting:profile_help_fixed,
+lighting:profile_help_interval,
+lighting:profile_help_lightning,
+lighting:profile_help_lunar,
+lighting:profile_help_random,
+lighting:profile_help_sine,
+lighting:profile_help_solar,
+lighting:profile_interval,
+lighting:profile_lightning,
+lighting:profile_lunar,
+lighting:profile_random,
+lighting:profile_sine,
+lighting:profile_solar,
 lighting:remove,Remover
+lighting:schedule_help,
+lighting:schedule_points,
 lighting:solar_latitude,
 lighting:solar_longitude,
+lighting:time,
+lighting:time_not_set,
 lighting:title_delete,Excluir
 lighting:warn_change,Mudar
 lighting:warn_delete,Excluir

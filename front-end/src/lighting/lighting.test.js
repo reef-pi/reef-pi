@@ -246,9 +246,13 @@ describe('Lighting ui', () => {
         }
       }
     }
-    expect(renderToStaticMarkup(
+    const html = renderToStaticMarkup(
       <LightForm onSubmit={jest.fn()} config={light} jacks={[{ id: '1', name: 'foo' }]} />
-    )).toContain('form-light-1')
+    )
+    expect(html).toContain('form-light-1')
+    expect(html).toContain('reefpi-lighting-form')
+    expect(html).toContain('reefpi-lighting-fixture')
+    expect(html).toContain('reefpi-controller-form__actions')
   })
 
   it('<LightForm /> maps legacy auto profiles to interval profiles', () => {
@@ -322,7 +326,7 @@ describe('Lighting ui', () => {
   })
 
   it('<Channel />', () => {
-    expect(wrapFormik(
+    const html = wrapFormik(
       <Channel
         name='config.channels.1'
         channel={light.channels['1']}
@@ -333,7 +337,15 @@ describe('Lighting ui', () => {
         errors={{}}
       />,
       { config: light }
-    )).toContain('channel_name')
+    )
+
+    expect(html).toContain('channel_name')
+    expect(html).toContain('<section')
+    expect(html).toContain('reefpi-lighting-channel')
+    expect(html).toContain('Pin 0')
+    expect(html).toContain('Minimum (%)')
+    expect(html).toContain('Maximum (%)')
+    expect(html).toContain('data-testid="lighting-profile-selector"')
   })
 
   it('<Channel /> resets profile config when profile type changes', () => {
@@ -567,6 +579,24 @@ describe('Lighting ui', () => {
     expect(onChangeHandler).toHaveBeenCalled()
   })
 
+  it('<FixedProfile /> renders a compact, bounded intensity editor', () => {
+    const html = wrapFormik(
+      <FixedProfile
+        name='profile'
+        config={{ start: '08:00:00', end: '20:00:00', value: 45 }}
+        onChangeHandler={jest.fn()}
+        touched={{}}
+        errors={{}}
+      />,
+      { profile: { start: '08:00:00', end: '20:00:00', value: 45 } }
+    )
+
+    expect(html).toContain('reefpi-lighting-fixed')
+    expect(html).toContain('Intensity (%)')
+    expect(html).toContain('min="0"')
+    expect(html).toContain('max="100"')
+  })
+
   it('<FixedProfile /> should not allow empty value', () => {
     const onChangeHandler = jest.fn()
     const m = new FixedProfile({ onChangeHandler, config: { value: '1' } })
@@ -628,8 +658,34 @@ describe('Lighting ui', () => {
   it('<ProfileSelector />', () => {
     const fn = jest.fn()
     const selector = ProfileSelector({ name: 'name', value: 'fixed', onChangeHandler: fn })
-    expect(React.Children.count(selector.props.children[1].props.children)).toBe(10)
-    selector.props.children[0].props.children.props.onChange({ target: { value: 'diurnal' } })
+    const select = findNode(selector, node => node.type === 'select' && node.props['data-testid'] === 'lighting-profile-selector')
+    expect(select.props['aria-label']).toBe('Profile')
+    expect(React.Children.count(select.props.children)).toBe(10)
+    expect(React.Children.toArray(select.props.children).map(option => option.props.value)).toEqual([
+      'fixed',
+      'interval',
+      'diurnal',
+      'random',
+      'sine',
+      'lunar',
+      'circadian',
+      'cyclic',
+      'lightning',
+      'solar'
+    ])
+    expect(React.Children.toArray(select.props.children).map(option => option.props.children)).toEqual([
+      'Fixed',
+      'Interval',
+      'Diurnal',
+      'Random',
+      'Sine',
+      'Lunar',
+      'Circadian',
+      'Cyclic',
+      'Lightning',
+      'Solar'
+    ])
+    select.props.onChange({ target: { value: 'diurnal' } })
     expect(fn).toHaveBeenCalled()
   })
 
