@@ -13,6 +13,7 @@ charts,Gráficas
 clear,Limpiar
 columns,Columnas
 configure,Configurar
+configured,
 delete,Eliminar
 devmode_warning,
 disabled,Desactivar
@@ -43,6 +44,7 @@ minimum,Mínimo
 name,Nombre
 no,
 none,Ninguno
+not_configured,
 off,Apagado
 ok,Ok
 on,Encendido
@@ -72,7 +74,9 @@ update,Actualizar
 upgrade_reef_pi,Actualizar reef-pi a version
 width,Anchura
 yes,
+ato:actions,
 ato:alert_after,Alerta despues de
+ato:alert_summary,
 ato:ato_usage,Uso del ATO
 ato:chk_freq,Frecuencia de Revisión
 ato:control,Control
@@ -82,7 +86,15 @@ ato:controlmacro,Macro
 ato:controlnothing,Nada
 ato:debounce,Debounce
 ato:disable_on_alert,Desactivar si ocurre la alerta
+ato:empty_usage,
+ato:helper_pump,
+ato:helper_safety,
+ato:helper_sensor,
+ato:no_automatic_control,
+ato:pump_control,
 ato:reset_usage,
+ato:safety_alerts,
+ato:sensor_timing,
 ato:title_delete,
 ato:total_seconds_pump_on,Tiempo en segundos que el ATO tenga encendido
 ato:warn_delete,Esta acción eliminará
@@ -407,8 +419,10 @@ telemetry:notification:port,Puerto
 telemetry:notification:server,Servidor
 telemetry:notification:to,Para
 telemetry:notification:username,Usuario
+temperature:actions,
 temperature:alert_above,Alerta Sobre
 temperature:alert_below,Alerta Bajo
+temperature:alert_range,
 temperature:analog_input,Entrada Análoga
 temperature:calibrate,Calibración
 temperature:calibration:apply,Aplicar
@@ -419,26 +433,36 @@ temperature:chart:down,Enfriador
 temperature:chart:historical,Temperatura(Historico)
 temperature:chart:up,Calentador
 temperature:chart_color,Color
+temperature:chart_range,
 temperature:chart_ymax,
 temperature:chart_ymin,
 temperature:check_frequency,Revisar Frecuencia
 temperature:control,Control
+temperature:control_safety,
 temperature:controlequipment,Equipo
 temperature:controlmacro,Macro
 temperature:controlnothing,Nada
 temperature:current_reading,Lectura Actual
+temperature:empty_readings,
 temperature:fahrenheit,Fahrenheit
 temperature:fail_safe,Fail safe (disable heater on sensor error)
 temperature:heater_cooler,Calentador/Enfriador
+temperature:helper_control,
+temperature:helper_sensor,
+temperature:helper_visualization,
 temperature:hysteresis,Histéresis
 temperature:hysteresis_less_than,Histéresis es menor que límite aceptable
 temperature:lower_function,Calentador
 temperature:lower_threshold,Límite de Calentador
+temperature:monitoring_only,
 temperature:sensor,Sensor
+temperature:sensor_sampling,
+temperature:source,
 temperature:temperature,Temperatura
 temperature:unit,Unidad
 temperature:upper_function,Enfriador
 temperature:upper_threshold,Límite de Enfriador
+temperature:visualization_alerts,
 temperature:warn_delete,Esta accion ser à eliminada
 temperature:warn_reset,
 timers:action,

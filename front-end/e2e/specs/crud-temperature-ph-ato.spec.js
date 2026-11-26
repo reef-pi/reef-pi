@@ -12,17 +12,25 @@ async function findByName (api, path, name) {
   return (await response.json()).find(item => item.name === name)
 }
 
-// Collapsible panels expose their edit/delete buttons as #edit-<panel> / #delete-<panel>.
-async function savePanelEdit (page, panel, fill, submitTestId) {
-  await page.locator(`#edit-${panel}`).click()
+async function openPanelAction (page, name, action) {
+  await page.getByRole('button', { name: `Actions for ${name}` }).click()
+  await page.getByRole('menuitem', { name: action }).click()
+}
+
+async function savePanelEdit (page, panel, name, fill, submitTestId) {
+  const legacyEdit = page.locator(`#edit-${panel}`)
+  if (await legacyEdit.count()) await legacyEdit.click()
+  else await openPanelAction(page, name, 'Edit')
   await fill()
   await page.getByTestId(submitTestId).click()
 }
 
-async function deletePanel (page, panel) {
-  await page.locator(`#delete-${panel}`).click()
+async function deletePanel (page, panel, name) {
+  const legacyDelete = page.locator(`#delete-${panel}`)
+  if (await legacyDelete.count()) await legacyDelete.click()
+  else await openPanelAction(page, name, 'Delete')
   await confirmDialog(page)
-  await expect(page.locator(`#delete-${panel}`)).toHaveCount(0)
+  await expect(page.getByText(name, { exact: true })).toHaveCount(0)
 }
 
 test.describe('sensor module create, edit and delete round trips', () => {
@@ -71,13 +79,13 @@ test.describe('sensor module create, edit and delete round trips', () => {
     await page.getByText('Smoke Temp', { exact: true }).click()
     await expect(page.getByText('Something went wrong')).toHaveCount(0)
 
-    await savePanelEdit(page, panel, async () => {
+    await savePanelEdit(page, panel, 'Smoke Temp', async () => {
       await page.getByTestId('smoke-temperature-name').fill('Smoke Temp 2')
       await page.getByTestId('smoke-temperature-max').fill('80')
     }, 'smoke-temperature-submit')
     await expect.poll(async () => (await findByName(api, '/api/tcs', 'Smoke Temp 2'))?.max).toBe(80)
 
-    await deletePanel(page, panel)
+    await deletePanel(page, panel, 'Smoke Temp 2')
     await expect.poll(() => findByName(api, '/api/tcs', 'Smoke Temp 2')).toBeUndefined()
   })
 
@@ -93,13 +101,13 @@ test.describe('sensor module create, edit and delete round trips', () => {
     await page.getByText('Smoke pH', { exact: true }).click()
     await expect(page.getByText('Something went wrong')).toHaveCount(0)
 
-    await savePanelEdit(page, panel, async () => {
+    await savePanelEdit(page, panel, 'Smoke pH', async () => {
       await page.getByTestId('smoke-ph-name').fill('Smoke pH 2')
       await page.getByTestId('smoke-ph-upper-threshold').fill('8.7')
     }, 'smoke-ph-submit')
     await expect.poll(async () => (await findByName(api, '/api/phprobes', 'Smoke pH 2'))?.max).toBe(8.7)
 
-    await deletePanel(page, panel)
+    await deletePanel(page, panel, 'Smoke pH 2')
     await expect.poll(() => findByName(api, '/api/phprobes', 'Smoke pH 2')).toBeUndefined()
   })
 
@@ -115,13 +123,13 @@ test.describe('sensor module create, edit and delete round trips', () => {
     await page.getByText('Smoke ATO', { exact: true }).click()
     await expect(page.getByText('Something went wrong')).toHaveCount(0)
 
-    await savePanelEdit(page, panel, async () => {
+    await savePanelEdit(page, panel, 'Smoke ATO', async () => {
       await page.getByTestId('smoke-ato-name').fill('Smoke ATO 2')
       await page.getByTestId('smoke-ato-period').fill('120')
     }, 'smoke-ato-submit')
     await expect.poll(async () => (await findByName(api, '/api/atos', 'Smoke ATO 2'))?.period).toBe(120)
 
-    await deletePanel(page, panel)
+    await deletePanel(page, panel, 'Smoke ATO 2')
     await expect.poll(() => findByName(api, '/api/atos', 'Smoke ATO 2')).toBeUndefined()
   })
 })

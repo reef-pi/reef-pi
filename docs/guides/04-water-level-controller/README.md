@@ -181,8 +181,9 @@ Once created, the new inlet will be visible in the UI.
 ![The inlet in the connector list](images/configuration-testing-02-connectors-inlets-desktop.png)
 ![The inlet in the connector list on a phone](images/configuration-testing-02-connectors-inlets-mobile.png)
 
-Next, head over to the ATO page. Create a new ATO by clicking the **+** button. Associate the newly
-created inlet with it. We'll name it Adafruit. Notice the default check frequency is set to 120
+Next, head over to the ATO page. Create a new ATO by clicking **Add**. The form separates sensor and
+timing, pump control, and safety and alert settings. Associate the newly created inlet with it. We'll
+name it Adafruit. Notice the default check frequency is set to 120
 seconds. This means reef-pi will check the inlet (the optical sensor in this case) every 120 seconds
 and switch the control pump on or off if specified. Choose **Equipment** as the control and pick the
 pump's equipment as the target. The **Status** drop-down menu controls whether the ATO will be enabled
@@ -192,8 +193,10 @@ or disabled. Click **Save**.
 ![New ATO form on a phone](images/configuration-testing-03-ato-new-mobile.png)
 
 Once created, the ATO controller will start monitoring the inlet. Since the optical water level sensor
-is out of water, the ATO control pump will be turned on. We can expand the ATO controller to see the
-usage chart which shows hourly ATO control pump usage in seconds.
+is out of water, the ATO control pump will be turned on. Expand the ATO controller to see its read-only
+sensor, pump, and safety summary. Its usage chart shows hourly ATO control pump usage in seconds once
+data is available; a new controller shows an empty message first. **Reset usage** clears that history,
+and the action menu contains Edit and Delete.
 
 ![ATO controller expanded](images/configuration-testing-04-ato-expanded-desktop.png)
 ![ATO controller expanded on a phone](images/configuration-testing-04-ato-expanded-mobile.png)

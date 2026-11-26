@@ -1,9 +1,11 @@
 import React, { Children, cloneElement, isValidElement } from 'react'
-import { FaAngleDown, FaAngleUp, FaEdit, FaTrashAlt } from 'react-icons/fa'
+import i18next from 'i18next'
+import { FaAngleDown, FaAngleUp, FaEdit, FaEllipsisV, FaTrashAlt } from 'react-icons/fa'
 import PropTypes from 'prop-types'
 import ToggleSwitch from '../../design-system/ui_kits/reef-pi-app/primitives/ToggleSwitch'
 import { ListItem } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
 import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { Menu } from '../../design-system/ui_kits/reef-pi-app/primitives/Interaction'
 
 class Collapsible extends React.Component {
   constructor (props) {
@@ -46,6 +48,10 @@ class Collapsible extends React.Component {
       this.props.onSubmit(this.props.name)
       form.props.onSubmit(values)
     }
+    const handleCancel = () => {
+      this.props.onCancel?.(this.props.name)
+      form.props.onCancel?.()
+    }
     let toggleStateButton = ''
     if (onToggleState) {
       toggleStateButton = (
@@ -56,30 +62,51 @@ class Collapsible extends React.Component {
       )
     }
 
-    const trailing = (
+    const overflowMenu = (
+      <Menu
+        buttonAriaLabel={this.props.actionsLabel || 'Controller actions'}
+        buttonLabel={<span aria-hidden='true'><FaEllipsisV /></span>}
+        items={[
+          { label: i18next.t('edit'), onSelect: this.handleEdit },
+          { label: i18next.t('delete'), onSelect: this.handleDelete }
+        ]}
+      />
+    )
+    const trailing = this.props.separateEdit && !readOnly ? null : (
       <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end', gap: 'var(--reefpi-space-xxs)', alignItems: 'center' }}>
         {this.props.buttons}
         {readOnly ? toggleStateButton : null}
-        {readOnly ? editButton : null}
-        <Button
-          variant='ghost'
-          onClick={this.handleDelete}
-          id={'delete-' + name}
-          icon={<FaTrashAlt />}
-          iconOnly
-          aria-label='Delete'
-          title='Delete'
-        />
+        {this.props.overflowActions && readOnly
+          ? overflowMenu
+          : (
+            <>
+              {readOnly ? editButton : null}
+              <Button
+                variant='ghost'
+                onClick={this.handleDelete}
+                id={'delete-' + name}
+                icon={<FaTrashAlt />}
+                iconOnly
+                aria-label='Delete'
+                title='Delete'
+              />
+            </>
+            )}
       </div>
     )
 
+    const visibleElements = this.props.separateEdit
+      ? (readOnly ? elements.slice(0, -1) : [form])
+      : elements
+
     return (
       <ListItem
+        data-controller-row={this.props.separateEdit ? 'true' : undefined}
         trailing={trailing}
         footer={expanded
-          ? elements.map(element => (
+          ? visibleElements.map(element => (
             element === form
-              ? cloneElement(element, { readOnly, onSubmit: handleSubmit })
+              ? cloneElement(element, { readOnly, onCancel: handleCancel, onSubmit: handleSubmit })
               : element
           ))
           : null}
@@ -106,9 +133,13 @@ Collapsible.propTypes = {
   enabled: PropTypes.bool,
   readOnly: PropTypes.bool,
   disableEdit: PropTypes.bool,
+  separateEdit: PropTypes.bool,
+  overflowActions: PropTypes.bool,
+  actionsLabel: PropTypes.string,
   onToggle: PropTypes.func,
   onDelete: PropTypes.func,
   onEdit: PropTypes.func,
+  onCancel: PropTypes.func,
   onSubmit: PropTypes.func,
   onToggleState: PropTypes.func,
   children: PropTypes.node.isRequired

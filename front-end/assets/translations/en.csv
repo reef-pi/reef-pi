@@ -13,6 +13,7 @@ charts,Charts
 clear,Clear
 columns,Columns
 configure,Configure
+configured,Configured
 delete,Delete
 devmode_warning,In DevMode
 disabled,Disabled
@@ -43,6 +44,7 @@ minimum,Minimum
 name,Name
 no,No
 none,None
+not_configured,Not configured
 off,Off
 ok,Ok
 on,On
@@ -72,7 +74,9 @@ update,Update
 upgrade_reef_pi,Upgrade reef-pi to version
 width,Width
 yes,Yes
+ato:actions,Actions for {{name}}
 ato:alert_after,Alert After
+ato:alert_summary,After {{seconds}} s pump-on time
 ato:ato_usage,ATO Usage
 ato:chk_freq,Check Frequency
 ato:control,Control
@@ -82,7 +86,15 @@ ato:controlmacro,Macro
 ato:controlnothing,Nothing
 ato:debounce,Debounce
 ato:disable_on_alert,Disable on alert
-ato:reset_usage,Reset
+ato:empty_usage,No top-off usage yet. Usage appears after reef-pi commands the configured target.
+ato:helper_pump,Choose what reef-pi commands when the inlet requests top-off. The target stays unavailable until a control type is selected.
+ato:helper_safety,Alerts use accumulated pump-on time. Disable on alert stops this controller after that alert threshold is reached.
+ato:helper_sensor,Choose the water-level inlet and how reef-pi filters repeated readings.
+ato:no_automatic_control,No automatic control
+ato:pump_control,Pump control
+ato:reset_usage,Reset usage
+ato:safety_alerts,Safety & alerts
+ato:sensor_timing,Sensor & timing
 ato:title_delete,Delete {{name}} ?
 ato:total_seconds_pump_on,Total number of seconds ato pump is on
 ato:warn_delete,This action will delete ATO {{name}}
@@ -407,8 +419,10 @@ telemetry:notification:port,Port
 telemetry:notification:server,Server
 telemetry:notification:to,To
 telemetry:notification:username,Username
+temperature:actions,Actions for {{name}}
 temperature:alert_above,Alert Above
 temperature:alert_below,Alert Below
+temperature:alert_range,Alert range
 temperature:analog_input,Analog Input
 temperature:calibrate, Calibrate
 temperature:calibration:apply, Apply
@@ -419,26 +433,36 @@ temperature:chart:down,Cooler
 temperature:chart:historical,Temperature(historical)
 temperature:chart:up,Heater
 temperature:chart_color, Chart Color
+temperature:chart_range,Chart range
 temperature:chart_ymax, Chart maximum
 temperature:chart_ymin, Chart minimum
 temperature:check_frequency,Check Frequency
 temperature:control, Control
+temperature:control_safety,Control & safety
 temperature:controlequipment, Equipment
 temperature:controlmacro, Macro
 temperature:controlnothing, Nothing
 temperature:current_reading, Current Reading
+temperature:empty_readings,No temperature readings yet. Data appears after the first successful sample.
 temperature:fahrenheit,Fahrenheit
 temperature:fail_safe,Fail safe (disable heater on sensor error)
 temperature:heater_cooler,Heater/Cooler
+temperature:helper_control,Choose a control target before setting heater or chiller thresholds. Fail-safe disables heater control when the sensor reports an error.
+temperature:helper_sensor,Choose one temperature source and how often reef-pi samples it.
+temperature:helper_visualization,Set the chart range and optional notification thresholds.
 temperature:hysteresis,Hysteresis
 temperature:hysteresis_less_than, Hysteresis is less than acceptable threshold
 temperature:lower_function, Heater
 temperature:lower_threshold, Heater Threshold
+temperature:monitoring_only,Monitoring only
 temperature:sensor,Sensor
+temperature:sensor_sampling,Sensor & sampling
+temperature:source,Source
 temperature:temperature,Temperature
 temperature:unit,Unit
 temperature:upper_function, Chiller
 temperature:upper_threshold, Chiller Threshold
+temperature:visualization_alerts,Visualization & alerts
 temperature:warn_delete,This action will delete controller {{name}}
 temperature:warn_reset,This action will reset usage data for {{name}}
 timers:action,Action

@@ -19,6 +19,7 @@ export default class CollapsibleList extends React.Component {
 
     this.onToggle = this.onToggle.bind(this)
     this.onEdit = this.onEdit.bind(this)
+    this.onCancel = this.onCancel.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
   }
 
@@ -36,6 +37,15 @@ export default class CollapsibleList extends React.Component {
     this.setState({
       expanded: { ...expanded, [name]: true },
       readOnly: { ...readOnly, [name]: false }
+    })
+  }
+
+  onCancel (name) {
+    const readOnly = { ...this.state.readOnly }
+    const expanded = { ...this.state.expanded }
+    this.setState({
+      expanded: { ...expanded, [name]: true },
+      readOnly: { ...readOnly, [name]: true }
     })
   }
 
@@ -80,6 +90,7 @@ export default class CollapsibleList extends React.Component {
             readOnly: this.state.readOnly[child.props.name],
             onToggle: this.onToggle,
             onEdit: this.onEdit,
+            onCancel: this.onCancel,
             onSubmit: this.onSubmit
           })
         })}

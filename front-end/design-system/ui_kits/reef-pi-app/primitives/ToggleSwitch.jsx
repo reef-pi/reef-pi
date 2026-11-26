@@ -68,7 +68,11 @@ export default function ToggleSwitch ({
           border: 'none',
           padding: 0,
           cursor: isInteractive || state === 'error' ? 'pointer' : 'default',
-          display: 'inline-block',
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: 'var(--reefpi-tap-target-min)',
+          minWidth: 'var(--reefpi-tap-target-min)',
           lineHeight: 0
         }}
       >

@@ -29,6 +29,7 @@ const EditTemperature = ({
   dirty,
   readOnly,
   showChart,
+  onCancel,
   handleBlur,
   handleChange
 }) => {
@@ -112,8 +113,13 @@ const EditTemperature = ({
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
+    <form className='reefpi-controller-form' onSubmit={handleSubmit}>
+      <div className='reefpi-controller-form__sections'>
+        <section className='reefpi-section-card' aria-label={i18next.t('temperature:sensor_sampling', { defaultValue: 'Sensor & sampling' })}>
+          <div className='reefpi-controller-section__header'>
+            <h3>{i18next.t('temperature:sensor_sampling', { defaultValue: 'Sensor & sampling' })}</h3>
+            <p>{i18next.t('temperature:helper_sensor', { defaultValue: 'Choose one temperature source and how often reef-pi samples it.' })}</p>
+          </div>
         {!readOnly && (
           <div style={{ ...gridStyle, marginBottom: 'var(--reefpi-space-md)' }}>
             <FormField
@@ -243,24 +249,14 @@ const EditTemperature = ({
             </BooleanFormSelect>
           </FormField>
 
-          <FormField
-            label={i18next.t('temperature:fail_safe')}
-            error={ShowError('fail_safe', touched, errors) ? ErrorMessage(errors, 'fail_safe') : undefined}
-          >
-            <BooleanFormSelect
-              name='fail_safe'
-              disabled={readOnly}
-              value={values.fail_safe}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              invalid={ShowError('fail_safe', touched, errors)}
-            >
-              <option value='true'>{i18next.t('enabled')}</option>
-              <option value='false'>{i18next.t('disabled')}</option>
-            </BooleanFormSelect>
-          </FormField>
         </div>
+        </section>
 
+        <section className='reefpi-section-card' aria-label={i18next.t('temperature:visualization_alerts', { defaultValue: 'Visualization & alerts' })}>
+          <div className='reefpi-controller-section__header'>
+            <h3>{i18next.t('temperature:visualization_alerts', { defaultValue: 'Visualization & alerts' })}</h3>
+            <p>{i18next.t('temperature:helper_visualization', { defaultValue: 'Set the chart range and optional notification thresholds.' })}</p>
+          </div>
         <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
           <FormField
             label={i18next.t('temperature:chart_ymin')}
@@ -354,7 +350,13 @@ const EditTemperature = ({
             </FormField>
           )}
         </div>
+        </section>
 
+        <section className='reefpi-section-card' aria-label={i18next.t('temperature:control_safety', { defaultValue: 'Control & safety' })}>
+          <div className='reefpi-controller-section__header'>
+            <h3>{i18next.t('temperature:control_safety', { defaultValue: 'Control & safety' })}</h3>
+            <p>{i18next.t('temperature:helper_control', { defaultValue: 'Choose a control target before setting heater or chiller thresholds. Fail-safe disables heater control when the sensor reports an error.' })}</p>
+          </div>
         <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
           <FormField
             label={i18next.t('temperature:control')}
@@ -461,13 +463,42 @@ const EditTemperature = ({
               invalid={ShowError('hysteresis', touched, errors)}
             />
           </FormField>
+
+          <FormField
+            label={i18next.t('temperature:fail_safe')}
+            error={ShowError('fail_safe', touched, errors) ? ErrorMessage(errors, 'fail_safe') : undefined}
+          >
+            <BooleanFormSelect
+              name='fail_safe'
+              disabled={readOnly}
+              value={values.fail_safe}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              invalid={ShowError('fail_safe', touched, errors)}
+            >
+              <option value='true'>{i18next.t('enabled')}</option>
+              <option value='false'>{i18next.t('disabled')}</option>
+            </BooleanFormSelect>
+          </FormField>
         </div>
+        </section>
 
         {charts()}
       </div>
 
       {!readOnly && (
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 'var(--reefpi-space-xs)' }}>
+        <div className='reefpi-controller-form__actions'>
+          {onCancel && (
+            <Button
+              type='button'
+              name='cancel'
+              data-testid='temperature-cancel'
+              variant='secondary'
+              onClick={onCancel}
+            >
+              {i18next.t('cancel')}
+            </Button>
+          )}
           <Button
             type='submit'
             data-testid='smoke-temperature-submit'
@@ -493,7 +524,8 @@ EditTemperature.propTypes = {
   onDelete: PropTypes.func,
   handleChange: PropTypes.func,
   equipment: PropTypes.array,
-  macros: PropTypes.array
+  macros: PropTypes.array,
+  onCancel: PropTypes.func
 }
 
 export default EditTemperature

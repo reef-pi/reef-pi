@@ -16,15 +16,15 @@ import RangeSelector from '../../design-system/ui_kits/reef-pi-app/primitives/Ra
 import Sparkline from '../../design-system/ui_kits/reef-pi-app/primitives/Sparkline'
 import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 import { List } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
+import ControllerSummary from '../ui_components/controller_summary'
 
 const RANGE_MS = { '1h': 3600000, '6h': 21600000, '1d': 86400000, '7d': 604800000, '30d': 2592000000 }
 
 function AtoPrimitives ({ ato, usage }) {
   const [range, setRange] = useState('1d')
-  if (!usage || !usage.historical) return null
 
   const cutoff = Date.now() - (RANGE_MS[range] || RANGE_MS['1d'])
-  const points = usage.historical
+  const points = ((usage && usage.historical) || [])
     .filter(d => timestampToEpoch(d.time) >= cutoff)
     .map(d => ({ t: timestampToEpoch(d.time), v: d.pump }))
     .sort((a, b) => a.t - b.t)
@@ -32,16 +32,70 @@ function AtoPrimitives ({ ato, usage }) {
   return (
     <div style={{ padding: 'var(--reefpi-space-xs) 0' }}>
       <RangeSelector value={range} onChange={setRange} compact scope={`ato-${ato.id}`} />
-      <div style={{ marginTop: 'var(--reefpi-space-xs)' }}>
-        <Sparkline
-          points={points}
-          stroke='var(--reefpi-color-brand)'
-          fill='var(--reefpi-color-brand)'
-          height={56}
-          hover
-        />
-      </div>
+      {points.length > 0
+        ? (
+          <div style={{ marginTop: 'var(--reefpi-space-xs)' }}>
+            <Sparkline
+              points={points}
+              stroke='var(--reefpi-color-brand)'
+              fill='var(--reefpi-color-brand)'
+              height={56}
+              hover
+            />
+          </div>
+          )
+        : <p className='reefpi-controller-empty'>{i18n.t('ato:empty_usage', { defaultValue: 'No top-off usage yet. Usage appears after reef-pi commands the configured target.' })}</p>}
     </div>
+  )
+}
+
+const enabledLabel = value => i18n.t(value ? 'enabled' : 'disabled')
+
+const namedTarget = (id, items = []) => {
+  if (!id) return i18n.t('not_configured', { defaultValue: 'Not configured' })
+  if (typeof id === 'object') return id.name || id.id || i18n.t('configured', { defaultValue: 'Configured' })
+  return items.find(item => item.id === id)?.name || id
+}
+
+export function AtoSummary ({ ato, usage, inlets, equipment, macros }) {
+  const targets = ato.is_macro ? macros : equipment
+  const control = ato.control
+    ? (ato.is_macro ? i18n.t('ato:controlmacro') : i18n.t('ato:controlequipment'))
+    : i18n.t('ato:no_automatic_control', { defaultValue: 'No automatic control' })
+  const alert = ato.notify && ato.notify.enable
+    ? i18n.t('ato:alert_summary', { seconds: ato.notify.max, defaultValue: `After ${ato.notify.max} s pump-on time` })
+    : i18n.t('disabled')
+
+  return (
+    <ControllerSummary
+      sections={[
+        {
+          title: i18n.t('ato:sensor_timing', { defaultValue: 'Sensor & timing' }),
+          items: [
+            { label: i18n.t('inlet'), value: namedTarget(ato.inlet, inlets) },
+            { label: i18n.t('ato:chk_freq'), value: ato.period ? `${ato.period} s` : undefined },
+            { label: i18n.t('ato:debounce'), value: `${ato.debounce || 0} s` }
+          ]
+        },
+        {
+          title: i18n.t('ato:pump_control', { defaultValue: 'Pump control' }),
+          items: [
+            { label: i18n.t('ato:control'), value: control },
+            { label: i18n.t('ato:control_target'), value: namedTarget(ato.pump, targets) },
+            { label: i18n.t('one_shot'), value: enabledLabel(ato.one_shot) }
+          ]
+        },
+        {
+          title: i18n.t('ato:safety_alerts', { defaultValue: 'Safety & alerts' }),
+          items: [
+            { label: i18n.t('alerts'), value: alert },
+            { label: i18n.t('ato:disable_on_alert'), value: enabledLabel(ato.disable_on_alert) }
+          ]
+        }
+      ]}
+    >
+      <AtoPrimitives ato={ato} usage={usage} />
+    </ControllerSummary>
   )
 }
 
@@ -138,9 +192,12 @@ export class RawATOMain extends React.Component {
           </Button>
         )
         const enhancedView = (
-          <AtoPrimitives
+          <AtoSummary
             ato={probe}
             usage={this.props.atoUsage[probe.id]}
+            inlets={this.props.inlets}
+            equipment={this.props.equipment}
+            macros={this.props.macros}
           />
         )
         return (
@@ -148,11 +205,19 @@ export class RawATOMain extends React.Component {
             key={'panel-ato-' + probe.id}
             name={'panel-ato-' + probe.id}
             item={probe}
-            title={<b style={{ marginLeft: 'var(--reefpi-space-xs)', verticalAlign: 'middle' }}>{probe.name}</b>}
+            title={(
+              <span className='reefpi-controller-title'>
+                <span>{probe.name}</span>
+                <span className='reefpi-controller-title__state'>{enabledLabel(probe.enable)}</span>
+              </span>
+            )}
             onDelete={this.handleDelete}
             onToggleState={handleToggleState}
             enabled={probe.enable}
             buttons={resetButton}
+            separateEdit
+            overflowActions
+            actionsLabel={i18n.t('ato:actions', { name: probe.name, defaultValue: `Actions for ${probe.name}` })}
           >
             {enhancedView}
             <AtoForm

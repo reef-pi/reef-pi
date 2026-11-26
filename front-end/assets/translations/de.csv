@@ -13,6 +13,7 @@ charts,Diagramme
 clear,Löschen
 columns,Spalten
 configure,Konfigurieren
+configured,
 delete,Löschen
 devmode_warning,
 disabled,aus
@@ -43,6 +44,7 @@ minimum,Minimum
 name,Name
 no,Nein
 none,-keine-
+not_configured,
 off,Aus
 ok,Ok
 on,Ein
@@ -72,7 +74,9 @@ update,Übernehmen
 upgrade_reef_pi,Aktualisiere reef-pi auf Version
 width,Breite
 yes,Ja
+ato:actions,
 ato:alert_after,Alarm nach Laufzeit von
+ato:alert_summary,
 ato:ato_usage,ATO Nutzung
 ato:chk_freq,Prüfintervall
 ato:control,Funktion
@@ -82,7 +86,15 @@ ato:controlmacro,Makro ausführen
 ato:controlnothing,-keine Steuerung-
 ato:debounce,Debounce
 ato:disable_on_alert,ATO nach Alarm ausschalten
+ato:empty_usage,
+ato:helper_pump,
+ato:helper_safety,
+ato:helper_sensor,
+ato:no_automatic_control,
+ato:pump_control,
 ato:reset_usage,Verlauf löschen
+ato:safety_alerts,
+ato:sensor_timing,
 ato:title_delete,{{name}} löschen?
 ato:total_seconds_pump_on,gesamte Laufzeit der Pumpe
 ato:warn_delete,Wollen Sie ATO {{name}} wirklich löschen?
@@ -407,8 +419,10 @@ telemetry:notification:port,Port
 telemetry:notification:server,Email-Server (Versand)
 telemetry:notification:to,Empfänger
 telemetry:notification:username,Emailkonto
+temperature:actions,
 temperature:alert_above,obere Warnschwelle
 temperature:alert_below,untere Warnschwelle
+temperature:alert_range,
 temperature:analog_input,analoger Eingang
 temperature:calibrate,Kalibrieren
 temperature:calibration:apply,Übernehmen
@@ -419,26 +433,36 @@ temperature:chart:down,Kühler
 temperature:chart:historical,Temperatur (Verlauf)
 temperature:chart:up,Heizung
 temperature:chart_color,Diagrammfarbe
+temperature:chart_range,
 temperature:chart_ymax,Achsenmaximum
 temperature:chart_ymin,Achsenminimum
 temperature:check_frequency,Messintervall
 temperature:control,Funktion
+temperature:control_safety,
 temperature:controlequipment,Gerät schalten
 temperature:controlmacro,Makro ausführen
 temperature:controlnothing,-keine Steuerung-
 temperature:current_reading,Messwert
+temperature:empty_readings,
 temperature:fahrenheit,Fahrenheit
 temperature:fail_safe,Fail safe (disable heater on sensor error)
 temperature:heater_cooler,Heizung/Kühler
+temperature:helper_control,
+temperature:helper_sensor,
+temperature:helper_visualization,
 temperature:hysteresis,Hysterese
 temperature:hysteresis_less_than,Die Hysterese muss kleiner als der Abstand der Schwellwerte sein!
 temperature:lower_function,Heizungssteuerung
 temperature:lower_threshold,unterer Schwellwert
+temperature:monitoring_only,
 temperature:sensor,Sensor
+temperature:sensor_sampling,
+temperature:source,
 temperature:temperature,Temperatur
 temperature:unit,Einheit
 temperature:upper_function,Kühlungssteuerung
 temperature:upper_threshold,oberer Schwellwert
+temperature:visualization_alerts,
 temperature:warn_delete,Wollen Sie die Regelung {{name}} wirklich löschen?
 temperature:warn_reset,Wollen Sie den Verlauf von {{name}} wirklich löschen?
 timers:action,Aktion

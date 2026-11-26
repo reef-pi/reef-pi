@@ -17,15 +17,15 @@ import ThresholdGauge from '../../design-system/ui_kits/reef-pi-app/primitives/T
 import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 import { List, ListItem } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
 import AddToggle from '../ui_components/add_toggle'
+import ControllerSummary from '../ui_components/controller_summary'
 
 const RANGE_MS = { '1h': 3600000, '6h': 21600000, '1d': 86400000, '7d': 604800000, '30d': 2592000000 }
 
 function TemperaturePrimitives ({ probe, usage, currentReading }) {
   const [range, setRange] = useState('1d')
-  if (!usage || !usage.current) return null
 
   const cutoff = Date.now() - (RANGE_MS[range] || RANGE_MS['1d'])
-  const points = usage.current
+  const points = ((usage && usage.current) || [])
     .filter(d => timestampToEpoch(d.time) >= cutoff)
     .map(d => ({ t: timestampToEpoch(d.time), v: d.value }))
     .sort((a, b) => a.t - b.t)
@@ -40,16 +40,20 @@ function TemperaturePrimitives ({ probe, usage, currentReading }) {
   return (
     <div style={{ padding: 'var(--reefpi-space-xs) 0' }}>
       <RangeSelector value={range} onChange={setRange} compact scope={`temp-${probe.id}`} />
-      <div style={{ marginTop: 'var(--reefpi-space-xs)' }}>
-        <Sparkline
-          points={points}
-          stroke='var(--reefpi-color-brand)'
-          fill='var(--reefpi-color-brand)'
-          band={safe}
-          height={56}
-          hover
-        />
-      </div>
+      {points.length > 0
+        ? (
+          <div style={{ marginTop: 'var(--reefpi-space-xs)' }}>
+            <Sparkline
+              points={points}
+              stroke='var(--reefpi-color-brand)'
+              fill='var(--reefpi-color-brand)'
+              band={safe}
+              height={56}
+              hover
+            />
+          </div>
+          )
+        : <p className='reefpi-controller-empty'>{i18next.t('temperature:empty_readings', { defaultValue: 'No temperature readings yet. Data appears after the first successful sample.' })}</p>}
       {latestValue != null && (
         <div style={{ marginTop: 'var(--reefpi-space-xs)' }}>
           <ThresholdGauge
@@ -62,6 +66,61 @@ function TemperaturePrimitives ({ probe, usage, currentReading }) {
         </div>
       )}
     </div>
+  )
+}
+
+const enabledLabel = value => i18next.t(value ? 'enabled' : 'disabled')
+
+const namedTarget = (id, items = []) => {
+  if (!id) return i18next.t('not_configured', { defaultValue: 'Not configured' })
+  if (typeof id === 'object') return id.name || id.id || i18next.t('configured', { defaultValue: 'Configured' })
+  return items.find(item => item.id === id)?.name || id
+}
+
+export function TemperatureSummary ({ probe, usage, currentReading, analogInputs, equipment, macros }) {
+  const unit = probe.fahrenheit ? '°F' : '°C'
+  const source = probe.sensor || namedTarget(probe.analog_input, analogInputs)
+  const controlTargets = probe.is_macro ? macros : equipment
+  const control = probe.control
+    ? (probe.is_macro ? i18next.t('temperature:controlmacro') : i18next.t('temperature:controlequipment'))
+    : i18next.t('temperature:monitoring_only', { defaultValue: 'Monitoring only' })
+  const chart = probe.chart || {}
+  const alertText = probe.notify && probe.notify.enable
+    ? `${probe.notify.min}–${probe.notify.max} ${unit}`
+    : i18next.t('disabled')
+
+  return (
+    <ControllerSummary
+      sections={[
+        {
+          title: i18next.t('temperature:sensor_sampling', { defaultValue: 'Sensor & sampling' }),
+          items: [
+            { label: i18next.t('temperature:source', { defaultValue: 'Source' }), value: source },
+            { label: i18next.t('temperature:unit'), value: probe.fahrenheit ? i18next.t('temperature:fahrenheit') : i18next.t('temperature:celsius') },
+            { label: i18next.t('temperature:check_frequency'), value: probe.period ? `${probe.period} s` : undefined },
+            { label: i18next.t('one_shot'), value: enabledLabel(probe.one_shot) }
+          ]
+        },
+        {
+          title: i18next.t('temperature:visualization_alerts', { defaultValue: 'Visualization & alerts' }),
+          items: [
+            { label: i18next.t('temperature:chart_range', { defaultValue: 'Chart range' }), value: chart.ymin != null && chart.ymax != null ? `${chart.ymin}–${chart.ymax} ${unit}` : undefined },
+            { label: i18next.t('temperature:alert_range', { defaultValue: 'Alert range' }), value: alertText }
+          ]
+        },
+        {
+          title: i18next.t('temperature:control_safety', { defaultValue: 'Control & safety' }),
+          items: [
+            { label: i18next.t('temperature:control'), value: control },
+            { label: i18next.t('temperature:lower_function'), value: namedTarget(probe.heater, controlTargets) },
+            { label: i18next.t('temperature:upper_function'), value: namedTarget(probe.cooler, controlTargets) },
+            { label: i18next.t('temperature:fail_safe'), value: enabledLabel(probe.fail_safe) }
+          ]
+        }
+      ]}
+    >
+      <TemperaturePrimitives probe={probe} usage={usage} currentReading={currentReading} />
+    </ControllerSummary>
   )
 }
 
@@ -153,10 +212,13 @@ export class RawTemperatureMain extends React.Component {
           this.props.update(probe.id, probe)
         }
         const enhancedView = (
-          <TemperaturePrimitives
+          <TemperatureSummary
             probe={probe}
             usage={(this.props.tcUsage || {})[probe.id]}
             currentReading={(this.props.currentReading || {})[probe.id]}
+            analogInputs={this.props.analogInputs}
+            equipment={this.props.equipment}
+            macros={this.props.macros}
           />
         )
         return (
@@ -165,10 +227,18 @@ export class RawTemperatureMain extends React.Component {
             name={'panel-temperature-' + probe.id}
             item={probe}
             buttons={calibrationButton}
-            title={<b style={{ marginLeft: 'var(--reefpi-space-xs)', verticalAlign: 'middle' }}>{probe.name}</b>}
+            title={(
+              <span className='reefpi-controller-title'>
+                <span>{probe.name}</span>
+                <span className='reefpi-controller-title__state'>{enabledLabel(probe.enable)}</span>
+              </span>
+            )}
             onDelete={this.handleDelete}
             onToggleState={handleToggleState}
             enabled={probe.enable}
+            separateEdit
+            overflowActions
+            actionsLabel={i18next.t('temperature:actions', { name: probe.name, defaultValue: `Actions for ${probe.name}` })}
           >
             {enhancedView}
             <TemperatureForm
@@ -264,6 +334,7 @@ export class RawTemperatureMain extends React.Component {
           equipment={this.props.equipment}
           macros={this.props.macros}
           onSubmit={this.handleCreate}
+          onCancel={this.handleToggleAddProbeDiv}
         />
       )
     }
