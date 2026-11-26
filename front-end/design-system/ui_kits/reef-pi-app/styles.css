@@ -1,5 +1,5 @@
-/* reef-pi app — kit styles. Imports tokens, then recreates the Bootstrap 4.6
-   pieces reef-pi actually uses. Not a full BS port — only what's needed. */
+/* reef-pi app — kit styles. Imports tokens, then defines the shared component
+   styles the preview cards use. */
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 @import url('../../colors_and_type.css');
 

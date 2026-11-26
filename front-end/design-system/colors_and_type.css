@@ -8,22 +8,22 @@
    ============================================================ */
 
 :root {
-  /* ---------- Legacy Bootstrap 4.6 values (theme-independent) ---------- */
+  /* ---------- Neutral greys (theme-independent) ---------- */
   --reefpi-color-secondary: #6c757d;
   --reefpi-color-light:   #f8f9fa;
   --reefpi-color-dark:    #343a40;
   --reefpi-color-control-border: #ced4da;
   --reefpi-color-disabled-bg: #ced4da;
 
-  /* ---------- Bootstrap context colors captured for legacy previews ---------- */
-  --reefpi-color-danger-bg-bootstrap: #f8d7da;
-  --reefpi-color-danger-text-bootstrap: #721c24;
-  --reefpi-color-warning-bg-bootstrap: #fff3cd;
-  --reefpi-color-warning-border-bootstrap: #ffeeba;
-  --reefpi-color-warning-text-bootstrap: #856404;
-  --reefpi-color-success-bg-bootstrap: #d4edda;
-  --reefpi-color-success-border-bootstrap: #c3e6cb;
-  --reefpi-color-success-text-bootstrap: #155724;
+  /* ---------- Soft alert colours (theme-independent) ---------- */
+  --reefpi-color-alert-danger-bg: #f8d7da;
+  --reefpi-color-alert-danger-text: #721c24;
+  --reefpi-color-alert-warning-bg: #fff3cd;
+  --reefpi-color-alert-warning-border: #ffeeba;
+  --reefpi-color-alert-warning-text: #856404;
+  --reefpi-color-alert-success-bg: #d4edda;
+  --reefpi-color-alert-success-border: #c3e6cb;
+  --reefpi-color-alert-success-text: #155724;
 
   /* ---------- Chart palette (from health_chart.jsx) ---------- */
   --reefpi-chart-green:  #00c851; /* cpu            */
@@ -73,7 +73,7 @@
   --reefpi-font-web:  'Manrope', 'Century Gothic', system-ui, sans-serif;
   --reefpi-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
 
-  /* Bootstrap 4.6 type scale used by reef-pi */
+  /* Type scale used by reef-pi */
   --reefpi-font-size-base: 1rem;      /* 16px */
   --reefpi-line-height:    1.5;
   --reefpi-h1: 2.5rem;   /* 40 */
