@@ -24,6 +24,7 @@ Copy-back checklist, per Adafruit page.
   `configuration-testing-01-settings-capabilities-{desktop,mobile}.png`.
 - Image 02 (new temperature controller form): replace with
   `configuration-testing-02-temperature-new-controller-{desktop,mobile}.png`.
+  It shows alerts enabled at 77 / 81 °F, as the old image did.
 - Image 03 (temperature controller list): replace with
   `configuration-testing-03-temperature-controller-list-{desktop,mobile}.png`.
 - Image 04 (dashboard chart configuration): **remove**. reef-pi 7.0 shows a Temperature tile on the
@@ -58,12 +59,6 @@ Copy-back checklist, per Adafruit page.
   - "a feed named the same as temperature controller name and with a tc- prefix. This feed will hold"
     -> feed `<prefix><controller name>-reading` (for example `adafruittempsensor-reading`), plus
     `-heater` / `-cooler` feeds when control is on; "These feeds hold".
-
-**Needs maintainer check**
-
-- The example screenshots use alerts **off** (the guide only enables monitoring); the old image had
-  alerts on at 77 / 81 °F. Turning alerts on from the form currently fails to save (reef-pi issue
-  #3252).
 
 ## Overview
 
