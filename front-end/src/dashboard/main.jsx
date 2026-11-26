@@ -52,6 +52,7 @@ export class RawDashboardMain extends React.Component {
 
     return (
       <DashboardV2
+        capabilities={this.props.capabilities}
         equipment={equipmentStripItems(this.props.equipment)}
         temperatureControllers={this.props.temperatureControllers}
         phProbes={this.props.phProbes}
@@ -65,8 +66,14 @@ export class RawDashboardMain extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+export const mapStateToProps = state => {
   return {
+    capabilities: {
+      temperature: state.capabilities?.temperature,
+      ph: state.capabilities?.ph,
+      ato: state.capabilities?.ato,
+      equipment: state.capabilities?.equipment
+    },
     equipment: state.equipment,
     devMode: state.capabilities?.dev_mode,
     temperatureControllers: state.tcs,

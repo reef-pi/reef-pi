@@ -188,6 +188,16 @@ cron:second,Sekunde
 cron:week,Wochentag (0=So - 6=Sa)
 dashboard:back_to_dashboard,zurück zur Übersicht
 dashboard:blank_panel,-leer-
+dashboard:setup_ato,
+dashboard:setup_ato_description,
+dashboard:setup_equipment,
+dashboard:setup_equipment_description,
+dashboard:setup_heading,
+dashboard:setup_intro,
+dashboard:setup_ph,
+dashboard:setup_ph_description,
+dashboard:setup_temperature,
+dashboard:setup_temperature_description,
 doser:calibrate,Kalibrieren
 doser:calibration:current_rate,
 doser:calibration:measured_volume,

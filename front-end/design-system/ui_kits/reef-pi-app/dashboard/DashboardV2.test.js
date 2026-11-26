@@ -181,4 +181,79 @@ describe('design-system DashboardV2', () => {
     expect(container.querySelector('[data-testid="temperature-tile"]').getAttribute('data-label')).toBe('AdafruitTempSensor')
     cleanup()
   })
+
+  it('replaces oversized empty tiles with one compact setup checklist on a fresh controller', () => {
+    const { container, cleanup } = renderDashboard({
+      capabilities: { temperature: true, ph: true, ato: true, equipment: true },
+      equipment: [],
+      temperatureControllers: [],
+      phProbes: [],
+      atos: []
+    })
+
+    const setup = container.querySelector('[data-testid="dashboard-setup"]')
+    expect(setup).toBeTruthy()
+    expect(setup.querySelectorAll('h2')).toHaveLength(1)
+    expect(Array.from(setup.querySelectorAll('a')).map(link => link.getAttribute('href'))).toEqual([
+      '/temperature',
+      '/ph',
+      '/ato',
+      '/equipment'
+    ])
+    expect(container.textContent).not.toContain('Not configured')
+    expect(container.querySelector('[data-testid="equipment-strip"]')).toBeNull()
+
+    cleanup()
+  })
+
+  it('keeps configured metrics and lists only supported unfinished setup', () => {
+    const { container, cleanup } = renderDashboard({
+      capabilities: { temperature: true, ph: true, ato: false, equipment: true },
+      equipment: [],
+      temperatureControllers: [{ id: 'temp-1', name: 'Display tank' }],
+      phProbes: [],
+      atos: []
+    })
+
+    expect(container.querySelector('[data-testid="temperature-tile"]')).toBeTruthy()
+    expect(Array.from(container.querySelectorAll('[data-testid="dashboard-setup"] a')).map(link => link.getAttribute('href'))).toEqual([
+      '/ph',
+      '/equipment'
+    ])
+    expect(container.querySelector('[href="/temperature"]')).toBeNull()
+    expect(container.querySelector('[href="/ato"]')).toBeNull()
+
+    cleanup()
+  })
+
+  it('omits setup guidance when every supported resource is configured', () => {
+    const { container, cleanup } = renderDashboard({
+      capabilities: { temperature: true, ph: true, ato: true, equipment: true },
+      equipment: [{ id: 'pump', name: 'Pump', state: 'on' }],
+      temperatureControllers: [{ id: 'temp-1' }],
+      phProbes: [{ id: 'ph-1' }],
+      atos: [{ id: 'ato-1' }]
+    })
+
+    expect(container.querySelector('[data-testid="dashboard-setup"]')).toBeNull()
+    expect(container.querySelector('[data-testid="equipment-strip"]')).toBeTruthy()
+
+    cleanup()
+  })
+
+  it('does not offer setup actions for explicitly disabled capabilities', () => {
+    const { container, cleanup } = renderDashboard({
+      capabilities: { temperature: false, ph: false, ato: false, equipment: false },
+      equipment: [],
+      temperatureControllers: [],
+      phProbes: [],
+      atos: []
+    })
+
+    expect(container.querySelector('[data-testid="dashboard-setup"]')).toBeNull()
+    expect(container.querySelector('[data-testid^="dashboard-tile-"]')).toBeNull()
+    expect(container.querySelector('[data-testid="equipment-strip"]')).toBeNull()
+
+    cleanup()
+  })
 })

@@ -188,6 +188,16 @@ cron:second,Second
 cron:week,Day of the week (0=Sun - 6=Sat)
 dashboard:back_to_dashboard,Back to dashboard
 dashboard:blank_panel,Unassigned (Blank)
+dashboard:setup_ato,Set up ATO
+dashboard:setup_ato_description,Add an automatic top-off controller.
+dashboard:setup_equipment,Add equipment
+dashboard:setup_equipment_description,Connect pumps heaters or other outlet-controlled equipment.
+dashboard:setup_heading,Finish setup
+dashboard:setup_intro,Add the controller features you plan to use.
+dashboard:setup_ph,Set up pH
+dashboard:setup_ph_description,Add and calibrate a pH probe.
+dashboard:setup_temperature,Set up temperature
+dashboard:setup_temperature_description,Add a temperature probe for live readings.
 doser:calibrate,Calibrate
 doser:calibration:current_rate,Calibrated rate
 doser:calibration:measured_volume,Measured volume (mL)
