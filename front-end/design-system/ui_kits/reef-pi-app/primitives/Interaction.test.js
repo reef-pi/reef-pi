@@ -99,7 +99,7 @@ describe('design-system interaction primitives', () => {
 
     act(() => trigger.click())
     const menu = document.querySelector('[role="menu"]')
-    menu.querySelector('[role="menuitem"]').focus()
+    expect(document.activeElement).toBe(menu.querySelector('[role="menuitem"]'))
     act(() => menu.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true })))
 
     expect(document.querySelector('[role="menu"]')).toBeNull()

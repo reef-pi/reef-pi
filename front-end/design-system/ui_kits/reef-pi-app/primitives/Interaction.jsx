@@ -179,6 +179,10 @@ export function Menu ({
     return () => document.removeEventListener('mousedown', handleMouseDown)
   }, [open])
 
+  useEffect(() => {
+    if (open) focusableElements(menuRef.current)[0]?.focus()
+  }, [open])
+
   const handleClose = () => {
     setOpen(false)
     buttonRef.current?.focus()

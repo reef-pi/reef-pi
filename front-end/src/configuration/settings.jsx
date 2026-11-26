@@ -252,7 +252,6 @@ export class RawSettings extends React.Component {
     }
 
     const https = !!this.state.settings.https
-    const twoUp = { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(16rem, 1fr))', gap: 'var(--reefpi-space-sm) var(--reefpi-space-md)' }
     const segment = (active, radius) => ({ borderRadius: radius, minWidth: '4.75rem', zIndex: active ? 1 : 0 })
     const saveMessage = this.state.saveState === 'saving'
       ? i18n.t('configuration:saving', { defaultValue: 'Saving' })
@@ -282,7 +281,7 @@ export class RawSettings extends React.Component {
       <div className='reefpi-core-page'>
         <section className='reefpi-section-card' aria-labelledby='settings-controller-title'>
           <h2 id='settings-controller-title' className='reefpi-section-title'>{i18n.t('configuration:section_controller', { defaultValue: 'Controller' })}</h2>
-          <div style={twoUp}>
+          <div className='reefpi-settings-grid'>
             {this.toRow('name')}
             {this.toRow('interface')}
             <FormField label={i18n.t('configuration:settings:address')}>
