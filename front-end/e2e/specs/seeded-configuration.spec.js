@@ -48,27 +48,16 @@ test('configuration connectors bottom content is not hidden behind the summary f
   const bottomConnector = page.locator('[data-testid="smoke-jack-add-toggle"], .connector-groups .connector-group').last()
   await expect(bottomConnector).toBeVisible()
 
-  const desktopShellSpacing = await page.evaluate(() => {
-    const panel = document.querySelector('#main-panel')
-    const footer = document.querySelector('.bottom-bar')
-    return {
-      panelPadding: parseFloat(window.getComputedStyle(panel).paddingBottom),
-      footerHeight: footer.getBoundingClientRect().height
-    }
-  })
-  expect(desktopShellSpacing.panelPadding).toBeGreaterThanOrEqual(desktopShellSpacing.footerHeight)
-
-  await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight))
-
-  const spacing = await page.evaluate(() => {
-    const footer = document.querySelector('.bottom-bar')
+  // The controller status lives in the navigation now (#3289): no fixed footer covers the content,
+  // and the last connector group can be scrolled fully into view.
+  await expect(page.locator('.bottom-bar')).toHaveCount(0)
+  await expect(page.getByTestId('smoke-nav').locator('.reefpi-status')).toBeVisible()
+  await bottomConnector.scrollIntoViewIfNeeded()
+  const bottomGap = await page.evaluate(() => {
     const target = document.querySelector('[data-testid="smoke-jack-add-toggle"]') || Array.from(document.querySelectorAll('.connector-groups .connector-group')).pop()
-    const footerRect = footer.getBoundingClientRect()
-    const targetRect = target.getBoundingClientRect()
-    return Math.floor(footerRect.top - targetRect.bottom)
+    return Math.floor(window.innerHeight - target.getBoundingClientRect().bottom)
   })
-
-  expect(spacing).toBeGreaterThanOrEqual(0)
+  expect(bottomGap).toBeGreaterThanOrEqual(0)
 
   await page.setViewportSize({ width: 390, height: 844 })
   const mobilePanelPadding = await page.evaluate(() => parseFloat(window.getComputedStyle(document.querySelector('#main-panel')).paddingBottom))

@@ -1,7 +1,7 @@
 /*
  * Theme persistence + system detection.
  *
- * Choices: 'light' | 'dark' | 'actinic' | 'system'
+ * Choices: 'light' | 'dark' | 'actinic' | 'classic' | 'system'
  * Default: 'system' (follows prefers-color-scheme; actinic only via manual pick
  *          or AcitnicSchedule (#23) setting).
  *
@@ -20,7 +20,7 @@
 import { useCallback, useEffect, useState } from 'react'
 
 const STORAGE_KEY = 'reefpi.theme'
-const THEMES      = ['light', 'dark', 'actinic', 'system']
+const THEMES      = ['light', 'dark', 'actinic', 'classic', 'system']
 
 function systemPreference () {
   if (typeof window === 'undefined') return 'light'

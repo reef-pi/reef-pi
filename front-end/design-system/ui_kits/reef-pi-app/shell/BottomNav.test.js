@@ -96,4 +96,61 @@ describe('design-system BottomNav', () => {
 
     act(() => root.unmount())
   })
+
+  it('treats the drawer as modal, traps focus, locks scrolling, and restores its trigger', () => {
+    setWidth(480)
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+    const root = createRoot(container)
+
+    act(() => root.render(<BottomNav primaryRoutes={routes} allRoutes={routes} />))
+
+    const trigger = container.querySelector('[aria-label="More routes"]')
+    act(() => {
+      trigger.focus()
+      trigger.click()
+    })
+
+    const drawer = container.querySelector('[aria-label="Navigation drawer"]')
+    expect(drawer.getAttribute('role')).toBe('dialog')
+    expect(drawer.getAttribute('aria-modal')).toBe('true')
+    expect(document.activeElement).toBe(drawer)
+    expect(document.body.style.overflow).toBe('hidden')
+
+    const firstControl = container.querySelector('[aria-label="Close navigation"]')
+    const lastControl = Array.from(drawer.querySelectorAll('button')).at(-1)
+    act(() => {
+      lastControl.focus()
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }))
+    })
+    expect(document.activeElement).toBe(firstControl)
+
+    act(() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true })))
+    expect(document.activeElement).toBe(trigger)
+    expect(document.body.style.overflow).toBe('')
+
+    act(() => root.unmount())
+    container.remove()
+  })
+
+  it('closes an open drawer and unlocks scrolling when the viewport becomes desktop-sized', () => {
+    setWidth(800)
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+    const root = createRoot(container)
+
+    act(() => root.render(<BottomNav primaryRoutes={routes} allRoutes={routes} />))
+    act(() => container.querySelector('[aria-label="Open navigation"]').click())
+    expect(document.body.style.overflow).toBe('hidden')
+
+    act(() => {
+      setWidth(1200)
+      window.dispatchEvent(new Event('resize'))
+    })
+    expect(container.innerHTML).toBe('')
+    expect(document.body.style.overflow).toBe('')
+
+    act(() => root.unmount())
+    container.remove()
+  })
 })

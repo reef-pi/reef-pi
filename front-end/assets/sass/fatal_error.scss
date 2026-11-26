@@ -1,11 +1,10 @@
-@import './colors';
 .fatal-error-container{
   height: 100%;
   width: 100%;
   position: fixed;
   z-index: 900;
   .fatal-error-background{
-    background:$main-alternate-color;
+    background: var(--reefpi-color-text);
     opacity: 0.6;
     position: absolute;
     top: 0;
@@ -14,7 +13,7 @@
     width: 100%;
   }
   .fatal-error-content{
-    color:white;
+    color: var(--reefpi-color-surface-elevated);
     position: absolute;
     top: 0;
     left: 0;

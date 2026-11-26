@@ -1,17 +1,16 @@
-@import './tokens';
-
 body,html,#main-panel {
   &.auth-page{
     height: 100%;
+    background-color: var(--reefpi-color-surface-auth);
   }
 }
 #main-panel {
   &.auth-page{
-    background-color: $surface-auth-color;
+    background-color: var(--reefpi-color-surface-auth);
   }
 }
 .auth-page{
   .reef-pi-title{
-    color: $text-strong-color;
+    color: var(--reefpi-color-text-strong);
   }
 }

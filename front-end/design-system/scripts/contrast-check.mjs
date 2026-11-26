@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * contrast-check.mjs — WCAG 2.1 contrast audit for reef-pi design tokens.
+ * contrast-check.mjs — WCAG 2.2 contrast audit for reef-pi design tokens.
  *
  * Usage:
  *   node scripts/contrast-check.mjs
@@ -93,7 +93,7 @@ function parseColor(val, bgRgb) {
 
 /**
  * Parse colors_and_type.css and return a map:
- *   { root: { '--reefpi-*': rawValue }, dark: { … }, actinic: { … } }
+ *   { light: { '--reefpi-*': rawValue }, dark: { … }, actinic: { … }, classic: { … } }
  *
  * Strips comments before parsing so inline /* ... *\/ don't confuse the regex.
  */
@@ -101,11 +101,14 @@ function extractTokens(css) {
   // Strip block comments
   const stripped = css.replace(/\/\*[\s\S]*?\*\//g, '');
 
-  const themes = { root: {} };
+  const themes = {};
 
   // :root block
   const rootMatch = stripped.match(/:root\s*\{([^}]+)\}/);
-  if (rootMatch) parseVarBlock(rootMatch[1], themes.root);
+  if (rootMatch) {
+    themes.root = {};
+    parseVarBlock(rootMatch[1], themes.root);
+  }
 
   // [data-theme="..."] blocks
   const themeRe = /\[data-theme="([^"]+)"\]\s*\{([^}]+)\}/g;
@@ -139,43 +142,25 @@ const PAIRS = [
   { fg: '--reefpi-color-text',       bg: '--reefpi-color-surface-auth',     type: 'text',  label: 'text on surface-auth'        },
   { fg: '--reefpi-color-text-muted', bg: '--reefpi-color-surface',          type: 'text',  label: 'text-muted on surface'       },
 
-  // Navbar: nav-text composited on the two brand gradient stops
-  { fg: '--reefpi-color-nav-text',   bg: '--reefpi-color-brand',            type: 'ui',    label: 'nav-text on brand'           },
-  { fg: '--reefpi-color-nav-text',   bg: '--reefpi-color-brand-alt',        type: 'ui',    label: 'nav-text on brand-alt'       },
+  // Action and status text used at normal body/label sizes
+  { fg: '--reefpi-color-brand',      bg: '--reefpi-color-surface-elevated', type: 'text',  label: 'brand on surface-elevated'   },
+  { fg: '--reefpi-color-on-brand',   bg: '--reefpi-color-brand',            type: 'text',  label: 'on-brand on brand'           },
+  { fg: '--reefpi-color-error',      bg: '--reefpi-color-surface-elevated', type: 'text',  label: 'error on surface-elevated'   },
+  { fg: '--reefpi-color-error',      bg: '--reefpi-color-error-bg',         type: 'text',  label: 'error on error-bg'           },
+  { fg: '--reefpi-color-on-error',   bg: '--reefpi-color-error',            type: 'text',  label: 'on-error on error'           },
+  { fg: '--reefpi-color-warn',       bg: '--reefpi-color-surface-elevated', type: 'text',  label: 'warn on surface-elevated'    },
+  { fg: '--reefpi-color-warn',       bg: '--reefpi-color-warn-bg',          type: 'text',  label: 'warn on warn-bg'             },
 
-  // State colors used as indicator labels (large-text threshold — used at ≥16px bold or ≥24px)
-  { fg: '--reefpi-color-error',      bg: '--reefpi-color-surface-elevated', type: 'large', label: 'error on surface-elevated'   },
-  { fg: '--reefpi-color-warn',       bg: '--reefpi-color-surface-elevated', type: 'large', label: 'warn on surface-elevated'    },
+  // Non-text UI and status indicators
+  { fg: '--reefpi-color-success',    bg: '--reefpi-color-surface-elevated', type: 'ui',    label: 'success on surface-elevated' },
   { fg: '--reefpi-color-pending',    bg: '--reefpi-color-surface-elevated', type: 'large', label: 'pending on surface-elevated' },
-
-  // Focus ring on both brand gradient stops (non-text UI)
-  { fg: '--reefpi-color-focus',      bg: '--reefpi-color-brand',            type: 'ui',    label: 'focus on brand'              },
-  { fg: '--reefpi-color-focus',      bg: '--reefpi-color-brand-alt',        type: 'ui',    label: 'focus on brand-alt'          },
+  { fg: '--reefpi-color-border-strong', bg: '--reefpi-color-surface-elevated', type: 'ui', label: 'border-strong on surface-elevated' },
+  { fg: '--reefpi-color-focus',      bg: '--reefpi-color-surface-elevated', type: 'ui',    label: 'focus on surface-elevated'   },
 ];
 
 const TARGET = { text: 4.5, large: 3.0, ui: 3.0 };
 
-/**
- * Known architectural limitations — reported but not counted as CI failures.
- * Format: "theme:label"
- *
- * dark:nav-text on brand-alt
- *   The dark theme overrides --reefpi-color-brand-alt (#2cc127) to improve
- *   text-on-dark surfaces, but --reefpi-gradient-brand hardcodes the original
- *   hex values. The navbar gradient does NOT change in dark mode, so checking
- *   nav-text against the theme's brand-alt is an audit artifact, not a real
- *   render pairing.
- *
- * light:focus on brand-alt, actinic:focus on brand-alt
- *   --reefpi-color-focus (#174d16) is a dark ring designed for light surfaces.
- *   On the dark gradient stop (#1c7e19) it has 1.9:1 — insufficient. A
- *   navbar-specific focus token is needed; deferred to E5 (shell + theming).
- */
-const KNOWN_SKIPS = new Set([
-  'dark:nav-text on brand-alt',
-  'light:focus on brand-alt',
-  'actinic:focus on brand-alt',
-]);
+const KNOWN_SKIPS = new Set();
 
 // ── Audit runner ──────────────────────────────────────────────────────────────
 
@@ -212,12 +197,13 @@ function auditTheme(themeName, themeOverrides, rootTokens) {
 
 const css = readFileSync(CSS_PATH, 'utf8');
 const allThemes = extractTokens(css);
-const rootTokens = allThemes.root;
+const rootTokens = allThemes.light ?? allThemes.root ?? {};
 
 const testThemes = [
-  { name: 'light',   overrides: {} },
+  { name: 'light',   overrides: allThemes.light   ?? {} },
   { name: 'dark',    overrides: allThemes.dark    ?? {} },
   { name: 'actinic', overrides: allThemes.actinic ?? {} },
+  { name: 'classic', overrides: allThemes.classic ?? {} },
 ];
 
 const allResults = testThemes.flatMap(({ name, overrides }) =>

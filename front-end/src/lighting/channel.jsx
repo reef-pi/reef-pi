@@ -204,7 +204,7 @@ const Channel = (props) => {
         <div>
           <label style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             {i18next.t('lighting:channel_name')}
-            <small style={{ background: 'var(--reefpi-color-brand)', color: 'var(--reefpi-color-nav-text-strong)', borderRadius: 'var(--reefpi-radius-sm)', padding: '0 var(--reefpi-space-xs)', fontSize: '0.75rem', marginTop: 'var(--reefpi-space-xxs)' }}>(pin {props.channel.pin})</small>
+            <small style={{ background: 'var(--reefpi-color-brand)', color: 'var(--reefpi-color-on-brand)', borderRadius: 'var(--reefpi-radius-sm)', padding: '0 var(--reefpi-space-xs)', fontSize: '0.75rem', marginTop: 'var(--reefpi-space-xxs)' }}>(pin {props.channel.pin})</small>
           </label>
           <Field
             name={NameFor(props.name, 'name')}

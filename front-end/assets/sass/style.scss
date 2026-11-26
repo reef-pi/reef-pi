@@ -1,4 +1,6 @@
 @import './tokens';
+@import './fonts';
+@import './shell';
 @import './auth-page';
 @import './sign-in';
 @import './dashboard';
@@ -14,28 +16,8 @@
 }
 
 :root {
-  --reefpi-color-brand: #{$main-color};
-  --reefpi-color-brand-dark: #{$main-dark-color};
-  --reefpi-color-brand-alt: #{$main-alternate-color};
-  --reefpi-color-surface: #{$surface-color};
-  --reefpi-color-surface-elevated: #{$surface-elevated-color};
-  --reefpi-color-border: #{$border-color};
-  --reefpi-color-text: #{$text-color};
-  --reefpi-color-text-muted: #{$text-muted-color};
-  --reefpi-color-focus: #{$focus-color};
-  --reefpi-color-surface-auth: #{$surface-auth-color};
-  --reefpi-color-text-strong: #{$text-strong-color};
-  --reefpi-color-border-subtle: #{$border-subtle-color};
-  --reefpi-color-border-strong: #{$border-strong-color};
-  --reefpi-color-shadow: #{$shadow-color};
-  --reefpi-color-nav-text: #{$nav-text-color};
-  --reefpi-color-nav-text-muted: #{$nav-text-muted-color};
-  --reefpi-color-nav-overlay: #{$nav-overlay-color};
-  --reefpi-color-nav-border: #{$nav-border-color};
-  --reefpi-color-nav-text-strong: #{$nav-text-strong-color};
   --reefpi-shell-gutter: #{$space-sm};
   --reefpi-panel-gap: #{$space-md};
-  --reefpi-summary-height: 64px;
   --reefpi-space-xxs: #{$space-xxs};
   --reefpi-space-xs: #{$space-xs};
   --reefpi-space-sm: #{$space-sm};
@@ -64,24 +46,10 @@
   --reefpi-weight-normal: 400;
   --reefpi-weight-bold:   700;
 
-  // Gradient (navbar + shell components)
-  --reefpi-gradient-brand: linear-gradient(180deg, #{$main-color} 0%, #{$main-alternate-color} 100%);
-
   // Shadow
-  --reefpi-shadow-navbar: 0 2px 8px #{$shadow-color};
-
-  // State tokens (E1 #1)
-  --reefpi-color-pending:        #{$color-pending};
-  --reefpi-color-pending-bg:     #{$color-pending-bg};
-  --reefpi-color-error:          #{$color-error};
-  --reefpi-color-error-bg:       #{$color-error-bg};
-  --reefpi-color-error-border:   #{$color-error-border};
-  --reefpi-color-warn:           #{$color-warn};
-  --reefpi-color-warn-bg:        #{$color-warn-bg};
-  --reefpi-color-success-strong: #{$color-success-strong};
+  --reefpi-shadow-navbar: 0 2px 8px var(--reefpi-color-shadow);
 
   // Bootstrap context colors captured for legacy previews
-  --reefpi-color-success-hover: #{$color-success-hover};
   --reefpi-color-secondary: #{$color-secondary};
   --reefpi-color-control-border: #{$color-control-border};
   --reefpi-color-disabled-bg: #{$color-disabled-bg};
@@ -93,11 +61,6 @@
   --reefpi-color-success-bg-bootstrap: #{$color-success-bg-bootstrap};
   --reefpi-color-success-border-bootstrap: #{$color-success-border-bootstrap};
   --reefpi-color-success-text-bootstrap: #{$color-success-text-bootstrap};
-
-  // Threshold bands (gauges, sparkline shading)
-  --reefpi-color-band-safe:      #{$color-band-safe};
-  --reefpi-color-band-warn:      #{$color-band-warn};
-  --reefpi-color-band-critical:  #{$color-band-critical};
 
   // Chart palette (replaces raw hex in chart components)
   --reefpi-chart-green:  #00c851;
@@ -124,38 +87,10 @@
   --reefpi-preview-actinic-border-strong: #{$preview-actinic-border-strong};
 
   // Bootstrap 4.6 semantic aliases
-  --reefpi-color-success: #28a745;
-  --reefpi-color-danger:  #dc3545;
-  --reefpi-color-warning: #ffc107;
-  --reefpi-color-info:    #17a2b8;
   --reefpi-color-light:   #f8f9fa;
   --reefpi-color-dark:    #343a40;
 }
 
-// Theme: dark (low-light general)
-[data-theme="dark"] {
-  --reefpi-color-surface:           #{$dark-surface};
-  --reefpi-color-surface-elevated:  #{$dark-surface-elevated};
-  --reefpi-color-surface-auth:      #{$dark-surface-auth};
-  --reefpi-color-text:              #{$dark-text};
-  --reefpi-color-text-muted:        #{$dark-text-muted};
-  --reefpi-color-border:            #{$dark-border};
-  --reefpi-color-border-strong:     #{$dark-border-strong};
-  --reefpi-color-brand-alt:         #{$dark-brand-alt};
-  --reefpi-color-pending:           #{$dark-pending};
-}
-
-// Theme: actinic (night / reef blue)
-[data-theme="actinic"] {
-  --reefpi-color-surface:           #{$actinic-surface};
-  --reefpi-color-surface-elevated:  #{$actinic-surface-elevated};
-  --reefpi-color-surface-auth:      #{$actinic-surface-auth};
-  --reefpi-color-text:              #{$actinic-text};
-  --reefpi-color-text-muted:        #{$actinic-text-muted};
-  --reefpi-color-border:            #{$actinic-border};
-  --reefpi-color-border-strong:     #{$actinic-border-strong};
-  --reefpi-color-pending:           #{$actinic-pending};
-}
 
 .reef_pi_panel {
   border-style: none;
@@ -163,99 +98,6 @@
 
 .pointer {
   cursor: pointer;
-}
-
-.bottom-bar {
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 90;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  column-gap: var(--reefpi-space-md);
-  min-height: var(--reefpi-summary-height, 64px);
-  padding: 0 var(--reefpi-shell-gutter);
-  background: var(--reefpi-color-surface-elevated);
-  border-top: 1px solid var(--reefpi-color-border);
-  color: var(--reefpi-color-text-muted);
-  font-size: var(--reefpi-small);
-}
-
-@media screen and (min-width: 992px) {
-  // Clear the 72px sidebar rail so the status line is not tucked under it.
-  .bottom-bar {
-    left: 72px;
-  }
-}
-
-.bottom-bar-item {
-  white-space: nowrap;
-}
-
-.bottom-bar-item + .bottom-bar-item::before {
-  content: '·';
-  margin-right: var(--reefpi-space-md);
-  color: var(--reefpi-color-border);
-}
-
-.bottom-bar-spacer {
-  flex: 1 1 auto;
-}
-
-.bottom-bar-link {
-  display: inline-flex;
-  align-items: center;
-  min-height: var(--reefpi-tap-target-min);
-  color: var(--reefpi-color-text-muted);
-  font-weight: var(--reefpi-font-weight-semibold);
-  text-decoration: none;
-}
-
-.bottom-bar-link:hover {
-  color: var(--reefpi-color-brand);
-  text-decoration: underline;
-}
-
-.bottom-bar-link--error {
-  color: var(--reefpi-color-error);
-}
-
-.bottom-bar-badge {
-  padding: 0.125rem var(--reefpi-space-xs);
-  border-radius: var(--reefpi-radius-sm);
-  font-weight: var(--reefpi-font-weight-semibold);
-  white-space: nowrap;
-}
-
-.bottom-bar-badge--warn {
-  background: var(--reefpi-color-warn-bg);
-  color: var(--reefpi-color-warn);
-}
-
-// ── Page header: route title + page-level actions ─────────────────────────
-.page-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--reefpi-space-sm);
-  min-height: 4rem;
-  padding-top: var(--reefpi-space-xs);
-}
-
-.page-title {
-  margin: 0;
-  font-size: 1.5rem;
-  font-weight: var(--reefpi-weight-bold);
-  line-height: 1.2;
-  color: var(--reefpi-color-text);
-}
-
-.page-header-actions {
-  display: flex;
-  align-items: center;
-  gap: var(--reefpi-space-xs);
 }
 
 // Borderless icon-only control (alert bell, collapse chevrons).
@@ -283,10 +125,6 @@
   background: color-mix(in srgb, var(--reefpi-color-text) 14%, transparent);
 }
 
-.bottom-bar .list-inline {
-  margin-bottom: 0;
-}
-
 html {
   font-family: var(--reefpi-font-app);
 }
@@ -298,17 +136,6 @@ body {
 
 #main-panel {
   min-height: 100vh;
-}
-
-// Page content: the gutter everywhere, plus room for the 72px sidebar rail when the sidebar is shown.
-.content-panel {
-  padding: 0 var(--reefpi-shell-gutter);
-}
-
-@media screen and (min-width: 992px) {
-  .content-panel {
-    padding-left: 72px;
-  }
 }
 
 .container-fluid {
@@ -655,22 +482,10 @@ textarea:focus,
   }
 }
 
-
-.bottom-bar .list-inline-item > a {
-  min-width: var(--reefpi-tap-target-min);
-  min-height: var(--reefpi-tap-target-min);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
 @media screen and (min-width: 992px) {
-  #main-panel {
-    padding-bottom: var(--reefpi-summary-height, 64px);
-  }
-
   .body-panel {
-    margin-bottom: 70px;
+    margin-bottom: var(--reefpi-space-lg);
+    padding-bottom: var(--reefpi-space-lg);
   }
 }
 
@@ -996,15 +811,5 @@ textarea:focus,
 @media screen and (max-width: 991.98px) {
   #main-panel {
     padding-bottom: 0;
-  }
-}
-
-.summary-desktop {
-  display: none;
-}
-
-@media screen and (min-width: 992px) {
-  .summary-desktop {
-    display: block;
   }
 }

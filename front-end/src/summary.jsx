@@ -1,7 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import i18n from 'utils/i18n'
+import SystemStatus from '../design-system/ui_kits/reef-pi-app/shell/SystemStatus'
 
+// Controller status for the navigation (replaces the fixed footer, #3289). Keeps polling the
+// controller info every 30 minutes; the shell renders it in the sidebar and the phone drawer.
 export default class Summary extends React.Component {
   constructor (props) {
     super(props)
@@ -17,27 +20,26 @@ export default class Summary extends React.Component {
   }
 
   render () {
-    const errorCount = this.props.errors.length
-    const info = this.props.info
     return (
-      <nav className='bottom-bar' aria-label='System status'>
-        <span className='bottom-bar-item'>{info.current_time}</span>
-        <span className='bottom-bar-item'>{i18n.t('running')} {info.version}, on {info.model}</span>
-        <span className='bottom-bar-item'>{i18n.t('since')} {info.uptime}</span>
-        <span className='bottom-bar-item'>IP {info.ip}</span>
-        <span className='bottom-bar-spacer' aria-hidden='true' />
-        {this.props.devMode && (
-          <span className='bottom-bar-badge bottom-bar-badge--warn'>{i18n.t('devmode_warning')}</span>
-        )}
-        <a
-          className={'bottom-bar-link' + (errorCount > 0 ? ' bottom-bar-link--error' : '')}
-          href='/configuration/errors'
-        >
-          {i18n.t('errors')}({errorCount})
-        </a>
-        <a className='bottom-bar-link' href='/assets/api.html'>API</a>
-        <a className='bottom-bar-link' href='http://reef-pi.com' target='_blank' rel='noopener noreferrer'>{i18n.t('documentation')}</a>
-      </nav>
+      <SystemStatus
+        info={this.props.info}
+        errorCount={this.props.errors.length}
+        devMode={this.props.devMode}
+        compact={this.props.compact}
+        labels={{
+          title: i18n.t('status:title'),
+          noErrors: i18n.t('status:no_errors'),
+          errorCount: count => i18n.t('status:error_count', { count }),
+          details: i18n.t('status:details'),
+          time: i18n.t('status:time'),
+          version: i18n.t('status:version'),
+          uptime: i18n.t('status:uptime'),
+          ip: i18n.t('status:ip'),
+          api: 'API',
+          documentation: i18n.t('documentation'),
+          devMode: i18n.t('devmode_warning')
+        }}
+      />
     )
   }
 }
@@ -46,5 +48,6 @@ Summary.propTypes = {
   info: PropTypes.object.isRequired,
   devMode: PropTypes.bool.isRequired,
   errors: PropTypes.array.isRequired,
-  fetch: PropTypes.func.isRequired
+  fetch: PropTypes.func.isRequired,
+  compact: PropTypes.bool
 }

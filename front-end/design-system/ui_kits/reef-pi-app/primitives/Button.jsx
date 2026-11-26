@@ -28,10 +28,10 @@ const variants = {
   primary: {
     '--button-bg': 'var(--reefpi-color-brand)',
     '--button-bg-hover': 'var(--reefpi-color-brand-dark)',
-    '--button-bg-active': 'var(--reefpi-color-success-strong)',
+    '--button-bg-active': 'color-mix(in srgb, var(--reefpi-color-brand-dark) 85%, var(--reefpi-color-text))',
     '--button-border': 'var(--reefpi-color-brand)',
     '--button-border-hover': 'var(--reefpi-color-brand-dark)',
-    '--button-fg': 'var(--reefpi-color-nav-text-strong)'
+    '--button-fg': 'var(--reefpi-color-on-brand)'
   },
   secondary: {
     '--button-bg': 'var(--reefpi-color-surface-elevated)',
@@ -47,7 +47,7 @@ const variants = {
     '--button-bg-active': 'color-mix(in srgb, var(--reefpi-color-error) 70%, var(--reefpi-color-text))',
     '--button-border': 'var(--reefpi-color-error)',
     '--button-border-hover': 'color-mix(in srgb, var(--reefpi-color-error) 85%, var(--reefpi-color-text))',
-    '--button-fg': 'var(--reefpi-color-nav-text-strong)'
+    '--button-fg': 'var(--reefpi-color-on-error)'
   },
   ghost: {
     '--button-bg': 'transparent',

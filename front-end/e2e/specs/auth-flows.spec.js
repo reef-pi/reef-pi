@@ -17,7 +17,7 @@ test.describe('sign-in and session handling', () => {
     await loginPage.password.fill('not-the-password')
     await loginPage.submit.click()
 
-    await expect(page.getByText('Oops!')).toBeVisible()
+    await expect(page.getByRole('alert')).toContainText('Invalid Credentials')
     await expect(page.getByTestId('smoke-sign-in-form')).toBeVisible()
     await expect(page.getByTestId('smoke-shell-root')).toHaveCount(0)
     expect(await meStatus(page)).toBe(401)
@@ -28,7 +28,7 @@ test.describe('sign-in and session handling', () => {
     await loginPage.goto()
     await loginPage.submit.click()
 
-    await expect(page.getByText('Oops!')).toBeVisible()
+    await expect(page.getByRole('alert')).toContainText('Invalid Credentials')
     await expect(page.getByTestId('smoke-shell-root')).toHaveCount(0)
   })
 
@@ -100,7 +100,7 @@ test.describe('credential change', () => {
       await loginPage.user.fill(original.user)
       await loginPage.password.fill(original.password)
       await loginPage.submit.click()
-      await expect(page.getByText('Oops!')).toBeVisible()
+      await expect(page.getByRole('alert')).toContainText('Invalid Credentials')
       await loginPage.login(changed.user, changed.password)
     } finally {
       if (credentialsChanged) {

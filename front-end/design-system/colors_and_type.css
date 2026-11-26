@@ -1,64 +1,19 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+/* Self-hosted variable fonts (OFL-1.1); the app loads the same files through assets/sass/_fonts.scss. */
+@font-face { font-family: 'Manrope'; font-style: normal; font-weight: 200 800; font-display: swap; src: url('../assets/fonts/manrope-latin.woff2') format('woff2'); }
+@font-face { font-family: 'Manrope'; font-style: normal; font-weight: 200 800; font-display: swap; src: url('../assets/fonts/manrope-latin-ext.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1E00-1E9F, U+A720-A7FF; }
+@font-face { font-family: 'JetBrains Mono'; font-style: normal; font-weight: 100 800; font-display: swap; src: url('../assets/fonts/jetbrains-mono-latin.woff2') format('woff2'); }
 /* ============================================================
    reef-pi Design System — Colors & Type
-   Source: front-end/assets/sass/_colors.scss + _tokens.scss + style.scss
+   Source: front-end/assets/sass/_tokens.scss + style.scss (themes: _tokens.scss)
    ============================================================ */
 
 :root {
-  /* ---------- Brand ---------- */
-  --reefpi-color-brand:        #27a822;  /* main green            */
-  --reefpi-color-brand-dark:   #267723;  /* hover / pressed       */
-  --reefpi-color-brand-alt:    #1c7e19;  /* deep green accent     */
-  --reefpi-color-focus:        #174d16;  /* a11y focus ring       */
-
-  /* ---------- Surfaces ---------- */
-  --reefpi-color-surface:           #f5faf3; /* page bg (mint tint) */
-  --reefpi-color-surface-elevated:  #ffffff; /* cards, list items   */
-  --reefpi-color-surface-auth:      #edf8e8; /* sign-in page bg     */
-
-  /* ---------- Borders ---------- */
-  --reefpi-color-border:         #d6e5d0;
-  --reefpi-color-border-subtle:  #cccccc;
-  --reefpi-color-border-strong:  #6b7a69;
-
-  /* ---------- Text ---------- */
-  --reefpi-color-text:         #1f2a1f;
-  --reefpi-color-text-muted:   #4e5f4e;
-  --reefpi-color-text-strong:  #2e2e2e;
-
-  /* ---------- Shadow ---------- */
-  --reefpi-color-shadow: rgba(31, 42, 31, 0.14);
-
-  /* ---------- Navbar (on brand gradient) ---------- */
-  --reefpi-color-nav-text:         rgba(255, 255, 255, 0.97);
-  --reefpi-color-nav-text-muted:   rgba(255, 255, 255, 0.82);
-  --reefpi-color-nav-text-strong:  #ffffff;
-  --reefpi-color-nav-overlay:      rgba(255, 255, 255, 0.12);
-  --reefpi-color-nav-border:       rgba(255, 255, 255, 0.40);
-
-  /* ---------- Semantic (Bootstrap 4.6 defaults reef-pi inherits) ---------- */
-  --reefpi-color-success: #28a745;
-  --reefpi-color-success-hover: #218838;
-  --reefpi-color-danger:  #dc3545;
-  --reefpi-color-warning: #ffc107;
-  --reefpi-color-info:    #17a2b8;
+  /* ---------- Legacy Bootstrap 4.6 values (theme-independent) ---------- */
   --reefpi-color-secondary: #6c757d;
   --reefpi-color-light:   #f8f9fa;
   --reefpi-color-dark:    #343a40;
   --reefpi-color-control-border: #ced4da;
   --reefpi-color-disabled-bg: #ced4da;
-
-  /* ---------- State tokens (E1 #1) ----------
-     First-class state tokens so components stop reaching for raw Bootstrap
-     hex values. Designed to pass WCAG AA on the default surface. */
-  --reefpi-color-pending:        #4e5f4e;  /* spinner ring, in-flight ink   */
-  --reefpi-color-pending-bg:     #eef3ec;  /* pending fill / pulse halo     */
-  --reefpi-color-error:          #dc3545;
-  --reefpi-color-error-bg:       #fdecee;
-  --reefpi-color-error-border:   #f5c6cb;
-  --reefpi-color-warn:           #b77400;  /* AA on #fff, unlike BS #ffc107 */
-  --reefpi-color-warn-bg:        #fff8e6;
-  --reefpi-color-success-strong: #1e7e34;  /* button hover/active           */
 
   /* ---------- Bootstrap context colors captured for legacy previews ---------- */
   --reefpi-color-danger-bg-bootstrap: #f8d7da;
@@ -69,11 +24,6 @@
   --reefpi-color-success-bg-bootstrap: #d4edda;
   --reefpi-color-success-border-bootstrap: #c3e6cb;
   --reefpi-color-success-text-bootstrap: #155724;
-
-  /* ---------- Threshold bands (gauges, sparkline shading) ---------- */
-  --reefpi-color-band-safe:      #d6e5d0;
-  --reefpi-color-band-warn:      #ffe6b0;
-  --reefpi-color-band-critical:  #f5c6cb;
 
   /* ---------- Chart palette (from health_chart.jsx) ---------- */
   --reefpi-chart-green:  #00c851; /* cpu            */
@@ -99,16 +49,12 @@
   --reefpi-preview-actinic-border: #10284d;
   --reefpi-preview-actinic-border-strong: #2a4a80;
 
-  /* ---------- Brand gradient (navbar) ---------- */
-  --reefpi-gradient-brand:
-    linear-gradient(180deg, #27a822 0%, #1c7e19 100%);
-
   /* ---------- Spacing scale ---------- */
-  --reefpi-space-xxs: 0.3125rem; /*  5px */
-  --reefpi-space-xs:  0.625rem;  /* 10px */
+  --reefpi-space-xxs: 0.25rem;   /*  4px */
+  --reefpi-space-xs:  0.5rem;    /*  8px */
   --reefpi-space-sm:  0.75rem;   /* 12px */
   --reefpi-space-md:  1rem;      /* 16px */
-  --reefpi-space-lg:  1.25rem;   /* 20px */
+  --reefpi-space-lg:  1.5rem;    /* 24px */
 
   /* ---------- Radii ---------- */
   --reefpi-radius-sm: 0.375rem;  /*  6px - nav links, buttons */
@@ -120,7 +66,6 @@
   /* ---------- Layout ---------- */
   --reefpi-shell-gutter:  0.75rem; /* 1rem on ≥768px */
   --reefpi-panel-gap:     1rem;
-  --reefpi-summary-height: 64px;
   --reefpi-tap-target-min: 2.75rem; /* 44px — min touch target */
 
   /* ---------- Type ---------- */
@@ -146,30 +91,226 @@
   --reefpi-weight-bold:   700;
 }
 
+/* ───────────────────────────────────────────────────────────────────────────── */
+/* Semantic colour themes — Aquatic Precision (#3289) */
 
-/* ---------- Theme: dark (low-light general) ---------- */
-[data-theme="dark"] {
-  --reefpi-color-surface:           #0f1410;
-  --reefpi-color-surface-elevated:  #1a211a;
-  --reefpi-color-surface-auth:      #0b0f0b;
-  --reefpi-color-text:              #e6efe0;
-  --reefpi-color-text-muted:        #9aa89a;
-  --reefpi-color-border:            #2a3329;
-  --reefpi-color-border-strong:     #4a5949;
-  --reefpi-color-brand-alt:         #2cc127;
-  --reefpi-color-pending:           #9aaf9a;
+/* One block per theme; every block sets the same semantic tokens. Components read */
+/* var(--reefpi-*) only, so a theme is a value swap. The values mirror */
+/* design-system/colors_and_type.css and design-system/aquatic-precision/tokens.json; */
+/* design-system/theme_tokens.test.js checks the mirror and the WCAG contrast pairs. */
+
+/*   light (default)  neutral canvas, white panels, restrained teal action colour */
+/*   dark             low-light, GitHub-like neutrals, teal accent */
+/*   actinic          night viewing beside a reef under blue light */
+/*   classic          the pre-7.x reef-pi green, kept as an option */
+
+/* Green is reserved for healthy status (--reefpi-color-success); actions use teal. */
+/* ───────────────────────────────────────────────────────────────────────────── */
+
+:root,
+[data-theme="light"] {
+  /* Action / brand */
+  --reefpi-color-brand:        #0f766e;
+  --reefpi-color-brand-dark:   #115e59;
+  --reefpi-color-brand-alt:    #0f766e;
+  --reefpi-color-on-brand:     #ffffff;
+  --reefpi-color-focus:        #0f766e;
+
+  /* Surfaces */
+  --reefpi-color-surface:          #f8fafc;
+  --reefpi-color-surface-elevated: #ffffff;
+  --reefpi-color-surface-sunken:   #f1f5f9;
+  --reefpi-color-surface-auth:     #f1f5f9;
+  --reefpi-color-scrim:            rgba(15, 23, 42, 0.55);
+  --reefpi-color-on-scrim:         #f8fafc;
+
+  /* Lines */
+  --reefpi-color-border:        #e2e8f0;
+  --reefpi-color-border-subtle: #cbd5e1;
+  --reefpi-color-border-strong: #64748b;
+
+  /* Text */
+  --reefpi-color-text:        #0f172a;
+  --reefpi-color-text-muted:  #64748b;
+  --reefpi-color-text-strong: #0f172a;
+
+  /* Status */
+  --reefpi-color-success:        #15803d;
+  --reefpi-color-success-strong: #166534;
+  --reefpi-color-success-bg:     #f0fdf4;
+  --reefpi-color-warn:           #b45309;
+  --reefpi-color-warn-bg:        #fffbeb;
+  --reefpi-color-error:          #b91c1c;
+  --reefpi-color-error-bg:       #fef2f2;
+  --reefpi-color-error-border:   #fecaca;
+  --reefpi-color-on-error:       #ffffff;
+  --reefpi-color-pending:        #64748b;
+  --reefpi-color-pending-bg:     #f1f5f9;
+  --reefpi-color-info:           #0369a1;
+
+  /* Threshold bands (gauges, sparkline shading) */
+  --reefpi-color-band-safe:     #dcfce7;
+  --reefpi-color-band-warn:     #fef3c7;
+  --reefpi-color-band-critical: #fee2e2;
+
+  --reefpi-color-shadow: rgba(15, 23, 42, 0.08);
 }
 
-/* ---------- Theme: actinic (night / reef blue) ---------- */
+[data-theme="dark"] {
+  --reefpi-color-brand:        #2dd4bf;
+  --reefpi-color-brand-dark:   #5eead4;
+  --reefpi-color-brand-alt:    #2dd4bf;
+  --reefpi-color-on-brand:     #0d1117;
+  --reefpi-color-focus:        #2dd4bf;
+
+  --reefpi-color-surface:          #0d1117;
+  --reefpi-color-surface-elevated: #161b22;
+  --reefpi-color-surface-sunken:   #0d1117;
+  --reefpi-color-surface-auth:     #0d1117;
+  --reefpi-color-scrim:            rgba(1, 4, 9, 0.7);
+  --reefpi-color-on-scrim:         #e6edf3;
+
+  --reefpi-color-border:        #30363d;
+  --reefpi-color-border-subtle: #30363d;
+  --reefpi-color-border-strong: #8b949e;
+
+  --reefpi-color-text:        #e6edf3;
+  --reefpi-color-text-muted:  #8b949e;
+  --reefpi-color-text-strong: #f0f6fc;
+
+  --reefpi-color-success:        #3fb950;
+  --reefpi-color-success-strong: #56d364;
+  --reefpi-color-success-bg:     #12261e;
+  --reefpi-color-warn:           #d29922;
+  --reefpi-color-warn-bg:        #272115;
+  --reefpi-color-error:          #f85149;
+  --reefpi-color-error-bg:       #2d1619;
+  --reefpi-color-error-border:   #6e2a2a;
+  --reefpi-color-on-error:       #0d1117;
+  --reefpi-color-pending:        #8b949e;
+  --reefpi-color-pending-bg:     #21262d;
+  --reefpi-color-info:           #58a6ff;
+
+  --reefpi-color-band-safe:     #12261e;
+  --reefpi-color-band-warn:     #272115;
+  --reefpi-color-band-critical: #2d1619;
+
+  --reefpi-color-shadow: rgba(1, 4, 9, 0.4);
+}
+
 [data-theme="actinic"] {
-  --reefpi-color-surface:           #05101f;
-  --reefpi-color-surface-elevated:  #0a1a33;
-  --reefpi-color-surface-auth:      #030a14;
-  --reefpi-color-text:              #cfe3ff;
-  --reefpi-color-text-muted:        #7a90b5;
-  --reefpi-color-border:            #10284d;
-  --reefpi-color-border-strong:     #2a4a80;
-  --reefpi-color-pending:           #9aaf9a;
+  --reefpi-color-brand:        #648bfa;
+  --reefpi-color-brand-dark:   #8da9fb;
+  --reefpi-color-brand-alt:    #648bfa;
+  --reefpi-color-on-brand:     #060b1b;
+  --reefpi-color-focus:        #648bfa;
+
+  --reefpi-color-surface:          #060b1b;
+  --reefpi-color-surface-elevated: #0c1429;
+  --reefpi-color-surface-sunken:   #060b1b;
+  --reefpi-color-surface-auth:     #060b1b;
+  --reefpi-color-scrim:            rgba(2, 4, 12, 0.72);
+  --reefpi-color-on-scrim:         #c5d6f5;
+
+  --reefpi-color-border:        #1b2a4a;
+  --reefpi-color-border-subtle: #1b2a4a;
+  --reefpi-color-border-strong: #8095bd;
+
+  --reefpi-color-text:        #c5d6f5;
+  --reefpi-color-text-muted:  #8095bd;
+  --reefpi-color-text-strong: #dce7fb;
+
+  --reefpi-color-success:        #42baa1;
+  --reefpi-color-success-strong: #5fd0b8;
+  --reefpi-color-success-bg:     #0c2129;
+  --reefpi-color-warn:           #d1a45d;
+  --reefpi-color-warn-bg:        #1d1a1f;
+  --reefpi-color-error:          #e77b88;
+  --reefpi-color-error-bg:       #24152a;
+  --reefpi-color-error-border:   #5a2b3c;
+  --reefpi-color-on-error:       #060b1b;
+  --reefpi-color-pending:        #8095bd;
+  --reefpi-color-pending-bg:     #111d38;
+  --reefpi-color-info:           #8fb0ff;
+
+  --reefpi-color-band-safe:     #0c2129;
+  --reefpi-color-band-warn:     #1d1a1f;
+  --reefpi-color-band-critical: #24152a;
+
+  --reefpi-color-shadow: rgba(2, 4, 12, 0.5);
+}
+
+[data-theme="classic"] {
+  --reefpi-color-brand:        #267723;
+  --reefpi-color-brand-dark:   #1c5e1a;
+  --reefpi-color-brand-alt:    #1c7e19;
+  --reefpi-color-on-brand:     #ffffff;
+  --reefpi-color-focus:        #174d16;
+
+  --reefpi-color-surface:          #f5faf3;
+  --reefpi-color-surface-elevated: #ffffff;
+  --reefpi-color-surface-sunken:   #edf8e8;
+  --reefpi-color-surface-auth:     #edf8e8;
+  --reefpi-color-scrim:            rgba(31, 42, 31, 0.55);
+  --reefpi-color-on-scrim:         #f5faf3;
+
+  --reefpi-color-border:        #d6e5d0;
+  --reefpi-color-border-subtle: #cccccc;
+  --reefpi-color-border-strong: #6b7a69;
+
+  --reefpi-color-text:        #1f2a1f;
+  --reefpi-color-text-muted:  #4e5f4e;
+  --reefpi-color-text-strong: #2e2e2e;
+
+  --reefpi-color-success:        #267723;
+  --reefpi-color-success-strong: #1e7e34;
+  --reefpi-color-success-bg:     #eef7ec;
+  --reefpi-color-warn:           #b45309;
+  --reefpi-color-warn-bg:        #fff8e6;
+  --reefpi-color-error:          #b91c1c;
+  --reefpi-color-error-bg:       #fdecee;
+  --reefpi-color-error-border:   #f5c6cb;
+  --reefpi-color-on-error:       #ffffff;
+  --reefpi-color-pending:        #4e5f4e;
+  --reefpi-color-pending-bg:     #eef3ec;
+  --reefpi-color-info:           #0e7490;
+
+  --reefpi-color-band-safe:     #d6e5d0;
+  --reefpi-color-band-warn:     #ffe6b0;
+  --reefpi-color-band-critical: #f5c6cb;
+
+  --reefpi-color-shadow: rgba(31, 42, 31, 0.14);
+}
+
+/* Derived tokens: the same in every theme because they point at the semantic set above. */
+:root {
+  /* Legacy names kept for existing components; new code uses the semantic names. */
+  --reefpi-color-danger:  var(--reefpi-color-error);
+  --reefpi-color-warning: var(--reefpi-color-warn);
+  --reefpi-color-success-hover: var(--reefpi-color-success-strong);
+  --reefpi-gradient-brand: linear-gradient(var(--reefpi-color-brand), var(--reefpi-color-brand));
+
+  /* Navigation now sits on a neutral panel, not the green gradient. nav-text-strong is "text on the */
+  /* brand fill" in the components that still use it. */
+  --reefpi-color-nav-text:        var(--reefpi-color-text);
+  --reefpi-color-nav-text-muted:  var(--reefpi-color-text-muted);
+  --reefpi-color-nav-text-strong: var(--reefpi-color-on-brand);
+  --reefpi-color-nav-overlay:     color-mix(in srgb, var(--reefpi-color-brand) 12%, transparent);
+  --reefpi-color-nav-border:      var(--reefpi-color-border);
+
+  /* Type scale (Aquatic Precision): page 28/600, section 18/600, body 14, labels 13, telemetry 30. */
+  --reefpi-font-size-page:      1.75rem;
+  --reefpi-font-size-section:   1.125rem;
+  --reefpi-font-size-body:      0.875rem;
+  --reefpi-font-size-label:     0.8125rem;
+  --reefpi-font-size-caption:   0.75rem;
+  --reefpi-font-size-telemetry: 1.875rem;
+
+  /* Controls and layout */
+  --reefpi-control-height:   2.25rem; /* 36px desktop control */
+  --reefpi-sidebar-rail:     4.5rem; /* 72px collapsed rail */
+  --reefpi-sidebar-expanded: 15rem; /* 240px labelled navigation */
+  --reefpi-sidebar-width:    0px; /* set by the shell when the sidebar is visible */
 }
 
 /* ---------- Semantic element styles ---------- */

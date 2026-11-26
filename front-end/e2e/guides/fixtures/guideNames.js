@@ -18,7 +18,8 @@ const VIEWPORTS = {
 
 // Capture-time only: the summary footer carries dev-mode details (DevMode warning, build string,
 // clock, uptime, IP) that must not appear in published guide images.
-const CAPTURE_CSS = '.bottom-bar { display: none !important; }'
+// Readers' controllers are not in dev mode: hide the dev-mode badge in the controller status.
+const CAPTURE_CSS = '.reefpi-status-dev { display: none !important; }'
 
 const REPO_ROOT = path.resolve(__dirname, '..', '..', '..', '..')
 const SAFE_NAME = /^[a-z0-9-]+$/

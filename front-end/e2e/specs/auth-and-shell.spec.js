@@ -28,6 +28,8 @@ test('sidebar tooltips anchor next to their trigger icons', async ({ page }) => 
   await navBar.open('equipment')
   await expect(page).toHaveURL(/\/equipment$/)
 
+  // The sidebar opens expanded with labels; tooltips belong to the collapsed icon rail.
+  await page.getByRole('button', { name: 'Collapse navigation' }).click()
   const trigger = navBar.tab('equipment').first()
 
   await trigger.hover()
@@ -57,5 +59,5 @@ test('sidebar tooltips anchor next to their trigger icons', async ({ page }) => 
   expect(rects.tooltip.left).toBeGreaterThan(rects.sidebar.right)
   expect(Math.abs(rects.tooltip.top - rects.trigger.top)).toBeLessThanOrEqual(20)
   expect(Math.abs((rects.tooltip.top + rects.tooltip.height / 2) - (rects.trigger.top + rects.trigger.height / 2))).toBeLessThanOrEqual(2)
-  expect(Math.abs(rects.tooltip.left - (rects.trigger.right + 8))).toBeLessThanOrEqual(1)
+  expect(Math.abs(rects.tooltip.left - (rects.sidebar.right + 8))).toBeLessThanOrEqual(1)
 })

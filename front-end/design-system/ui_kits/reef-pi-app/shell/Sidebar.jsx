@@ -3,60 +3,66 @@ import PropTypes from 'prop-types'
 import { NAV_ICONS } from './navIcons'
 
 /*
- * Collapsible left sidebar — visible at ≥992px only.
- * Below 992px, render nothing; BottomNav (#21) takes over.
+ * Desktop navigation (≥992px; BottomNav takes over below). Aquatic Precision (#3289):
+ * a neutral panel, not the green gradient.
  *
- * Rail: 72px wide, --reefpi-gradient-brand background.
- * Expanded: 240px wide, text labels alongside icons.
- * Persists expanded/collapsed to localStorage.
+ * Expanded (default, 240px): routes in labelled groups — Observe / Operate / Configure.
+ * Collapsed (72px rail): icons only; each link keeps its name (aria-label + hover tooltip)
+ * and the groups are separated by rules. The choice persists in localStorage.
+ *
+ * The sidebar publishes its width as --reefpi-sidebar-width on <html> so the content panel
+ * can clear it without knowing which state it is in.
  *
  * Usage:
  *   <Sidebar
- *     routes={[{ id, label, href, icon: <svg> }]}
+ *     routes={[{ id, label, href, icon, group }]}
+ *     groups={[{ id: 'observe', label: 'Observe' }, ...]}
  *     activeRoute='dashboard'
+ *     onNavigate={route => {}}
  *     onSignOut={fn}
+ *     footer={expanded => <SystemStatus compact={!expanded} ... />}
  *   />
  */
 
-const STORAGE_KEY  = 'reefpi.sidebar-expanded'
-const RAIL_W       = 72
-const EXPANDED_W   = 240
+const STORAGE_KEY = 'reefpi.sidebar-expanded'
 
-const NAV_ITEM_STYLE = (active, expanded) => ({
-  display:        'flex',
-  alignItems:     'center',
-  gap:            '0.75rem',
-  minHeight:      '44px',
-  padding:        expanded ? '0 1rem' : '0',
-  justifyContent: expanded ? 'flex-start' : 'center',
-  borderRadius:   'var(--reefpi-radius-sm)',
-  background:     active ? 'var(--reefpi-color-nav-overlay)' : 'none',
-  border:         'none',
-  cursor:         'pointer',
-  color:          active ? 'var(--reefpi-color-nav-text-strong)' : 'var(--reefpi-color-nav-text)',
-  fontFamily:     'var(--reefpi-font-app)',
-  fontSize:       '0.875rem',
-  fontWeight:     active ? 600 : 400,
-  width:          '100%',
-  textDecoration: 'none',
-  transition:     'background 0.12s, color 0.12s',
-  position:       'relative',
-  whiteSpace:     'nowrap',
-  overflow:       expanded ? 'hidden' : 'visible'
-})
+export const DEFAULT_GROUPS = [
+  { id: 'observe', label: 'Observe' },
+  { id: 'operate', label: 'Operate' },
+  { id: 'configure', label: 'Configure' }
+]
+
+const DEFAULT_LABELS = {
+  nav: 'Main navigation',
+  expand: 'Expand sidebar',
+  collapse: 'Collapse sidebar',
+  signOut: 'Sign out',
+  tagline: 'Aquarium controller'
+}
+
+// Routes without a known group are listed last, under no heading.
+export function groupRoutes (routes, groups) {
+  const known = groups.map(group => ({ ...group, routes: routes.filter(route => route.group === group.id) }))
+  const rest = routes.filter(route => !groups.some(group => group.id === route.group))
+  if (rest.length) known.push({ id: 'other', label: '', routes: rest })
+  return known.filter(group => group.routes.length > 0)
+}
 
 export default function Sidebar ({
   routes = DEFAULT_ROUTES,
+  groups = DEFAULT_GROUPS,
+  labels = {},
   activeRoute,
   onSignOut,
-  onNavigate
+  onNavigate,
+  footer
 }) {
+  const l = { ...DEFAULT_LABELS, ...labels }
   const [expanded, setExpanded] = useState(() => {
-    try { return localStorage.getItem(STORAGE_KEY) === 'true' } catch { return false }
+    try { return window.localStorage.getItem(STORAGE_KEY) !== 'false' } catch { return true }
   })
   const [visible, setVisible] = useState(false)
 
-  // Only mount at ≥992px
   useEffect(() => {
     const mq = window.matchMedia('(min-width: 992px)')
     const update = () => setVisible(mq.matches)
@@ -65,117 +71,74 @@ export default function Sidebar ({
     return () => mq.removeEventListener('change', update)
   }, [])
 
+  useEffect(() => {
+    const width = !visible ? '0px' : expanded ? 'var(--reefpi-sidebar-expanded)' : 'var(--reefpi-sidebar-rail)'
+    document.documentElement.style.setProperty('--reefpi-sidebar-width', width)
+  }, [visible, expanded])
+
   const toggleExpanded = useCallback(() => {
-    setExpanded(e => {
-      const next = !e
-      try { localStorage.setItem(STORAGE_KEY, String(next)) } catch {}
+    setExpanded(value => {
+      const next = !value
+      try { window.localStorage.setItem(STORAGE_KEY, String(next)) } catch {}
       return next
     })
   }, [])
 
   if (!visible) return null
 
-  const width = expanded ? EXPANDED_W : RAIL_W
-
   return (
     <nav
-      aria-label='Main navigation'
+      aria-label={l.nav}
       data-testid='smoke-nav'
-      style={{
-        position:   'fixed',
-        top:        0,
-        left:       0,
-        bottom:     0,
-        width:      `${width}px`,
-        background: 'var(--reefpi-gradient-brand)',
-        display:    'flex',
-        flexDirection: 'column',
-        zIndex:     100,
-        transition: 'width 0.22s cubic-bezier(0.4,0,0.2,1)',
-        overflow:   expanded ? 'hidden' : 'visible'
-      }}
+      className={'reefpi-sidebar ' + (expanded ? 'reefpi-sidebar--expanded' : 'reefpi-sidebar--rail')}
     >
-      {/* Logo + expand toggle */}
-      <div style={{
-        display:        'flex',
-        alignItems:     'center',
-        justifyContent: expanded ? 'space-between' : 'center',
-        minHeight:      '64px',
-        padding:        expanded ? '0 1rem 0 1.25rem' : '0',
-        borderBottom:   '1px solid var(--reefpi-color-nav-border)',
-        flexShrink:     0
-      }}>
-        <a
-          href='/'
-          data-testid='smoke-brand'
-          style={{
-            color:          'var(--reefpi-color-nav-text-strong)',
-            fontFamily:     'var(--reefpi-font-app)',
-            fontWeight:     700,
-            fontSize:       expanded ? '1.1rem' : '1rem',
-            textDecoration: 'none',
-            letterSpacing:  expanded ? 0 : '0.04em',
-            minWidth:       '44px',
-            minHeight:      '44px',
-            display:        'inline-flex',
-            alignItems:     'center',
-            justifyContent: 'center'
-          }}
-        >
-          {expanded ? 'reef-pi' : 'rp'}
+      <div className='reefpi-sidebar-head'>
+        <a href='/' data-testid='smoke-brand' className='reefpi-brand' aria-label='reef-pi'>
+          <span className='reefpi-brand-mark' aria-hidden='true'>rp</span>
+          {expanded && (
+            <span className='reefpi-brand-text' aria-hidden='true'>
+              <span className='reefpi-brand-name'>reef-pi</span>
+              <span className='reefpi-brand-tagline'>{l.tagline}</span>
+            </span>
+          )}
         </a>
         <button
-          aria-label={expanded ? 'Collapse sidebar' : 'Expand sidebar'}
+          type='button'
+          className='reefpi-sidebar-toggle'
+          aria-label={expanded ? l.collapse : l.expand}
+          aria-expanded={expanded}
           onClick={toggleExpanded}
-          style={{
-            background: 'none',
-            border:     'none',
-            color:      'var(--reefpi-color-nav-text-muted)',
-            cursor:     'pointer',
-            minWidth:   '44px',
-            minHeight:  '44px',
-            display:    'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderRadius: 'var(--reefpi-radius-sm)',
-            flexShrink: 0
-          }}
         >
           <ChevronIcon expanded={expanded} />
         </button>
       </div>
 
-      {/* Route items */}
-      <div style={{
-        flex:       '1 1 auto',
-        overflowY:  expanded ? 'auto' : 'visible',
-        overflowX:  'visible',
-        padding:    expanded ? '0.5rem' : '0.5rem 0',
-        display:    'flex',
-        flexDirection: 'column',
-        gap:        '2px'
-      }}>
-        {routes.map(route => (
-          <NavItem
-            key={route.id}
-            route={route}
-            active={activeRoute === route.id}
-            expanded={expanded}
-            onNavigate={onNavigate}
-          />
+      <div className='reefpi-sidebar-body'>
+        {groupRoutes(routes, groups).map(group => (
+          <div key={group.id} className='reefpi-nav-group' role='group' aria-label={group.label || undefined}>
+            {expanded && group.label && <p className='reefpi-nav-group-label' aria-hidden='true'>{group.label}</p>}
+            <ul className='reefpi-nav-list'>
+              {group.routes.map(route => (
+                <li key={route.id}>
+                  <NavItem route={route} active={activeRoute === route.id} expanded={expanded} onNavigate={onNavigate} />
+                </li>
+              ))}
+            </ul>
+          </div>
         ))}
       </div>
 
-      {/* Sign out */}
-      <div style={{ padding: '0.5rem', borderTop: '1px solid var(--reefpi-color-nav-border)', flexShrink: 0 }}>
+      <div className='reefpi-sidebar-foot'>
+        {footer ? footer(expanded) : null}
         <button
+          type='button'
           onClick={onSignOut}
-          aria-label='Sign out'
+          aria-label={l.signOut}
           data-testid='smoke-sign-out'
-          style={NAV_ITEM_STYLE(false, expanded)}
+          className='reefpi-nav-item'
         >
-          <SignOutIcon />
-          {expanded && <span>Sign out</span>}
+          <span className='reefpi-nav-icon'><SignOutIcon /></span>
+          {expanded && <span className='reefpi-nav-label'>{l.signOut}</span>}
         </button>
       </div>
     </nav>
@@ -184,46 +147,33 @@ export default function Sidebar ({
 
 function NavItem ({ route, active, expanded, onNavigate }) {
   const [hovered, setHovered] = useState(false)
+  const [focused, setFocused] = useState(false)
 
   return (
     <a
       href={route.href}
       data-testid={`smoke-tab-${route.id}`}
       aria-current={active ? 'page' : undefined}
+      aria-label={expanded ? undefined : route.label}
+      className='reefpi-nav-item'
       onClick={e => { if (onNavigate) { e.preventDefault(); onNavigate(route) } }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      style={NAV_ITEM_STYLE(active, expanded)}
+      onFocus={() => setFocused(true)}
+      onBlur={() => setFocused(false)}
     >
-      <span style={{ flexShrink: 0, width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        {route.icon}
-      </span>
-      {expanded && <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{route.label}</span>}
-      {hovered && !expanded && (
-        <span
-          role='tooltip'
-          style={{
-            position:   'absolute',
-            left:       '100%',
-            top:        '50%',
-            transform:  'translateY(-50%)',
-            marginLeft: '8px',
-            background: 'var(--reefpi-color-text)',
-            color:      'var(--reefpi-color-surface)',
-            fontSize:   '0.75rem',
-            padding:    '4px 8px',
-            borderRadius: 'var(--reefpi-radius-sm)',
-            pointerEvents: 'none',
-            zIndex:     1000,
-            fontFamily: 'var(--reefpi-font-app)',
-            whiteSpace: 'nowrap'
-          }}
-        >
-          {route.label}
-        </span>
-      )}
+      <span className='reefpi-nav-icon'>{route.icon}</span>
+      {expanded && <span className='reefpi-nav-label'>{route.label}</span>}
+      {(hovered || focused) && !expanded && <span role='tooltip' className='reefpi-nav-tooltip'>{route.label}</span>}
     </a>
   )
+}
+
+NavItem.propTypes = {
+  route: PropTypes.object.isRequired,
+  active: PropTypes.bool,
+  expanded: PropTypes.bool,
+  onNavigate: PropTypes.func
 }
 
 // ── Icons ─────────────────────────────────────────────────────────────────────
@@ -233,11 +183,12 @@ function ChevronIcon ({ expanded }) {
     <svg width='16' height='16' viewBox='0 0 16 16' fill='none' stroke='currentColor' strokeWidth='1.5' strokeLinecap='round' strokeLinejoin='round' aria-hidden='true'>
       {expanded
         ? <polyline points='10,4 6,8 10,12' />
-        : <polyline points='6,4 10,8 6,12' />
-      }
+        : <polyline points='6,4 10,8 6,12' />}
     </svg>
   )
 }
+
+ChevronIcon.propTypes = { expanded: PropTypes.bool }
 
 function SignOutIcon () {
   return (
@@ -248,23 +199,25 @@ function SignOutIcon () {
   )
 }
 
-// ── Default routes ────────────────────────────────────────────────────────────
+// ── Default routes (design-system previews) ───────────────────────────────────
 
 const DEFAULT_ROUTES = [
-  { id: 'dashboard',   label: 'Dashboard',   href: '/',            icon: NAV_ICONS.dashboard },
-  { id: 'equipment',   label: 'Equipment',   href: '/equipment',   icon: NAV_ICONS.equipment },
-  { id: 'lighting',    label: 'Lighting',    href: '/lighting',    icon: NAV_ICONS.lighting },
-  { id: 'temperature', label: 'Temperature', href: '/temperature', icon: NAV_ICONS.temperature },
-  { id: 'ato',         label: 'ATO',         href: '/ato',         icon: NAV_ICONS.ato },
-  { id: 'ph',          label: 'pH',          href: '/ph',          icon: NAV_ICONS.ph },
-  { id: 'timers',      label: 'Timers',      href: '/timers',      icon: NAV_ICONS.timers },
-  { id: 'configuration', label: 'Settings',  href: '/config',      icon: NAV_ICONS.configuration },
-  { id: 'health',      label: 'Health',      href: '/health',      icon: NAV_ICONS.health }
+  { id: 'dashboard', label: 'Dashboard', href: '/', icon: NAV_ICONS.dashboard, group: 'observe' },
+  { id: 'equipment', label: 'Equipment', href: '/equipment', icon: NAV_ICONS.equipment, group: 'operate' },
+  { id: 'lighting', label: 'Lighting', href: '/lighting', icon: NAV_ICONS.lighting, group: 'operate' },
+  { id: 'temperature', label: 'Temperature', href: '/temperature', icon: NAV_ICONS.temperature, group: 'operate' },
+  { id: 'ato', label: 'ATO', href: '/ato', icon: NAV_ICONS.ato, group: 'operate' },
+  { id: 'ph', label: 'pH', href: '/ph', icon: NAV_ICONS.ph, group: 'operate' },
+  { id: 'timers', label: 'Timers', href: '/timers', icon: NAV_ICONS.timers, group: 'operate' },
+  { id: 'configuration', label: 'Configuration', href: '/configuration', icon: NAV_ICONS.configuration, group: 'configure' }
 ]
 
 Sidebar.propTypes = {
-  routes:      PropTypes.array,
+  routes: PropTypes.array,
+  groups: PropTypes.array,
+  labels: PropTypes.object,
   activeRoute: PropTypes.string,
-  onSignOut:   PropTypes.func,
-  onNavigate:  PropTypes.func
+  onSignOut: PropTypes.func,
+  onNavigate: PropTypes.func,
+  footer: PropTypes.func
 }
