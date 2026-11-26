@@ -64,9 +64,11 @@ test('Guide 3: Configuration & Testing', async ({ page, baseURL }, testInfo) => 
     await page.getByTestId('smoke-temperature-name').fill(CONTROLLER.name)
     await page.getByTestId('smoke-temperature-sensor').selectOption(CONTROLLER.sensor)
     await page.getByTestId('smoke-temperature-period').fill(CONTROLLER.period)
-    // Unit (Fahrenheit) and status (Enabled) are the form defaults; alerts stay off because the
-    // guide "just enables sensor monitoring". (Changing those Yes/No selects currently sends
-    // strings the API rejects; reef-pi issue #3252.)
+    // Unit (Fahrenheit) and status (Enabled) are the form defaults. Alerts are on at 77 / 81 F, as in the
+    // published guide's screenshot.
+    await page.locator('select[name="alerts"]').selectOption('true')
+    await page.locator('input[name="minAlert"]').fill('77')
+    await page.locator('input[name="maxAlert"]').fill('81')
     const form = page.locator('form').filter({ has: page.getByTestId('smoke-temperature-name') })
     await form.scrollIntoViewIfNeeded()
     await shot(page, testInfo, { guide: GUIDE, pageSlug: PAGE, index: 2, what: 'temperature-new-controller' })
