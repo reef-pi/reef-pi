@@ -199,10 +199,13 @@ describe('ATO Main', () => {
     expect(html).toContain('reefpi-range-selector')
   })
 
-  it('omits dashboard primitives when usage history is not available', () => {
+  it('shows an honest empty usage state when usage history is not available', () => {
     const component = new RawATOMain(makeProps({ atoUsage: { 1: {} } }))
 
-    expect(renderToStaticMarkup(component.probeList()[0].props.children[0])).toBe('')
+    const html = renderToStaticMarkup(component.probeList()[0].props.children[0])
+    expect(html).toContain('No top-off usage yet')
+    expect(html).toContain('Sensor &amp; timing')
+    expect(html).toContain('Safety &amp; alerts')
   })
 
   it('render shows EmptyState when atos list is empty', () => {

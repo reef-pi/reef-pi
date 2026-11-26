@@ -25,6 +25,7 @@ const EditAto = ({
   isValid,
   dirty,
   readOnly,
+  onCancel,
   handleBlur,
   handleChange
 }) => {
@@ -78,7 +79,13 @@ const EditAto = ({
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className='reefpi-controller-form' onSubmit={handleSubmit}>
+      <div className='reefpi-controller-form__sections'>
+      <section className='reefpi-section-card' aria-label={i18next.t('ato:sensor_timing', { defaultValue: 'Sensor & timing' })}>
+        <div className='reefpi-controller-section__header'>
+          <h3>{i18next.t('ato:sensor_timing', { defaultValue: 'Sensor & timing' })}</h3>
+          <p>{i18next.t('ato:helper_sensor', { defaultValue: 'Choose the water-level inlet and how reef-pi filters repeated readings.' })}</p>
+        </div>
       {!readOnly && (
         <div style={{ ...gridStyle, marginBottom: 'var(--reefpi-space-md)' }}>
           <FormField
@@ -170,7 +177,13 @@ const EditAto = ({
           </BooleanFormSelect>
         </FormField>
       </div>
+      </section>
 
+      <section className='reefpi-section-card' aria-label={i18next.t('ato:pump_control', { defaultValue: 'Pump control' })}>
+        <div className='reefpi-controller-section__header'>
+          <h3>{i18next.t('ato:pump_control', { defaultValue: 'Pump control' })}</h3>
+          <p>{i18next.t('ato:helper_pump', { defaultValue: 'Choose what reef-pi commands when the inlet requests top-off. The target stays unavailable until a control type is selected.' })}</p>
+        </div>
       <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
         <FormField
           label={i18next.t('ato:control')}
@@ -228,7 +241,13 @@ const EditAto = ({
           </BooleanFormSelect>
         </FormField>
       </div>
+      </section>
 
+      <section className='reefpi-section-card' aria-label={i18next.t('ato:safety_alerts', { defaultValue: 'Safety & alerts' })}>
+        <div className='reefpi-controller-section__header'>
+          <h3>{i18next.t('ato:safety_alerts', { defaultValue: 'Safety & alerts' })}</h3>
+          <p>{i18next.t('ato:helper_safety', { defaultValue: 'Alerts use accumulated pump-on time. Disable on alert stops this controller after that alert threshold is reached.' })}</p>
+        </div>
       <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
         <FormField
           label={i18next.t('alerts')}
@@ -283,9 +302,21 @@ const EditAto = ({
           </BooleanFormSelect>
         </FormField>
       </div>
+      </section>
+      </div>
 
       {!readOnly && (
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 'var(--reefpi-space-xs)' }}>
+        <div className='reefpi-controller-form__actions'>
+          {onCancel && (
+            <Button
+              type='button'
+              name='cancel'
+              variant='secondary'
+              onClick={onCancel}
+            >
+              {i18next.t('cancel')}
+            </Button>
+          )}
           <Button
             type='submit'
             data-testid='smoke-ato-submit'
@@ -307,9 +338,12 @@ EditAto.propTypes = {
   errors: PropTypes.object,
   touched: PropTypes.object,
   inlets: PropTypes.array,
+  equipment: PropTypes.array,
+  macros: PropTypes.array,
   handleBlur: PropTypes.func.isRequired,
   submitForm: PropTypes.func.isRequired,
   onDelete: PropTypes.func,
+  onCancel: PropTypes.func,
   handleChange: PropTypes.func
 }
 

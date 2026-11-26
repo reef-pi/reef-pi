@@ -1,5 +1,6 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
+import { renderToStaticMarkup } from 'react-dom/server'
 import EditAto from './edit_ato'
 import 'isomorphic-fetch'
 import * as Alert from '../utils/alert'
@@ -76,6 +77,24 @@ describe('<EditAto />', () => {
     expect(element.type).toBe('form')
     expect(findFieldByName(element, 'name')).not.toBeNull()
     expect(findFieldByName(element, 'inlet')).not.toBeNull()
+  })
+
+  it('groups configuration into the three controller sections', () => {
+    const markup = renderToStaticMarkup(renderComponent())
+
+    expect(markup).toContain('Sensor &amp; timing')
+    expect(markup).toContain('Pump control')
+    expect(markup).toContain('Safety &amp; alerts')
+  })
+
+  it('offers a cancel action outside read-only mode', () => {
+    const onCancel = jest.fn()
+    const element = renderComponent({ onCancel })
+    const cancel = findFieldByName(element, 'cancel')
+
+    expect(cancel).not.toBeNull()
+    cancel.props.onClick()
+    expect(onCancel).toHaveBeenCalled()
   })
 
   it('submits when valid', () => {

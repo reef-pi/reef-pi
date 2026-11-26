@@ -220,7 +220,8 @@ reef-pi from **Configuration > Admin > Reload**; reload reef-pi every time capab
 
 Refresh your browser after reef-pi is reloaded and the **Temperature** page should appear in the
 sidebar (on a phone, in the bottom bar's **More** menu). Navigate to it and create a new temperature
-controller by clicking on the **+** button. A new temperature item should be available from the
+controller by clicking **Add**. The form groups sensor sampling, visualization and alerts, and
+control and safety settings. A new temperature item should be available from the
 **Sensor** drop-down (DS18B20 sensors always have a name starting with 28-). The **Status** option
 represents whether reef-pi will check this sensor or not. Once enabled, the **Check Frequency** option
 represents how frequently (seconds) reef-pi should check for sensor value. Next, the **Alerts** and
@@ -249,8 +250,9 @@ usage (in seconds) for the past thirty days.
 There is nothing to configure: as soon as a temperature controller exists, the main dashboard shows a
 **Temperature** tile with the latest reading, a gauge, and a chart of recent readings. Use the range
 buttons on the tile to switch between the last hour, 6 hours, day, 7 days and 30 days. Expanding the
-controller on the **Temperature** page shows its readings and usage charts. The example images are
-taken from a controller running for a short time; for new builds, the charts will have limited data.
+controller on the **Temperature** page shows its readings and a read-only configuration summary. Use
+the controller's action menu to edit or delete it. The example images are taken from a controller
+running for a short time; for new builds, the chart shows an empty message until readings arrive.
 
 | Desktop | Mobile |
 |---|---|

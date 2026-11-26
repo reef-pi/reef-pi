@@ -1,5 +1,6 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
+import { renderToStaticMarkup } from 'react-dom/server'
 import { Provider } from 'react-redux'
 import ControlChart from './control_chart'
 import EditTemperature from './edit_temperature'
@@ -76,6 +77,24 @@ describe('<EditTemperature />', () => {
 
   afterEach(() => {
     jest.clearAllMocks()
+  })
+
+  it('groups configuration into the three controller sections', () => {
+    const markup = renderToStaticMarkup(renderComponent({ showChart: false }))
+
+    expect(markup).toContain('Sensor &amp; sampling')
+    expect(markup).toContain('Visualization &amp; alerts')
+    expect(markup).toContain('Control &amp; safety')
+  })
+
+  it('offers a cancel action outside read-only mode', () => {
+    const onCancel = jest.fn()
+    const element = renderComponent({ onCancel })
+    const cancel = findFirst(element, child => child.props['data-testid'] === 'temperature-cancel')
+
+    expect(cancel).toBeTruthy()
+    cancel.props.onClick()
+    expect(onCancel).toHaveBeenCalled()
   })
 
   it('should not show charts when showChart is false', () => {

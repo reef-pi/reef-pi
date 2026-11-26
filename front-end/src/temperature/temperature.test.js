@@ -301,7 +301,7 @@ describe('Temperature controller ui', () => {
     expect(html).toContain('°C')
   })
 
-  it('<Main /> omits dashboard primitives when usage is unavailable', () => {
+  it('<Main /> shows an honest empty telemetry state when usage is unavailable', () => {
     const component = new RawTemperatureMain({
       probes: [{ id: '1', name: 'Water', chart: {}, enable: false, notify: { enable: false } }],
       currentReading: {},
@@ -322,7 +322,10 @@ describe('Temperature controller ui', () => {
       calibrateSensor: jest.fn()
     })
 
-    expect(renderToStaticMarkup(component.probeList()[0].props.children[0])).toBe('')
+    const html = renderToStaticMarkup(component.probeList()[0].props.children[0])
+    expect(html).toContain('No temperature readings yet')
+    expect(html).toContain('Sensor &amp; sampling')
+    expect(html).toContain('Control &amp; safety')
   })
 
   it('<Main /> toggles add probe form', () => {

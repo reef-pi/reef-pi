@@ -2,14 +2,15 @@ const { test, expect } = require('@playwright/test')
 const { createSmokeApi, seedFullSmokeConfiguration } = require('../fixtures/apiSeed')
 const { NavBar } = require('../pages/navBar')
 
-// ATO, pH and temperature panels render a chart/gauge view plus a form inside one collapsible item.
+// Temperature and ATO use a read-only summary before entering edit mode. pH retains the legacy
+// combined chart/form panel until its own Aquatic Precision slice.
 const panels = [
-  { tab: 'ato', title: 'Biocube29 ATO' },
+  { tab: 'ato', title: 'Biocube29 ATO', summary: 'Sensor & timing' },
   { tab: 'ph', title: 'Biocube29 pH' },
-  { tab: 'temperature', title: 'Biocube29 Temperature' }
+  { tab: 'temperature', title: 'Biocube29 Temperature', summary: 'Sensor & sampling' }
 ]
 
-test('expanding ATO, pH and temperature panels shows their form without crashing', async ({ page, baseURL }) => {
+test('expanding ATO, pH and temperature panels shows the intended details without crashing', async ({ page, baseURL }) => {
   const api = await createSmokeApi(baseURL)
   try {
     await seedFullSmokeConfiguration(api)
@@ -24,7 +25,12 @@ test('expanding ATO, pH and temperature panels shows their form without crashing
   for (const panel of panels) {
     await navBar.open(panel.tab)
     await page.getByText(panel.title, { exact: true }).click()
-    await expect(page.locator('li form').first()).toBeVisible()
+    if (panel.summary) {
+      await expect(page.getByRole('heading', { name: panel.summary })).toBeVisible()
+      await expect(page.locator('li form')).toHaveCount(0)
+    } else {
+      await expect(page.locator('li form').first()).toBeVisible()
+    }
     await expect(page.getByText('Something went wrong')).toHaveCount(0)
   }
 })

@@ -39,6 +39,7 @@ export class RawNewATO extends React.Component {
     return (
       <AtoForm
         onSubmit={this.handleSubmit}
+        onCancel={this.handleToggle}
         inlets={this.props.inlets}
         equipment={this.props.equipment}
         macros={this.props.macros}

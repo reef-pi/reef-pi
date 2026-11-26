@@ -13,6 +13,7 @@ charts,tabelas
 clear,Limpar
 columns,Colunas
 configure,Configurar
+configured,
 delete,Apagar
 devmode_warning,Aviso
 disabled,desativar
@@ -43,6 +44,7 @@ minimum,minimo
 name,Nome
 no,Não
 none,nenhum
+not_configured,
 off,desligar
 ok,Ok
 on,ligar
@@ -72,7 +74,9 @@ update,Atualizar
 upgrade_reef_pi,Upgrade
 width,largura
 yes,sim
+ato:actions,
 ato:alert_after,Alertar após
+ato:alert_summary,
 ato:ato_usage,Utilização do ATO
 ato:chk_freq,Verificar a frequência
 ato:control,Comando
@@ -82,7 +86,15 @@ ato:controlmacro,Macro do equipamento
 ato:controlnothing,Não controlar
 ato:debounce,Debounce
 ato:disable_on_alert,Desativar alerta
+ato:empty_usage,
+ato:helper_pump,
+ato:helper_safety,
+ato:helper_sensor,
+ato:no_automatic_control,
+ato:pump_control,
 ato:reset_usage,Reninciar o uso
+ato:safety_alerts,
+ato:sensor_timing,
 ato:title_delete,Apagar
 ato:total_seconds_pump_on,Número de segundos para ligar a a bomba
 ato:warn_delete,Avisar apagar
@@ -407,8 +419,10 @@ telemetry:notification:port,porta
 telemetry:notification:server,servidor
 telemetry:notification:to,para
 telemetry:notification:username,nome de utilizador
+temperature:actions,
 temperature:alert_above,alerta sobre
 temperature:alert_below,alerta abaixo
+temperature:alert_range,
 temperature:analog_input,Entrada Analogica
 temperature:calibrate,calibrar
 temperature:calibration:apply,aplicar
@@ -419,26 +433,36 @@ temperature:chart:down,Refrigeração
 temperature:chart:historical,histórico
 temperature:chart:up,Aquecedor
 temperature:chart_color,cor
+temperature:chart_range,
 temperature:chart_ymax,y maximo 
 temperature:chart_ymin,y minimo
 temperature:check_frequency,Verificar a frequência
 temperature:control,controlo
+temperature:control_safety,
 temperature:controlequipment,controlar equipamento
 temperature:controlmacro,controlar macro
 temperature:controlnothing,não controlar
 temperature:current_reading,Leitura atual
+temperature:empty_readings,
 temperature:fahrenheit,Fahrenheit
 temperature:fail_safe,Fail safe (disable heater on sensor error)
 temperature:heater_cooler,Aquecedor/refrigeração
+temperature:helper_control,
+temperature:helper_sensor,
+temperature:helper_visualization,
 temperature:hysteresis,hysteresis
 temperature:hysteresis_less_than,hysteresis menos de 
 temperature:lower_function,função caso seja menor
 temperature:lower_threshold,Abaixo do desejado
+temperature:monitoring_only,
 temperature:sensor,Sensor
+temperature:sensor_sampling,
+temperature:source,
 temperature:temperature,Temperatura
 temperature:unit,Unidades
 temperature:upper_function,função caso seja maior
 temperature:upper_threshold,a cima do desejado
+temperature:visualization_alerts,
 temperature:warn_delete,apagar
 temperature:warn_reset,reset
 timers:action,acção

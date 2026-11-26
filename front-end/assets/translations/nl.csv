@@ -13,6 +13,7 @@ charts,
 clear,Resetten
 columns,
 configure,Instellen
+configured,
 delete,Verwijderen
 devmode_warning,
 disabled,Uitgeschakeld
@@ -43,6 +44,7 @@ minimum,
 name,Naam
 no,
 none,Niets
+not_configured,
 off,
 ok,Ok
 on,
@@ -72,7 +74,9 @@ update,Update
 upgrade_reef_pi,
 width,
 yes,
+ato:actions,
 ato:alert_after,Alarm Na
+ato:alert_summary,
 ato:ato_usage,ATO Gebruik
 ato:chk_freq,Controleer Frequentie
 ato:control,
@@ -82,7 +86,15 @@ ato:controlmacro,Macro
 ato:controlnothing,Niets
 ato:debounce,Debounce
 ato:disable_on_alert,Uitschakelen bij alarm
+ato:empty_usage,
+ato:helper_pump,
+ato:helper_safety,
+ato:helper_sensor,
+ato:no_automatic_control,
+ato:pump_control,
 ato:reset_usage,
+ato:safety_alerts,
+ato:sensor_timing,
 ato:title_delete,
 ato:total_seconds_pump_on,Tijdsduur ATO pomp ingeschakeld in seconden
 ato:warn_delete,Deze actie verwijderd
@@ -407,8 +419,10 @@ telemetry:notification:port,
 telemetry:notification:server,
 telemetry:notification:to,
 telemetry:notification:username,
+temperature:actions,
 temperature:alert_above,Alarm boven
 temperature:alert_below,Alarm onder
+temperature:alert_range,
 temperature:analog_input,Analoge Ingang
 temperature:calibrate,Kalibreer
 temperature:calibration:apply,Bevestigen
@@ -419,26 +433,36 @@ temperature:chart:down,Koeling
 temperature:chart:historical,historiek
 temperature:chart:up,Verwarming
 temperature:chart_color,
+temperature:chart_range,
 temperature:chart_ymax,
 temperature:chart_ymin,
 temperature:check_frequency,Controleer frequentie
 temperature:control,Bedien
+temperature:control_safety,
 temperature:controlequipment,Apparatuur
 temperature:controlmacro,Macro
 temperature:controlnothing,Niets
 temperature:current_reading,Huidige uitlezing
+temperature:empty_readings,
 temperature:fahrenheit,Fahrenheit
 temperature:fail_safe,Fail safe (disable heater on sensor error)
 temperature:heater_cooler,Verwarming/Koeling
+temperature:helper_control,
+temperature:helper_sensor,
+temperature:helper_visualization,
 temperature:hysteresis,Hysteresis
 temperature:hysteresis_less_than,Hysteresis kleiner dan de aanvaardbaar drempelwaarde
 temperature:lower_function,Verwarming
 temperature:lower_threshold,Verwarming drempelwaarde
+temperature:monitoring_only,
 temperature:sensor,Sensor
+temperature:sensor_sampling,
+temperature:source,
 temperature:temperature,Temperatuur
 temperature:unit,Eenheid
 temperature:upper_function,Koeler
 temperature:upper_threshold,Koeler drempelwaarde
+temperature:visualization_alerts,
 temperature:warn_delete,Deze actie verwijderd
 temperature:warn_reset,
 timers:action,

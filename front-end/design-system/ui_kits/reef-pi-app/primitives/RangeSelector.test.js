@@ -87,6 +87,8 @@ describe('design-system RangeSelector and ToggleSwitch', () => {
     act(() => {
       root.render(<ToggleSwitch state='on' onRequestChange={request} />)
     })
+    expect(container.querySelector('button').style.minHeight).toBe('var(--reefpi-tap-target-min)')
+    expect(container.querySelector('button').style.minWidth).toBe('var(--reefpi-tap-target-min)')
     act(() => container.querySelector('button').click())
     expect(request).toHaveBeenCalledWith('off')
 

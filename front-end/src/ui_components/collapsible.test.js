@@ -196,5 +196,55 @@ describe('Collapsible', () => {
       expect(markup).not.toContain('chart area')
       expect(markup).not.toContain('This is inner content')
     })
+
+    it('renders only the summary in separate read mode', () => {
+      const children = [<View key='view' />, <Content key='form' onSubmit={jest.fn()} />]
+      const markup = renderToStaticMarkup(makeCollapsible({
+        expanded: true,
+        readOnly: true,
+        separateEdit: true,
+        overflowActions: true,
+        actionsLabel: 'Controller actions',
+        children
+      }).render())
+
+      expect(markup).toContain('chart area')
+      expect(markup).not.toContain('This is inner content')
+      expect(markup).toContain('aria-label="Controller actions"')
+      expect(markup).not.toContain('id="edit-test"')
+    })
+
+    it('renders only the form in separate edit mode and forwards cancel', () => {
+      const onCancel = jest.fn()
+      const children = [<View key='view' />, <Content key='form' onSubmit={jest.fn()} />]
+      const instance = makeCollapsible({
+        expanded: true,
+        readOnly: false,
+        separateEdit: true,
+        overflowActions: true,
+        onCancel,
+        children
+      })
+      const rendered = instance.render()
+      const markup = renderToStaticMarkup(rendered)
+      const form = visitElements(rendered, element => element.type === Content)[0]
+
+      expect(markup).not.toContain('chart area')
+      expect(markup).toContain('This is inner content')
+      expect(markup).not.toContain('role="switch"')
+      form.props.onCancel()
+      expect(onCancel).toHaveBeenCalledWith('test')
+    })
+
+    it('returns an edited panel to its expanded summary when cancelled', () => {
+      const child = <Collapsible name='test' title='title'><Content onSubmit={noop} /></Collapsible>
+      const list = makeCollapsibleList(child)
+      list.onEdit('test')
+
+      list.onCancel('test')
+
+      expect(list.state.expanded.test).toBe(true)
+      expect(list.state.readOnly.test).toBe(true)
+    })
   })
 })
