@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import ThresholdGauge from '../primitives/ThresholdGauge'
 import Sparkline from '../primitives/Sparkline'
@@ -28,11 +28,20 @@ function alertRelTime (ts) {
   return Math.floor(s / 3600) + 'h'
 }
 
-export default function TemperatureTile ({ metric = 'temperature.display', unit = '°F', label = '', alert, onAlertClick }) {
+export default function TemperatureTile ({ metric = 'temperature.display', unit = '°F', label = '', alert, onAlertClick, refreshEquipment }) {
   const [range, setRange] = useState('1d')
   const [hoverValue, setHoverValue] = useState(null)
 
   const { points, loading, error, refetch } = useTimeSeries({ metric, range, maxPoints: 120 })
+
+  useEffect(() => {
+    if (!refreshEquipment) return
+    const timer = setInterval(() => {
+      refetch()
+      refreshEquipment()
+    }, 5000)
+    return () => clearInterval(timer)
+  }, [refetch, refreshEquipment])
 
   const latest = points.length ? points[points.length - 1].v : null
   const display = hoverValue !== null ? hoverValue : latest
@@ -258,5 +267,6 @@ TemperatureTile.propTypes = {
   unit: PropTypes.string,
   label: PropTypes.string,
   alert: PropTypes.shape({ severity: PropTypes.string, message: PropTypes.string, at: PropTypes.number }),
+  refreshEquipment: PropTypes.func,
   onAlertClick: PropTypes.func
 }

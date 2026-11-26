@@ -101,20 +101,16 @@ func TestReadTemperatureCelsius(t *testing.T) {
 func TestReadDevMode(t *testing.T) {
 	c := setupTempController(t)
 
-	v, err := c.Read(&TC{})
-	if err != nil {
-		t.Fatal(err)
+	defer c.c.Store().Close()
+	tc := &TC{Sensor: "28-devmodeenable", Fahrenheit: true}
+	v, err := c.Read(tc)
+	if err != nil || v != 78.5 {
+		t.Fatalf("initial fake reading = %v, %v; want 78.5°F", v, err)
 	}
-	if v < 24.4 || v > 25.9 {
-		t.Fatalf("expected celsius dev reading in range, got %v", v)
-	}
-
-	v, err = c.Read(&TC{Fahrenheit: true})
-	if err != nil {
-		t.Fatal(err)
-	}
-	if v < 78 || v > 81 {
-		t.Fatalf("expected fahrenheit dev reading in range, got %v", v)
+	tc.Fahrenheit = false
+	v, err = c.Read(tc)
+	if err != nil || v != 25.83 {
+		t.Fatalf("same fake reading in Celsius = %v, %v; want 25.83°C", v, err)
 	}
 }
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { updateEquipment } from 'redux/actions/equipment'
+import { fetchEquipment, updateEquipment } from 'redux/actions/equipment'
 import { connect } from 'react-redux'
 import Config from './config'
 import i18n from 'utils/i18n'
@@ -58,6 +58,7 @@ export class RawDashboardMain extends React.Component {
         phProbes={this.props.phProbes}
         atos={this.props.atos}
         onToggle={this.handleEquipmentToggle}
+        refreshEquipment={this.props.devMode ? this.props.fetchEquipment : undefined}
         onConfigure={this.handleToggle}
         sseEndpoint='/api/alerts'
       />
@@ -68,6 +69,7 @@ export class RawDashboardMain extends React.Component {
 const mapStateToProps = state => {
   return {
     equipment: state.equipment,
+    devMode: state.capabilities?.dev_mode,
     temperatureControllers: state.tcs,
     phProbes: state.phprobes,
     atos: state.atos
@@ -76,6 +78,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    fetchEquipment: () => dispatch(fetchEquipment()),
     updateEquipment: (id, payload) => dispatch(updateEquipment(id, payload))
   }
 }
