@@ -21,9 +21,12 @@ const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
 
 describe('macro actions', () => {
+  beforeEach(() => {
+    fetchMock.mockGlobal()
+  })
+
   afterEach(() => {
-    fetchMock.reset()
-    fetchMock.restore()
+    fetchMock.hardReset()
   })
 
   it('macroUpdated returns correct type', () => {

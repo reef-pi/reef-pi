@@ -6,9 +6,12 @@ import 'isomorphic-fetch'
 const children = component => component.render().props.children
 
 describe('<New />', () => {
+  beforeEach(() => {
+    fetchMock.mockGlobal()
+  })
+
   afterEach(() => {
-    fetchMock.reset()
-    fetchMock.restore()
+    fetchMock.hardReset()
   })
 
   it('renders collapsed without a journal form', () => {

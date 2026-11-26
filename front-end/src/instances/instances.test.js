@@ -62,9 +62,12 @@ const findNode = (node, predicate) => {
 }
 
 describe('Instances Main', () => {
+  beforeEach(() => {
+    fetchMock.mockGlobal()
+  })
+
   afterEach(() => {
-    fetchMock.reset()
-    fetchMock.restore()
+    fetchMock.hardReset()
     jest.clearAllMocks()
   })
 
