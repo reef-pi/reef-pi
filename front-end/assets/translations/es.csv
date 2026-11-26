@@ -221,9 +221,15 @@ doser:volume_ml,
 doser:vpr,
 doser:warn_delete,
 doser:warn_reset,
+equipment:actions,
 equipment:boot_delay,
 equipment:chart:barchart,Equipo(Gráfica de Barras)
 equipment:chart:ctrlpanel,Equipo(Panel de Interruptores)
+equipment:command_failed,
+equipment:command_pending,
+equipment:command_state_unknown,
+equipment:commanded_off,
+equipment:commanded_on,
 equipment:sort,Sort
 equipment:sort_name_az,Name (A→Z)
 equipment:sort_name_za,Name (Z→A)

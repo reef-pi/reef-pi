@@ -1,24 +1,11 @@
 import React, { useCallback } from 'react'
 import PropTypes from 'prop-types'
-import { FaEdit, FaTrashAlt } from 'react-icons/fa'
-import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
+import { FaEllipsisV } from 'react-icons/fa'
+import i18next from 'utils/i18n'
 import ToggleSwitch from '../../design-system/ui_kits/reef-pi-app/primitives/ToggleSwitch'
+import { Menu } from '../../design-system/ui_kits/reef-pi-app/primitives/Interaction'
 import { useEquipmentToggle } from '../../design-system/ui_kits/reef-pi-app/hooks/useEquipmentToggle'
 import { controlEquipment } from './utils'
-
-const rowStyle = {
-  alignItems: 'center',
-  display: 'grid',
-  gap: 'var(--reefpi-space-sm)',
-  gridTemplateColumns: 'minmax(0, 1fr) auto auto',
-  width: '100%'
-}
-
-const nameStyle = {
-  display: 'grid',
-  gap: 'var(--reefpi-space-xxs)',
-  minWidth: 0
-}
 
 const outletStyle = {
   color: 'var(--reefpi-color-text-muted)',
@@ -26,10 +13,12 @@ const outletStyle = {
   fontFamily: 'var(--reefpi-font-mono)'
 }
 
-const actionStyle = {
-  alignItems: 'center',
-  display: 'inline-flex',
-  gap: 'var(--reefpi-space-xxs)'
+function commandStateLabel (state, on) {
+  if (state === 'pending') return i18next.t('equipment:command_pending', { defaultValue: 'Command pending' })
+  if (state === 'error') return i18next.t('equipment:command_failed', { defaultValue: 'Command failed' })
+  if (on === true) return i18next.t('equipment:commanded_on', { defaultValue: 'Commanded on' })
+  if (on === false) return i18next.t('equipment:commanded_off', { defaultValue: 'Commanded off' })
+  return i18next.t('equipment:command_state_unknown', { defaultValue: 'Command state unknown' })
 }
 
 function PendingToggle ({ equipment, onStateChange }) {
@@ -45,28 +34,37 @@ function PendingToggle ({ equipment, onStateChange }) {
   })
 
   return (
-    <ToggleSwitch
-      state={state === 'idle' || state === 'ok'
-        ? (equipment.on ? 'on' : 'off')
-        : state}
-      onRequestChange={next => mutate(next)}
-      onRetry={retry}
-    />
+    <div className='reefpi-equipment-row__controls'>
+      <span className='reefpi-equipment-state' role='status' aria-live='polite'>
+        {commandStateLabel(state, equipment.on)}
+      </span>
+      <ToggleSwitch
+        state={state === 'idle' || state === 'ok'
+          ? (equipment.on === true ? 'on' : 'off')
+          : state}
+        onRequestChange={next => mutate(next)}
+        onRetry={retry}
+      />
+    </div>
   )
 }
 
 const ViewEquipment = ({ equipment, outletName, onStateChange, onDelete, onEdit }) => {
   return (
-    <div style={rowStyle} data-testid={`equipment-row-${equipment.id}`}>
-      <div style={nameStyle}>
+    <div className='reefpi-equipment-row' data-testid={`equipment-row-${equipment.id}`}>
+      <div className='reefpi-equipment-row__identity'>
         <span style={{ fontWeight: 600 }}>{equipment.name}</span>
         <small style={outletStyle}>{outletName}</small>
       </div>
       <PendingToggle equipment={equipment} onStateChange={onStateChange} />
-      <div style={actionStyle}>
-        <Button type='button' variant='ghost' icon={<FaEdit />} iconOnly aria-label='Edit equipment' data-testid='equipment-edit' onClick={onEdit} />
-        <Button type='button' variant='ghost' icon={<FaTrashAlt />} iconOnly aria-label='Delete equipment' data-testid='equipment-delete' onClick={onDelete} />
-      </div>
+      <Menu
+        buttonAriaLabel={i18next.t('equipment:actions', { defaultValue: 'Equipment actions' })}
+        buttonLabel={<span aria-hidden='true'><FaEllipsisV /></span>}
+        items={[
+          { label: i18next.t('edit', { defaultValue: 'Edit' }), onSelect: onEdit },
+          { label: i18next.t('delete', { defaultValue: 'Delete' }), onSelect: onDelete }
+        ]}
+      />
     </div>
   )
 }
