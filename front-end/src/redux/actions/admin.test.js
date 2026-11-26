@@ -18,9 +18,12 @@ window.localStorage = {
 }
 
 describe('admin actions', () => {
+  beforeEach(() => {
+    fetchMock.mockGlobal()
+  })
+
   afterEach(() => {
-    fetchMock.reset()
-    fetchMock.restore()
+    fetchMock.hardReset()
   })
 
   it('reloaded', () => {
@@ -69,7 +72,7 @@ describe('admin actions', () => {
     const store = mockStore()
     return store.dispatch(dbImport(formData)).then(() => {
       expect(store.getActions()).toEqual([dbImported()])
-      expect(fetchMock.lastOptions('/api/admin/reef-pi.db').body).toBe(formData)
+      expect(fetchMock.callHistory.lastCall('/api/admin/reef-pi.db').options.body).toBe(formData)
     })
   })
 

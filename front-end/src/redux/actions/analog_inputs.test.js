@@ -14,9 +14,12 @@ const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
 
 describe('analog_inputs actions', () => {
+  beforeEach(() => {
+    fetchMock.mockGlobal()
+  })
+
   afterEach(() => {
-    fetchMock.reset()
-    fetchMock.restore()
+    fetchMock.hardReset()
   })
 
   it('analogInputsLoaded returns correct type and payload', () => {

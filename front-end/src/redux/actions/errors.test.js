@@ -8,9 +8,12 @@ const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
 
 describe('errors actions', () => {
+  beforeEach(() => {
+    fetchMock.mockGlobal()
+  })
+
   afterEach(() => {
-    fetchMock.reset()
-    fetchMock.restore()
+    fetchMock.hardReset()
   })
 
   it('errorsLoaded returns correct type and payload', () => {

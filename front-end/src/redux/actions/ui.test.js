@@ -18,9 +18,12 @@ window.localStorage = {
 }
 
 describe('ui actions', () => {
+  beforeEach(() => {
+    fetchMock.mockGlobal()
+  })
+
   afterEach(() => {
-    fetchMock.reset()
-    fetchMock.restore()
+    fetchMock.hardReset()
   })
 
   it('fetchUIData', () => {
@@ -57,7 +60,7 @@ describe('ui actions', () => {
     fetchMock.getOnce('/api/instances', [])
     const store = mockStore()
     return store.dispatch(fetchUIData()).then(() => {
-      expect(fetchMock.called('/api/instances')).toBe(true)
+      expect(fetchMock.callHistory.called('/api/instances')).toBe(true)
       expect(store.getActions()).toContainEqual(expect.objectContaining({
         type: 'CAPABILITIES_LOADED',
         payload: expect.objectContaining(caps)
@@ -96,11 +99,11 @@ describe('ui actions', () => {
     fetchMock.getOnce('/api/errors', [])
     const store = mockStore()
     return store.dispatch(fetchUIData()).then(() => {
-      expect(fetchMock.called('/api/equipment')).toBe(true)
-      expect(fetchMock.called('/api/doser/pumps')).toBe(true)
-      expect(fetchMock.called('/api/timers')).toBe(true)
-      expect(fetchMock.called('/api/macros')).toBe(true)
-      expect(fetchMock.called('/api/journal')).toBe(true)
+      expect(fetchMock.callHistory.called('/api/equipment')).toBe(true)
+      expect(fetchMock.callHistory.called('/api/doser/pumps')).toBe(true)
+      expect(fetchMock.callHistory.called('/api/timers')).toBe(true)
+      expect(fetchMock.callHistory.called('/api/macros')).toBe(true)
+      expect(fetchMock.callHistory.called('/api/journal')).toBe(true)
     })
   })
 })

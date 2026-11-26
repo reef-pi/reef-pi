@@ -16,9 +16,12 @@ const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
 
 describe('drivers actions', () => {
+  beforeEach(() => {
+    fetchMock.mockGlobal()
+  })
+
   afterEach(() => {
-    fetchMock.reset()
-    fetchMock.restore()
+    fetchMock.hardReset()
   })
 
   it('driversLoaded returns correct type and payload', () => {

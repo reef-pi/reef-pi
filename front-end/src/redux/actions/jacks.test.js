@@ -8,9 +8,12 @@ const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
 
 describe('jacks actions', () => {
+  beforeEach(() => {
+    fetchMock.mockGlobal()
+  })
+
   afterEach(() => {
-    fetchMock.reset()
-    fetchMock.restore()
+    fetchMock.hardReset()
   })
 
   it('jacksLoaded', () => {

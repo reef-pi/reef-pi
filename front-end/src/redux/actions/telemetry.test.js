@@ -14,9 +14,12 @@ const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
 
 describe('telemetry actions', () => {
+  beforeEach(() => {
+    fetchMock.mockGlobal()
+  })
+
   afterEach(() => {
-    fetchMock.reset()
-    fetchMock.restore()
+    fetchMock.hardReset()
   })
 
   it('telemetryLoaded returns correct type and payload', () => {

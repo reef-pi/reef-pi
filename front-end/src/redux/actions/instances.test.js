@@ -17,9 +17,12 @@ const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
 
 describe('instances actions', () => {
+  beforeEach(() => {
+    fetchMock.mockGlobal()
+  })
+
   afterEach(() => {
-    fetchMock.reset()
-    fetchMock.restore()
+    fetchMock.hardReset()
   })
 
   it('instanceUpdated returns correct type', () => {

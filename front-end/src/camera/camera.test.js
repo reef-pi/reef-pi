@@ -52,9 +52,12 @@ const findAllByType = (node, type) => {
 }
 
 describe('Camera module', () => {
+  beforeEach(() => {
+    fetchMock.mockGlobal()
+  })
+
   afterEach(() => {
-    fetchMock.reset()
-    fetchMock.restore()
+    fetchMock.hardReset()
     jest.restoreAllMocks()
     jest.clearAllMocks()
   })
