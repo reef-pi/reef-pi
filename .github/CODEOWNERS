@@ -11,7 +11,7 @@
 /front-end/ @ranjib
 /package.json @ranjib
 /package-lock.json @ranjib
-/webpack.config.js @ranjib
+/vite.config.mjs @ranjib
 
 # CI and release automation
 /.github/ @ranjib
