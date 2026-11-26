@@ -31,7 +31,7 @@ describe('design-system form primitives', () => {
       </Field>
     )
 
-    expect(html).toContain('for="field-id"')
+    expect(html).toContain('for="custom-outlet"')
     expect(html).toContain('id="custom-outlet"')
     expect(html).toContain('aria-describedby="external-help field-id-help"')
   })
