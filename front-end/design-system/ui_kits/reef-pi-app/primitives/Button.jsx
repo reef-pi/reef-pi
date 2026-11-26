@@ -1,12 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+// Layout lives inline so the primitive renders correctly anywhere; colour and
+// interaction states (hover / active / focus-visible / disabled) live in the
+// `.reefpi-button` rules in front-end/assets/sass/style.scss, driven by the
+// per-variant custom properties below. Inline colours could not express
+// :hover or :active, which left every button with no pressed feedback.
 const baseStyle = {
   alignItems: 'center',
-  border: '1px solid transparent',
   borderRadius: 'var(--reefpi-radius-sm)',
-  boxShadow: 'none',
-  cursor: 'pointer',
   display: 'inline-flex',
   fontFamily: 'var(--reefpi-font-app)',
   fontSize: '0.9375rem',
@@ -19,36 +21,42 @@ const baseStyle = {
   padding: '0 var(--reefpi-space-md)',
   textAlign: 'center',
   textDecoration: 'none',
-  transition: 'background-color 0.12s, border-color 0.12s, color 0.12s',
   userSelect: 'none'
 }
 
 const variants = {
   primary: {
-    background: 'var(--reefpi-color-brand)',
-    borderColor: 'var(--reefpi-color-brand)',
-    color: 'var(--reefpi-color-nav-text-strong)'
+    '--button-bg': 'var(--reefpi-color-brand)',
+    '--button-bg-hover': 'var(--reefpi-color-brand-dark)',
+    '--button-bg-active': 'var(--reefpi-color-success-strong)',
+    '--button-border': 'var(--reefpi-color-brand)',
+    '--button-border-hover': 'var(--reefpi-color-brand-dark)',
+    '--button-fg': 'var(--reefpi-color-nav-text-strong)'
   },
   secondary: {
-    background: 'var(--reefpi-color-surface-elevated)',
-    borderColor: 'var(--reefpi-color-border)',
-    color: 'var(--reefpi-color-text)'
+    '--button-bg': 'var(--reefpi-color-surface-elevated)',
+    '--button-bg-hover': 'color-mix(in srgb, var(--reefpi-color-brand) 8%, var(--reefpi-color-surface-elevated))',
+    '--button-bg-active': 'color-mix(in srgb, var(--reefpi-color-brand) 16%, var(--reefpi-color-surface-elevated))',
+    '--button-border': 'var(--reefpi-color-border)',
+    '--button-border-hover': 'var(--reefpi-color-brand)',
+    '--button-fg': 'var(--reefpi-color-text)'
   },
   danger: {
-    background: 'var(--reefpi-color-error)',
-    borderColor: 'var(--reefpi-color-error)',
-    color: 'var(--reefpi-color-nav-text-strong)'
+    '--button-bg': 'var(--reefpi-color-error)',
+    '--button-bg-hover': 'color-mix(in srgb, var(--reefpi-color-error) 85%, var(--reefpi-color-text))',
+    '--button-bg-active': 'color-mix(in srgb, var(--reefpi-color-error) 70%, var(--reefpi-color-text))',
+    '--button-border': 'var(--reefpi-color-error)',
+    '--button-border-hover': 'color-mix(in srgb, var(--reefpi-color-error) 85%, var(--reefpi-color-text))',
+    '--button-fg': 'var(--reefpi-color-nav-text-strong)'
   },
   ghost: {
-    background: 'transparent',
-    borderColor: 'transparent',
-    color: 'var(--reefpi-color-text)'
+    '--button-bg': 'transparent',
+    '--button-bg-hover': 'color-mix(in srgb, var(--reefpi-color-text) 8%, transparent)',
+    '--button-bg-active': 'color-mix(in srgb, var(--reefpi-color-text) 16%, transparent)',
+    '--button-border': 'transparent',
+    '--button-border-hover': 'transparent',
+    '--button-fg': 'var(--reefpi-color-text)'
   }
-}
-
-const disabledStyle = {
-  cursor: 'not-allowed',
-  opacity: 0.58
 }
 
 const Button = React.forwardRef(function Button ({
@@ -67,12 +75,14 @@ const Button = React.forwardRef(function Button ({
     {},
     baseStyle,
     variants[variant] || variants.primary,
-    disabled ? disabledStyle : null,
     iconOnly ? { padding: 0 } : null,
     style
   )
+  const classes = ['reefpi-button', 'reefpi-button--' + (variants[variant] ? variant : 'primary')]
+  if (iconOnly) classes.push('reefpi-button--icon')
+  if (className) classes.push(className)
   const componentProps = Object.assign({}, props, {
-    className,
+    className: classes.join(' '),
     ref,
     style: mergedStyle
   })

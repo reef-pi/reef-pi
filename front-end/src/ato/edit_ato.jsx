@@ -289,9 +289,8 @@ const EditAto = ({
           <Button
             type='submit'
             data-testid='smoke-ato-submit'
-            variant='primary'
+            variant={dirty ? 'primary' : 'secondary'}
             disabled={readOnly}
-            style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
           >
             {i18next.t('save')}
           </Button>

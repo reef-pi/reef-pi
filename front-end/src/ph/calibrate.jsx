@@ -45,7 +45,6 @@ export const Calibrate = ({ values, errors, touched, label, submitForm, complete
                 type='submit'
                 disabled={readOnly}
                 variant='secondary'
-                style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
               >
                 {i18n.t('ph:run_calibration')}
               </Button>

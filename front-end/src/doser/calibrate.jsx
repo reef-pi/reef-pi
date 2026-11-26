@@ -69,7 +69,6 @@ export const Calibrate = ({
             type='submit'
             variant='primary'
             disabled={readOnly}
-            style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
           >
             {i18n.t('doser:calibration:run')}
           </Button>

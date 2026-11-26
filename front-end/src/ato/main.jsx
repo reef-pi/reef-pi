@@ -131,7 +131,7 @@ export class RawATOMain extends React.Component {
             type='button'
             name={'reset-ato-' + probe.id}
             variant='secondary'
-            style={{ marginLeft: 'auto', padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
+            style={{ marginLeft: 'auto' }}
             onClick={() => { this.handleReset(probe) }}
           >
             {i18n.t('ato:reset_usage')}

@@ -222,10 +222,10 @@ describe('Timer ui', () => {
     component.state.addTimer = true
 
     const rendered = component.render()
-    const addButton = findNodes(rendered, node => node.type === Button && node.props.id === 'add_timer')[0]
+    const addButton = findNodes(rendered, node => node.props && node.props.id === 'add_timer')[0]
     const form = findNodes(rendered, node => node.type === TimerForm)[0]
 
-    expect(addButton.props.children).toBe('-')
+    expect(addButton.props.open).toBe(true)
     expect(form.props.onSubmit).toBe(component.handleSubmit)
     expect(form.props.equipment).toBe(component.props.equipment)
     expect(form.props.macros).toBe(component.props.macros)

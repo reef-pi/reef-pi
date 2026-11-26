@@ -18,7 +18,14 @@
     .action[data-variant="secondary"] { background: var(--reefpi-color-surface-elevated); border-color: var(--reefpi-color-border); color: var(--reefpi-color-text); }
     .action[data-variant="danger"] { background: var(--reefpi-color-error); border-color: var(--reefpi-color-error); color: var(--reefpi-color-nav-text-strong); }
     .action[data-variant="ghost"] { background: transparent; border-color: transparent; color: var(--reefpi-color-text); }
-    .action[data-state="disabled"] { cursor: not-allowed; opacity: 0.58; }
+    .action[data-state="disabled"] { cursor: not-allowed; opacity: 0.55; }
+    /* Interaction states mirror .reefpi-button in front-end/assets/sass/style.scss */
+    .action { transition: background-color 0.12s, border-color 0.12s, transform 0.06s; }
+    .action[data-variant="primary"]:hover, .action[data-variant="primary"][data-state="hover"] { background: var(--reefpi-color-brand-dark); border-color: var(--reefpi-color-brand-dark); }
+    .action[data-variant="primary"]:active, .action[data-variant="primary"][data-state="active"] { background: var(--reefpi-color-success-strong); transform: translateY(1px); }
+    .action[data-variant="secondary"]:hover, .action[data-variant="secondary"][data-state="hover"] { background: color-mix(in srgb, var(--reefpi-color-brand) 8%, var(--reefpi-color-surface-elevated)); border-color: var(--reefpi-color-brand); }
+    .action[data-variant="secondary"]:active { background: color-mix(in srgb, var(--reefpi-color-brand) 16%, var(--reefpi-color-surface-elevated)); transform: translateY(1px); }
+    .action[data-variant="ghost"]:hover { background: color-mix(in srgb, var(--reefpi-color-text) 8%, transparent); }
     .action.icon-only { padding: 0; }
   </style>
 </head>
@@ -39,10 +46,21 @@
       <div class="card-header">States</div>
       <div class="sample-row">
         <button class="action" data-variant="primary" type="submit">Apply</button>
+        <button class="action" data-variant="primary" data-state="hover">Hover</button>
+        <button class="action" data-variant="primary" data-state="active">Pressed</button>
+        <button class="action" data-variant="secondary" data-state="hover">Hover</button>
         <button class="action" data-variant="secondary" data-state="disabled" disabled>Disabled</button>
         <button class="action icon-only" data-variant="ghost" aria-label="Edit"><span aria-hidden="true">&#9998;</span></button>
         <button class="action icon-only" data-variant="danger" aria-label="Delete"><span aria-hidden="true">&#10005;</span></button>
       </div>
+    </section>
+    <section class="card">
+      <div class="card-header">Save state</div>
+      <div class="sample-row">
+        <button class="action" data-variant="secondary">Save</button>
+        <button class="action" data-variant="primary">Save</button>
+      </div>
+      <p>Save / Update is outline while the form is pristine and turns filled brand green once there are unsaved edits. Red is reserved for destructive actions.</p>
     </section>
   </div>
   <script src="../_card.js"></script>

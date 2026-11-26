@@ -17,27 +17,26 @@ export default class Summary extends React.Component {
   }
 
   render () {
-    let devModeWarning = null
-    if (this.props.devMode) {
-      devModeWarning = <span style={{ color: 'var(--reefpi-color-error)' }}>{i18n.t('devmode_warning')} | </span>
-    }
+    const errorCount = this.props.errors.length
+    const info = this.props.info
     return (
-      <nav className='bottom-bar' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', gap: 'var(--reefpi-space-xs)', position: 'fixed', bottom: 0, left: 0, right: 0, background: 'var(--reefpi-color-surface-elevated)', padding: '0 var(--reefpi-space-sm)' }}>
-        <a href='http://reef-pi.com' target='_blank' rel='noopener noreferrer'>{i18n.t('documentation')}</a>
-        <span>|</span>
-        <span>{this.props.info.current_time},</span>
-        <span>{i18n.t('running')} {this.props.info.version}, on {this.props.info.model}</span>
-        <span>|</span>
-        <span>{i18n.t('since')} {this.props.info.uptime}</span>
-        <span>|</span>
-        <span>IP {this.props.info.ip}</span>
-        <span>|</span>
-        <a href='/assets/api.html'>API</a>
-        <span>|</span>
-        {devModeWarning}
-        <a href='/configuration/errors' style={{ color: 'var(--reefpi-color-error)' }}>
-          {i18n.t('errors')}({this.props.errors.length})
+      <nav className='bottom-bar' aria-label='System status'>
+        <span className='bottom-bar-item'>{info.current_time}</span>
+        <span className='bottom-bar-item'>{i18n.t('running')} {info.version}, on {info.model}</span>
+        <span className='bottom-bar-item'>{i18n.t('since')} {info.uptime}</span>
+        <span className='bottom-bar-item'>IP {info.ip}</span>
+        <span className='bottom-bar-spacer' aria-hidden='true' />
+        {this.props.devMode && (
+          <span className='bottom-bar-badge bottom-bar-badge--warn'>{i18n.t('devmode_warning')}</span>
+        )}
+        <a
+          className={'bottom-bar-link' + (errorCount > 0 ? ' bottom-bar-link--error' : '')}
+          href='/configuration/errors'
+        >
+          {i18n.t('errors')}({errorCount})
         </a>
+        <a className='bottom-bar-link' href='/assets/api.html'>API</a>
+        <a className='bottom-bar-link' href='http://reef-pi.com' target='_blank' rel='noopener noreferrer'>{i18n.t('documentation')}</a>
       </nav>
     )
   }

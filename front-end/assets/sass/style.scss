@@ -166,8 +166,121 @@
 }
 
 .bottom-bar {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 90;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: var(--reefpi-space-md);
   min-height: var(--reefpi-summary-height, 64px);
-  border-top: solid 1px var(--reefpi-color-border-subtle);
+  padding: 0 var(--reefpi-shell-gutter);
+  background: var(--reefpi-color-surface-elevated);
+  border-top: 1px solid var(--reefpi-color-border);
+  color: var(--reefpi-color-text-muted);
+  font-size: var(--reefpi-small);
+}
+
+@media screen and (min-width: 992px) {
+  // Clear the 72px sidebar rail so the status line is not tucked under it.
+  .bottom-bar {
+    left: 72px;
+  }
+}
+
+.bottom-bar-item {
+  white-space: nowrap;
+}
+
+.bottom-bar-item + .bottom-bar-item::before {
+  content: '·';
+  margin-right: var(--reefpi-space-md);
+  color: var(--reefpi-color-border);
+}
+
+.bottom-bar-spacer {
+  flex: 1 1 auto;
+}
+
+.bottom-bar-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--reefpi-tap-target-min);
+  color: var(--reefpi-color-text-muted);
+  font-weight: var(--reefpi-font-weight-semibold);
+  text-decoration: none;
+}
+
+.bottom-bar-link:hover {
+  color: var(--reefpi-color-brand);
+  text-decoration: underline;
+}
+
+.bottom-bar-link--error {
+  color: var(--reefpi-color-error);
+}
+
+.bottom-bar-badge {
+  padding: 0.125rem var(--reefpi-space-xs);
+  border-radius: var(--reefpi-radius-sm);
+  font-weight: var(--reefpi-font-weight-semibold);
+  white-space: nowrap;
+}
+
+.bottom-bar-badge--warn {
+  background: var(--reefpi-color-warn-bg);
+  color: var(--reefpi-color-warn);
+}
+
+// ── Page header: route title + page-level actions ─────────────────────────
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--reefpi-space-sm);
+  min-height: 4rem;
+  padding-top: var(--reefpi-space-xs);
+}
+
+.page-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: var(--reefpi-weight-bold);
+  line-height: 1.2;
+  color: var(--reefpi-color-text);
+}
+
+.page-header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--reefpi-space-xs);
+}
+
+// Borderless icon-only control (alert bell, collapse chevrons).
+.reefpi-icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--reefpi-tap-target-min);
+  min-height: var(--reefpi-tap-target-min);
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--reefpi-radius-sm);
+  background: transparent;
+  color: var(--reefpi-color-text-muted);
+  cursor: pointer;
+  transition: background-color 0.12s, color 0.12s;
+}
+
+.reefpi-icon-button:hover {
+  background: color-mix(in srgb, var(--reefpi-color-text) 8%, transparent);
+  color: var(--reefpi-color-text);
+}
+
+.reefpi-icon-button:active {
+  background: color-mix(in srgb, var(--reefpi-color-text) 14%, transparent);
 }
 
 .bottom-bar .list-inline {
@@ -212,7 +325,7 @@ body {
 }
 
 .body-panel {
-  margin-top: 10px;
+  margin-top: 0;
   margin-bottom: 20px;
   padding-bottom: 70px;
   row-gap: var(--reefpi-panel-gap);
@@ -278,6 +391,147 @@ body {
   min-height: var(--reefpi-tap-target-min);
   display: inline-flex;
   align-items: center;
+}
+
+// ── Button primitive interaction states ───────────────────────────────────
+// Colours come from the per-variant custom properties set inline by
+// design-system/ui_kits/reef-pi-app/primitives/Button.jsx.
+.reefpi-button {
+  background: var(--button-bg);
+  border: 1px solid var(--button-border);
+  color: var(--button-fg);
+  cursor: pointer;
+  transition: background-color 0.12s, border-color 0.12s, color 0.12s, transform 0.06s;
+}
+
+.reefpi-button:hover:not(:disabled):not([aria-disabled='true']) {
+  background: var(--button-bg-hover);
+  border-color: var(--button-border-hover);
+}
+
+.reefpi-button:active:not(:disabled):not([aria-disabled='true']),
+.reefpi-button[aria-pressed='true'] {
+  background: var(--button-bg-active);
+  border-color: var(--button-border-hover);
+  transform: translateY(1px);
+}
+
+.reefpi-button:focus {
+  outline: none;
+}
+
+.reefpi-button:focus-visible {
+  outline: 2px solid var(--reefpi-color-focus);
+  outline-offset: 2px;
+}
+
+.reefpi-button:disabled,
+.reefpi-button[aria-disabled='true'] {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.reefpi-button--icon {
+  padding: 0;
+}
+
+.reefpi-button svg {
+  flex-shrink: 0;
+}
+
+// ── Native checkbox + radio ───────────────────────────────────────────────
+// One size and the brand accent everywhere, instead of the browser default.
+input[type='checkbox'],
+input[type='radio'] {
+  width: 1.125rem;
+  height: 1.125rem;
+  margin: 0;
+  flex-shrink: 0;
+  accent-color: var(--reefpi-color-brand);
+  cursor: pointer;
+}
+
+input[type='checkbox'] + label,
+input[type='radio'] + label {
+  cursor: pointer;
+}
+
+// ── Baseline for native form controls ─────────────────────────────────────
+// Matches the Form primitive (primitives/Form.jsx) so fields not yet migrated
+// to it (Formik <Field>s in timers, cron, ...) stop rendering as raw browser
+// widgets. :where() keeps specificity at zero, so primitive inline styles and
+// any component rule still win.
+:where(input:not([type='checkbox'], [type='radio'], [type='color'], [type='range'], [type='submit'], [type='button'], [type='reset'], [type='file'], [type='hidden']), select, textarea) {
+  width: 100%;
+  min-height: var(--reefpi-tap-target-min);
+  padding: 0 var(--reefpi-space-sm);
+  border: 1px solid var(--reefpi-color-border);
+  border-radius: var(--reefpi-radius-sm);
+  background: var(--reefpi-color-surface-elevated);
+  color: var(--reefpi-color-text);
+  font-family: var(--reefpi-font-app);
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+:where(textarea) {
+  min-height: 6rem;
+  padding: var(--reefpi-space-xs) var(--reefpi-space-sm);
+}
+
+:where(input, select, textarea):where(:disabled, [readonly]) {
+  background: var(--reefpi-color-pending-bg);
+}
+
+:where(input, select, textarea).is-invalid {
+  border-color: var(--reefpi-color-error);
+}
+
+// Field label: a label directly above its control.
+:where(label):has(+ input:not([type='checkbox'], [type='radio']), + select, + textarea, + div > input, + div > select) {
+  display: block;
+  margin-bottom: var(--reefpi-space-xxs);
+  font-size: 0.875rem;
+  font-weight: var(--reefpi-font-weight-semibold);
+  line-height: 1.35;
+}
+
+// Room between an open "Cancel" add-toggle and the form it reveals.
+.reefpi-add-toggle[aria-expanded='true'] {
+  margin-bottom: var(--reefpi-space-md);
+}
+
+// A labelled checkbox row: box + label on one line, full tap target.
+.reefpi-check {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--reefpi-space-xs);
+  min-height: var(--reefpi-tap-target-min);
+  font-size: 1rem;
+  font-weight: var(--reefpi-weight-normal);
+  line-height: 1.35;
+}
+
+.reefpi-check-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  column-gap: var(--reefpi-space-md);
+}
+
+// Section heading inside a settings page (Capabilities, Health, ...).
+.reefpi-section-title {
+  margin: 0 0 var(--reefpi-space-xs);
+  font-size: 0.8125rem;
+  font-weight: var(--reefpi-weight-bold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--reefpi-color-text-muted);
+}
+
+.reefpi-section {
+  padding-top: var(--reefpi-space-md);
+  margin-top: var(--reefpi-space-md);
+  border-top: 1px solid var(--reefpi-color-border);
 }
 
 .text-muted,
@@ -593,7 +847,8 @@ textarea:focus,
 }
 
 .connector-group-caret {
-  color: var(--reefpi-color-brand);
+  display: inline-flex;
+  color: var(--reefpi-color-text-muted);
   font-weight: var(--reefpi-weight-bold);
   white-space: nowrap;
 }
@@ -628,7 +883,7 @@ textarea:focus,
 
 .connector-channel-grid {
   display: grid;
-  grid-template-columns: repeat(16, minmax(5.25rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(5.25rem, 1fr));
   gap: var(--reefpi-space-xs);
   padding: var(--reefpi-space-sm);
 }

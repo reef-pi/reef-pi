@@ -33,7 +33,6 @@ class errors extends React.Component {
           <div>
             <Button
               variant='secondary'
-              style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
               onClick={() => this.props.delete(el.id)}
             >
               X

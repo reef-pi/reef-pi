@@ -40,19 +40,8 @@ export function AlertCenterBell ({ sseEndpoint }) {
         aria-label={`Alerts${unacknowledgedCount ? ` — ${unacknowledgedCount} unacknowledged` : ''}`}
         aria-expanded={open}
         onClick={() => setOpen(o => !o)}
-        style={{
-          position: 'relative',
-          background: 'none',
-          border: 'none',
-          cursor: 'pointer',
-          minWidth: '44px',
-          minHeight: '44px',
-          display: 'inline-flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: 'var(--reefpi-color-nav-text)',
-          borderRadius: 'var(--reefpi-radius-sm)'
-        }}
+        className='reefpi-icon-button'
+        style={{ position: 'relative' }}
       >
         <BellIcon />
         {unacknowledgedCount > 0 && (

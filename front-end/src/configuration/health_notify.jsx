@@ -45,7 +45,7 @@ export default class HealthNotify extends React.Component {
 
   render () {
     const ct = [
-      <div key='health_notify_enable' style={{ display: 'flex', gap: 'var(--reefpi-space-xs)', alignItems: 'center' }}>
+      <div key='health_notify_enable' className='reefpi-check'>
         <input
           type='checkbox'
           id='health_notify_enable'
@@ -53,7 +53,7 @@ export default class HealthNotify extends React.Component {
           onClick={this.handleUpdateEnable}
         />
         <label htmlFor='health_notify_enable'>
-          <b>{i18n.t('configuration:settings:alert_health_check')}</b>
+          {i18n.t('configuration:settings:alert_health_check')}
         </label>
       </div>
     ]
@@ -90,7 +90,7 @@ export default class HealthNotify extends React.Component {
       )
     }
     ct.push(
-      <div key='health_report_enable' style={{ display: 'flex', gap: 'var(--reefpi-space-xs)', alignItems: 'center' }}>
+      <div key='health_report_enable' className='reefpi-check'>
         <input
           type='checkbox'
           id='health_report_enable'
@@ -98,7 +98,7 @@ export default class HealthNotify extends React.Component {
           onClick={this.handleUpdateReportEnable}
         />
         <label htmlFor='health_report_enable'>
-          <b>{i18n.t('configuration:settings:report_enable')}</b>
+          {i18n.t('configuration:settings:report_enable')}
         </label>
       </div>
     )

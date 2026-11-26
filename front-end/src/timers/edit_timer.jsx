@@ -172,10 +172,10 @@ const EditTimer = ({
       {!readOnly && (
         <div style={{ display: 'flex', marginTop: 'var(--reefpi-space-xs)' }}>
           <Button
-            type='submit'
+            type='submit' variant={dirty ? 'primary' : 'secondary'}
             data-testid='smoke-timer-submit'
             disabled={readOnly}
-            style={{ marginLeft: 'auto', padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
+            style={{ marginLeft: 'auto' }}
           >
             {i18n.t('save')}
           </Button>

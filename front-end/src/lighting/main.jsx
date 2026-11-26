@@ -14,6 +14,7 @@ import { SortByName } from 'utils/sort_by_name'
 import i18n from 'utils/i18n'
 import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 import { Menu } from '../../design-system/ui_kits/reef-pi-app/primitives/Interaction'
+import AddToggle from '../ui_components/add_toggle'
 
 export const DEFAULT_CHANNEL_COLOR = '#000000'
 
@@ -165,7 +166,7 @@ class main extends React.Component {
               type='button'
               onClick={this.handleChangeMode(light)}
               variant='secondary'
-              style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem', marginLeft: 'auto' }}
+              style={{ marginLeft: 'auto' }}
             >
               <><IoMdSwitch /> {this.getModeLabel(mode)}</>
             </Button>
@@ -318,14 +319,7 @@ class main extends React.Component {
           {this.lightsList()}
         </CollapsibleList>
         <div style={{ padding: 'var(--reefpi-space-sm) 0' }}>
-          <Button
-            id='add_light'
-            data-testid='smoke-light-add-toggle'
-            onClick={this.handleToggleAddLightDiv}
-            variant='secondary'
-          >
-            {this.state.addLight ? '-' : '+'}
-          </Button>
+          <AddToggle id='add_light' testId='smoke-light-add-toggle' open={this.state.addLight} onClick={this.handleToggleAddLightDiv} />
           {nLight}
         </div>
       </div>

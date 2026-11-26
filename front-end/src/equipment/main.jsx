@@ -7,9 +7,9 @@ import EquipmentForm from './equipment_form'
 import { SORT_NAME_AZ, SORT_NAME_ZA, SORT_ON_FIRST, SORT_OFF_FIRST, sortEquipment } from './utils'
 import i18next from 'i18next'
 import EmptyState, { EquipmentIcon } from '../../design-system/ui_kits/reef-pi-app/shell/EmptyState'
-import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 import { Field, Select } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
 import { List, ListItem } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
+import AddToggle from '../ui_components/add_toggle'
 
 const sortOptions = [
   { value: SORT_NAME_AZ, label: 'equipment:sort_name_az' },
@@ -114,17 +114,7 @@ export class RawEquipmentMain extends React.Component {
           )
         })}
         <ListItem style={addRowStyle}>
-          <Button
-            id='add_equipment'
-            data-testid='smoke-equipment-add-toggle'
-            type='button'
-            variant='secondary'
-            onClick={this.handleToggleAddEquipmentDiv}
-            aria-expanded={this.state.addEquipment}
-            aria-label={this.state.addEquipment ? i18next.t('close') : i18next.t('equipment:add', 'Add equipment')}
-          >
-            {this.state.addEquipment ? '-' : '+'}
-          </Button>
+          <AddToggle id='add_equipment' testId='smoke-equipment-add-toggle' open={this.state.addEquipment} onClick={this.handleToggleAddEquipmentDiv} />
           {newEquipmentForm}
         </ListItem>
       </List>

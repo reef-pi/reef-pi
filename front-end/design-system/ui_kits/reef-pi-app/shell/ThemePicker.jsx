@@ -24,73 +24,54 @@ export default function ThemePicker ({ onSessionOverride } = {}) {
   }
 
   return (
-    <fieldset style={{
-      border: '1px solid var(--reefpi-color-border)',
-      borderRadius: 'var(--reefpi-radius-md)',
-      padding: '1rem',
-      fontFamily: 'var(--reefpi-font-app)'
-    }}>
-      <legend style={{
-        fontSize: '0.75rem',
-        fontWeight: 500,
-        textTransform: 'uppercase',
-        letterSpacing: '0.06em',
-        color: 'var(--reefpi-color-text-muted)',
-        padding: '0 0.25rem'
-      }}>
+    <fieldset style={{ border: 0, margin: 0, padding: 0, minWidth: 0, fontFamily: 'var(--reefpi-font-app)' }}>
+      <legend className='reefpi-section-title' style={{ padding: 0 }}>
         Appearance
       </legend>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-        {OPTIONS.map(opt => (
-          <label
-            key={opt.value}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.75rem',
-              minHeight: 'var(--reefpi-tap-target-min)',
-              padding: '0 0.5rem',
-              borderRadius: 'var(--reefpi-radius-sm)',
-              cursor: 'pointer',
-              background: theme === opt.value ? 'var(--reefpi-color-pending-bg)' : 'transparent',
-              border: theme === opt.value
-                ? '1px solid var(--reefpi-color-brand)'
-                : '1px solid transparent',
-              transition: 'background 0.12s'
-            }}
-          >
-            <input
-              type='radio'
-              name='reefpi-theme'
-              value={opt.value}
-              checked={theme === opt.value}
-              onChange={() => handleChange(opt.value)}
-              style={{ accentColor: 'var(--reefpi-color-brand)', width: '16px', height: '16px', flexShrink: 0 }}
-            />
-            <span>
-              <span style={{ fontSize: '0.88rem', fontWeight: 500, color: 'var(--reefpi-color-text)' }}>
-                {opt.label}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(11rem, 1fr))', gap: 'var(--reefpi-space-sm)' }}>
+        {OPTIONS.map(opt => {
+          const selected = theme === opt.value
+          return (
+            <label
+              key={opt.value}
+              data-selected={selected || undefined}
+              style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: 'var(--reefpi-space-xs)',
+                minHeight: 'var(--reefpi-tap-target-min)',
+                padding: 'var(--reefpi-space-sm)',
+                borderRadius: 'var(--reefpi-radius-sm)',
+                cursor: 'pointer',
+                background: selected
+                  ? 'color-mix(in srgb, var(--reefpi-color-brand) 8%, var(--reefpi-color-surface-elevated))'
+                  : 'var(--reefpi-color-surface-elevated)',
+                border: selected
+                  ? '1px solid var(--reefpi-color-brand)'
+                  : '1px solid var(--reefpi-color-border)',
+                transition: 'background 0.12s, border-color 0.12s'
+              }}
+            >
+              <input
+                type='radio'
+                name='reefpi-theme'
+                value={opt.value}
+                checked={selected}
+                onChange={() => handleChange(opt.value)}
+                style={{ marginTop: '0.125rem' }}
+              />
+              <span style={{ display: 'grid', gap: '0.125rem' }}>
+                <span style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--reefpi-color-text)' }}>
+                  {opt.label}
+                </span>
+                <span style={{ fontSize: '0.8125rem', color: 'var(--reefpi-color-text-muted)' }}>
+                  {opt.desc}
+                </span>
               </span>
-              <span style={{ fontSize: '0.75rem', color: 'var(--reefpi-color-text-muted)', marginLeft: '0.4rem' }}>
-                — {opt.desc}
-              </span>
-            </span>
-            {opt.value === theme && (
-              <span style={{
-                marginLeft: 'auto',
-                fontSize: '0.65rem',
-                fontFamily: 'var(--reefpi-font-mono)',
-                color: 'var(--reefpi-color-brand)',
-                background: 'var(--reefpi-color-band-safe)',
-                padding: '1px 6px',
-                borderRadius: '999px'
-              }}>
-                active
-              </span>
-            )}
-          </label>
-        ))}
+            </label>
+          )
+        })}
       </div>
     </fieldset>
   )

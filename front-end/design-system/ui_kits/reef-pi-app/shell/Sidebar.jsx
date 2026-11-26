@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
+import { NAV_ICONS } from './navIcons'
 
 /*
  * Collapsible left sidebar — visible at ≥992px only.
@@ -249,24 +250,16 @@ function SignOutIcon () {
 
 // ── Default routes ────────────────────────────────────────────────────────────
 
-function icon (path) {
-  return (
-    <svg width='20' height='20' viewBox='0 0 20 20' fill='none' stroke='currentColor' strokeWidth='1.5' strokeLinecap='round' strokeLinejoin='round' aria-hidden='true'>
-      <path d={path} />
-    </svg>
-  )
-}
-
 const DEFAULT_ROUTES = [
-  { id: 'dashboard',   label: 'Dashboard',   href: '/',            icon: icon('M3 7l7-5 7 5v11H3V7z M7 18v-5h6v5') },
-  { id: 'equipment',   label: 'Equipment',   href: '/equipment',   icon: icon('M10 2a8 8 0 1 0 0 16A8 8 0 0 0 10 2zm0 4v4l3 2') },
-  { id: 'lighting',    label: 'Lighting',    href: '/lighting',    icon: icon('M10 2v2M10 16v2M4.2 4.2l1.4 1.4M14.4 14.4l1.4 1.4M2 10h2M16 10h2M4.2 15.8l1.4-1.4M14.4 5.6l1.4-1.4M10 7a3 3 0 1 0 0 6 3 3 0 0 0 0-6z') },
-  { id: 'temperature', label: 'Temperature', href: '/temperature', icon: icon('M10 3v9M10 16a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM7 12V5a3 3 0 0 1 6 0v7') },
-  { id: 'ato',         label: 'ATO',         href: '/ato',         icon: icon('M5 18s2-6 5-6 5 6 5 6M10 6v6') },
-  { id: 'ph',          label: 'pH',          href: '/ph',          icon: icon('M3 10h14M10 3v14') },
-  { id: 'timers',      label: 'Timers',      href: '/timers',      icon: icon('M10 2a8 8 0 1 0 0 16A8 8 0 0 0 10 2zM10 6v4l3 2') },
-  { id: 'configuration', label: 'Settings',  href: '/config',      icon: icon('M10 1l1.5 3 3.3.5-2.4 2.3.6 3.2L10 8.5 7 10l.6-3.2L5.2 4.5 8.5 4z') },
-  { id: 'health',      label: 'Health',      href: '/health',      icon: icon('M3 10h3l2-5 3 10 2-7 2 2h2') }
+  { id: 'dashboard',   label: 'Dashboard',   href: '/',            icon: NAV_ICONS.dashboard },
+  { id: 'equipment',   label: 'Equipment',   href: '/equipment',   icon: NAV_ICONS.equipment },
+  { id: 'lighting',    label: 'Lighting',    href: '/lighting',    icon: NAV_ICONS.lighting },
+  { id: 'temperature', label: 'Temperature', href: '/temperature', icon: NAV_ICONS.temperature },
+  { id: 'ato',         label: 'ATO',         href: '/ato',         icon: NAV_ICONS.ato },
+  { id: 'ph',          label: 'pH',          href: '/ph',          icon: NAV_ICONS.ph },
+  { id: 'timers',      label: 'Timers',      href: '/timers',      icon: NAV_ICONS.timers },
+  { id: 'configuration', label: 'Settings',  href: '/config',      icon: NAV_ICONS.configuration },
+  { id: 'health',      label: 'Health',      href: '/health',      icon: NAV_ICONS.health }
 ]
 
 Sidebar.propTypes = {

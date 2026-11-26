@@ -62,7 +62,7 @@ export class RawSettings extends React.Component {
 
   checkBoxComponent (attr) {
     return (
-      <div style={{ display: 'flex', gap: 'var(--reefpi-space-xs)', alignItems: 'center' }}>
+      <div className='reefpi-check'>
         <input
           type='checkbox'
           id={attr}
@@ -172,7 +172,7 @@ export class RawSettings extends React.Component {
   }
 
   showCapabilities () {
-    return <Capabilities capabilities={this.state.capabilities} update={this.updateCapabilities} />
+    return <Capabilities capabilities={this.state.settings.capabilities} update={this.updateCapabilities} />
   }
 
   updateCapabilities (capabilities) {
@@ -238,29 +238,33 @@ export class RawSettings extends React.Component {
       )
     }
 
-    const updateVariant = this.state.updated ? 'danger' : 'primary'
+    // Outline while there is nothing to save; filled brand green once edited.
+    const updateVariant = this.state.updated ? 'primary' : 'secondary'
+    const https = !!this.state.settings.https
+    const twoUp = { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(16rem, 1fr))', gap: 'var(--reefpi-space-sm) var(--reefpi-space-md)' }
+    const segment = (active, radius) => ({ borderRadius: radius, minWidth: '4.75rem', zIndex: active ? 1 : 0 })
 
     return (
-      <div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))', gap: 'var(--reefpi-space-md)' }}>
+      <div style={{ maxWidth: '64rem' }}>
+        <div style={twoUp}>
           {this.toRow('name')}
           {this.toRow('interface')}
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))', gap: 'var(--reefpi-space-md)', marginTop: 'var(--reefpi-space-sm)' }}>
           <FormField label={i18n.t('configuration:settings:address')}>
             <div style={{ display: 'flex', gap: 'var(--reefpi-space-xs)', alignItems: 'center' }}>
-              <div style={{ display: 'flex', gap: 0 }}>
+              <div role='group' aria-label={i18n.t('configuration:settings:address')} style={{ display: 'flex', flexShrink: 0 }}>
                 <Button
-                  variant='secondary'
-                  style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem', borderRadius: 'var(--reefpi-radius-sm) 0 0 var(--reefpi-radius-sm)' }}
+                  variant={https ? 'secondary' : 'primary'}
+                  aria-pressed={!https}
+                  style={segment(!https, 'var(--reefpi-radius-sm) 0 0 var(--reefpi-radius-sm)')}
                   onClick={this.handleSetProtocolHttp}
                   type='button'
                 >
                   http://
                 </Button>
                 <Button
-                  variant='secondary'
-                  style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem', borderRadius: '0 var(--reefpi-radius-sm) var(--reefpi-radius-sm) 0' }}
+                  variant={https ? 'primary' : 'secondary'}
+                  aria-pressed={https}
+                  style={{ ...segment(https, '0 var(--reefpi-radius-sm) var(--reefpi-radius-sm) 0'), marginLeft: '-1px' }}
                   onClick={this.handleSetProtocolHttps}
                   type='button'
                 >
@@ -276,8 +280,6 @@ export class RawSettings extends React.Component {
             </div>
           </FormField>
           {this.toRow('rpi_pwm_freq')}
-        </div>
-        <div style={{ marginTop: 'var(--reefpi-space-sm)' }}>
           <FormField label={i18n.t('language:language')}>
             <Select
               value={this.state.currentLanguage}
@@ -298,32 +300,29 @@ export class RawSettings extends React.Component {
           </FormField>
         </div>
 
-        <div style={{ marginTop: 'var(--reefpi-space-sm)' }}>
-          <div style={{ display: 'flex', gap: 'var(--reefpi-space-sm)', flexWrap: 'wrap' }}>
-            {this.checkBoxComponent('display')}
-            {this.showDisplay()}
-          </div>
-        </div>
-
-        <div style={{ display: 'flex', gap: 'var(--reefpi-space-sm)', flexWrap: 'wrap', marginTop: 'var(--reefpi-space-sm)' }}>
+        <div className='reefpi-check-grid' style={{ marginTop: 'var(--reefpi-space-sm)' }}>
+          {this.checkBoxComponent('display')}
           {this.checkBoxComponent('notification')}
           {this.checkBoxComponent('pprof')}
           {this.checkBoxComponent('prometheus')}
           {this.checkBoxComponent('cors')}
         </div>
-        <hr />
-        <div>
+        {this.showDisplay()}
+
+        <section className='reefpi-section'>
           <ThemePicker />
-        </div>
-        <hr />
-        <div>
-          <label style={{ fontSize: '1.25rem', fontWeight: 400 }}>
-            {i18n.t('capabilities')}
-          </label>
+        </section>
+
+        <section className='reefpi-section'>
+          <h2 className='reefpi-section-title'>{i18n.t('capabilities')}</h2>
           {this.showCapabilities()}
-        </div>
-        <div>{this.showHealthNotify()}</div>
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 'var(--reefpi-space-sm)' }}>
+        </section>
+
+        <section className='reefpi-section' style={{ display: 'grid', gap: 'var(--reefpi-space-xxs)' }}>
+          {this.showHealthNotify()}
+        </section>
+
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 'var(--reefpi-space-md)' }}>
           <Button
             variant={updateVariant}
             onClick={this.handleUpdate}

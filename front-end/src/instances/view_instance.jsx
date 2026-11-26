@@ -27,7 +27,6 @@ const ViewInstance = ({ instance, onStateChange, onDelete, onEdit }) => {
       <div style={{ display: 'flex', gap: 'var(--reefpi-space-xs)', marginLeft: 'auto' }}>
         <Button
           variant='secondary'
-          style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
           type='button'
           onClick={onEdit}
         >
@@ -35,7 +34,6 @@ const ViewInstance = ({ instance, onStateChange, onDelete, onEdit }) => {
         </Button>
         <Button
           variant='danger'
-          style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
           type='button'
           onClick={onDelete}
         >

@@ -43,7 +43,6 @@ export class RawDashboardMain extends React.Component {
             onClick={this.handleToggle}
             id='configure-dashboard'
             data-testid='smoke-dashboard-configure'
-            style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
           >
             {i18n.t('dashboard:back_to_dashboard')}
           </Button>

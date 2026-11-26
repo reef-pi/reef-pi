@@ -121,7 +121,7 @@ const EditEquipment = ({
           />
         </Field>
         <div style={actionStyle}>
-          <Button type='submit' id='add_equipment' data-testid='smoke-equipment-submit' icon={<FaSave />}>
+          <Button type='submit' variant={dirty ? 'primary' : 'secondary'} id='add_equipment' data-testid='smoke-equipment-submit' icon={<FaSave />} style={{ textTransform: 'capitalize' }}>
             {actionLabel}
           </Button>
           {deleteAction()}

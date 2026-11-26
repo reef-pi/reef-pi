@@ -2,8 +2,8 @@ import React from 'react'
 import { createJournal } from 'redux/actions/journal'
 import JournalForm from './form'
 import { connect } from 'react-redux'
-import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 import { ListItem } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
+import AddToggle from '../ui_components/add_toggle'
 
 export class RawNewJournal extends React.Component {
   constructor (props) {
@@ -52,9 +52,7 @@ export class RawNewJournal extends React.Component {
   render () {
     return (
       <ListItem>
-        <Button id='add_new_journal' data-testid='smoke-journal-add-toggle' type='button' variant='primary' onClick={this.handleToggle}>
-          {this.state.add ? '-' : '+'}
-        </Button>
+        <AddToggle id='add_new_journal' testId='smoke-journal-add-toggle' open={this.state.add} onClick={this.handleToggle} />
         {this.ui()}
       </ListItem>
     )

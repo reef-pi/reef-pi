@@ -14,6 +14,7 @@ import RangeSelector from '../../design-system/ui_kits/reef-pi-app/primitives/Ra
 import Sparkline from '../../design-system/ui_kits/reef-pi-app/primitives/Sparkline'
 import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 import { List, ListItem } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
+import AddToggle from '../ui_components/add_toggle'
 
 const RANGE_MS = { '1h': 3600000, '6h': 21600000, '1d': 86400000, '7d': 604800000, '30d': 2592000000 }
 
@@ -78,7 +79,7 @@ export class RawDoser extends React.Component {
               name={'calibrate-doser-' + doser.id}
               data-testid={'smoke-doser-calibrate-' + doser.id}
               variant='secondary'
-              style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem', marginLeft: 'auto' }}
+              style={{ marginLeft: 'auto' }}
               onClick={(e) => this.calibrateDoser(e, doser)}
             >
               {i18n.t('doser:calibrate')}
@@ -204,15 +205,7 @@ export class RawDoser extends React.Component {
           {this.doserList()}
         </CollapsibleList>
         <ListItem>
-          <Button
-            type='button'
-            variant='primary'
-            id='add_doser'
-            data-testid='smoke-doser-add-toggle'
-            onClick={this.handleToggleAddDoserDiv}
-          >
-            {this.state.addDoser ? '-' : '+'}
-          </Button>
+          <AddToggle id='add_doser' testId='smoke-doser-add-toggle' open={this.state.addDoser} onClick={this.handleToggleAddDoserDiv} />
           {newDoser}
         </ListItem>
       </List>

@@ -96,7 +96,6 @@ export default class CalibrationModal extends React.Component {
               <Button
                 type='button'
                 variant='primary'
-                style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
                 onClick={this.handleSaveCalibration}
                 disabled={!this.state.measuredVolume || parseFloat(this.state.measuredVolume) <= 0}
               >

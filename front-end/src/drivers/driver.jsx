@@ -112,7 +112,6 @@ export default class Driver extends React.Component {
         btnEdit = (
           <Button
             variant='secondary'
-            style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
             className='edit-outlet'
             onClick={this.handleEdit}
           >{this.state.lbl}
@@ -121,7 +120,6 @@ export default class Driver extends React.Component {
         btnProvision = (
           <Button
             variant='secondary'
-            style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
             title={i18n.t('configuration:drivers:provision_title')}
             onClick={() => {
               this.props.provision(this.props.driver.id)
@@ -134,7 +132,6 @@ export default class Driver extends React.Component {
       btnDelete = (
         <Button
           variant='danger'
-          style={{ padding: '0 var(--reefpi-space-xs)', minHeight: '2rem', fontSize: '0.875rem' }}
           onClick={() => { this.handleRemove(this.props.driver) }}
         >X
         </Button>

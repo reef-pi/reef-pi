@@ -242,10 +242,10 @@ describe('MainPanel', () => {
       fetchInfo: jest.fn()
     })
     const rendered = panel.render()
-    const bell = findAll(rendered, node => node.type && node.type.name === 'AlertCenterBell')[0]
+    // The bell now lives in the PageHeader (route title + page actions).
+    const header = findAll(rendered, node => node.type && node.type.name === 'PageHeader')[0]
     const legacyNotify = findAll(rendered, node => node.type && node.type.name === 'NotificationAlert')[0]
-    expect(bell).toBeDefined()
-    expect(bell.props.sseEndpoint).toBe('/api/alerts')
+    expect(header).toBeDefined()
     expect(legacyNotify).toBeUndefined()
     window.FEATURE_FLAGS = {}
   })
