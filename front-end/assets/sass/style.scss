@@ -9,7 +9,7 @@
 @import './alert';
 @import './fatal_error';
 
-// Bootstrap provided box-sizing: border-box — restore it without the framework
+// Use border-box sizing everywhere
 *,
 ::before,
 ::after {
@@ -50,18 +50,18 @@
   // Shadow
   --reefpi-shadow-navbar: 0 2px 8px var(--reefpi-color-shadow);
 
-  // Bootstrap context colors captured for legacy previews
+  // Neutral greys and soft alert colours (kept from the pre-Aquatic palette)
   --reefpi-color-secondary: #{$color-secondary};
   --reefpi-color-control-border: #{$color-control-border};
   --reefpi-color-disabled-bg: #{$color-disabled-bg};
-  --reefpi-color-danger-bg-bootstrap: #{$color-danger-bg-bootstrap};
-  --reefpi-color-danger-text-bootstrap: #{$color-danger-text-bootstrap};
-  --reefpi-color-warning-bg-bootstrap: #{$color-warning-bg-bootstrap};
-  --reefpi-color-warning-border-bootstrap: #{$color-warning-border-bootstrap};
-  --reefpi-color-warning-text-bootstrap: #{$color-warning-text-bootstrap};
-  --reefpi-color-success-bg-bootstrap: #{$color-success-bg-bootstrap};
-  --reefpi-color-success-border-bootstrap: #{$color-success-border-bootstrap};
-  --reefpi-color-success-text-bootstrap: #{$color-success-text-bootstrap};
+  --reefpi-color-alert-danger-bg: #{$color-alert-danger-bg};
+  --reefpi-color-alert-danger-text: #{$color-alert-danger-text};
+  --reefpi-color-alert-warning-bg: #{$color-alert-warning-bg};
+  --reefpi-color-alert-warning-border: #{$color-alert-warning-border};
+  --reefpi-color-alert-warning-text: #{$color-alert-warning-text};
+  --reefpi-color-alert-success-bg: #{$color-alert-success-bg};
+  --reefpi-color-alert-success-border: #{$color-alert-success-border};
+  --reefpi-color-alert-success-text: #{$color-alert-success-text};
 
   // Chart palette (replaces raw hex in chart components)
   --reefpi-chart-green:  #00c851;
@@ -87,7 +87,7 @@
   --reefpi-preview-actinic-border: #{$preview-actinic-border};
   --reefpi-preview-actinic-border-strong: #{$preview-actinic-border-strong};
 
-  // Bootstrap 4.6 semantic aliases
+  // Neutral light and dark surfaces
   --reefpi-color-light:   #f8f9fa;
   --reefpi-color-dark:    #343a40;
 }

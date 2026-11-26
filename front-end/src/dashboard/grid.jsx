@@ -6,8 +6,8 @@ import { Menu } from '../../design-system/ui_kits/reef-pi-app/primitives/Interac
 
 export const numColsToColSize = (numCols) => {
   /*
-  Given a number of columns, returns the maximum bootstrap column size in order
-  to fit all columns on one row
+  Given a number of columns, returns the largest column span (out of a 12-column
+  grid) that fits all columns on one row
 
   i.e. 1->12, 2->6, 3->4, 4->3, 5->2, 6->2, 7->1, 8->1, 9->1, 10->1, 11->1, 12->1
   */

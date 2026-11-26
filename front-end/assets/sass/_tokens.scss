@@ -1,16 +1,16 @@
 
-// Bootstrap context colors captured for legacy previews
+// Neutral greys and soft alert colours (kept from the pre-Aquatic palette)
 $color-secondary: #6c757d;
 $color-control-border: #ced4da;
 $color-disabled-bg: #ced4da;
-$color-danger-bg-bootstrap: #f8d7da;
-$color-danger-text-bootstrap: #721c24;
-$color-warning-bg-bootstrap: #fff3cd;
-$color-warning-border-bootstrap: #ffeeba;
-$color-warning-text-bootstrap: #856404;
-$color-success-bg-bootstrap: #d4edda;
-$color-success-border-bootstrap: #c3e6cb;
-$color-success-text-bootstrap: #155724;
+$color-alert-danger-bg: #f8d7da;
+$color-alert-danger-text: #721c24;
+$color-alert-warning-bg: #fff3cd;
+$color-alert-warning-border: #ffeeba;
+$color-alert-warning-text: #856404;
+$color-alert-success-bg: #d4edda;
+$color-alert-success-border: #c3e6cb;
+$color-alert-success-text: #155724;
 
 $space-xxs: 0.25rem; // 4px grid (#3289)
 $space-xs: 0.5rem;
