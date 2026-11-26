@@ -72,7 +72,7 @@ describe('Equipment ui', () => {
 
     expect(props.fetch).toHaveBeenCalled()
     expect(props.fetchOutlets).toHaveBeenCalled()
-    expect(component.render().type).toBe(List)
+    expect(component.render().props.className).toBe('reefpi-core-page')
   })
 
   it('<Main /> toggles add form and creates equipment payloads', () => {
@@ -117,6 +117,27 @@ describe('Equipment ui', () => {
     const rendered = component.render()
     const equipmentItems = collectElements(rendered, node => node.type === Equipment)
     expect(equipmentItems.map(item => item.props.equipment.name)).toEqual(['Beta', 'Alpha'])
+  })
+
+  it('<Main /> puts Add equipment and Sort in a page toolbar above the list', () => {
+    const { container } = render(
+      <RawEquipmentMain
+        outlets={outlets}
+        equipment={eqs}
+        fetch={jest.fn()}
+        fetchOutlets={jest.fn()}
+        create={jest.fn()}
+        update={jest.fn()}
+        delete={jest.fn()}
+      />
+    )
+
+    const toolbar = container.querySelector('.reefpi-page-toolbar')
+    const list = container.querySelector('.reefpi-list')
+    expect(toolbar).toBeTruthy()
+    expect(toolbar.compareDocumentPosition(list) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(toolbar.querySelector('[data-testid="smoke-equipment-add-toggle"]').textContent).toContain('Add equipment')
+    expect(toolbar.querySelector('#equipment-sort')).toBeTruthy()
   })
 
   it('sortEquipment supports all sort modes without mutating input', () => {

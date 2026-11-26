@@ -133,6 +133,7 @@ configuration:admin:sign_out,Sign Out
 configuration:authentication:credentials,Credentials
 configuration:authentication:error_pass,You Must Provide a password
 configuration:authentication:error_user,You Must Provide a username
+configuration:changes_saved,Changes saved
 configuration:connectors:title_delete,Delete {{name}} ?
 configuration:connectors:warn_delete,This action will delete connector {{name}}
 configuration:drivers:provision,Provision
@@ -141,6 +142,13 @@ configuration:drivers:title_delete,Remove driver {{name}}?
 configuration:drivers:type,Type
 configuration:drivers:warn_delete,This action will remove the driver for {{name}}
 configuration:errors:alert,Alert
+configuration:save_changes,Save changes
+configuration:save_failed,Save failed
+configuration:saving,Saving
+configuration:section_advanced,Advanced
+configuration:section_appearance,Appearance
+configuration:section_capabilities,Capabilities
+configuration:section_controller,Controller
 configuration:settings:address,Address
 configuration:settings:alert_health_check,Alert on health check
 configuration:settings:brightness,Brightness
@@ -171,6 +179,7 @@ configuration:tab:drivers,Drivers
 configuration:tab:errors,Errors
 configuration:tab:settings,Settings
 configuration:tab:telemetry,Telemetry
+configuration:unsaved_changes,Unsaved changes
 cron:day_of_month,Day of the month
 cron:hour,Hour
 cron:minute,Minute
@@ -179,6 +188,16 @@ cron:second,Second
 cron:week,Day of the week (0=Sun - 6=Sat)
 dashboard:back_to_dashboard,Back to dashboard
 dashboard:blank_panel,Unassigned (Blank)
+dashboard:setup_ato,Set up ATO
+dashboard:setup_ato_description,Add an automatic top-off controller.
+dashboard:setup_equipment,Add equipment
+dashboard:setup_equipment_description,Connect pumps heaters or other outlet-controlled equipment.
+dashboard:setup_heading,Finish setup
+dashboard:setup_intro,Add the controller features you plan to use.
+dashboard:setup_ph,Set up pH
+dashboard:setup_ph_description,Add and calibrate a pH probe.
+dashboard:setup_temperature,Set up temperature
+dashboard:setup_temperature_description,Add a temperature probe for live readings.
 doser:calibrate,Calibrate
 doser:calibration:current_rate,Calibrated rate
 doser:calibration:measured_volume,Measured volume (mL)
@@ -212,9 +231,15 @@ doser:volume_ml,Volume (mL per dose)
 doser:vpr,Volume Per Rotation
 doser:warn_delete,This action will delete doser {{name}}
 doser:warn_reset,This action will reset usage data for doser {{name}}
+equipment:actions,Equipment actions
 equipment:boot_delay,Boot Delay (seconds)
 equipment:chart:barchart,Equipment(Bar Chart)
 equipment:chart:ctrlpanel,Equipment(Switch Panel)
+equipment:command_failed,Command failed
+equipment:command_pending,Command pending
+equipment:command_state_unknown,Command state unknown
+equipment:commanded_off,Commanded off
+equipment:commanded_on,Commanded on
 equipment:sort,Sort
 equipment:sort_name_az,Name (A→Z)
 equipment:sort_name_za,Name (Z→A)

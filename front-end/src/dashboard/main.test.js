@@ -1,5 +1,5 @@
 import React from 'react'
-import { RawDashboardMain, equipmentStripItems } from './main'
+import { RawDashboardMain, equipmentStripItems, mapStateToProps } from './main'
 
 describe('equipmentStripItems', () => {
   it('maps the API on flag to the strip switch state', () => {
@@ -20,7 +20,24 @@ describe('equipmentStripItems', () => {
 
 describe('<RawDashboardMain />', () => {
   it('hands the dashboard strip items carrying their on/off state', () => {
-    const element = new RawDashboardMain({ equipment: [{ id: '1', name: 'Eq1', on: true }], updateEquipment: jest.fn() }).render()
+    const capabilities = { temperature: true, ph: false, ato: true, equipment: true }
+    const element = new RawDashboardMain({ capabilities, equipment: [{ id: '1', name: 'Eq1', on: true }], updateEquipment: jest.fn() }).render()
     expect(element.props.equipment).toEqual([expect.objectContaining({ id: '1', state: 'on' })])
+    expect(element.props.capabilities).toBe(capabilities)
+  })
+
+  it('maps only dashboard setup capabilities from Redux state', () => {
+    expect(mapStateToProps({
+      capabilities: { temperature: true, ph: false, ato: true, equipment: false, dev_mode: true },
+      equipment: [],
+      tcs: [],
+      phprobes: [],
+      atos: []
+    }).capabilities).toEqual({
+      temperature: true,
+      ph: false,
+      ato: true,
+      equipment: false
+    })
   })
 })

@@ -44,7 +44,9 @@ class EquipmentPage {
   }
 
   async rename (name, newName) {
-    await (await this.row(name)).getByTestId('equipment-edit').click()
+    const row = await this.row(name)
+    await row.getByRole('button', { name: 'Equipment actions' }).click()
+    await this.page.getByRole('menuitem', { name: 'Edit' }).click()
     await this.page.getByTestId('smoke-equipment-name').fill(newName)
     await this.page.getByTestId('smoke-equipment-submit').click()
     await expect(this.page.getByText(newName, { exact: true })).toBeVisible()
@@ -56,7 +58,8 @@ class EquipmentPage {
 
   async remove (name) {
     const row = await this.row(name)
-    await row.getByTestId('equipment-delete').click()
+    await row.getByRole('button', { name: 'Equipment actions' }).click()
+    await this.page.getByRole('menuitem', { name: 'Delete' }).click()
     await confirmDialog(this.page)
     await expect(row).toHaveCount(0)
   }

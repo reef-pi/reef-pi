@@ -150,6 +150,7 @@ function MenuItemButton ({ item, onClose }) {
 }
 
 export function Menu ({
+  buttonAriaLabel,
   buttonLabel,
   children,
   items = []
@@ -176,6 +177,10 @@ export function Menu ({
     }
     document.addEventListener('mousedown', handleMouseDown)
     return () => document.removeEventListener('mousedown', handleMouseDown)
+  }, [open])
+
+  useEffect(() => {
+    if (open) focusableElements(menuRef.current)[0]?.focus()
   }, [open])
 
   const handleClose = () => {
@@ -205,6 +210,7 @@ export function Menu ({
   return (
     <div className='reefpi-menu' style={{ display: 'inline-flex', position: 'relative' }}>
       <button
+        aria-label={buttonAriaLabel}
         aria-expanded={open}
         aria-haspopup='menu'
         onClick={() => setOpen(value => !value)}
@@ -361,6 +367,7 @@ MenuItemButton.propTypes = {
 }
 
 Menu.propTypes = {
+  buttonAriaLabel: PropTypes.string,
   buttonLabel: PropTypes.node.isRequired,
   children: PropTypes.node,
   items: PropTypes.arrayOf(PropTypes.shape({

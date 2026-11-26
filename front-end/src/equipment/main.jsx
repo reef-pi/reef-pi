@@ -8,7 +8,7 @@ import { SORT_NAME_AZ, SORT_NAME_ZA, SORT_ON_FIRST, SORT_OFF_FIRST, sortEquipmen
 import i18next from 'i18next'
 import EmptyState, { EquipmentIcon } from '../../design-system/ui_kits/reef-pi-app/shell/EmptyState'
 import { Field, Select } from '../../design-system/ui_kits/reef-pi-app/primitives/Form'
-import { List, ListItem } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
+import { List } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
 import AddToggle from '../ui_components/add_toggle'
 
 const sortOptions = [
@@ -18,19 +18,8 @@ const sortOptions = [
   { value: SORT_OFF_FIRST, label: 'equipment:sort_off_first' }
 ]
 
-const sortRowStyle = {
-  alignItems: 'end',
-  display: 'grid',
-  gap: 'var(--reefpi-space-sm)',
-  gridTemplateColumns: 'minmax(12rem, 18rem)',
-  justifyContent: 'start'
-}
-
-const addRowStyle = {
-  alignItems: 'start',
-  display: 'grid',
-  gap: 'var(--reefpi-space-sm)',
-  justifyItems: 'start'
+const sortStyle = {
+  minWidth: 'min(18rem, 100%)'
 }
 
 export class RawEquipmentMain extends React.Component {
@@ -90,8 +79,16 @@ export class RawEquipmentMain extends React.Component {
     }
 
     return (
-      <List density='roomy'>
-        <ListItem style={sortRowStyle}>
+      <div className='reefpi-core-page'>
+        <div className='reefpi-page-toolbar'>
+          <AddToggle
+            id='add_equipment'
+            testId='smoke-equipment-add-toggle'
+            label={i18next.t('equipment:add', { defaultValue: 'Add equipment' })}
+            open={this.state.addEquipment}
+            onClick={this.handleToggleAddEquipmentDiv}
+          />
+          <div style={sortStyle}>
           <Field id='equipment-sort' label={i18next.t('equipment:sort')}>
             <Select
               id='equipment-sort'
@@ -100,24 +97,24 @@ export class RawEquipmentMain extends React.Component {
               options={sortOptions.map(option => ({ value: option.value, label: i18next.t(option.label) }))}
             />
           </Field>
-        </ListItem>
-        {sorted.map(item => {
-          return (
-            <Equipment
-              key={item.id}
-              equipment={item}
-              outlets={this.props.outlets}
-              update={this.props.update}
-              refresh={this.props.fetch}
-              delete={this.props.delete}
-            />
-          )
-        })}
-        <ListItem style={addRowStyle}>
-          <AddToggle id='add_equipment' testId='smoke-equipment-add-toggle' open={this.state.addEquipment} onClick={this.handleToggleAddEquipmentDiv} />
-          {newEquipmentForm}
-        </ListItem>
-      </List>
+          </div>
+        </div>
+        {newEquipmentForm && <section className='reefpi-section-card'>{newEquipmentForm}</section>}
+        <List density='roomy'>
+          {sorted.map(item => {
+            return (
+              <Equipment
+                key={item.id}
+                equipment={item}
+                outlets={this.props.outlets}
+                update={this.props.update}
+                refresh={this.props.fetch}
+                delete={this.props.delete}
+              />
+            )
+          })}
+        </List>
+      </div>
     )
   }
 }

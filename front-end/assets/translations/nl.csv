@@ -133,6 +133,7 @@ configuration:admin:sign_out,Log uit
 configuration:authentication:credentials,Aanmeldingsgegevens
 configuration:authentication:error_pass,Geef een passwoord in
 configuration:authentication:error_user,Geef een gebruikersnaam in
+configuration:changes_saved,
 configuration:connectors:title_delete,
 configuration:connectors:warn_delete,
 configuration:drivers:provision,
@@ -141,6 +142,13 @@ configuration:drivers:title_delete,
 configuration:drivers:type,
 configuration:drivers:warn_delete,
 configuration:errors:alert,Alert
+configuration:save_changes,
+configuration:save_failed,
+configuration:saving,
+configuration:section_advanced,
+configuration:section_appearance,
+configuration:section_capabilities,
+configuration:section_controller,
 configuration:settings:address,Adres
 configuration:settings:alert_health_check,Alarm bij health check
 configuration:settings:brightness,
@@ -171,6 +179,7 @@ configuration:tab:drivers,Drivers
 configuration:tab:errors,Foutmeldingen
 configuration:tab:settings,Instellingen
 configuration:tab:telemetry,Monitoring
+configuration:unsaved_changes,
 cron:day_of_month,Dag van de maand
 cron:hour,Uur
 cron:minute,Minuut
@@ -179,6 +188,16 @@ cron:second,Seconde
 cron:week,Week
 dashboard:back_to_dashboard,Terug naar dashboard
 dashboard:blank_panel,
+dashboard:setup_ato,
+dashboard:setup_ato_description,
+dashboard:setup_equipment,
+dashboard:setup_equipment_description,
+dashboard:setup_heading,
+dashboard:setup_intro,
+dashboard:setup_ph,
+dashboard:setup_ph_description,
+dashboard:setup_temperature,
+dashboard:setup_temperature_description,
 doser:calibrate,
 doser:calibration:current_rate,
 doser:calibration:measured_volume,
@@ -212,9 +231,15 @@ doser:volume_ml,
 doser:vpr,
 doser:warn_delete,
 doser:warn_reset,
+equipment:actions,
 equipment:boot_delay,
 equipment:chart:barchart,
 equipment:chart:ctrlpanel,
+equipment:command_failed,
+equipment:command_pending,
+equipment:command_state_unknown,
+equipment:commanded_off,
+equipment:commanded_on,
 equipment:sort,Sort
 equipment:sort_name_az,Name (A→Z)
 equipment:sort_name_za,Name (Z→A)

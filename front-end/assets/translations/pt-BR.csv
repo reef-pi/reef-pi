@@ -133,6 +133,7 @@ configuration:admin:sign_out,Sair
 configuration:authentication:credentials,Credenciais
 configuration:authentication:error_pass,Você deve inserir uma senha
 configuration:authentication:error_user,Você deve inserir um nome de usuário
+configuration:changes_saved,
 configuration:connectors:title_delete,Excluir
 configuration:connectors:warn_delete,Aviso de exclusão
 configuration:drivers:provision,Provisionar
@@ -141,6 +142,13 @@ configuration:drivers:title_delete,Excluir
 configuration:drivers:type,Tipo
 configuration:drivers:warn_delete,Aviso de exclusão
 configuration:errors:alert,Alerta
+configuration:save_changes,
+configuration:save_failed,
+configuration:saving,
+configuration:section_advanced,
+configuration:section_appearance,
+configuration:section_capabilities,
+configuration:section_controller,
 configuration:settings:address,Endereço
 configuration:settings:alert_health_check,Alertas de Saúde Geral
 configuration:settings:brightness,Brilho
@@ -171,6 +179,7 @@ configuration:tab:drivers,Controladores
 configuration:tab:errors,Erros
 configuration:tab:settings,Configurações
 configuration:tab:telemetry,Telemetria
+configuration:unsaved_changes,
 cron:day_of_month,dias do mês
 cron:hour,Horas
 cron:minute,Minutos
@@ -179,6 +188,16 @@ cron:second,Segundos
 cron:week,Semana
 dashboard:back_to_dashboard,Voltar ao Painel
 dashboard:blank_panel,Painel em branco
+dashboard:setup_ato,
+dashboard:setup_ato_description,
+dashboard:setup_equipment,
+dashboard:setup_equipment_description,
+dashboard:setup_heading,
+dashboard:setup_intro,
+dashboard:setup_ph,
+dashboard:setup_ph_description,
+dashboard:setup_temperature,
+dashboard:setup_temperature_description,
 doser:calibrate,calibrar
 doser:calibration:current_rate,
 doser:calibration:measured_volume,
@@ -212,9 +231,15 @@ doser:volume_ml,
 doser:vpr,vpr
 doser:warn_delete,Aviso de exclusão
 doser:warn_reset,Aviso de reinicialização
+equipment:actions,
 equipment:boot_delay,
 equipment:chart:barchart,Gráfico
 equipment:chart:ctrlpanel,Painel de Controle
+equipment:command_failed,
+equipment:command_pending,
+equipment:command_state_unknown,
+equipment:commanded_off,
+equipment:commanded_on,
 equipment:sort,Ordenar
 equipment:sort_name_az,Nome (A→Z)
 equipment:sort_name_za,Nome (Z→A)

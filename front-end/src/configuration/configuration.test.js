@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { act } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
-import { render, fireEvent } from '@testing-library/react'
+import { render, fireEvent, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import configureMockStore from 'redux-mock-store'
@@ -39,7 +39,7 @@ const fullSettings = {
   interface: 'wlan0',
   address: 'localhost:8080',
   https: false,
-  capabilities: { health_check: true },
+  capabilities: { health_check: true, dev_mode: false },
   health_check: { enable: false, max_memory: 100, max_cpu: 80, max_cpu_temp: 70, report_enable: false, report_schedule: '' },
   display: false,
   notification: false,
@@ -329,7 +329,7 @@ describe('Configuration ui', () => {
       settings: { ...fullSettings },
       capabilities: fullCapabilities,
       fetchSettings: jest.fn(),
-      updateSettings: jest.fn()
+      updateSettings: jest.fn(() => new Promise(() => {}))
     })
 
     it('keeps a toggled checkbox and typed text across re-renders', () => {
@@ -344,6 +344,55 @@ describe('Configuration ui', () => {
       fireEvent.change(container.querySelector('#to-row-name'), { target: { value: 'my-tank' } })
       expect(container.querySelector('#to-row-name').value).toBe('my-tank')
       expect(container.querySelector('#cors').checked).toBe(true)
+    })
+
+    it('groups controller, appearance, capabilities, and advanced settings', () => {
+      const { container, getByRole } = render(<RawSettings {...baseProps()} />)
+
+      expect(getByRole('heading', { name: 'Controller' })).toBeTruthy()
+      expect(getByRole('heading', { name: 'Appearance' })).toBeTruthy()
+      expect(getByRole('heading', { name: 'Capabilities' })).toBeTruthy()
+      expect(getByRole('heading', { name: 'Advanced' })).toBeTruthy()
+      expect(container.querySelector('#settings-advanced').contains(container.querySelector('#update-dev_mode'))).toBe(true)
+      expect(container.querySelectorAll('#update-dev_mode')).toHaveLength(1)
+    })
+
+    it('keeps save disabled until a field changes', () => {
+      const { container } = render(<RawSettings {...baseProps()} />)
+      const save = container.querySelector('#systemUpdateSettings')
+
+      expect(save.disabled).toBe(true)
+      fireEvent.change(container.querySelector('#to-row-name'), { target: { value: 'display-tank' } })
+      expect(save.disabled).toBe(false)
+      expect(container.querySelector('[role="status"]').textContent).toContain('Unsaved changes')
+    })
+
+    it('announces a successful save and clears dirty state', async () => {
+      let resolveUpdate
+      const props = baseProps()
+      props.updateSettings = jest.fn(() => new Promise(resolve => { resolveUpdate = resolve }))
+      const { container } = render(<RawSettings {...props} />)
+
+      fireEvent.change(container.querySelector('#to-row-name'), { target: { value: 'display-tank' } })
+      fireEvent.click(container.querySelector('#systemUpdateSettings'))
+      expect(container.querySelector('[role="status"]').textContent).toContain('Saving')
+      expect(container.querySelector('#systemUpdateSettings').disabled).toBe(true)
+
+      await act(async () => resolveUpdate())
+      await waitFor(() => expect(container.querySelector('[role="status"]').textContent).toContain('Changes saved'))
+      expect(container.querySelector('#systemUpdateSettings').disabled).toBe(true)
+    })
+
+    it('keeps dirty state and announces a rejected save', async () => {
+      const props = baseProps()
+      props.updateSettings = jest.fn(() => Promise.reject(new Error('offline')))
+      const { container } = render(<RawSettings {...props} />)
+
+      fireEvent.change(container.querySelector('#to-row-name'), { target: { value: 'display-tank' } })
+      fireEvent.click(container.querySelector('#systemUpdateSettings'))
+
+      await waitFor(() => expect(container.querySelector('[role="status"]').textContent).toContain('Save failed'))
+      expect(container.querySelector('#systemUpdateSettings').disabled).toBe(false)
     })
 
     it('saves the edited values', () => {
@@ -375,7 +424,7 @@ describe('Configuration ui', () => {
     })
   })
 
-  it('<Settings /> handleUpdate valid settings calls updateSettings', () => {
+  it('<Settings /> handleUpdate valid settings calls updateSettings', async () => {
     const updateSettings = jest.fn()
     const component = new RawSettings({
       settings: { ...fullSettings },
@@ -384,7 +433,7 @@ describe('Configuration ui', () => {
       updateSettings
     })
     patchSetState(component)
-    component.handleUpdate()
+    await component.handleUpdate()
     expect(updateSettings).toHaveBeenCalled()
     expect(Alert.showUpdateSuccessful).toHaveBeenCalled()
   })
@@ -563,9 +612,9 @@ describe('Configuration ui', () => {
 
     component.updateCapabilities(capabilities)
 
-    expect(previousSettings.capabilities).toEqual({ health_check: true })
+    expect(previousSettings.capabilities).toEqual({ health_check: true, dev_mode: false })
     expect(component.state.settings).not.toBe(previousSettings)
-    expect(component.state.settings.capabilities).toEqual({ health_check: true, dashboard: true })
+    expect(component.state.settings.capabilities).toEqual({ health_check: true, dev_mode: false, dashboard: true })
   })
 
   it('<Settings /> updateHealthNotify updates without mutating previous settings', () => {

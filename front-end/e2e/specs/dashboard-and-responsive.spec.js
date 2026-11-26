@@ -71,11 +71,11 @@ test('prunes orphaned dashboard chart subscriptions from local storage', async (
 
   const dashboard = page.getByTestId('smoke-dashboard-v2')
   await expect(dashboard).toBeVisible()
-  const temperatureTile = page.getByTestId('dashboard-tile-temperature')
-  await expect(temperatureTile).toContainText('Not configured')
-  await expect(temperatureTile).toContainText('Configure temperature probe')
-  await expect(temperatureTile).not.toContainText('HTTP 404')
-  await expect(temperatureTile).not.toContainText('Retry')
+  const setup = page.getByTestId('dashboard-setup')
+  await expect(setup).toBeVisible()
+  await expect(setup.getByRole('link', { name: 'Set up temperature' })).toHaveAttribute('href', '/temperature')
+  await expect(setup).not.toContainText('HTTP 404')
+  await expect(setup).not.toContainText('Retry')
 
   await expect.poll(async () => page.evaluate(() => window.localStorage.getItem('dashboard_config'))).not.toContain('999')
 })

@@ -6,7 +6,9 @@ import TemperatureTile from './TemperatureTile'
 import PhTile from './PhTile'
 import AtoTile from './AtoTile'
 import EquipmentStrip from './EquipmentStrip'
+import SetupPanel from './SetupPanel'
 import { useAlertsStore } from '../hooks/useAlertsStore'
+import i18n from 'utils/i18n'
 
 /* Composed dashboard layout for the reef-pi overview. */
 
@@ -38,24 +40,19 @@ const DASHBOARD_CONFIG_KEY = 'dashboard_config'
 const RESOURCE_META = {
   temperature: {
     aliases: ['temperature', 'temperatures', 'tcs', 'temp', 'temp_current', 'temp_historical'],
-    title: 'Temperature',
-    copy: 'No temperature probe is selected for this chart.',
-    action: 'Configure temperature probe',
     href: '/temperature'
   },
   ph: {
     aliases: ['ph', 'phprobes', 'ph_current', 'ph_historical', 'ph_usage'],
-    title: 'pH',
-    copy: 'No pH probe is selected for this chart.',
-    action: 'Configure pH probe',
     href: '/ph'
   },
   ato: {
     aliases: ['ato', 'atos'],
-    title: 'ATO',
-    copy: 'No ATO controller is selected for this chart.',
-    action: 'Configure ATO',
     href: '/ato'
+  },
+  equipment: {
+    aliases: ['equipment'],
+    href: '/equipment'
   }
 }
 
@@ -139,59 +136,18 @@ function pruneDashboardConfig (config, orphans) {
   return { config: next, changed }
 }
 
-function NotConfiguredTile ({ resource }) {
-  const meta = RESOURCE_META[resource]
-  return (
-    <div
-      data-testid={`dashboard-tile-${resource}`}
-      style={{
-        background: 'var(--reefpi-color-surface-elevated)',
-        border: '1px solid var(--reefpi-color-border)',
-        borderRadius: 'var(--reefpi-radius-md)',
-        minHeight: resource === 'temperature' ? '320px' : '220px',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '0.75rem',
-        padding: '1rem',
-        textAlign: 'center',
-        fontFamily: 'var(--reefpi-font-app)'
-      }}
-    >
-      <div style={{ fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--reefpi-color-text-muted)' }}>
-        {meta.title}
-      </div>
-      <div style={{ fontSize: '1rem', fontWeight: 500, color: 'var(--reefpi-color-text)' }}>Not configured</div>
-      <div style={{ fontSize: '0.8rem', color: 'var(--reefpi-color-text-muted)', maxWidth: '18rem' }}>{meta.copy}</div>
-      <a
-        href={meta.href}
-        style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          minHeight: '44px',
-          padding: '0 1rem',
-          borderRadius: 'var(--reefpi-radius-sm)',
-          background: 'var(--reefpi-color-brand)',
-          color: 'var(--reefpi-color-on-brand, #fff)',
-          textDecoration: 'none',
-          fontSize: '0.85rem',
-          fontWeight: 600
-        }}
-      >
-        {meta.action}
-      </a>
-    </div>
-  )
-}
-
-NotConfiguredTile.propTypes = {
-  resource: PropTypes.oneOf(Object.keys(RESOURCE_META)).isRequired
+function setupItem (resource) {
+  return {
+    id: resource,
+    title: i18n.t(`dashboard:setup_${resource}`, { defaultValue: `Set up ${resource}` }),
+    description: i18n.t(`dashboard:setup_${resource}_description`, { defaultValue: `Configure ${resource} to show it on the dashboard.` }),
+    href: RESOURCE_META[resource].href
+  }
 }
 
 export default function DashboardV2 ({
   equipment,
+  capabilities,
   temperatureControllers,
   phProbes,
   atos,
@@ -230,6 +186,13 @@ export default function DashboardV2 ({
   const tempAlert = toTileAlert(firstAlertFor(activeAlerts, 'temperature.display'))
   const phAlert = toTileAlert(firstAlertFor(activeAlerts, 'ph.display'))
   const atoAlert = toTileAlert(firstAlertFor(activeAlerts, 'ato.reservoir'))
+  const enabled = resource => capabilities?.[resource] !== false
+  const setupItems = [
+    !tempState.configured && enabled('temperature') ? setupItem('temperature') : null,
+    !phState.configured && enabled('ph') ? setupItem('ph') : null,
+    !atoState.configured && enabled('ato') ? setupItem('ato') : null,
+    !(equipment || []).length && enabled('equipment') ? setupItem('equipment') : null
+  ].filter(Boolean)
 
   return (
     <div
@@ -251,38 +214,47 @@ export default function DashboardV2 ({
         onResetDashboardConfig={handleResetDashboardConfig}
       />
       <AlertCenter open={alertCenterOpen} onClose={() => setAlertCenterOpen(false)} />
+      <SetupPanel items={setupItems} />
 
       {/* Primary metric row */}
-      <div className='row' style={{ margin: 0, gap: '1rem', display: 'flex', flexWrap: 'wrap' }}>
-        <div style={{ flex: '2 1 300px', minWidth: 0 }}>
-          {tempState.configured
-            ? <div data-testid='dashboard-tile-temperature'><TemperatureTile globalRange={globalRange} label={temperatureControllers?.[0]?.name} alert={tempAlert} refreshEquipment={refreshEquipment} /></div>
-            : <NotConfiguredTile resource='temperature' />}
+      {(tempState.configured || phState.configured) && (
+        <div className='row' style={{ margin: 0, gap: '1rem', display: 'flex', flexWrap: 'wrap' }}>
+          {tempState.configured && (
+            <div style={{ flex: '2 1 300px', minWidth: 0 }}>
+              <div data-testid='dashboard-tile-temperature'><TemperatureTile globalRange={globalRange} label={temperatureControllers?.[0]?.name} alert={tempAlert} refreshEquipment={refreshEquipment} /></div>
+            </div>
+          )}
+          {phState.configured && (
+            <div style={{ flex: '1 1 200px', minWidth: 0 }}>
+              <div data-testid='dashboard-tile-ph'><PhTile globalRange={globalRange} alert={phAlert} /></div>
+            </div>
+          )}
         </div>
-        <div style={{ flex: '1 1 200px', minWidth: 0 }}>
-          {phState.configured
-            ? <div data-testid='dashboard-tile-ph'><PhTile globalRange={globalRange} alert={phAlert} /></div>
-            : <NotConfiguredTile resource='ph' />}
-        </div>
-      </div>
+      )}
 
       {/* Secondary metric row */}
-      <div className='row' style={{ margin: 0 }}>
-        <div style={{ flex: '1 1 200px', minWidth: 0 }}>
-          {atoState.configured
-            ? <div data-testid='dashboard-tile-ato'><AtoTile globalRange={globalRange} targetLevel={targetAtoLevel} alert={atoAlert} /></div>
-            : <NotConfiguredTile resource='ato' />}
+      {atoState.configured && (
+        <div className='row' style={{ margin: 0 }}>
+          <div style={{ flex: '1 1 200px', minWidth: 0 }}>
+            <div data-testid='dashboard-tile-ato'><AtoTile globalRange={globalRange} targetLevel={targetAtoLevel} alert={atoAlert} /></div>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Equipment strip — full width footer */}
-      <EquipmentStrip items={equipment} onToggle={onToggle} />
+      {(equipment || []).length > 0 && <EquipmentStrip items={equipment} onToggle={onToggle} />}
     </div>
   )
 }
 
 DashboardV2.propTypes = {
   equipment: PropTypes.array,
+  capabilities: PropTypes.shape({
+    temperature: PropTypes.bool,
+    ph: PropTypes.bool,
+    ato: PropTypes.bool,
+    equipment: PropTypes.bool
+  }),
   temperatureControllers: PropTypes.array,
   phProbes: PropTypes.array,
   atos: PropTypes.array,
