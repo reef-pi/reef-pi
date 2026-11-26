@@ -5,22 +5,18 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"math/rand"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func (c *Controller) Read(tc *TC) (float64, error) {
 	if c.devMode {
-		log.Println("Temperature controller is running in dev mode, skipping sensor reading.")
-		if tc.Fahrenheit {
-			return utils.RoundToTwoDecimal(78.0 + (3 * rand.Float64())), nil
-		}
-		return utils.RoundToTwoDecimal(24.4 + (1.5 * rand.Float64())), nil
+		return c.readDevTemperature(tc, time.Now()), nil
 	}
 
 	if tc.AnalogInput != "" {

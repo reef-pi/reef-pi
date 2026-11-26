@@ -46,6 +46,7 @@ type TC struct {
 	OneShot      bool          `json:"one_shot"`
 	Chart        ChartConfig   `json:"chart"`
 	h            *controller.Homeostasis
+	devTank      devTank
 	currentValue float64
 	calibrator   hal.Calibrator
 }
