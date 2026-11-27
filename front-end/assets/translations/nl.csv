@@ -197,10 +197,13 @@ configuration:tab:errors,Foutmeldingen
 configuration:tab:settings,Instellingen
 configuration:tab:telemetry,Monitoring
 configuration:unsaved_changes,
+cron:daily_at,
+cron:daily_fields,
 cron:day_of_month,Dag van de maand
 cron:hour,Uur
 cron:minute,Minuut
 cron:month,Maand
+cron:schedule_fields,
 cron:second,Seconde
 cron:week,Week
 dashboard:back_to_dashboard,Terug naar dashboard
@@ -247,8 +250,6 @@ doser:calibration:volume_help,
 doser:connection,
 doser:continuous,
 doser:continuous_mode,
-doser:daily_at,
-doser:daily_fields,
 doser:delay,
 doser:direction,
 doser:direction_pin,
@@ -268,7 +269,6 @@ doser:ms_pin_a,
 doser:ms_pin_b,
 doser:ms_pin_c,
 doser:pump_section,
-doser:schedule_fields,
 doser:soft_start,
 doser:speed,
 doser:spr,
@@ -578,6 +578,8 @@ temperature:visualization_alerts,
 temperature:warn_delete,Deze actie verwijderd
 temperature:warn_reset,
 timers:action,
+timers:action_section,
+timers:actions,
 timers:add_timer,
 timers:after,Na
 timers:and_then,AEn Daarna
@@ -589,16 +591,19 @@ timers:message,Bericht
 timers:reverse,
 timers:revert,
 timers:run,
+timers:schedule_section,
 timers:sec,sec
 timers:stay_off,Uit blijven
 timers:stay_on,Aan blijven
 timers:subject,Onderwerp
+timers:target,
 timers:title_delete,
 timers:turn_back_off,Terug uitschakelen
 timers:turn_back_on,Terug inschakelen
 timers:turn_off,Uitschakelen
 timers:turn_on,Inschakelen
 timers:warn_delete,
+timers:when,
 validation:a_must_be_greater_than_b,
 validation:a_must_be_less_than_b,
 validation:a_must_differ_from_b,

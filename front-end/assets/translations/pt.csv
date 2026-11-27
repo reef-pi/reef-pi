@@ -197,10 +197,13 @@ configuration:tab:errors,Erros
 configuration:tab:settings,Configurações
 configuration:tab:telemetry,Telemetria
 configuration:unsaved_changes,
+cron:daily_at,
+cron:daily_fields,
 cron:day_of_month,dias do mês
 cron:hour,Horas
 cron:minute,Minutos
 cron:month,Meses
+cron:schedule_fields,
 cron:second,Segundos
 cron:week,Semana
 dashboard:back_to_dashboard,Voltas ao  Painel Inicial
@@ -247,8 +250,6 @@ doser:calibration:volume_help,
 doser:connection,
 doser:continuous,
 doser:continuous_mode,
-doser:daily_at,
-doser:daily_fields,
 doser:delay,espera
 doser:direction,direcção
 doser:direction_pin,pin de direcção
@@ -268,7 +269,6 @@ doser:ms_pin_a,Pin A
 doser:ms_pin_b,Pin B
 doser:ms_pin_c,Pin C
 doser:pump_section,
-doser:schedule_fields,
 doser:soft_start,
 doser:speed,Velocidade
 doser:spr,spr
@@ -578,6 +578,8 @@ temperature:visualization_alerts,
 temperature:warn_delete,apagar
 temperature:warn_reset,reset
 timers:action,acção
+timers:action_section,
+timers:actions,
 timers:add_timer,
 timers:after,após
 timers:and_then,e depois
@@ -589,16 +591,19 @@ timers:message,Mensagem
 timers:reverse,
 timers:revert,reverter
 timers:run,
+timers:schedule_section,
 timers:sec,sec
 timers:stay_off,manter desligado
 timers:stay_on,Manter ligado
 timers:subject,Assunto
+timers:target,
 timers:title_delete,apagar
 timers:turn_back_off,Voltar a desligar
 timers:turn_back_on,Voltar a Ligar
 timers:turn_off,Desligar
 timers:turn_on,Ligar é Obrigatório
 timers:warn_delete,apagar
+timers:when,
 validation:a_must_be_greater_than_b, A tem que ser maior do que B
 validation:a_must_be_less_than_b,A tem que ser menos do que B
 validation:a_must_differ_from_b,A tem de ser diferente de B

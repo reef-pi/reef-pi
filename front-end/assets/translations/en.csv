@@ -197,10 +197,13 @@ configuration:tab:errors,Errors
 configuration:tab:settings,Settings
 configuration:tab:telemetry,Telemetry
 configuration:unsaved_changes,Unsaved changes
+cron:daily_at,Every day at {{time}}
+cron:daily_fields,"Every day: hour {{hour}}, minute {{minute}}, second {{second}}"
 cron:day_of_month,Day of the month
 cron:hour,Hour
 cron:minute,Minute
 cron:month,Month
+cron:schedule_fields,"Day {{day}}, month {{month}}, weekday {{week}}: hour {{hour}}, minute {{minute}}, second {{second}}"
 cron:second,Second
 cron:week,Day of the week (0=Sun - 6=Sat)
 dashboard:back_to_dashboard,Back to dashboard
@@ -247,8 +250,6 @@ doser:calibration:volume_help,"Volume to dispense, in mL"
 doser:connection,Connection
 doser:continuous,Continuous (run indefinitely)
 doser:continuous_mode,Continuous
-cron:daily_at,Every day at {{time}}
-cron:daily_fields,"Every day: hour {{hour}}, minute {{minute}}, second {{second}}"
 doser:delay,Delay
 doser:direction, Direction
 doser:direction_pin,Direction Pin
@@ -268,7 +269,6 @@ doser:ms_pin_a,MicroStepping Pin A
 doser:ms_pin_b,MicroStepping Pin B
 doser:ms_pin_c,MicroStepping Pin C 
 doser:pump_section,Pump
-cron:schedule_fields,"Day {{day}}, month {{month}}, weekday {{week}}: hour {{hour}}, minute {{minute}}, second {{second}}"
 doser:soft_start,Soft Start (ramp up/down)
 doser:speed,Speed
 doser:spr,Steps Per Rotation

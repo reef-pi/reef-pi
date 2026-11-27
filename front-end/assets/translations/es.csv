@@ -197,10 +197,13 @@ configuration:tab:errors,Errores
 configuration:tab:settings,Configuraciones
 configuration:tab:telemetry,Telemetria
 configuration:unsaved_changes,
+cron:daily_at,
+cron:daily_fields,
 cron:day_of_month,Dia del Mes
 cron:hour,Hora
 cron:minute,Minuto
 cron:month,Mes
+cron:schedule_fields,
 cron:second,Segundo
 cron:week,Semana
 dashboard:back_to_dashboard,Volver al dashboard
@@ -247,8 +250,6 @@ doser:calibration:volume_help,
 doser:connection,
 doser:continuous,
 doser:continuous_mode,
-doser:daily_at,
-doser:daily_fields,
 doser:delay,
 doser:direction,
 doser:direction_pin,
@@ -268,7 +269,6 @@ doser:ms_pin_a,
 doser:ms_pin_b,
 doser:ms_pin_c,
 doser:pump_section,
-doser:schedule_fields,
 doser:soft_start,
 doser:speed,
 doser:spr,
@@ -578,6 +578,8 @@ temperature:visualization_alerts,
 temperature:warn_delete,Esta accion ser à eliminada
 temperature:warn_reset,
 timers:action,
+timers:action_section,
+timers:actions,
 timers:add_timer,
 timers:after,Despues
 timers:and_then,Luego
@@ -589,16 +591,19 @@ timers:message,Mensaje
 timers:reverse,
 timers:revert,
 timers:run,
+timers:schedule_section,
 timers:sec,seg
 timers:stay_off,Mantener Apagado
 timers:stay_on,Mantener Encendido
 timers:subject,Asunto
+timers:target,
 timers:title_delete,
 timers:turn_back_off,Regresar a Apagado
 timers:turn_back_on,Regresar a Encendido
 timers:turn_off,Apagar
 timers:turn_on,Encender
 timers:warn_delete,
+timers:when,
 validation:a_must_be_greater_than_b,
 validation:a_must_be_less_than_b,
 validation:a_must_differ_from_b,
