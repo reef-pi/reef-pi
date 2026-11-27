@@ -1,35 +1,9 @@
 import React from 'react'
 import i18n from 'utils/i18n'
 import ControllerSummary from '../ui_components/controller_summary'
+import { describeSchedule } from '../utils/schedule_text'
 
 // Read-only view of a dosing pump (#3305): labelled values, not disabled form controls.
-
-const SCHEDULE_DEFAULTS = {
-  'doser:daily_at': 'Every day at {{time}}',
-  'doser:daily_fields': 'Every day: hour {{hour}}, minute {{minute}}, second {{second}}',
-  'doser:schedule_fields': 'Day {{day}}, month {{month}}, weekday {{week}}: hour {{hour}}, minute {{minute}}, second {{second}}'
-}
-
-const isNumber = value => /^\d+$/.test(value)
-const isAny = value => value === '*' || value === '?'
-
-// "Every day at 03:00:00" for a daily schedule at one time; otherwise every cron field as entered,
-// labelled, so a list or step ("1,9,17", "*/2") never reads as a clock time.
-export function scheduleText (schedule = {}) {
-  const field = (name, fallback) => (schedule[name] === undefined || schedule[name] === '' ? fallback : String(schedule[name]))
-  const hour = field('hour', '0')
-  const minute = field('minute', '0')
-  const second = field('second', '0')
-  const day = field('day', '*')
-  const month = field('month', '*')
-  const week = field('week', '*')
-  const daily = isAny(day) && isAny(month) && isAny(week)
-  if (daily && [hour, minute, second].every(isNumber)) {
-    return ['doser:daily_at', { time: [hour, minute, second].map(value => value.padStart(2, '0')).join(':') }]
-  }
-  if (daily) return ['doser:daily_fields', { hour, minute, second }]
-  return ['doser:schedule_fields', { day, month, week, hour, minute, second }]
-}
 
 const nameOf = (id, items = []) => {
   if (id === undefined || id === null || id === '') return i18n.t('not_configured', { defaultValue: 'Not configured' })
@@ -71,8 +45,7 @@ export default function DoserSummary ({ doser, jacks, outlets, children }) {
   if (regiment.continuous) {
     dosingItems.push({ label: i18n.t('schedule'), value: i18n.t('doser:continuous_mode', { defaultValue: 'Continuous' }) })
   } else {
-    const [key, values] = scheduleText(regiment.schedule)
-    dosingItems.push({ label: i18n.t('schedule'), value: i18n.t(key, { ...values, defaultValue: SCHEDULE_DEFAULTS[key] }) })
+    dosingItems.push({ label: i18n.t('schedule'), value: describeSchedule(regiment.schedule) })
     // A calibrated DC pump doses a volume; an uncalibrated one runs for a duration (as its form asks).
     dosingItems.push(stepper || calibrated
       ? { label: i18n.t('doser:volume'), value: withUnit(regiment.volume, 'mL') }
