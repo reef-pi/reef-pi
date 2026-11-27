@@ -404,33 +404,54 @@ page:manager,
 page:ph,
 page:temperature,
 page:timers,
+ph:actions,
 ph:alert_above,Alerta acima de
 ph:alert_below,Alerta abaixo de
+ph:alert_range,
+ph:buffer_help,
 ph:calibrate,Calibrar
+ph:calibrate_requires_off,
+ph:calibration_intro,
 ph:chart:current,Atualmente
 ph:chart:historical,histórico
 ph:chart:usage,Uso
+ph:chart_alerts,
 ph:chart_color,cor
+ph:chart_range,
 ph:chart_unit,unidade
 ph:chart_ymax,Y máximo
 ph:chart_ymin,Y mínimo
 ph:check_frequency,Verificar frequência
 ph:control,Controle
+ph:control_dependency,
+ph:control_section,
 ph:controlequipment,Equipamento
 ph:controlmacro,Macro
 ph:controlnothing,Nada
 ph:current_reading,Leitura Atual
+ph:empty_readings,
+ph:helper_chart,
+ph:helper_control,
+ph:helper_probe,
 ph:hysteresis,histerese
 ph:hysteresis_less_than,histerese menor que
 ph:low_point,
 ph:lower_function,Função inferior
 ph:lower_threshold,Limite inferior
 ph:midpoint,Ponto médio
+ph:monitoring_only,
+ph:optional,
+ph:probe_sampling,
 ph:run_calibration,Executar Calibração
 ph:second_point,Segundo ponto
+ph:step_failed,
+ph:step_locked,
+ph:step_stored,
+ph:step_storing,
 ph:transformer,Transformador
 ph:upper_function,Função superior
 ph:upper_threshold,Limite superior
+ph:waiting_reading,
 ph:warn_delete,Esta ação será removida
 ph:warn_reset,Redefinir
 signin:invalidcredentials,Credenciais inválidas

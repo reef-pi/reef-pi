@@ -500,7 +500,7 @@ describe('Ph ui', () => {
     expect(html).toContain('pH')
   })
 
-  it('<Main /> omits pH dashboard primitives when readings are unavailable', () => {
+  it('<Main /> shows an empty state instead of pH charts when readings are unavailable', () => {
     const probe = { id: '1', name: 'Tank pH', enable: false, notify: { enable: false }, control: false }
     const component = new RawPhMain(createProps({
       probes: [probe],
@@ -508,7 +508,9 @@ describe('Ph ui', () => {
       phReadings: { 1: {} }
     }))
 
-    expect(renderToStaticMarkup(component.probeList()[0].props.children[0])).toBe('')
+    const html = renderToStaticMarkup(component.probeList()[0].props.children[0])
+    expect(html).toContain('reefpi-controller-empty')
+    expect(html).not.toContain('<svg')
   })
 
   it('<Main /> renders EmptyState with calibration modal slot when no probes', () => {
@@ -568,7 +570,7 @@ describe('Ph ui', () => {
     expect(html).toContain('reefpi-range-selector')
   })
 
-  it('<Main /> PhPrimitives returns empty when readings are absent', () => {
+  it('<Main /> PhPrimitives says there are no readings when they are absent', () => {
     const probe = { id: '1', name: 'Tank pH', enable: false, min: 7.8, max: 8.3, notify: { enable: false } }
     const component = new RawPhMain(createProps({
       probes: [probe],
@@ -577,6 +579,74 @@ describe('Ph ui', () => {
       fetchProbeReadings: jest.fn()
     }))
     const primitives = component.probeList()[0].props.children[0]
-    expect(renderToStaticMarkup(primitives)).toBe('')
+    expect(renderToStaticMarkup(primitives)).toContain('reefpi-controller-empty')
+  })
+})
+
+describe('PhSummary (#3301)', () => {
+  const { PhSummary } = require('./main')
+  const { renderToStaticMarkup } = require('react-dom/server')
+  const probe = {
+    id: '1',
+    name: 'Tank pH',
+    enable: true,
+    analog_input: '2',
+    period: 60,
+    one_shot: false,
+    chart: { ymin: 7, ymax: 9, unit: 'pH' },
+    notify: { enable: true, min: 7.8, max: 8.4 },
+    control: true,
+    is_macro: false,
+    min: 7.9,
+    max: 8.3,
+    downer_eq: '3',
+    upper_eq: '4',
+    hysteresis: 0.1
+  }
+  const props = {
+    probe,
+    analogInputs: [{ id: '2', name: 'EZO pH' }],
+    equipment: [{ id: '3', name: 'Kalk reactor' }, { id: '4', name: 'CO2 valve' }],
+    macros: []
+  }
+
+  it('groups settings into labelled sections with readable values', () => {
+    const html = renderToStaticMarkup(<PhSummary {...props} />)
+    for (const text of ['EZO pH', '60 s', '7.8–8.4', '7–9', 'Kalk reactor', 'CO2 valve', '7.9', '8.3']) {
+      expect(html).toContain(text)
+    }
+    expect((html.match(/reefpi-controller-summary__section"/g) || []).length).toBe(3)
+    // Values are text, not disabled form controls.
+    expect(html).not.toContain('<input')
+    expect(html).not.toContain('<select')
+  })
+
+  it('says when there are no readings instead of drawing an empty chart', () => {
+    const html = renderToStaticMarkup(<PhSummary {...props} readings={undefined} />)
+    expect(html).toContain('reefpi-controller-empty')
+  })
+
+  it('shows monitoring only and no mechanisms when control is off', () => {
+    const html = renderToStaticMarkup(<PhSummary {...props} probe={{ ...probe, control: false, downer_eq: '', upper_eq: '' }} />)
+    expect(html).toContain('Monitoring only')
+    expect(html).not.toContain('Kalk reactor')
+  })
+})
+
+describe('pH calibrate action (#3301)', () => {
+  const { CalibrateAction } = require('./main')
+  const { renderToStaticMarkup } = require('react-dom/server')
+
+  it('explains why calibration is unavailable while the probe is on', () => {
+    const html = renderToStaticMarkup(<CalibrateAction probe={{ id: '1', name: 'Tank pH', enable: true }} onCalibrate={jest.fn()} />)
+    expect(html).toContain('disabled=""')
+    expect(html).toContain('aria-describedby="ph-calibrate-hint-1"')
+    expect(html).toContain('id="ph-calibrate-hint-1"')
+  })
+
+  it('offers calibration when the probe is off', () => {
+    const html = renderToStaticMarkup(<CalibrateAction probe={{ id: '1', name: 'Tank pH', enable: false }} onCalibrate={jest.fn()} />)
+    expect(html).not.toContain('disabled=""')
+    expect(html).not.toContain('ph-calibrate-hint-1')
   })
 })

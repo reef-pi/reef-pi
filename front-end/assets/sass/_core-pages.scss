@@ -596,3 +596,180 @@
     font-weight: 600;
   }
 }
+
+// ── pH probes (#3301) ──────────────────────────────────────────────────────
+// A control section that is not set up yet says what it needs, instead of leaving the reader
+// to guess why its fields are disabled.
+.reefpi-controller-dependency {
+  margin: 0 0 var(--reefpi-space-md);
+  padding: var(--reefpi-space-xs) var(--reefpi-space-sm);
+  border-radius: var(--reefpi-radius-sm);
+  background: var(--reefpi-color-surface-sunken);
+  color: var(--reefpi-color-text-muted);
+  font-size: var(--reefpi-font-size-label);
+}
+
+.ph-calibrate-action {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--reefpi-space-xs);
+}
+
+.ph-calibrate-action__hint {
+  color: var(--reefpi-color-text-muted);
+  font-size: var(--reefpi-font-size-caption);
+}
+
+.ph-calibration {
+  display: grid;
+  gap: var(--reefpi-space-md);
+}
+
+.ph-calibration-intro {
+  margin: 0;
+  max-width: 60ch;
+  color: var(--reefpi-color-text-muted);
+  font-size: var(--reefpi-font-size-body);
+  line-height: 1.5;
+}
+
+.ph-calibration-reading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--reefpi-space-xs) var(--reefpi-space-sm);
+  padding: var(--reefpi-space-sm) var(--reefpi-space-md);
+  border: 1px solid var(--reefpi-color-border);
+  border-radius: var(--reefpi-radius-md);
+  background: var(--reefpi-color-surface-sunken);
+}
+
+.ph-calibration-reading__label {
+  color: var(--reefpi-color-text-muted);
+  font-size: var(--reefpi-font-size-label);
+  font-weight: var(--reefpi-font-weight-semibold);
+}
+
+.ph-calibration-reading__value {
+  color: var(--reefpi-color-text);
+  font-size: var(--reefpi-font-size-telemetry);
+  font-weight: var(--reefpi-font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.ph-calibration-reading__unit,
+.ph-calibration-reading__waiting {
+  color: var(--reefpi-color-text-muted);
+  font-size: var(--reefpi-font-size-body);
+  font-weight: var(--reefpi-font-weight-medium);
+}
+
+.ph-calibration-steps {
+  display: grid;
+  gap: var(--reefpi-space-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ph-calibration-step {
+  display: grid;
+  grid-template-columns: 1.75rem minmax(0, 1fr);
+  gap: var(--reefpi-space-sm);
+  align-items: start;
+  padding: var(--reefpi-space-sm);
+  border: 1px solid var(--reefpi-color-border);
+  border-radius: var(--reefpi-radius-md);
+  background: var(--reefpi-color-surface-elevated);
+
+  &[data-status='locked'] {
+    background: transparent;
+  }
+
+  &[data-status='failed'] {
+    border-color: var(--reefpi-color-error-border);
+  }
+}
+
+.ph-calibration-step__marker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  margin-top: 1.75rem;
+  border: 1px solid var(--reefpi-color-border-strong);
+  border-radius: 50%;
+  color: var(--reefpi-color-text-muted);
+  font-size: var(--reefpi-font-size-label);
+  font-weight: var(--reefpi-font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+
+  [data-status='ready'] > &,
+  [data-status='storing'] > & {
+    border-color: var(--reefpi-color-brand);
+    color: var(--reefpi-color-brand);
+  }
+
+  [data-status='stored'] > & {
+    border-color: var(--reefpi-color-success);
+    background: var(--reefpi-color-success);
+    color: var(--reefpi-color-surface-elevated);
+  }
+
+  [data-status='failed'] > & {
+    border-color: var(--reefpi-color-error);
+    color: var(--reefpi-color-error);
+  }
+}
+
+.ph-calibration-step__form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--reefpi-space-sm);
+  align-items: start;
+}
+
+.ph-calibration-step__action {
+  padding-top: 1.625rem;
+}
+
+// Its own row under the field, so every step's input keeps the same width.
+.ph-calibration-step__status {
+  grid-column: 1 / -1;
+  color: var(--reefpi-color-text-muted);
+  font-size: var(--reefpi-font-size-label);
+
+  &--storing {
+    color: var(--reefpi-color-pending);
+  }
+
+  &--stored {
+    color: var(--reefpi-color-success);
+    font-weight: var(--reefpi-font-weight-semibold);
+  }
+
+  &--failed {
+    color: var(--reefpi-color-error);
+  }
+}
+
+.ph-calibration-actions {
+  display: flex;
+  gap: var(--reefpi-space-sm);
+}
+
+@media screen and (max-width: 480px) {
+  .ph-calibration-step__form {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ph-calibration-step__action {
+    display: grid;
+    padding-top: 0;
+  }
+}

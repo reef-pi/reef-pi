@@ -32,23 +32,24 @@ Copy-back checklist, per Adafruit page.
   has I2C address of 0x99, unless you are changing it, keep it as it is. Add the probe in disable
   state." -> "Open the **pH** page and click **+**. Give the probe a name, pick its **Analog Input**
   (the EZO circuit, declared as a pH board driver with address 0x99 = 153, unless you changed it), set
-  **Status** to **Disabled** and click **Save**." The 7.0 form also has Chart unit/minimum/maximum/color,
-  One Shot, Alerts, Control and the lowering/raising mechanisms; the guide leaves them at their defaults.
+  **Status** to **Disabled** and click **Save**." The 7.0 form groups its fields into **Probe &
+  sampling**, **Chart & alerts** and **Control**; the guide leaves everything outside Probe & sampling at
+  its defaults.
 - Text "Before using pH probe, we have to calibrate it. Depending upon what calibration solutions you are
   using choose the appropriate value and hit "Run"." -> "Click **Calibrate** on the probe's row" (the
-  button is only enabled while the probe is disabled), then choose the value for each calibration
-  solution (**Midpoint**, **Second Point**, **Low Point**) and click **Run**; click **Done** when
-  finished. The three points are used in that order.
+  button is only enabled while the probe is off), wait for the **Current Reading** to settle, then
+  enter the value of each calibration solution (**Midpoint**, then the optional **Second Point** and
+  **Low Point**) and click **Run**. Each point shows **Stored** once reef-pi confirms it and unlocks the
+  next one; click **Done** when finished.
 - Text "Once calibrated, enable the probe" -> use the on/off switch on the probe's row.
 - Text "The readings can be viewed in the reef-pi dashboard directly" -> unchanged: the dashboard has a
   pH tile once a probe exists.
 
 **Needs maintainer check**
 
-- Mobile image 02: the dialog's Midpoint field is focused (dark outline) and the labels of the three
-  fields sit close together ("Second Point" touches the Midpoint field): that is the 7.0 layout.
-- The calibration dialog's **Current Reading** is blank in the screenshots (no pH hardware on the dev
-  server). The old screenshot may have shown a live value.
+- The calibration dialog shows "Waiting for a reading from the probe…" in the screenshots (no pH
+  hardware on the dev server), so every **Run** button is disabled there. The old screenshot may have
+  shown a live value.
 - The old image showed a probe name and values specific to the author's tank; the new form uses the
   name `pH` and a 60 second check frequency.
 
@@ -180,9 +181,11 @@ are changing it, keep it as it is. Add the probe in the **Disabled** state and c
 ![New pH probe form](images/configuration-and-calibration-01-ph-new-probe-desktop.png)
 ![New pH probe form on a phone](images/configuration-and-calibration-01-ph-new-probe-mobile.png)
 
-Before using the pH probe, we have to calibrate it. Click **Calibrate** on the probe, and depending on
-what calibration solutions you are using, choose the appropriate value and hit **Run**. reef-pi allows
-one, two or three point calibration. Calibration is not an absolute requirement, but a highly
+Before using the pH probe, we have to calibrate it. Click **Calibrate** on the probe (it is only
+available while the probe is off). Place the probe in the first calibration solution, wait for the
+**Current Reading** to settle, enter the solution's value and hit **Run**. Each point shows **Stored**
+once reef-pi has accepted it, and unlocks the next one. reef-pi allows one, two or three point
+calibration: the midpoint first, then the optional second and low points. Calibration is not an absolute requirement, but a highly
 recommended step before usage.
 
 ![Calibration dialog](images/configuration-and-calibration-02-ph-calibration-desktop.png)
