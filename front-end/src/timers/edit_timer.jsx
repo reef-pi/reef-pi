@@ -29,6 +29,7 @@ const EditTimer = ({
   handleBlur,
   handleChange,
   readOnly,
+  onCancel,
   ...props
 }) => {
   const handleSubmit = event => {
@@ -78,7 +79,7 @@ const EditTimer = ({
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className='reefpi-controller-form' onSubmit={handleSubmit}>
       <div style={formGridStyle}>
 
         <div>
@@ -170,12 +171,22 @@ const EditTimer = ({
       </div>
 
       {!readOnly && (
-        <div style={{ display: 'flex', marginTop: 'var(--reefpi-space-xs)' }}>
+        <div className='reefpi-controller-form__actions'>
+          {onCancel && (
+            <Button
+              type='button'
+              name='cancel'
+              data-testid='timer-cancel'
+              variant='secondary'
+              onClick={onCancel}
+            >
+              {i18n.t('cancel')}
+            </Button>
+          )}
           <Button
             type='submit' variant={dirty ? 'primary' : 'secondary'}
             data-testid='smoke-timer-submit'
             disabled={readOnly}
-            style={{ marginLeft: 'auto' }}
           >
             {i18n.t('save')}
           </Button>
@@ -194,6 +205,7 @@ EditTimer.propTypes = {
   macros: PropTypes.array,
   handleBlur: PropTypes.func.isRequired,
   submitForm: PropTypes.func.isRequired,
+  onCancel: PropTypes.func,
   onDelete: PropTypes.func,
   handleChange: PropTypes.func
 }

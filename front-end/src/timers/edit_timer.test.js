@@ -188,4 +188,28 @@ describe('<EditTimer />', () => {
     expect(cron[0].props.handleChange).toBe(onChange)
     expect(cron[0].props.handleBlur).toBe(onBlur)
   })
+
+  it('<EditTimer /> renders Cancel and Save in the controller action group while editing', () => {
+    const onCancel = jest.fn()
+    const form = EditTimer({
+      values,
+      equipment,
+      macros,
+      handleBlur: fn,
+      handleChange: fn,
+      submitForm: fn,
+      onCancel,
+      errors: {},
+      touched: {},
+      readOnly: false
+    })
+    const actions = findAll(form, node => node.props?.className === 'reefpi-controller-form__actions')
+
+    expect(actions).toHaveLength(1)
+    const cancel = findAll(actions[0], node => node.props?.['data-testid'] === 'timer-cancel')[0]
+    const save = findAll(actions[0], node => node.props?.['data-testid'] === 'smoke-timer-submit')[0]
+    expect(cancel).toBeDefined()
+    expect(cancel.props.onClick).toBe(onCancel)
+    expect(save).toBeDefined()
+  })
 })
