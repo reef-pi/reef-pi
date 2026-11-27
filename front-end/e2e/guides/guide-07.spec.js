@@ -117,7 +117,7 @@ test('Guide 7: Configuration & Testing', async ({ page, baseURL }, testInfo) => 
     const pumps = await (await api.get('/api/doser/pumps')).json()
     const pump1 = pumps.find(item => item.name === 'Pump1')
     await page.getByTestId(`smoke-doser-calibrate-${pump1.id}`).click()
-    const dialog = page.locator('.modal[role="dialog"]')
+    const dialog = page.locator('.reefpi-dialog')
     await expect(dialog).toBeVisible()
     // The guide's example: run for 15 seconds at 70% speed.
     await dialog.locator('input').nth(0).fill('70')

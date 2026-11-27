@@ -85,7 +85,7 @@ class DoserPage {
   async openCalibration (name) {
     const doser = await this.findDoser(name)
     await this.page.getByTestId(`smoke-doser-calibrate-${doser.id}`).click()
-    const dialog = this.page.locator('.modal[role="dialog"]')
+    const dialog = this.page.locator('.reefpi-dialog')
     await expect(dialog).toBeVisible()
     return dialog
   }

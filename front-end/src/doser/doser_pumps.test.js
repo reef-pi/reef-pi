@@ -3,10 +3,8 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { Formik, Form } from 'formik'
 import EditDcPump from './edit_dcpump'
 import EditStepper from './edit_stepper'
-import CalibrationModal from './calibration_modal'
 import 'isomorphic-fetch'
 
-// jQuery was removed; CalibrationModal now uses native Promise
 
 const wrapFormik = (component, initialValues = {}) => (
   <Formik initialValues={initialValues} onSubmit={() => {}}>
@@ -120,75 +118,5 @@ describe('Doser pump components', () => {
     )
     expect(html).toContain('stepper.step_pin')
     expect(html).toContain('disabled=""')
-  })
-
-  it('<CalibrationModal /> renders for DC pump', () => {
-    const doser = {
-      id: '1',
-      name: 'Doser 1',
-      type: 'dcpump',
-      regiment: { duration: 10, speed: 100, volume: 0, volume_per_second: 0.5 }
-    }
-    const instance = new CalibrationModal({
-      doser,
-      calibrateDoser: jest.fn(),
-      saveCalibration: jest.fn(),
-      cancel: jest.fn(),
-      confirm: jest.fn()
-    })
-
-    expect(React.isValidElement(instance.render())).toBe(true)
-  })
-
-  it('<CalibrationModal /> handleCalibrate for DC pump', () => {
-    const calibrateDoser = jest.fn()
-    const doser = {
-      id: '1',
-      name: 'Doser 1',
-      type: 'dcpump',
-      regiment: { duration: 10, speed: 100, volume: 0, volume_per_second: 0 }
-    }
-    const inst = new CalibrationModal({ doser, calibrateDoser, saveCalibration: jest.fn(), cancel: jest.fn(), confirm: jest.fn() })
-    inst.state = { lastDuration: 10, lastSpeed: 100, ranCalibration: false, measuredVolume: '' }
-    inst.setState = update => { inst.state = { ...inst.state, ...(typeof update === 'function' ? update(inst.state) : update) } }
-    inst.handleCalibrate(5, 80, 0)
-    expect(calibrateDoser).toHaveBeenCalledWith('1', { duration: 5, speed: 80 })
-    expect(inst.state.ranCalibration).toBe(true)
-  })
-
-  it('<CalibrationModal /> handleCalibrate for stepper', () => {
-    const calibrateDoser = jest.fn()
-    const doser = {
-      id: '2',
-      name: 'Stepper 1',
-      type: 'stepper',
-      regiment: { duration: 0, speed: 0, volume: 10, volume_per_second: 0 }
-    }
-    const inst = new CalibrationModal({ doser, calibrateDoser, saveCalibration: jest.fn(), cancel: jest.fn(), confirm: jest.fn() })
-    inst.state = { lastDuration: 0, lastSpeed: 0, ranCalibration: false, measuredVolume: '' }
-    inst.setState = update => { inst.state = { ...inst.state, ...(typeof update === 'function' ? update(inst.state) : update) } }
-    inst.handleCalibrate(0, 0, 25.0)
-    expect(calibrateDoser).toHaveBeenCalledWith('2', { volume: 25.0 })
-  })
-
-  it('<CalibrationModal /> handleSaveCalibration skips invalid volume', () => {
-    const saveCalibration = jest.fn()
-    const doser = { id: '1', name: 'D', type: 'dcpump', regiment: { duration: 10, speed: 100, volume: 0, volume_per_second: 0 } }
-    const inst = new CalibrationModal({ doser, calibrateDoser: jest.fn(), saveCalibration, cancel: jest.fn(), confirm: jest.fn() })
-    inst.state = { lastDuration: 10, lastSpeed: 100, ranCalibration: true, measuredVolume: '' }
-    inst.setState = update => { inst.state = { ...inst.state, ...(typeof update === 'function' ? update(inst.state) : update) } }
-    inst.handleSaveCalibration()
-    expect(saveCalibration).not.toHaveBeenCalled()
-  })
-
-  it('<CalibrationModal /> handleSaveCalibration with valid volume', () => {
-    const saveCalibration = jest.fn()
-    const doser = { id: '1', name: 'D', type: 'dcpump', regiment: { duration: 10, speed: 100, volume: 0, volume_per_second: 0 } }
-    const inst = new CalibrationModal({ doser, calibrateDoser: jest.fn(), saveCalibration, cancel: jest.fn(), confirm: jest.fn() })
-    inst.state = { lastDuration: 10, lastSpeed: 100, ranCalibration: true, measuredVolume: '25.5' }
-    inst.setState = update => { inst.state = { ...inst.state, ...(typeof update === 'function' ? update(inst.state) : update) } }
-    inst.handleSaveCalibration()
-    expect(saveCalibration).toHaveBeenCalledWith('1', { volume: 25.5, duration: 10, speed: 100 })
-    expect(inst.state.ranCalibration).toBe(false)
   })
 })

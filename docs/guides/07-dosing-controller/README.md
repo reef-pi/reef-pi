@@ -47,8 +47,10 @@ Copy-back checklist, per Adafruit page.
 - Text "switch to the equipment tab and create four virtual equipment items" -> Equipment page, **+**,
   name and outlet.
 - Text "click on the calibrate button. Set a PWM or speed value, which ranges from 1-100 and duration in
-  seconds" -> unchanged; the dialog is titled "Calibrate: <pump name>" and has **Speed**, **Duration**
-  and **Run**. After a run it shows a measured-volume field and **Save result**.
+  seconds" -> unchanged; the dialog is titled "Calibrate <pump name>" and has **Speed** (%), **Duration**
+  (s) and **Run**. Once reef-pi has started the pump, a second step asks for the measured volume (mL) and
+  **Save calibration**, after which the dialog shows the pump's **Calibrated rate** in mL/s. Close it
+  with **Done**.
 - Text "Click on the edit button, set the schedule and enable the dosing pump" -> unchanged; set Hour `3`,
   Minute `0`, Second `0`, Duration `5`, Speed `50`, then switch the pump on with the toggle.
 
@@ -56,8 +58,8 @@ Copy-back checklist, per Adafruit page.
 
 - The example screenshots use pumps named Pump1/Pump2 on Jack1/Jack2; the old ones used the author's
   names.
-- The calibration image has no measured volume or "current rate" line, because no pump was actually
-  run. After a real run the dialog shows both.
+- The calibration image shows the dialog before **Run** ("Not calibrated yet", no measured-volume step),
+  because no pump was actually run. After a real run the dialog shows both.
 - The old page predates stepper pumps (7.0 supports them, see
   [../../stepper-dosing-pumps.md](../../stepper-dosing-pumps.md)); the guide stays DC-motor only.
 
@@ -267,9 +269,10 @@ reef-pi to run Pump1 for 15 seconds at 70% speed.
 ![Calibration](images/configuration-testing-06-doser-calibration-desktop.png)
 ![Calibration on a phone](images/configuration-testing-06-doser-calibration-mobile.png)
 
-Use a measuring cylinder or similar vessel to measure the amount of liquid dispensed by the pump. Note it
-down. For me it was 5ml. This is the value that you'll use to decide how long you need to run your dosing
-pump and at what speed, depending upon your dosing regimen.
+Use a measuring cylinder or similar vessel to measure the amount of liquid dispensed by the pump. For me
+it was 5ml. Enter it as the **Measured volume** and click **Save calibration**: reef-pi works out the
+pump's rate in mL per second and shows it as the **Calibrated rate**. This is the value that you'll use to
+decide how long you need to run your dosing pump and at what speed, depending upon your dosing regimen.
 
 ![Measuring the dispensed liquid](https://cdn-learn.adafruit.com/assets/assets/000/066/138/medium800/components_86990488-DAD8-46B3-8DA8-DAEAEACAB22C.jpeg?1542574016)
 
