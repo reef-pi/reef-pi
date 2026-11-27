@@ -10,6 +10,7 @@ import { SortByName } from 'utils/sort_by_name'
 import i18n from 'utils/i18n'
 import { List, ListItem } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
 import AddToggle from '../ui_components/add_toggle'
+import TimerSummary from './timer_summary'
 
 export class RawTimersMain extends React.Component {
   constructor (props) {
@@ -42,11 +43,28 @@ export class RawTimersMain extends React.Component {
             item={timer}
             onToggleState={handleToggleState}
             enabled={timer.enable}
-            title={<b style={{ marginLeft: 'var(--reefpi-space-xxs)', verticalAlign: 'middle' }}>{timer.name}</b>}
+            title={(
+              <span className='reefpi-controller-title'>
+                <span>{timer.name}</span>
+                <span className='reefpi-controller-title__state'>{i18n.t(timer.enable ? 'enabled' : 'disabled')}</span>
+              </span>
+            )}
             onDelete={this.handleRemoveTimer}
+            separateEdit
+            overflowActions
+            actionsLabel={i18n.t('timers:actions', { name: timer.name, defaultValue: `Actions for ${timer.name}` })}
           >
+            <TimerSummary
+              timer={timer}
+              equipment={this.props.equipment}
+              macros={this.props.macros}
+              atos={this.props.atos}
+              phprobes={this.props.phprobes}
+              tcs={this.props.tcs}
+              dosers={this.props.dosers}
+              lights={this.props.lights}
+            />
             <TimerForm
-              readOnly={timer.readOnly}
               onSubmit={this.handleUpdateTimer}
               equipment={this.props.equipment}
               macros={this.props.macros}
@@ -145,7 +163,12 @@ const mapStateToProps = state => {
   return {
     timers: state.timers,
     equipment: state.equipment,
-    macros: state.macros
+    macros: state.macros,
+    atos: state.atos,
+    phprobes: state.phprobes,
+    tcs: state.tcs,
+    dosers: state.dosers,
+    lights: state.lights
   }
 }
 

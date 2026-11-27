@@ -7,6 +7,7 @@ import configureMockStore from 'redux-mock-store'
 import { thunk } from 'redux-thunk'
 import { RawTimersMain } from './main'
 import TimerForm from './timer_form'
+import TimerSummary from './timer_summary'
 import Collapsible from '../ui_components/collapsible'
 import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 import 'isomorphic-fetch'
@@ -33,6 +34,7 @@ const timerData = {
   name: 'foo',
   enable: false,
   type: 'equipment',
+  target: { id: '1', on: true, revert: true, duration: 10 },
   equipment: { id: '1', on: true, revert: true, duration: 10 },
   reminder: { title: '', message: '' },
   day: '*',
@@ -231,14 +233,23 @@ describe('Timer ui', () => {
     expect(form.props.macros).toBe(component.props.macros)
   })
 
-  it('<Main /> passes readOnly timer setting to TimerForm', () => {
-    const timer = { ...timerData, readOnly: true }
+  it('<Main /> wires a summary and separate edit form into each timer row', () => {
+    const timer = { ...timerData }
     const component = new RawTimersMain(makeProps({ timers: [timer] }))
     const panel = component.timerList()[0]
+    const summary = findNodes(panel, node => node.type === TimerSummary)[0]
     const form = findNodes(panel, node => node.type === TimerForm)[0]
+    const title = renderToStaticMarkup(panel.props.title)
 
     expect(panel.type).toBe(Collapsible)
-    expect(form.props.readOnly).toBe(true)
+    expect(panel.props.separateEdit).toBe(true)
+    expect(panel.props.overflowActions).toBe(true)
+    expect(panel.props.actionsLabel).toBe('Actions for foo')
+    expect(title).toContain('foo')
+    expect(title).toContain('disabled')
+    expect(summary.props.timer).toBe(timer)
+    expect(summary.props.equipment).toBe(component.props.equipment)
+    expect(summary.props.macros).toBe(component.props.macros)
     expect(form.props.timer).toBe(timer)
   })
 

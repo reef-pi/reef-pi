@@ -106,19 +106,22 @@ class TimersPage {
     return timer
   }
 
+  async openAction (name, action) {
+    await this.page.getByRole('button', { name: `Actions for ${name}` }).click()
+    await this.page.getByRole('menuitem', { name: action }).click()
+  }
+
   async rename (name, newName) {
-    const timer = await this.findTimer(name)
-    await this.page.locator(`#edit-panel-timer-${timer.id}`).click()
+    await this.openAction(name, 'Edit')
     await this.page.getByTestId('smoke-timer-name').fill(newName)
     await this.page.getByTestId('smoke-timer-submit').click()
     await expect(this.page.locator('body')).toContainText(newName)
   }
 
   async remove (name) {
-    const timer = await this.findTimer(name)
-    await this.page.locator(`#delete-panel-timer-${timer.id}`).click()
+    await this.openAction(name, 'Delete')
     await confirmDialog(this.page)
-    await expect(this.page.locator(`#delete-panel-timer-${timer.id}`)).toHaveCount(0)
+    await expect(this.page.getByRole('button', { name: `Actions for ${name}` })).toHaveCount(0)
   }
 }
 

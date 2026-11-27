@@ -197,10 +197,13 @@ configuration:tab:errors,Errors
 configuration:tab:settings,Settings
 configuration:tab:telemetry,Telemetry
 configuration:unsaved_changes,Unsaved changes
+cron:daily_at,Every day at {{time}}
+cron:daily_fields,"Every day: hour {{hour}}, minute {{minute}}, second {{second}}"
 cron:day_of_month,Day of the month
 cron:hour,Hour
 cron:minute,Minute
 cron:month,Month
+cron:schedule_fields,"Day {{day}}, month {{month}}, weekday {{week}}: hour {{hour}}, minute {{minute}}, second {{second}}"
 cron:second,Second
 cron:week,Day of the week (0=Sun - 6=Sat)
 dashboard:back_to_dashboard,Back to dashboard
@@ -247,8 +250,6 @@ doser:calibration:volume_help,"Volume to dispense, in mL"
 doser:connection,Connection
 doser:continuous,Continuous (run indefinitely)
 doser:continuous_mode,Continuous
-doser:daily_at,Every day at {{time}}
-doser:daily_fields,"Every day: hour {{hour}}, minute {{minute}}, second {{second}}"
 doser:delay,Delay
 doser:direction, Direction
 doser:direction_pin,Direction Pin
@@ -268,7 +269,6 @@ doser:ms_pin_a,MicroStepping Pin A
 doser:ms_pin_b,MicroStepping Pin B
 doser:ms_pin_c,MicroStepping Pin C 
 doser:pump_section,Pump
-doser:schedule_fields,"Day {{day}}, month {{month}}, weekday {{week}}: hour {{hour}}, minute {{minute}}, second {{second}}"
 doser:soft_start,Soft Start (ramp up/down)
 doser:speed,Speed
 doser:spr,Steps Per Rotation
@@ -578,6 +578,8 @@ temperature:visualization_alerts,Visualization & alerts
 temperature:warn_delete,This action will delete controller {{name}}
 temperature:warn_reset,This action will reset usage data for {{name}}
 timers:action,Action
+timers:action_section,Action
+timers:actions,Actions for {{name}}
 timers:add_timer,Add timer
 timers:after,After
 timers:and_then,And Then
@@ -589,16 +591,19 @@ timers:message,Message
 timers:reverse,Reverse
 timers:revert,Revert
 timers:run,Run
+timers:schedule_section,Schedule
 timers:sec,sec
 timers:stay_off,Stay off
 timers:stay_on,Stay on
 timers:subject,Subject
+timers:target,Target
 timers:title_delete,Delete {{name}} ?
 timers:turn_back_off,Turn back off
 timers:turn_back_on,Turn back on
 timers:turn_off,Turn Off
 timers:turn_on,Turn On
 timers:warn_delete,This action will delete timer {{name}}
+timers:when,When
 validation:a_must_be_greater_than_b,{{a}} must be greater than {{b}}
 validation:a_must_be_less_than_b,{{a}} must be less than {{b}}
 validation:a_must_differ_from_b,{{a}} and {{b}} must be different

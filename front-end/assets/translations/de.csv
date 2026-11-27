@@ -197,10 +197,13 @@ configuration:tab:errors,Fehler
 configuration:tab:settings,Einstellungen
 configuration:tab:telemetry,Telemetrie
 configuration:unsaved_changes,
+cron:daily_at,
+cron:daily_fields,
 cron:day_of_month,Kalendertag
 cron:hour,Stunde
 cron:minute,Minute
 cron:month,Monat
+cron:schedule_fields,
 cron:second,Sekunde
 cron:week,Wochentag (0=So - 6=Sa)
 dashboard:back_to_dashboard,zurück zur Übersicht
@@ -247,8 +250,6 @@ doser:calibration:volume_help,
 doser:connection,
 doser:continuous,
 doser:continuous_mode,
-doser:daily_at,
-doser:daily_fields,
 doser:delay,
 doser:direction,
 doser:direction_pin,
@@ -268,7 +269,6 @@ doser:ms_pin_a,
 doser:ms_pin_b,
 doser:ms_pin_c,
 doser:pump_section,
-doser:schedule_fields,
 doser:soft_start,
 doser:speed,Geschwindigkeit
 doser:spr,
@@ -578,6 +578,8 @@ temperature:visualization_alerts,
 temperature:warn_delete,Wollen Sie die Regelung {{name}} wirklich löschen?
 temperature:warn_reset,Wollen Sie den Verlauf von {{name}} wirklich löschen?
 timers:action,Aktion
+timers:action_section,
+timers:actions,
 timers:add_timer,
 timers:after,... nach
 timers:and_then,... danach
@@ -589,16 +591,19 @@ timers:message,Nachricht
 timers:reverse,
 timers:revert,Umgekehrt
 timers:run,
+timers:schedule_section,
 timers:sec,s
 timers:stay_off,aus lassen
 timers:stay_on,an lassen
 timers:subject,Betreff
+timers:target,
 timers:title_delete,{{name}} löschen?
 timers:turn_back_off,wieder ausschalten
 timers:turn_back_on,wieder einschalten
 timers:turn_off,Ausschalten
 timers:turn_on,Einschalten
 timers:warn_delete,Wollen Sie die Schaltuhr {{name}} wirklich löschen?
+timers:when,
 validation:a_must_be_greater_than_b,{{a}} muss größer als {{b}} sein!
 validation:a_must_be_less_than_b,{{a}} muss kleiner als {{b}} sein!
 validation:a_must_differ_from_b,{{a}} und {{b}} dürfen nicht gleich sein!

@@ -1,6 +1,6 @@
 import React from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
-import DoserSummary, { scheduleText } from './doser_summary'
+import DoserSummary from './doser_summary'
 
 const dcPump = (regiment = {}, extra = {}) => ({
   id: '1',
@@ -64,21 +64,5 @@ describe('<DoserSummary /> (#3305)', () => {
     expect(out).toContain('3 mL')
     expect(out).toContain('0.25 mL')
     expect(out).not.toContain(' %')
-  })
-})
-
-describe('scheduleText (#3305)', () => {
-  it('reads a daily time plainly and pads it', () => {
-    expect(scheduleText({ month: '*', week: '*', day: '*', hour: '3', minute: '0', second: '0' })).toEqual(['doser:daily_at', { time: '03:00:00' }])
-  })
-
-  it('treats ? like * and labels each time field when they are not single numbers', () => {
-    expect(scheduleText({ month: '*', week: '?', day: '*', hour: '1,9,17', minute: '1', second: '1' }))
-      .toEqual(['doser:daily_fields', { hour: '1,9,17', minute: '1', second: '1' }])
-  })
-
-  it('keeps every field of a non-daily schedule', () => {
-    expect(scheduleText({ month: '*', week: '1', day: '*', hour: '*/2', minute: '0', second: '0' }))
-      .toEqual(['doser:schedule_fields', { day: '*', month: '*', week: '1', hour: '*/2', minute: '0', second: '0' }])
   })
 })

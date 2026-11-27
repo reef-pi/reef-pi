@@ -29,7 +29,8 @@ Copy-back checklist, per Adafruit page.
 - Image 05 (dashboard grid configuration): **remove**. reef-pi 7.0 has no chart grid to configure.
 - Image 06 (equipment chart on the dashboard): replace with
   `configure-and-test-06-dashboard-equipment-strip-{desktop,mobile}.png`.
-- Image 07 (timer form): replace with `configure-and-test-07-timer-new-{desktop,mobile}.png`.
+- Image 07 (saved timer summary): replace with
+  `configure-and-test-07-timer-summary-{desktop,mobile}.png`.
 - Image 08 (macro form): replace with `configure-and-test-08-macro-new-{desktop,mobile}.png`.
 - Image 09 (macro in the list): replace with `configure-and-test-09-macro-list-{desktop,mobile}.png`.
 - Text "Head to Configuration section ... click on the connector sub-section" -> "Configuration >
@@ -38,7 +39,7 @@ Copy-back checklist, per Adafruit page.
 - Section "Configure Dashboard" rewritten: there is no grid to configure; the Equipment strip along
   the bottom of the dashboard lists every equipment item with an on/off switch.
 - Section "Schedule on/off with Timers": the form is described by the 7.0 field names (Function,
-  equipment, Action, And Then, After, Schedule).
+  equipment, Action, And Then, After, Schedule), and the saved read-only summary is shown.
 - Section "Macro": steps are added with **+**; step types are `equipment` and `wait`.
 
 **Needs maintainer check**
@@ -293,13 +294,16 @@ At this point, we can use reef-pi to turn on/off any AC equipment on-demand.
 reef-pi allows controlling AC equipment periodically using timers. Timers are popular to automate
 various reef keeping chores (for example light turn on/off at a fixed time every day).
 
-Open the **Timers** page, click **+** and create a timer with the following details. reef-pi uses
+Open the **Timers** page, click **+**, create a timer with the following details, and click **Save**. reef-pi uses
 [Linux cron](https://adafru.it/Cyg) like grammar to specify timers: Function **equipment**, equipment
 **Eq6**, Action **Turn On**, And Then **Turn back off** after **2** seconds, and a Schedule of `*` for
 month, day of the week, day of the month, hour and minute, and `*/10` for second.
 
-![New timer form](images/configure-and-test-07-timer-new-desktop.png)
-![New timer form on a phone](images/configure-and-test-07-timer-new-mobile.png)
+Open **TestTimer** to review its action and schedule without entering edit mode. Use **Actions for
+TestTimer** to edit or delete it.
+
+![Saved timer summary](images/configure-and-test-07-timer-summary-desktop.png)
+![Saved timer summary on a phone](images/configure-and-test-07-timer-summary-mobile.png)
 
 The above timer tells reef-pi after every 10 seconds, turn on equipment Eq6 and then turn it off after 2
 seconds. In short, Eq6 will be turned on for 2 seconds after every 10 seconds. Cron is a very powerful

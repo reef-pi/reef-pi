@@ -82,8 +82,8 @@ test('Guide 2: Configure & Test', async ({ page, baseURL }, testInfo) => {
     await expect(strip.getByRole('listitem')).toHaveCount(8)
     await shot(page, testInfo, { guide: GUIDE, pageSlug: PAGE, index: 6, what: 'dashboard-equipment-strip', locator: strip })
 
-    // 07: Timers: TestTimer turns Eq6 on every 10 seconds for 2 seconds (form filled, not saved, so the
-    // timer does not keep running against the dev server).
+    // 07: Timers: save TestTimer, expand its read-only summary, capture it, then delete the timer so it
+    // does not keep running against the dev server.
     await openTab(page, 'timers')
     await page.getByTestId('smoke-timer-add-toggle').click()
     await page.getByTestId('smoke-timer-name').fill('TestTimer')
@@ -94,7 +94,15 @@ test('Guide 2: Configure & Test', async ({ page, baseURL }, testInfo) => {
     await page.getByTestId('smoke-cron-hour').fill('*')
     await page.getByTestId('smoke-cron-minute').fill('*')
     await page.getByTestId('smoke-cron-second').fill('*/10')
-    await shot(page, testInfo, { guide: GUIDE, pageSlug: PAGE, index: 7, what: 'timer-new', locator: page.locator('form').filter({ has: page.getByTestId('smoke-timer-name') }) })
+    await page.getByTestId('smoke-timer-submit').click()
+    const timerRow = page.getByRole('listitem').filter({ has: page.getByText('TestTimer', { exact: true }) })
+    await expect(timerRow).toBeVisible()
+    await timerRow.getByText('TestTimer', { exact: true }).click()
+    await expect(timerRow.getByText('Eq6', { exact: true })).toBeVisible()
+    await expect(timerRow.getByText('Every day: hour *, minute *, second */10', { exact: true })).toBeVisible()
+    await shot(page, testInfo, { guide: GUIDE, pageSlug: PAGE, index: 7, what: 'timer-summary', locator: timerRow })
+    const savedTimer = (await listItems(api, '/api/timers')).find(item => item.name === 'TestTimer')
+    expect((await api.delete(`/api/timers/${savedTimer.id}`)).ok()).toBeTruthy()
 
     // 08-09: Macro: TestMacro with the guide's six steps; then the saved macro in the list.
     await openTab(page, 'macro')
