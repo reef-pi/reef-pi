@@ -20,7 +20,13 @@ async function shot (page, testInfo, { guide, pageSlug, index, what, locator }) 
   await page.evaluate(() => document.fonts.ready)
   fs.mkdirSync(path.dirname(file), { recursive: true })
   if (locator) {
+    // An element taller than the viewport is captured in stitched scrolls, which the off-canvas
+    // drawers shift sideways; grow the viewport to fit it for the capture instead.
+    const box = await locator.boundingBox()
+    const grow = box && box.height > size.height
+    if (grow) await page.setViewportSize({ width: size.width, height: Math.ceil(box.height) + 64 })
     await locator.screenshot({ path: file })
+    if (grow) await page.setViewportSize(size)
   } else {
     await page.screenshot({ path: file })
   }

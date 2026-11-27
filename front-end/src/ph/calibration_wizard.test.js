@@ -1,121 +1,128 @@
-import React from 'react'
+import React, { act } from 'react'
+import { createRoot } from 'react-dom/client'
 import CalibrationWizard from './calibration_wizard'
 import 'isomorphic-fetch'
 
-const findAll = (node, predicate, acc = []) => {
-  if (!node || typeof node !== 'object') {
-    return acc
+globalThis.IS_REACT_ACT_ENVIRONMENT = true
+
+const STORED = { type: 'PH_PROBE_CALIBRATED' }
+
+function render (props) {
+  const container = document.createElement('div')
+  document.body.appendChild(container)
+  const root = createRoot(container)
+  act(() => root.render(<CalibrationWizard {...props} />))
+  return {
+    rerender: next => act(() => root.render(<CalibrationWizard {...props} {...next} />)),
+    cleanup: () => { act(() => root.unmount()); container.remove() }
   }
-  if (predicate(node)) {
-    acc.push(node)
-  }
-  // Traverse children
-  React.Children.toArray(node.props?.children).forEach(child => findAll(child, predicate, acc))
-  // Also traverse Dialog 'actions' prop since cancel/confirm buttons live there
-  if (node.props?.actions) {
-    findAll(node.props.actions, predicate, acc)
-  }
-  return acc
 }
 
+const dialog = () => document.querySelector('[role="dialog"]')
+const step = point => document.querySelector(`[data-calibration-step="${point}"]`)
+const runButton = point => step(point).querySelector('button[type="submit"]')
+const flush = () => act(async () => { await new Promise(resolve => setTimeout(resolve, 0)) })
+
 describe('<CalibrationWizard />', () => {
-  beforeEach(() => {
-    jest.useFakeTimers()
-  })
-
-  afterEach(() => {
-    jest.useRealTimers()
-    jest.clearAllMocks()
-  })
-
   const makeProps = (overrides = {}) => ({
-    probe: { id: '1', name: 'pH Probe' },
+    probe: { id: '1', name: 'Tank pH' },
     readProbe: jest.fn(),
-    calibrateProbe: jest.fn().mockResolvedValue({}),
-    currentReading: { 1: 7.0 },
+    calibrateProbe: jest.fn().mockResolvedValue(STORED),
+    currentReading: { 1: 7.023 },
     cancel: jest.fn(),
     confirm: jest.fn(),
     ...overrides
   })
 
-  it('renders and shows cancel button before mid calibration', () => {
-    const component = new CalibrationWizard(makeProps())
-    const tree = component.render()
-    expect(findAll(tree, node => node.props?.role === 'abort')).toHaveLength(1)
-    component.componentWillUnmount()
+  afterEach(() => {
+    document.body.innerHTML = ''
+    jest.useRealTimers()
+    jest.clearAllMocks()
   })
 
-  it('componentDidMount starts polling interval', () => {
+  it('lists the three points in order: midpoint first, the others after it', () => {
+    const view = render(makeProps())
+
+    expect([...document.querySelectorAll('[data-calibration-step]')].map(node => node.dataset.calibrationStep)).toEqual(['mid', 'second', 'low'])
+    expect(step('mid').dataset.status).toBe('ready')
+    expect(step('second').dataset.status).toBe('locked')
+    expect(step('low').dataset.status).toBe('locked')
+    expect(runButton('second').disabled).toBe(true)
+    expect(dialog().querySelector('[role="abort"]')).not.toBeNull()
+    view.cleanup()
+  })
+
+  it('shows the live reading with its unit', () => {
+    const view = render(makeProps())
+    expect(document.querySelector('.ph-calibration-reading').textContent).toContain('7.02')
+    expect(document.querySelector('.ph-calibration-reading').textContent).toContain('pH')
+    view.cleanup()
+  })
+
+  it('waits for a reading before a point can be stored, and never invents one', () => {
+    const view = render(makeProps({ currentReading: {} }))
+
+    expect(document.querySelector('.ph-calibration-reading__waiting')).not.toBeNull()
+    expect(document.querySelector('.ph-calibration-reading__value')).toBeNull()
+    expect(runButton('mid').disabled).toBe(true)
+    view.cleanup()
+  })
+
+  it('stores a point only when the controller confirms it, then unlocks the next one', async () => {
+    let finish
+    const calibrateProbe = jest.fn(() => new Promise(resolve => { finish = resolve }))
+    const view = render(makeProps({ calibrateProbe }))
+
+    await act(async () => { runButton('mid').click() })
+    await flush()
+    expect(calibrateProbe).toHaveBeenCalledWith('1', { type: 'mid', expected: 7, observed: 7.023 })
+    expect(step('mid').dataset.status).toBe('storing')
+    expect(step('second').dataset.status).toBe('locked')
+
+    await act(async () => { finish(STORED) })
+    expect(step('mid').dataset.status).toBe('stored')
+    expect(step('second').dataset.status).toBe('ready')
+    // Once a point is stored, closing is "Done": stopping here is the supported skip.
+    expect(dialog().querySelector('[role="abort"]')).toBeNull()
+    view.cleanup()
+  })
+
+  it('keeps a failed point retryable and explains the failure', async () => {
+    const calibrateProbe = jest.fn().mockResolvedValueOnce(undefined).mockResolvedValueOnce(STORED)
+    const view = render(makeProps({ calibrateProbe }))
+
+    await act(async () => { runButton('mid').click() })
+    await flush()
+    expect(step('mid').dataset.status).toBe('failed')
+    expect(step('mid').querySelector('.ph-calibration-step__status--failed[role="alert"]')).not.toBeNull()
+    expect(step('second').dataset.status).toBe('locked')
+    expect(runButton('mid').disabled).toBe(false)
+
+    await act(async () => { runButton('mid').click() })
+    await flush()
+    expect(step('mid').dataset.status).toBe('stored')
+    view.cleanup()
+  })
+
+  it('polls the probe while open and stops when closed', () => {
+    jest.useFakeTimers()
     const readProbe = jest.fn()
-    const wrapper = new CalibrationWizard(makeProps({ readProbe }))
-    wrapper.componentDidMount()
-    jest.advanceTimersByTime(1500)
+    const view = render(makeProps({ readProbe }))
+    act(() => { jest.advanceTimersByTime(1500) })
     expect(readProbe).toHaveBeenCalledWith('1')
-    wrapper.componentWillUnmount()
-  })
-
-  it('componentWillUnmount clears interval', () => {
-    const readProbe = jest.fn()
-    const wrapper = new CalibrationWizard(makeProps({ readProbe }))
-    wrapper.componentDidMount()
-    wrapper.componentWillUnmount()
-    jest.advanceTimersByTime(3000)
+    view.cleanup()
+    readProbe.mockClear()
+    act(() => { jest.advanceTimersByTime(3000) })
     expect(readProbe).not.toHaveBeenCalled()
   })
 
-  it('handleCalibrate mid advances state', () => {
+  it('cancels and confirms through the props', () => {
     const props = makeProps()
-    const inst = new CalibrationWizard(props)
-    inst.setState = update => { inst.state = { ...inst.state, ...(typeof update === 'function' ? update(inst.state) : update) } }
-    inst.handleCalibrate('mid', 7.0)
-    expect(inst.state.enableSecond).toBe(true)
-    expect(props.calibrateProbe).toHaveBeenCalledWith('1', { type: 'mid', expected: 7.0, observed: 7.0 })
-    inst.componentWillUnmount()
-  })
-
-  it('handleCalibrate second advances state', () => {
-    const props = makeProps()
-    const inst = new CalibrationWizard(props)
-    inst.setState = update => { inst.state = { ...inst.state, ...(typeof update === 'function' ? update(inst.state) : update) } }
-    inst.handleCalibrate('second', 10.0)
-    expect(inst.state.enableLow).toBe(true)
-    expect(props.calibrateProbe).toHaveBeenCalledWith('1', { type: 'second', expected: 10.0, observed: 7.0 })
-    inst.componentWillUnmount()
-  })
-
-  it('handleCalibrate low advances state', () => {
-    const props = makeProps()
-    const inst = new CalibrationWizard(props)
-    inst.setState = update => { inst.state = { ...inst.state, ...(typeof update === 'function' ? update(inst.state) : update) } }
-    inst.handleCalibrate('low', 4.0)
-    expect(inst.state.lowCalibrated).toBe(true)
-    expect(inst.state.enableLow).toBe(false)
-    inst.componentWillUnmount()
-  })
-
-  it('handleCancel calls props.cancel', () => {
-    const props = makeProps()
-    const wrapper = new CalibrationWizard(props)
-    wrapper.handleCancel()
+    const view = render(props)
+    act(() => dialog().querySelector('[role="abort"]').click())
     expect(props.cancel).toHaveBeenCalled()
-    wrapper.componentWillUnmount()
-  })
-
-  it('handleConfirm calls props.confirm', () => {
-    const props = makeProps()
-    const wrapper = new CalibrationWizard(props)
-    wrapper.handleConfirm()
+    act(() => dialog().querySelector('[role="confirm"]').click())
     expect(props.confirm).toHaveBeenCalled()
-    wrapper.componentWillUnmount()
-  })
-
-  it('hides cancel button after mid calibrated', () => {
-    const props = makeProps()
-    const wrapper = new CalibrationWizard(props)
-    wrapper.setState = update => { wrapper.state = { ...wrapper.state, ...(typeof update === 'function' ? update(wrapper.state) : update) } }
-    wrapper.setState({ midCalibrated: true })
-    const tree = wrapper.render()
-    expect(findAll(tree, node => node.props?.role === 'abort')).toHaveLength(0)
-    wrapper.componentWillUnmount()
+    view.cleanup()
   })
 })

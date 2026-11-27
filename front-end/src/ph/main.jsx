@@ -16,12 +16,15 @@ import ThresholdGauge from '../../design-system/ui_kits/reef-pi-app/primitives/T
 import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 import { List, ListItem } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
 import AddToggle from '../ui_components/add_toggle'
+import ControllerSummary from '../ui_components/controller_summary'
 
 const RANGE_MS = { '1h': 3600000, '6h': 21600000, '1d': 86400000, '7d': 604800000, '30d': 2592000000 }
 
 function PhPrimitives ({ probe, readings, currentReading }) {
   const [range, setRange] = useState('1d')
-  if (!readings || !readings.current) return null
+  if (!readings || !readings.current || readings.current.length === 0) {
+    return <p className='reefpi-controller-empty'>{i18next.t('ph:empty_readings', { defaultValue: 'No pH readings yet. Data appears after the first successful sample.' })}</p>
+  }
 
   const cutoff = Date.now() - (RANGE_MS[range] || RANGE_MS['1d'])
   const points = readings.current
@@ -63,6 +66,88 @@ function PhPrimitives ({ probe, readings, currentReading }) {
   )
 }
 
+const enabledLabel = value => i18next.t(value ? 'enabled' : 'disabled')
+
+const namedTarget = (id, items = []) => {
+  if (!id) return i18next.t('not_configured', { defaultValue: 'Not configured' })
+  return items.find(item => item.id === id)?.name || id
+}
+
+const range = (min, max, unit) => (min != null && max != null ? `${min}–${max}${unit ? ' ' + unit : ''}` : undefined)
+
+// Read-only view of a probe (#3301): labelled values, not disabled form controls.
+export function PhSummary ({ probe, readings, currentReading, analogInputs, equipment, macros }) {
+  const chart = probe.chart || {}
+  const unit = chart.unit || ''
+  const targets = probe.is_macro ? macros : equipment
+  const controlled = probe.control === true
+  const control = controlled
+    ? (probe.is_macro ? i18next.t('ph:controlmacro') : i18next.t('ph:controlequipment'))
+    : i18next.t('ph:monitoring_only', { defaultValue: 'Monitoring only' })
+
+  const controlItems = [{ label: i18next.t('ph:control'), value: control }]
+  if (controlled) {
+    controlItems.push(
+      { label: i18next.t('ph:upper_threshold'), value: probe.max },
+      { label: i18next.t('ph:upper_function'), value: namedTarget(probe.upper_eq, targets) },
+      { label: i18next.t('ph:lower_threshold'), value: probe.min },
+      { label: i18next.t('ph:lower_function'), value: namedTarget(probe.downer_eq, targets) },
+      { label: i18next.t('ph:hysteresis'), value: probe.hysteresis }
+    )
+  }
+  if (probe.transformer) controlItems.push({ label: i18next.t('ph:transformer'), value: probe.transformer })
+
+  return (
+    <ControllerSummary
+      sections={[
+        {
+          title: i18next.t('ph:probe_sampling', { defaultValue: 'Probe & sampling' }),
+          items: [
+            { label: i18next.t('analog_input'), value: namedTarget(probe.analog_input, analogInputs) },
+            { label: i18next.t('ph:check_frequency'), value: probe.period ? `${probe.period} s` : undefined },
+            { label: i18next.t('one_shot'), value: enabledLabel(probe.one_shot) }
+          ]
+        },
+        {
+          title: i18next.t('ph:chart_alerts', { defaultValue: 'Chart & alerts' }),
+          items: [
+            { label: i18next.t('ph:chart_range', { defaultValue: 'Chart range' }), value: range(chart.ymin, chart.ymax, unit) },
+            { label: i18next.t('ph:alert_range', { defaultValue: 'Alert range' }), value: probe.notify && probe.notify.enable ? range(probe.notify.min, probe.notify.max, unit) : i18next.t('disabled') }
+          ]
+        },
+        { title: i18next.t('ph:control_section', { defaultValue: 'Control' }), items: controlItems }
+      ]}
+    >
+      <PhPrimitives probe={probe} readings={readings} currentReading={currentReading} />
+    </ControllerSummary>
+  )
+}
+
+// Calibration needs the probe off (the controller would otherwise act on the readings mid-calibration);
+// say so next to the action instead of only in a tooltip.
+export function CalibrateAction ({ probe, onCalibrate }) {
+  const hintId = 'ph-calibrate-hint-' + probe.id
+  return (
+    <span className='ph-calibrate-action'>
+      <Button
+        type='button'
+        name={'calibrate-probe-' + probe.id}
+        disabled={probe.enable}
+        aria-describedby={probe.enable ? hintId : undefined}
+        variant='secondary'
+        onClick={e => onCalibrate(e, probe)}
+      >
+        {i18next.t('ph:calibrate')}
+      </Button>
+      {probe.enable && (
+        <span id={hintId} className='ph-calibrate-action__hint'>
+          {i18next.t('ph:calibrate_requires_off', { defaultValue: 'Turn the probe off to calibrate' })}
+        </span>
+      )}
+    </span>
+  )
+}
+
 class ph extends React.Component {
   constructor (props) {
     super(props)
@@ -94,38 +179,34 @@ class ph extends React.Component {
           probe.enable = !probe.enable
           this.props.update(probe.id, probe)
         }
-        const calibrationButton = (
-          <Button
-            type='button'
-            name={'calibrate-probe-' + probe.id}
-            disabled={probe.enable}
-            title={probe.enable ? 'Ph probe must be disabled before calibration' : null}
-            variant='secondary'
-            style={{ marginLeft: 'auto' }}
-            onClick={e => this.calibrateProbe(e, probe)}
-          >
-            {i18next.t('ph:calibrate')}
-          </Button>
-        )
-        const enhancedView = (
-          <PhPrimitives
-            probe={probe}
-            readings={(this.props.phReadings || {})[probe.id]}
-            currentReading={(this.props.currentReading || {})[probe.id]}
-          />
-        )
+        const calibrationButton = <CalibrateAction probe={probe} onCalibrate={(e, p) => this.calibrateProbe(e, p)} />
         return (
           <Collapsible
             key={'panel-ph-' + probe.id}
             name={'panel-ph-' + probe.id}
             item={probe}
             buttons={calibrationButton}
-            title={<b style={{ marginLeft: 'var(--reefpi-space-xs)', verticalAlign: 'middle' }}>{probe.name}</b>}
+            title={(
+              <span className='reefpi-controller-title'>
+                <span>{probe.name}</span>
+                <span className='reefpi-controller-title__state'>{enabledLabel(probe.enable)}</span>
+              </span>
+            )}
             onDelete={this.handleDeleteProbe}
             onToggleState={handleToggleState}
             enabled={probe.enable}
+            separateEdit
+            overflowActions
+            actionsLabel={i18next.t('ph:actions', { name: probe.name, defaultValue: `Actions for ${probe.name}` })}
           >
-            {enhancedView}
+            <PhSummary
+              probe={probe}
+              readings={(this.props.phReadings || {})[probe.id]}
+              currentReading={(this.props.currentReading || {})[probe.id]}
+              analogInputs={this.props.ais}
+              equipment={this.props.equipment}
+              macros={this.props.macros}
+            />
             <PhForm
               onSubmit={this.handleUpdateProbe}
               key={Number(probe.id)}
