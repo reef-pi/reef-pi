@@ -51,8 +51,10 @@ Copy-back checklist, per Adafruit page.
   (s) and **Run**. Once reef-pi has started the pump, a second step asks for the measured volume (mL) and
   **Save calibration**, after which the dialog shows the pump's **Calibrated rate** in mL/s. Close it
   with **Done**.
-- Text "Click on the edit button, set the schedule and enable the dosing pump" -> unchanged; set Hour `3`,
-  Minute `0`, Second `0`, Duration `5`, Speed `50`, then switch the pump on with the toggle.
+- Text "Click on the edit button, set the schedule and enable the dosing pump" -> "Open the pump's
+  actions menu (**⋮**) and choose **Edit**, set the schedule and click **Save**, then enable the pump
+  with its toggle"; set Hour `3`, Minute `0`, Second `0`, Duration `5`, Speed `50`. An expanded pump
+  shows a read-only summary (Pump, Dosing); its settings are edited from that menu.
 
 **Needs maintainer check**
 
@@ -277,8 +279,9 @@ decide how long you need to run your dosing pump and at what speed, depending up
 ![Measuring the dispensed liquid](https://cdn-learn.adafruit.com/assets/assets/000/066/138/medium800/components_86990488-DAD8-46B3-8DA8-DAEAEACAB22C.jpeg?1542574016)
 
 I dose 2ml of two-part solution (calcium carbonate and alkalinity) every day. So, I went back and
-scheduled my dosing pump to dose every night at 3 AM for 5 seconds at speed 50. Click on the edit button,
-set the schedule and enable the dosing pump. That's all, your automatic dosing system is ready for
+scheduled my dosing pump to dose every night at 3 AM for 5 seconds at speed 50. Open the pump's actions
+menu (**⋮**), choose **Edit**, set the schedule and click **Save**, then enable the dosing pump with its
+toggle. That's all, your automatic dosing system is ready for
 operation.
 
 ![Schedule](images/configuration-testing-07-doser-schedule-desktop.png)

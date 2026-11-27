@@ -28,7 +28,8 @@ const EditDoser = ({
   handleChange,
   setFieldValue,
   dirty,
-  readOnly
+  readOnly,
+  onCancel
 }) => {
   const handleSubmit = event => {
     event.preventDefault()
@@ -76,7 +77,7 @@ const EditDoser = ({
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className='reefpi-controller-form' onSubmit={handleSubmit}>
       <div style={formGridStyle}>
         <FormField label={i18next.t('name')} error={ShowError('name', touched, errors) ? <ErrorFor errors={errors} touched={touched} name='name' /> : undefined}>
           <Input
@@ -138,7 +139,18 @@ const EditDoser = ({
       )}
 
       {!readOnly && (
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 'var(--reefpi-space-xxs)' }}>
+        <div className='reefpi-controller-form__actions'>
+          {onCancel && (
+            <Button
+              type='button'
+              name='cancel'
+              data-testid='doser-cancel'
+              variant='secondary'
+              onClick={onCancel}
+            >
+              {i18next.t('cancel')}
+            </Button>
+          )}
           <Button
             type='submit'
             variant={dirty ? 'primary' : 'secondary'}
@@ -160,6 +172,7 @@ EditDoser.propTypes = {
   handleBlur: PropTypes.func.isRequired,
   submitForm: PropTypes.func.isRequired,
   onDelete: PropTypes.func,
+  onCancel: PropTypes.func,
   handleChange: PropTypes.func
 }
 

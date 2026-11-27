@@ -7,6 +7,7 @@ import EmptyState, { DoserIcon } from '../../design-system/ui_kits/reef-pi-app/s
 import CollapsibleList from '../ui_components/collapsible_list'
 import Collapsible from '../ui_components/collapsible'
 import CalibrationModal from './calibration_modal'
+import DoserSummary from './doser_summary'
 import { SortByName } from 'utils/sort_by_name'
 import i18n from 'utils/i18n'
 import { timestampToEpoch } from 'utils/timestamp'
@@ -81,7 +82,6 @@ export class RawDoser extends React.Component {
               name={'calibrate-doser-' + doser.id}
               data-testid={'smoke-doser-calibrate-' + doser.id}
               variant='secondary'
-              style={{ marginLeft: 'auto' }}
               onClick={(e) => this.calibrateDoser(e, doser)}
             >
               {i18n.t('doser:calibrate')}
@@ -105,10 +105,20 @@ export class RawDoser extends React.Component {
               onToggleState={handleTState}
               enabled={doser.regiment.enable}
               buttons={calibrationButton}
-              title={<b style={{ marginLeft: 'var(--reefpi-space-xs)', verticalAlign: 'middle' }}>{doser.name}</b>}
+              title={(
+                <span className='reefpi-controller-title'>
+                  <span>{doser.name}</span>
+                  <span className='reefpi-controller-title__state'>{i18n.t(doser.regiment.enable ? 'enabled' : 'disabled')}</span>
+                </span>
+              )}
               onDelete={this.handleDeleteDoser}
+              separateEdit
+              overflowActions
+              actionsLabel={i18n.t('doser:actions', { name: doser.name, defaultValue: `Actions for ${doser.name}` })}
             >
-              {enhancedView}
+              <DoserSummary doser={doser} jacks={this.props.jacks} outlets={this.props.outlets}>
+                {enhancedView}
+              </DoserSummary>
               <DoserForm
                 onSubmit={this.handleUpdateDoser}
                 jacks={this.props.jacks}

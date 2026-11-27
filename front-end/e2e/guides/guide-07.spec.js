@@ -127,7 +127,8 @@ test('Guide 7: Configuration & Testing', async ({ page, baseURL }, testInfo) => 
     await expect(dialog).toHaveCount(0)
 
     // 07: Schedule: dose every night at 03:00:00 for 5 seconds at 50% speed (form filled, not saved).
-    await page.locator(`#edit-panel-doser-${pump1.id}`).click()
+    await page.getByRole('button', { name: 'Actions for Pump1' }).click()
+    await page.getByRole('menuitem', { name: 'Edit' }).click()
     await page.getByTestId('smoke-cron-hour').fill('3')
     await page.getByTestId('smoke-cron-minute').fill('0')
     await page.getByTestId('smoke-cron-second').fill('0')
