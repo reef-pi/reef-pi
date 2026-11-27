@@ -425,6 +425,7 @@ macro:reverting,Reverting
 macro:run,Run
 macro:running,Running
 macro:steps,Steps
+macro:summary_section,Macro
 macro:system,System
 macro:title_delete,Delete {{name}} ?
 macro:turn_off,Turn Off
