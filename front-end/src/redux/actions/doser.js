@@ -19,6 +19,12 @@ export const dosingPumpCalibrated = () => {
   })
 }
 
+export const dosingPumpCalibrationSaved = () => {
+  return ({
+    type: 'DOSING_PUMP_CALIBRATION_SAVED'
+  })
+}
+
 export const fetchDosingPumps = () => {
   return getAction(['doser', 'pumps'], dosingPumpsLoaded)
 }
@@ -43,8 +49,13 @@ export const calibrateDosingPump = (id, s) => {
   return postAction(['doser', 'pumps', id, 'calibrate'], s, dosingPumpCalibrated)
 }
 
+// Resolves to the saved action only when the controller accepted the result (and refreshes the
+// pumps so the new rate shows); a rejected save resolves to undefined after its error toast.
 export const saveDosingPumpCalibration = (id, s) => {
-  return postAction(['doser', 'pumps', id, 'calibrate', 'save'], s, fetchDosingPumps)
+  return postAction(['doser', 'pumps', id, 'calibrate', 'save'], s, () => dispatch => {
+    dispatch(fetchDosingPumps())
+    return dispatch(dosingPumpCalibrationSaved())
+  })
 }
 
 export const fetchDoserUsage = (id) => {

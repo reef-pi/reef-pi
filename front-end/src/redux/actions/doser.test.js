@@ -1,4 +1,4 @@
-import { dosingPumpsLoaded, dosingPumpScheduleUpdated, dosingPumpCalibrated, fetchDosingPumps, createDosingPump, deleteDosingPump, updateDosingPumpSchedule, calibrateDosingPump } from './doser'
+import { dosingPumpsLoaded, dosingPumpScheduleUpdated, dosingPumpCalibrated, fetchDosingPumps, createDosingPump, deleteDosingPump, updateDosingPumpSchedule, calibrateDosingPump, saveDosingPumpCalibration } from './doser'
 import { thunk } from 'redux-thunk'
 import fetchMock from 'fetch-mock'
 import configureMockStore from 'redux-mock-store'
@@ -67,6 +67,24 @@ describe('doser actions', () => {
     const store = mockStore()
     return store.dispatch(calibrateDosingPump('1', {})).then(() => {
       expect(store.getActions()).toEqual([dosingPumpCalibrated({})])
+    })
+  })
+
+  it('saveDosingPumpCalibration resolves to a saved action and refreshes the pumps (#3303)', () => {
+    fetchMock.postOnce('/api/doser/pumps/1/calibrate/save', {})
+    fetchMock.getOnce('/api/doser/pumps', [])
+    const store = mockStore()
+    return store.dispatch(saveDosingPumpCalibration('1', { volume: 10, duration: 15 })).then(result => {
+      expect(result).toEqual({ type: 'DOSING_PUMP_CALIBRATION_SAVED' })
+      expect(store.getActions()).toContainEqual({ type: 'DOSING_PUMP_CALIBRATION_SAVED' })
+    })
+  })
+
+  it('saveDosingPumpCalibration resolves to nothing when the controller rejects it (#3303)', () => {
+    fetchMock.postOnce('/api/doser/pumps/1/calibrate/save', { status: 400, body: 'calibration volume must be positive' })
+    const store = mockStore()
+    return store.dispatch(saveDosingPumpCalibration('1', { volume: 0, duration: 15 })).then(result => {
+      expect(result).toBeUndefined()
     })
   })
 })

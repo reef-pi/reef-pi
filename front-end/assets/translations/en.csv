@@ -212,10 +212,31 @@ dashboard:setup_temperature,Set up temperature
 dashboard:setup_temperature_description,Add a temperature probe for live readings.
 doser:calibrate,Calibrate
 doser:calibration:current_rate,Calibrated rate
+doser:calibration:dispensing,Dispensing {{volume}} mL. Check the cylinder once the pump stops.
+doser:calibration:duration_help,"How long the pump runs, in seconds"
+doser:calibration:intro,"Place the pump outlet in a measuring cylinder, run the pump, then enter the volume it dispensed. reef-pi uses it to work out how many mL the pump doses per second."
+doser:calibration:intro_stepper,"Place the pump outlet in a measuring cylinder and dispense a known volume. If the cylinder shows a different volume, adjust the pump's volume per rotation."
+doser:calibration:measured_help,Dispensed in {{duration}} s at {{speed}} %
 doser:calibration:measured_volume,Measured volume (mL)
+doser:calibration:measured_volume_label,Measured volume
+doser:calibration:not_calibrated,Not calibrated yet
 doser:calibration:rate,Dosing rate
 doser:calibration:run,Run
+doser:calibration:run_failed,The pump did not start. Check the pump and try again.
+doser:calibration:run_hint,Runs at {{speed}} % for {{duration}} s
+doser:calibration:run_hint_stepper,Dispenses {{volume}} mL
+doser:calibration:running,Starting the pump…
+doser:calibration:save_failed,Not saved. Check the volume and try again.
 doser:calibration:save_result,Save calibration
+doser:calibration:saved,Saved
+doser:calibration:saving,Saving…
+doser:calibration:schedule_on,"This pump's schedule is on, so a scheduled dose could run during the measurement. Turn the pump off first for an accurate result."
+doser:calibration:speed_help,"Percent of full speed, 1–100"
+doser:calibration:started,Pump started for {{duration}} s. Measure the volume once it stops.
+doser:calibration:step_dispense,Dispense a volume
+doser:calibration:step_measure,Enter the measured volume
+doser:calibration:step_run,Run the pump
+doser:calibration:volume_help,"Volume to dispense, in mL"
 doser:continuous,Continuous (run indefinitely)
 doser:delay,Delay
 doser:direction, Direction

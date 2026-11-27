@@ -5,7 +5,6 @@ import 'isomorphic-fetch'
 import DoserForm, { mapDoserPropsToValues, submitDoserForm } from './doser_form'
 
 jest.mock('utils/confirm', () => ({
-  showModal: jest.fn(),
   confirm: jest.fn(() => Promise.resolve(true))
 }))
 
@@ -279,11 +278,14 @@ describe('Doser ui', () => {
     expect(del).toHaveBeenCalledWith('1')
   })
 
-  it('<Main /> calibrateDoser calls showModal', () => {
-    const { showModal: mockShowModal } = require('utils/confirm')
+  it('<Main /> calibrateDoser opens the calibration dialog for that pump, and closes it (#3303)', () => {
     const component = makeComponent()
+    expect(component.calibrationDialog()).toBeNull()
     component.calibrateDoser({ stopPropagation: jest.fn() }, makeDoser())
-    expect(mockShowModal).toHaveBeenCalled()
+    expect(component.state.calibrating).toBe('1')
+    expect(component.calibrationDialog().props.doser.id).toBe('1')
+    component.handleCloseCalibration()
+    expect(component.calibrationDialog()).toBeNull()
   })
 
   it('<Main /> render shows add form when addDoser is true', () => {

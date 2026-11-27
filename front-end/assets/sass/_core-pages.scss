@@ -773,3 +773,182 @@
     padding-top: 0;
   }
 }
+
+// ── Dosing pump calibration (#3303) ────────────────────────────────────────
+.doser-calibration {
+  display: grid;
+  gap: var(--reefpi-space-md);
+}
+
+.doser-calibration__intro {
+  margin: 0;
+  max-width: 60ch;
+  color: var(--reefpi-color-text-muted);
+  font-size: var(--reefpi-font-size-body);
+  line-height: 1.5;
+}
+
+.doser-calibration__notice {
+  margin: 0;
+  padding: var(--reefpi-space-xs) var(--reefpi-space-sm);
+  border: 1px solid var(--reefpi-color-border);
+  border-left: 3px solid var(--reefpi-color-warning);
+  border-radius: var(--reefpi-radius-sm);
+  background: var(--reefpi-color-pending-bg);
+  color: var(--reefpi-color-text);
+  font-size: var(--reefpi-font-size-label);
+  line-height: 1.4;
+}
+
+.doser-calibration__rate {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--reefpi-space-xs) var(--reefpi-space-sm);
+  margin: 0;
+  padding: var(--reefpi-space-sm) var(--reefpi-space-md);
+  border: 1px solid var(--reefpi-color-border);
+  border-radius: var(--reefpi-radius-md);
+  background: var(--reefpi-color-surface-sunken);
+}
+
+.doser-calibration__rate-label {
+  color: var(--reefpi-color-text-muted);
+  font-size: var(--reefpi-font-size-label);
+  font-weight: var(--reefpi-font-weight-semibold);
+}
+
+.doser-calibration__rate-value {
+  color: var(--reefpi-color-text);
+  font-size: var(--reefpi-font-size-telemetry);
+  font-weight: var(--reefpi-font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.doser-calibration__rate-missing {
+  color: var(--reefpi-color-text-muted);
+  font-size: var(--reefpi-font-size-body);
+}
+
+.doser-calibration__steps {
+  display: grid;
+  gap: var(--reefpi-space-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.doser-calibration__step {
+  display: grid;
+  grid-template-columns: 1.75rem minmax(0, 1fr);
+  gap: var(--reefpi-space-sm);
+  align-items: start;
+  padding: var(--reefpi-space-sm);
+  border: 1px solid var(--reefpi-color-border);
+  border-radius: var(--reefpi-radius-md);
+  background: var(--reefpi-color-surface-elevated);
+
+  &[data-status='failed'] {
+    border-color: var(--reefpi-color-error-border);
+  }
+}
+
+.doser-calibration__marker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid var(--reefpi-color-brand);
+  border-radius: 50%;
+  color: var(--reefpi-color-brand);
+  font-size: var(--reefpi-font-size-label);
+  font-weight: var(--reefpi-font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+
+  [data-status='started'] > &,
+  [data-status='saved'] > & {
+    border-color: var(--reefpi-color-success);
+    color: var(--reefpi-color-success);
+  }
+
+  [data-status='failed'] > & {
+    border-color: var(--reefpi-color-error);
+    color: var(--reefpi-color-error);
+  }
+}
+
+.doser-calibration__form {
+  display: grid;
+  gap: var(--reefpi-space-sm);
+}
+
+.doser-calibration__step-title {
+  margin: 0;
+  padding-top: var(--reefpi-space-xxs);
+  color: var(--reefpi-color-text);
+  font-size: var(--reefpi-font-size-body);
+  font-weight: var(--reefpi-font-weight-semibold);
+}
+
+.doser-calibration__fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: var(--reefpi-space-sm);
+}
+
+.doser-calibration__input {
+  display: flex;
+  align-items: center;
+  gap: var(--reefpi-space-xs);
+}
+
+.doser-calibration__unit {
+  min-width: 1.75rem;
+  color: var(--reefpi-color-text-muted);
+  font-size: var(--reefpi-font-size-label);
+  font-weight: var(--reefpi-font-weight-semibold);
+}
+
+.doser-calibration__action {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--reefpi-space-xs) var(--reefpi-space-sm);
+}
+
+.doser-calibration__action-hint {
+  color: var(--reefpi-color-text-muted);
+  font-size: var(--reefpi-font-size-label);
+  font-variant-numeric: tabular-nums;
+}
+
+.doser-calibration__status {
+  margin: 0;
+  color: var(--reefpi-color-text-muted);
+  font-size: var(--reefpi-font-size-label);
+
+  &--running,
+  &--saving {
+    color: var(--reefpi-color-pending);
+  }
+
+  &--started,
+  &--saved {
+    color: var(--reefpi-color-success);
+    font-weight: var(--reefpi-font-weight-semibold);
+  }
+
+  &--failed {
+    color: var(--reefpi-color-error);
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .doser-calibration__action .reefpi-button {
+    flex: 1 1 100%;
+    min-height: 44px;
+  }
+}

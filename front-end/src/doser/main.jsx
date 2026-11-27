@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { confirm, showModal } from 'utils/confirm'
+import { confirm } from 'utils/confirm'
 import DoserForm from './doser_form'
 import { fetchDosingPumps, createDosingPump, deleteDosingPump, updateDosingPump, calibrateDosingPump, saveDosingPumpCalibration, fetchDoserUsage } from 'redux/actions/doser'
 import { connect } from 'react-redux'
@@ -48,7 +48,8 @@ export class RawDoser extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      addDoser: false
+      addDoser: false,
+      calibrating: null
     }
     this.doserList = this.doserList.bind(this)
     this.handleToggleAddDoserDiv = this.handleToggleAddDoserDiv.bind(this)
@@ -56,6 +57,7 @@ export class RawDoser extends React.Component {
     this.handleCreateDoser = this.handleCreateDoser.bind(this)
     this.handleUpdateDoser = this.handleUpdateDoser.bind(this)
     this.calibrateDoser = this.calibrateDoser.bind(this)
+    this.handleCloseCalibration = this.handleCloseCalibration.bind(this)
     this.valuesToDoser = this.valuesToDoser.bind(this)
   }
 
@@ -173,11 +175,23 @@ export class RawDoser extends React.Component {
 
   calibrateDoser (e, doser) {
     e.stopPropagation()
-    showModal(
+    this.setState({ calibrating: doser.id })
+  }
+
+  handleCloseCalibration () {
+    this.setState({ calibrating: null })
+  }
+
+  // Looked up from the store on every render, so a saved calibration shows the refreshed rate.
+  calibrationDialog () {
+    const doser = this.props.dosers.find(item => item.id === this.state.calibrating)
+    if (!doser) return null
+    return (
       <CalibrationModal
         doser={doser}
         calibrateDoser={this.props.calibrateDoser}
         saveCalibration={this.props.saveCalibration}
+        onClose={this.handleCloseCalibration}
       />
     )
   }
@@ -208,6 +222,7 @@ export class RawDoser extends React.Component {
           <AddToggle id='add_doser' testId='smoke-doser-add-toggle' open={this.state.addDoser} onClick={this.handleToggleAddDoserDiv} />
           {newDoser}
         </ListItem>
+        {this.calibrationDialog()}
       </List>
     )
   }
