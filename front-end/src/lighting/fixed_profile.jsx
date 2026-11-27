@@ -3,10 +3,8 @@ import PropTypes from 'prop-types'
 import { ErrorFor, NameFor, ShowError } from 'utils/validation_helper'
 import classNames from 'classnames'
 import { Field } from 'formik'
-import i18next from 'i18next'
+import i18next from 'utils/i18n'
 import { IsPercentageInput } from '../utils/percentage_input'
-
-const inputStyle = { padding: 'var(--reefpi-space-xs)', border: '1px solid var(--reefpi-color-border)', borderRadius: 'var(--reefpi-radius-sm)', fontFamily: 'var(--reefpi-font-app)', width: '100%' }
 
 export default class FixedProfile extends React.Component {
   constructor (props) {
@@ -18,12 +16,10 @@ export default class FixedProfile extends React.Component {
     this.handleChange = this.handleChange.bind(this)
   }
 
-  handleChange (e) {
-    if (IsPercentageInput(e.target.value)) {
-      let value = parseFloat(e.target.value)
-      if (isNaN(value)) {
-        value = ''
-      }
+  handleChange (event) {
+    if (IsPercentageInput(event.target.value)) {
+      let value = parseFloat(event.target.value)
+      if (isNaN(value)) value = ''
       this.setState({ value })
       this.props.onChangeHandler({
         start: this.props.config.start,
@@ -34,62 +30,75 @@ export default class FixedProfile extends React.Component {
   }
 
   render () {
+    const baseId = `lighting-fixed-${this.props.name.replace(/[^a-zA-Z0-9_-]/g, '-')}`
+    const valueName = NameFor(this.props.name, 'value')
+
     return (
-      <>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--reefpi-space-sm)', alignItems: 'flex-end', marginBottom: 'var(--reefpi-space-sm)' }}>
-          <div>
-            <label style={{ marginRight: 'var(--reefpi-space-xs)' }}>{i18next.t('start_time')}</label>
-            <Field
-              name={NameFor(this.props.name, 'start')}
-              readOnly={this.props.readOnly}
-              className={classNames({ 'is-invalid': ShowError(NameFor(this.props.name, 'start'), this.props.touched, this.props.errors) })}
-              style={inputStyle}
-              placeholder='HH:mm:ss'
-            />
-            <ErrorFor {...this.props} name={NameFor(this.props.name, 'start')} />
-          </div>
-          <div>
-            <label style={{ marginRight: 'var(--reefpi-space-xs)' }}>{i18next.t('end_time')}</label>
-            <Field
-              name={NameFor(this.props.name, 'end')}
-              readOnly={this.props.readOnly}
-              className={classNames({ 'is-invalid': ShowError(NameFor(this.props.name, 'end'), this.props.touched, this.props.errors) })}
-              style={inputStyle}
-              placeholder='HH:mm:ss'
-            />
-            <ErrorFor {...this.props} name={NameFor(this.props.name, 'end')} />
-          </div>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--reefpi-space-sm)' }}>
-          <input
-            type='number'
-            name={NameFor(this.props.name, 'value')}
-            className={classNames({ 'is-invalid': ShowError(NameFor(this.props.name, 'value'), this.props.touched, this.props.errors) })}
-            style={{ ...inputStyle, width: '5rem' }}
-            value={this.state.value}
-            onBlur={this.props.onBlur}
-            onChange={this.handleChange}
-            disabled={this.props.readOnly}
+      <div className='reefpi-lighting-fixed'>
+        <div>
+          <label htmlFor={`${baseId}-start`}>{i18next.t('start_time')}</label>
+          <Field
+            id={`${baseId}-start`}
+            name={NameFor(this.props.name, 'start')}
+            readOnly={this.props.readOnly}
+            className={classNames({ 'is-invalid': ShowError(NameFor(this.props.name, 'start'), this.props.touched, this.props.errors) })}
+            placeholder='HH:mm:ss'
           />
+          <ErrorFor {...this.props} name={NameFor(this.props.name, 'start')} />
+        </div>
+        <div>
+          <label htmlFor={`${baseId}-end`}>{i18next.t('end_time')}</label>
+          <Field
+            id={`${baseId}-end`}
+            name={NameFor(this.props.name, 'end')}
+            readOnly={this.props.readOnly}
+            className={classNames({ 'is-invalid': ShowError(NameFor(this.props.name, 'end'), this.props.touched, this.props.errors) })}
+            placeholder='HH:mm:ss'
+          />
+          <ErrorFor {...this.props} name={NameFor(this.props.name, 'end')} />
+        </div>
+        <div className='reefpi-lighting-fixed__intensity'>
+          <label htmlFor={`${baseId}-value`}>{i18next.t('lighting:intensity_percent', { defaultValue: 'Intensity (%)' })}</label>
+          <div className='reefpi-lighting-fixed__value'>
+            <input
+              id={`${baseId}-value`}
+              type='number'
+              min={0}
+              max={100}
+              inputMode='decimal'
+              name={valueName}
+              className={classNames({ 'is-invalid': ShowError(valueName, this.props.touched, this.props.errors) })}
+              value={this.state.value}
+              onBlur={this.props.onBlur}
+              onChange={this.handleChange}
+              disabled={this.props.readOnly}
+            />
+            <span aria-hidden='true'>%</span>
+          </div>
           <input
-            name={NameFor(this.props.name, 'value')}
-            style={{ flex: 1 }}
+            className='reefpi-lighting-fixed__range'
             type='range'
+            min={0}
+            max={100}
+            name={valueName}
+            aria-label={i18next.t('lighting:intensity_slider', { defaultValue: 'Intensity slider' })}
             onChange={this.handleChange}
             disabled={this.props.readOnly}
             value={this.state.value}
           />
-          <div style={{ textAlign: 'center' }}>
-            <input style={{ display: 'none' }} className='is-invalid' />
-            <ErrorFor {...this.props} name={NameFor(this.props.name, 'value')} />
-          </div>
+          <ErrorFor {...this.props} name={valueName} />
         </div>
-      </>
+      </div>
     )
   }
 }
 
 FixedProfile.propTypes = {
+  config: PropTypes.object.isRequired,
+  errors: PropTypes.object,
+  name: PropTypes.string.isRequired,
+  onBlur: PropTypes.func,
   readOnly: PropTypes.bool,
-  onChangeHandler: PropTypes.func.isRequired
+  onChangeHandler: PropTypes.func.isRequired,
+  touched: PropTypes.object
 }

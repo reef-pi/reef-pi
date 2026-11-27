@@ -41,9 +41,8 @@ class LightingPage {
 
     await this.page.locator(`#edit-light-${savedLight.id}`).click()
     await expect(form).toBeVisible()
-    // The radio input is visually hidden; the styled wrapping label is the click target.
-    // Multi-pin jacks have one radio group per channel; configure the first channel.
-    await form.locator(`label:has(input[type="radio"][value="${light.profile}"])`).first().click()
+    // Multi-pin jacks have one selector per channel; configure the first channel.
+    await form.getByTestId('lighting-profile-selector').first().selectOption(light.profile)
     await form.locator(`[name="config.channels.${channelKey}.profile.config.start"]`).fill(light.start)
     await form.locator(`[name="config.channels.${channelKey}.profile.config.end"]`).fill(light.end)
 

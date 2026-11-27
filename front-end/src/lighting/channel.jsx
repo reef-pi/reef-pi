@@ -196,20 +196,30 @@ const Channel = (props) => {
     props.onChangeHandler(event, props.channelNum)
   }
 
-  const inputStyle = { display: 'block', width: '100%', padding: 'var(--reefpi-space-xs)', border: '1px solid var(--reefpi-color-border)', borderRadius: 'var(--reefpi-radius-sm)', fontFamily: 'var(--reefpi-font-app)' }
+  const channelId = `lighting-channel-${props.name.replace(/[^a-zA-Z0-9_-]/g, '-')}`
+  const nameId = `${channelId}-name`
+  const minId = `${channelId}-minimum`
+  const maxId = `${channelId}-maximum`
+  const statusId = `${channelId}-status`
+  const profileId = `${channelId}-profile`
 
   return (
-    <div style={{ borderTop: '1px solid var(--reefpi-color-border)' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))', gap: 'var(--reefpi-space-md)', alignItems: 'start', marginBottom: 'var(--reefpi-space-sm)' }}>
+    <section className='reefpi-section-card reefpi-lighting-channel' aria-labelledby={`${channelId}-heading`}>
+      <header className='reefpi-lighting-channel__header'>
         <div>
-          <label style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            {i18next.t('lighting:channel_name')}
-            <small style={{ background: 'var(--reefpi-color-brand)', color: 'var(--reefpi-color-on-brand)', borderRadius: 'var(--reefpi-radius-sm)', padding: '0 var(--reefpi-space-xs)', fontSize: '0.75rem', marginTop: 'var(--reefpi-space-xxs)' }}>(pin {props.channel.pin})</small>
-          </label>
+          <p className='reefpi-lighting-channel__eyebrow'>{i18next.t('lighting:channel', { defaultValue: 'Light channel' })}</p>
+          <h3 id={`${channelId}-heading`}>{props.channel.name || `${i18next.t('lighting:channel_name')} ${props.channelNum}`}</h3>
+        </div>
+        <span className='reefpi-lighting-channel__pin'>{i18next.t('lighting:pin', { defaultValue: 'Pin' })} {props.channel.pin}</span>
+      </header>
+
+      <div className='reefpi-lighting-channel__settings'>
+        <div>
+          <label htmlFor={nameId}>{i18next.t('lighting:channel_name')}</label>
           <Field
+            id={nameId}
             name={NameFor(props.name, 'name')}
             className={classNames({ 'is-invalid': ShowError(NameFor(props.name, 'name'), props.touched, props.errors) })}
-            style={inputStyle}
             placeholder={i18next.t('lighting:channel_name')}
             disabled={props.readOnly}
           />
@@ -219,7 +229,7 @@ const Channel = (props) => {
           />
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--reefpi-space-xs)' }}>
+        <div className='reefpi-lighting-channel__color'>
           <label>{i18next.t('lighting:chart_color')}</label>
           <ColorPicker
             name={NameFor(props.name, 'color')}
@@ -230,11 +240,14 @@ const Channel = (props) => {
         </div>
 
         <div>
-          <label>{i18next.t('minimum')}</label>
+          <label htmlFor={minId}>{i18next.t('lighting:minimum_percent', { defaultValue: 'Minimum (%)' })}</label>
           <Percent
-            type='text'
+            id={minId}
+            type='number'
+            min={0}
+            max={100}
+            inputMode='decimal'
             className={classNames({ 'is-invalid': ShowError(NameFor(props.name, 'min'), props.touched, props.errors) })}
-            style={inputStyle}
             name={NameFor(props.name, 'min')}
             onBlur={props.onBlur}
             disabled={props.readOnly}
@@ -245,11 +258,14 @@ const Channel = (props) => {
         </div>
 
         <div>
-          <label>{i18next.t('maximum')}</label>
+          <label htmlFor={maxId}>{i18next.t('lighting:maximum_percent', { defaultValue: 'Maximum (%)' })}</label>
           <Percent
-            type='text'
+            id={maxId}
+            type='number'
+            min={0}
+            max={100}
+            inputMode='decimal'
             className={classNames({ 'is-invalid': ShowError(NameFor(props.name, 'max'), props.touched, props.errors) })}
-            style={inputStyle}
             name={NameFor(props.name, 'max')}
             onBlur={props.onBlur}
             disabled={props.readOnly}
@@ -260,48 +276,46 @@ const Channel = (props) => {
         </div>
 
         <div>
-          <label>{i18next.t('status')}</label>
+          <label htmlFor={statusId}>{i18next.t('status')}</label>
           <Field
+            id={statusId}
             name={NameFor(props.name, 'on')}
             component={BooleanSelect}
             disabled={props.readOnly}
             className={classNames({ 'is-invalid': ShowError('enable', props.touched, props.errors) })}
-            style={{ display: 'block', width: '100%', padding: 'var(--reefpi-space-xs)', border: '1px solid var(--reefpi-color-border)', borderRadius: 'var(--reefpi-radius-sm)', fontFamily: 'var(--reefpi-font-app)' }}
           >
             <option value='true'>{i18next.t('enabled')}</option>
             <option value='false'>{i18next.t('disabled')}</option>
           </Field>
         </div>
+      </div>
 
+      <div className='reefpi-lighting-channel__profile'>
+        <label htmlFor={profileId}>{i18next.t('profile')}</label>
+        <ProfileSelector
+          id={profileId}
+          className={classNames({ 'is-invalid': ShowError(NameFor(props.name, 'profile'), props.touched, props.errors) })}
+          name={NameFor(props.name, 'profile')}
+          readOnly={props.readOnly}
+          onChangeHandler={handleConfigChange}
+          value={props.channel.profile.type}
+        />
+        <input type='hidden' />
+        <ErrorFor {...props} name={NameFor(props.name, 'profile.type')} />
       </div>
-      <div style={{ marginBottom: 'var(--reefpi-space-sm)' }}>
-        <div>
-          <label style={{ marginRight: 'var(--reefpi-space-sm)' }}>{i18next.t('profile')}</label>
-          <ProfileSelector
-            className={classNames({ 'is-invalid': ShowError(NameFor(props.name, 'profile'), props.touched, props.errors) })}
-            name={NameFor(props.name, 'profile')}
-            readOnly={props.readOnly}
-            onChangeHandler={handleConfigChange}
-            value={props.channel.profile.type}
-          />
-          <input style={{ display: 'none' }} />
-          <ErrorFor {...props} name={NameFor(props.name, 'profile.type')} />
-        </div>
+
+      <div className='reefpi-lighting-channel__profile-config'>
+        <Profile
+          {...props}
+          name={NameFor(props.name, 'profile.config')}
+          onBlur={props.onBlur}
+          readOnly={props.readOnly}
+          type={props.channel.profile.type}
+          value={props.channel.profile.config}
+          onChangeHandler={handleChange}
+        />
       </div>
-      <div style={{ marginBottom: 'var(--reefpi-space-md)' }}>
-        <div>
-          <Profile
-            {...props}
-            name={NameFor(props.name, 'profile.config')}
-            onBlur={props.onBlur}
-            readOnly={props.readOnly}
-            type={props.channel.profile.type}
-            value={props.channel.profile.config}
-            onChangeHandler={handleChange}
-          />
-        </div>
-      </div>
-    </div>
+    </section>
   )
 }
 

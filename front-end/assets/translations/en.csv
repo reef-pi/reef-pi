@@ -301,22 +301,60 @@ language:nl,Nederlands
 language:pt,Portuguesa
 language:pt-BR,Português (Brasil)
 language:zh,中文
+lighting:actions,Actions
 lighting:add_point,Add point
 lighting:change_mode,Change Mode
+lighting:channel,Light channel
 lighting:channel_name,Channel Name
 lighting:chart_color,Color
 lighting:cyclic_period,Period
 lighting:cyclic_phase_shift,Phase Shift
+lighting:fixture_help,"Name the fixture, choose its jack, and configure each PWM channel below."
+lighting:fixture_settings,Light settings
+lighting:intensity_at,Intensity at {{time}} (%)
+lighting:intensity_limit,Intensity range: 0–100%
+lighting:intensity_percent,Intensity (%)
+lighting:intensity_slider,Intensity slider
+lighting:interval_preview,24-hour intensity preview
+lighting:interval_preview_caption,Intensity (%) across local time. Exact values are listed below.
+lighting:interval_preview_description,"{{count}} schedule points from {{start}} to {{end}}, with intensity from 0 to 100 percent."
 lighting:jack,Jack
 lighting:lightning_flash_slot,Flash Slot
 lighting:lightning_frequency,Frequency
 lighting:lightning_intensity,Intensity
+lighting:maximum_percent,Maximum (%)
+lighting:minimum_percent,Minimum (%)
 lighting:mode_auto,Auto
 lighting:mode_manual,Manual
 lighting:mode_mixed,Mixed
+lighting:pin,Pin
+lighting:profile_circadian,Circadian
+lighting:profile_cyclic,Cyclic
+lighting:profile_diurnal,Diurnal
+lighting:profile_fixed,Fixed
+lighting:profile_help_circadian,Blend dawn and noon intensities across a daily cycle.
+lighting:profile_help_cyclic,Repeat a cycle using its period and phase shift.
+lighting:profile_help_diurnal,Ramp intensity up and down across a daylight window.
+lighting:profile_help_fixed,Hold one intensity during the configured time range.
+lighting:profile_help_interval,Interpolate evenly between exact intensity points across the configured time range.
+lighting:profile_help_lightning,Generate configured lightning flashes during a time range.
+lighting:profile_help_lunar,Follow the lunar cycle from a known full-moon date.
+lighting:profile_help_random,Vary intensity randomly during the configured time range.
+lighting:profile_help_sine,Follow a smooth sine wave during the configured time range.
+lighting:profile_help_solar,Follow solar timing for the configured latitude and longitude.
+lighting:profile_interval,Interval
+lighting:profile_lightning,Lightning
+lighting:profile_lunar,Lunar
+lighting:profile_random,Random
+lighting:profile_sine,Sine
+lighting:profile_solar,Solar
 lighting:remove,Remove
+lighting:schedule_help,Times are distributed evenly between start and end. Enter each exact intensity from 0 to 100%.
+lighting:schedule_points,Schedule points
 lighting:solar_latitude,Latitude
 lighting:solar_longitude,Longitude
+lighting:time,Time
+lighting:time_not_set,time not set
 lighting:title_delete,Delete lighting {{name}} ?
 lighting:warn_change,This action will change {{name}} from mode {{oldmode}} to {{newmode}}.
 lighting:warn_delete,This action will delete lighting {{name}}
