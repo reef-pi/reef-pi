@@ -34,7 +34,7 @@ async function expectValidationVisible (page) {
 }
 
 async function confirmDialog (page) {
-  const dialog = page.locator('.modal[role="dialog"]')
+  const dialog = page.locator('.reefpi-dialog')
   await expect(dialog).toBeVisible()
   await dialog.locator('button[role="confirm"]').click()
   await expect(dialog).toHaveCount(0)

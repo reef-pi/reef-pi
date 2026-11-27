@@ -37,6 +37,7 @@ function focusableElements (node) {
 export function Dialog ({
   actions,
   children,
+  initialFocusRef,
   labelledBy,
   onClose,
   open = false,
@@ -51,7 +52,7 @@ export function Dialog ({
     if (!open) return undefined
     previousFocusRef.current = document.activeElement
     const focusables = focusableElements(panelRef.current)
-    ;(focusables[0] || panelRef.current)?.focus()
+    ;(initialFocusRef?.current || focusables[0] || panelRef.current)?.focus()
 
     return () => {
       previousFocusRef.current?.focus?.()
@@ -184,8 +185,11 @@ export function Menu ({
   }, [open])
 
   const handleClose = () => {
+    // An item may have moved focus on purpose (e.g. it opened a dialog): leave it there.
+    const active = document.activeElement
+    const focusMoved = active && active !== document.body && !menuRef.current?.contains(active) && active !== buttonRef.current
     setOpen(false)
-    buttonRef.current?.focus()
+    if (!focusMoved) buttonRef.current?.focus()
   }
 
   const focusItem = index => {
@@ -353,6 +357,7 @@ export function Tabs ({ tabs = [], value, onChange }) {
 Dialog.propTypes = {
   actions: PropTypes.node,
   children: PropTypes.node,
+  initialFocusRef: PropTypes.shape({ current: PropTypes.any }),
   labelledBy: PropTypes.string,
   onClose: PropTypes.func,
   open: PropTypes.bool,

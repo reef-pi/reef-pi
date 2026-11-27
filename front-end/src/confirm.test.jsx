@@ -1,81 +1,85 @@
-import React from 'react'
-import { render, screen, fireEvent } from '@testing-library/react'
+import React, { act } from 'react'
+import { createRoot } from 'react-dom/client'
 import Confirm from './confirm'
-import Button from '../design-system/ui_kits/reef-pi-app/primitives/Button'
+import 'utils/i18n'
 
-const findAll = (node, predicate, acc = []) => {
-  if (!node || typeof node !== 'object') {
-    return acc
-  }
-  if (predicate(node)) {
-    acc.push(node)
-  }
-  React.Children.toArray(node.props?.children).forEach(child => findAll(child, predicate, acc))
-  return acc
+globalThis.IS_REACT_ACT_ENVIRONMENT = true
+
+function render (props) {
+  const container = document.createElement('div')
+  document.body.appendChild(container)
+  const root = createRoot(container)
+  const ref = React.createRef()
+  act(() => root.render(<Confirm ref={ref} {...props} />))
+  return { ref, cleanup: () => { act(() => root.unmount()); container.remove() } }
 }
 
-describe('<Confirm />', () => {
-  it('renders default labels and optional description', () => {
-    const component = new Confirm({
-      message: 'Delete item?',
-      description: <span id='description'>This cannot be undone.</span>
+const dialog = () => document.querySelector('.reefpi-dialog')
+
+describe('<Confirm /> on the Dialog primitive (#3314)', () => {
+  afterEach(() => { document.body.innerHTML = '' })
+
+  it('is a labelled dialog titled by the message, with the description as its body', () => {
+    const view = render({ message: 'Delete item?', description: <span id='description'>This cannot be undone.</span> })
+    const node = dialog()
+    expect(node.getAttribute('role')).toBe('dialog')
+    expect(node.getAttribute('aria-modal')).toBe('true')
+    expect(document.getElementById(node.getAttribute('aria-labelledby')).textContent).toBe('Delete item?')
+    expect(node.querySelector('#description').textContent).toBe('This cannot be undone.')
+    expect(node.closest('.modal')).toBeNull()
+    view.cleanup()
+  })
+
+  it('has default OK/Cancel labels and honours custom ones', () => {
+    let view = render({ message: 'Continue?' })
+    expect(dialog().querySelector('button[role="confirm"]').textContent).toBe('ok')
+    expect(dialog().querySelector('button[role="abort"]').textContent).toBe('cancel')
+    view.cleanup()
+    view = render({ message: 'Continue?', confirmLabel: 'Yes', abortLabel: 'No' })
+    expect(dialog().querySelector('button[role="confirm"]').textContent).toBe('Yes')
+    expect(dialog().querySelector('button[role="abort"]').textContent).toBe('No')
+    view.cleanup()
+  })
+
+  it('makes the confirm action primary and focuses it on open', () => {
+    const view = render({ message: 'Continue?' })
+    const confirm = dialog().querySelector('button[role="confirm"]')
+    expect(confirm.className).toContain('reefpi-button--primary')
+    expect(dialog().querySelector('button[role="abort"]').className).toContain('reefpi-button--secondary')
+    expect(document.activeElement).toBe(confirm)
+    view.cleanup()
+  })
+
+  it('resolves on confirm', async () => {
+    const view = render({ message: 'Continue?' })
+    const result = view.ref.current.promise.then(() => 'resolved', () => 'rejected')
+    act(() => dialog().querySelector('button[role="confirm"]').click())
+    await expect(result).resolves.toBe('resolved')
+    view.cleanup()
+  })
+
+  it('rejects on Cancel, Escape and a backdrop click', async () => {
+    for (const dismiss of [
+      () => dialog().querySelector('button[role="abort"]').click(),
+      () => dialog().dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Escape', bubbles: true })),
+      () => document.querySelector('.reefpi-dialog-backdrop').dispatchEvent(new window.MouseEvent('mousedown', { bubbles: true }))
+    ]) {
+      const view = render({ message: 'Continue?' })
+      const result = view.ref.current.promise.then(() => 'resolved', () => 'rejected')
+      act(dismiss)
+      await expect(result).resolves.toBe('rejected')
+      view.cleanup()
+    }
+  })
+
+  it('settles only once', async () => {
+    const view = render({ message: 'Continue?' })
+    const result = view.ref.current.promise.then(() => 'resolved', () => 'rejected')
+    act(() => {
+      dialog().querySelector('button[role="confirm"]').click()
+      dialog().querySelector('button[role="abort"]').click()
     })
-
-    const tree = component.render()
-    expect(JSON.stringify(tree)).toContain('Delete item?')
-    expect(JSON.stringify(tree)).toContain('description')
-    // Design-system Button is a forwardRef component — check for Button type, not native 'button'
-    expect(findAll(tree, node => node.type === Button)).toHaveLength(2)
-  })
-
-  it('uses custom labels and omits body without description', () => {
-    const component = new Confirm({
-      message: 'Continue?',
-      confirmLabel: 'Yes',
-      abortLabel: 'No'
-    })
-
-    const tree = component.render()
-    expect(component.state.abortLabel).toBe('No')
-    expect(component.state.confirmLabel).toBe('Yes')
-    // Design-system Button is a forwardRef component — check for Button type, not native 'button'
-    expect(findAll(tree, node => node.type === Button)).toHaveLength(2)
-    expect(JSON.stringify(tree)).not.toContain('modal-body')
-  })
-
-  it('focuses confirm button on mount', () => {
-    const component = new Confirm({ message: 'Continue?' })
-    component.confirmRef.current = { focus: jest.fn() }
-
-    component.componentDidMount()
-
-    expect(component.confirmRef.current.focus).toHaveBeenCalled()
-    expect(component.promise).toBeDefined()
-  })
-
-  it('resolves or rejects its promise from button handlers', () => {
-    const component = new Confirm({ message: 'Continue?' })
-    // Now uses native Promise with _resolve/_reject callbacks
-    component._resolve = jest.fn()
-    component._reject = jest.fn()
-
-    component.handleConfirm()
-    component.handleAbort()
-
-    expect(component._resolve).toHaveBeenCalled()
-    expect(component._reject).toHaveBeenCalled()
-  })
-
-  it('is labelled by its title and aborts on Escape', async () => {
-    const ref = React.createRef()
-    render(<Confirm ref={ref} message='Delete item?' />)
-    const dialog = screen.getByRole('dialog')
-    expect(dialog.getAttribute('aria-labelledby')).toBe('confirm-title')
-    expect(document.getElementById('confirm-title').textContent).toBe('Delete item?')
-    expect(dialog.querySelector('button[role="confirm"]')).toBe(document.activeElement)
-
-    const rejected = ref.current.promise.then(() => 'resolved', () => 'rejected')
-    fireEvent.keyDown(dialog, { key: 'Escape' })
-    await expect(rejected).resolves.toBe('rejected')
+    await expect(result).resolves.toBe('resolved')
+    view.cleanup()
   })
 })

@@ -88,14 +88,14 @@ class ConnectorsPage {
   async remove (name) {
     await this.select(name)
     await this.page.getByTestId('smoke-connector-delete').click()
-    const dialog = this.page.locator('.modal[role="dialog"]')
+    const dialog = this.page.locator('.reefpi-dialog')
     await expect(dialog).toBeVisible()
     // The dialog layer must cover the sidebar rather than sit beneath it.
     const covered = await this.page.evaluate(() => {
       const top = selector => {
         const rect = document.querySelector(selector).getBoundingClientRect()
         const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2)
-        return Boolean(hit && hit.closest('.modal, .modal-backdrop'))
+        return Boolean(hit && hit.closest('.reefpi-dialog, .reefpi-dialog-backdrop'))
       }
       return { nav: top('[data-testid="smoke-nav"]') }
     })
