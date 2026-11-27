@@ -410,6 +410,7 @@ log:emitter,Emitter
 log:time,Time
 log:type,Type
 macro:action,Action
+macro:actions,Actions for {{name}}
 macro:add_macro,Add macro
 macro:alert:message,message
 macro:alert:title,title
