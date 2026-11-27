@@ -120,9 +120,9 @@ export class RawTimersMain extends React.Component {
       return (
         <EmptyState
           icon={<TimerIcon />}
-          title='No timers yet'
-          body='Schedule equipment on/off events by creating a timer.'
-          action={{ label: 'Add timer', onClick: this.handleToggleAddTimerDiv, testId: 'smoke-timer-add-toggle' }}
+          title={i18n.t('timers:empty_title', { defaultValue: 'No timers yet' })}
+          body={i18n.t('timers:empty_body', { defaultValue: 'Schedule equipment on/off events by creating a timer.' })}
+          action={{ label: i18n.t('timers:add_timer', { defaultValue: 'Add timer' }), onClick: this.handleToggleAddTimerDiv, testId: 'smoke-timer-add-toggle' }}
         />
       )
     }

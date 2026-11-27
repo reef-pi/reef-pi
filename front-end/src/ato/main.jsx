@@ -249,9 +249,9 @@ export class RawATOMain extends React.Component {
     if (this.props.atos.length === 0) {
       return (
         <EmptyState
-          title='No ATO configured'
-          body='Connect a water level sensor to automate top-off dosing.'
-          action={{ label: 'Add ATO', onClick: this.handleToggleAddDiv, testId: 'smoke-ato-add-toggle' }}
+          title={i18n.t('ato:empty_title', { defaultValue: 'No ATO configured' })}
+          body={i18n.t('ato:empty_body', { defaultValue: 'Connect a water level sensor to automate top-off dosing.' })}
+          action={{ label: i18n.t('ato:add_ato', { defaultValue: 'Add ATO' }), onClick: this.handleToggleAddDiv, testId: 'smoke-ato-add-toggle' }}
         />
       )
     }

@@ -75,8 +75,8 @@ export class RawCamera extends React.Component {
             : !this.state.showConfig && (
               <EmptyState
                 testId='smoke-camera-empty'
-                title='No images yet'
-                body='Capture an image to get started.'
+                title={i18next.t('camera:empty_title', { defaultValue: 'No images yet' })}
+                body={i18next.t('camera:empty_body', { defaultValue: 'Capture an image to get started.' })}
               />
               )}
         </div>

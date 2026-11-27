@@ -335,9 +335,9 @@ class ph extends React.Component {
         <div>
           {calibrationModal}
           <EmptyState
-            title='No pH probes yet'
-            body='Add a probe to monitor and control reef pH.'
-            action={{ label: 'Add pH probe', onClick: this.handleToggleAddProbeDiv, testId: 'smoke-ph-add-toggle' }}
+            title={i18next.t('ph:empty_title', { defaultValue: 'No pH probes yet' })}
+            body={i18next.t('ph:empty_body', { defaultValue: 'Add a probe to monitor and control reef pH.' })}
+            action={{ label: i18next.t('ph:add_probe', { defaultValue: 'Add pH probe' }), onClick: this.handleToggleAddProbeDiv, testId: 'smoke-ph-add-toggle' }}
           />
         </div>
       )

@@ -306,9 +306,9 @@ class main extends React.Component {
       return (
         <EmptyState
           icon={<LightingIcon />}
-          title='No lights configured'
-          body='Add an LED fixture or light channel to automate your reef lighting schedule.'
-          action={{ label: 'Add light', onClick: this.handleToggleAddLightDiv, testId: 'smoke-light-add-toggle' }}
+          title={i18n.t('lighting:empty_title', { defaultValue: 'No lights configured' })}
+          body={i18n.t('lighting:empty_body', { defaultValue: 'Add an LED fixture or light channel to automate your reef lighting schedule.' })}
+          action={{ label: i18n.t('lighting:add_light', { defaultValue: 'Add light' }), onClick: this.handleToggleAddLightDiv, testId: 'smoke-light-add-toggle' }}
         />
       )
     }
