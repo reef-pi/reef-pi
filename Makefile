@@ -109,6 +109,10 @@ clean:
 
 .PHONY: standard
 standard:
+	npm run js-lint
+
+.PHONY: standard-fix
+standard-fix:
 	npm run standard
 
 .PHONY: jest

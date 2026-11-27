@@ -120,136 +120,136 @@ const EditTemperature = ({
             <h3>{i18next.t('temperature:sensor_sampling', { defaultValue: 'Sensor & sampling' })}</h3>
             <p>{i18next.t('temperature:helper_sensor', { defaultValue: 'Choose one temperature source and how often reef-pi samples it.' })}</p>
           </div>
-        {!readOnly && (
-          <div style={{ ...gridStyle, marginBottom: 'var(--reefpi-space-md)' }}>
+          {!readOnly && (
+            <div style={{ ...gridStyle, marginBottom: 'var(--reefpi-space-md)' }}>
+              <FormField
+                label={i18next.t('name')}
+                error={ShowError('name', touched, errors) ? ErrorMessage(errors, 'name') : undefined}
+              >
+                <Input
+                  name='name'
+                  data-testid='smoke-temperature-name'
+                  disabled={readOnly}
+                  value={values.name || ''}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  invalid={ShowError('name', touched, errors)}
+                />
+              </FormField>
+            </div>
+          )}
+
+          <div style={gridStyle}>
             <FormField
-              label={i18next.t('name')}
-              error={ShowError('name', touched, errors) ? ErrorMessage(errors, 'name') : undefined}
+              label={i18next.t('temperature:sensor')}
+              error={ShowError('sensor', touched, errors) ? ErrorMessage(errors, 'sensor') : undefined}
             >
-              <Input
-                name='name'
-                data-testid='smoke-temperature-name'
-                disabled={readOnly}
-                value={values.name || ''}
+              <Select
+                name='sensor'
+                data-testid='smoke-temperature-sensor'
+                disabled={readOnly || values.analog_input !== ''}
+                value={values.sensor || ''}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                invalid={ShowError('name', touched, errors)}
+                invalid={ShowError('sensor', touched, errors)}
+              >
+                <option value=''>
+                  -- {i18next.t('select')} --
+                </option>
+                {sensorOptions()}
+              </Select>
+            </FormField>
+
+            <FormField
+              label={i18next.t('temperature:analog_input')}
+              error={ShowError('analog_input', touched, errors) ? ErrorMessage(errors, 'analog_input') : undefined}
+            >
+              <Select
+                name='analog_input'
+                disabled={readOnly || values.sensor !== ''}
+                value={values.analog_input || ''}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                invalid={ShowError('analog_input', touched, errors)}
+              >
+                <option value=''>
+                  {i18next.t('none')}
+                </option>
+                {analogInputOptions()}
+              </Select>
+            </FormField>
+
+            <FormField
+              label={i18next.t('temperature:unit')}
+              error={ShowError('fahrenheit', touched, errors) ? ErrorMessage(errors, 'fahrenheit') : undefined}
+            >
+              <BooleanFormSelect
+                name='fahrenheit'
+                disabled={readOnly}
+                value={values.fahrenheit}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                invalid={ShowError('fahrenheit', touched, errors)}
+              >
+                <option value='true'>{i18next.t('temperature:fahrenheit')}</option>
+                <option value='false'>{i18next.t('temperature:celsius')}</option>
+              </BooleanFormSelect>
+            </FormField>
+
+            <FormField
+              label={i18next.t('temperature:check_frequency')}
+              error={ShowError('period', touched, errors) ? ErrorMessage(errors, 'period') : undefined}
+              helpText={i18next.t('second_s')}
+            >
+              <Input
+                name='period'
+                data-testid='smoke-temperature-period'
+                readOnly={readOnly}
+                type='number'
+                value={values.period || ''}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                invalid={ShowError('period', touched, errors)}
               />
             </FormField>
+
+            <FormField
+              label={i18next.t('status')}
+              error={ShowError('enable', touched, errors) ? ErrorMessage(errors, 'enable') : undefined}
+            >
+              <BooleanFormSelect
+                name='enable'
+                disabled={readOnly}
+                value={values.enable}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                invalid={ShowError('enable', touched, errors)}
+              >
+                <option value='true'>{i18next.t('enabled')}</option>
+                <option value='false'>{i18next.t('disabled')}</option>
+              </BooleanFormSelect>
+            </FormField>
           </div>
-        )}
 
-        <div style={gridStyle}>
-          <FormField
-            label={i18next.t('temperature:sensor')}
-            error={ShowError('sensor', touched, errors) ? ErrorMessage(errors, 'sensor') : undefined}
-          >
-            <Select
-              name='sensor'
-              data-testid='smoke-temperature-sensor'
-              disabled={readOnly || values.analog_input !== ''}
-              value={values.sensor || ''}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              invalid={ShowError('sensor', touched, errors)}
+          <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
+            <FormField
+              label={i18next.t('one_shot')}
+              error={ShowError('one_shot', touched, errors) ? ErrorMessage(errors, 'one_shot') : undefined}
             >
-              <option value=''>
-                -- {i18next.t('select')} --
-              </option>
-              {sensorOptions()}
-            </Select>
-          </FormField>
+              <BooleanFormSelect
+                name='one_shot'
+                disabled={readOnly}
+                value={values.one_shot}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                invalid={ShowError('one_shot', touched, errors)}
+              >
+                <option value='true'>{i18next.t('enabled')}</option>
+                <option value='false'>{i18next.t('disabled')}</option>
+              </BooleanFormSelect>
+            </FormField>
 
-          <FormField
-            label={i18next.t('temperature:analog_input')}
-            error={ShowError('analog_input', touched, errors) ? ErrorMessage(errors, 'analog_input') : undefined}
-          >
-            <Select
-              name='analog_input'
-              disabled={readOnly || values.sensor !== ''}
-              value={values.analog_input || ''}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              invalid={ShowError('analog_input', touched, errors)}
-            >
-              <option value=''>
-                {i18next.t('none')}
-              </option>
-              {analogInputOptions()}
-            </Select>
-          </FormField>
-
-          <FormField
-            label={i18next.t('temperature:unit')}
-            error={ShowError('fahrenheit', touched, errors) ? ErrorMessage(errors, 'fahrenheit') : undefined}
-          >
-            <BooleanFormSelect
-              name='fahrenheit'
-              disabled={readOnly}
-              value={values.fahrenheit}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              invalid={ShowError('fahrenheit', touched, errors)}
-            >
-              <option value='true'>{i18next.t('temperature:fahrenheit')}</option>
-              <option value='false'>{i18next.t('temperature:celsius')}</option>
-            </BooleanFormSelect>
-          </FormField>
-
-          <FormField
-            label={i18next.t('temperature:check_frequency')}
-            error={ShowError('period', touched, errors) ? ErrorMessage(errors, 'period') : undefined}
-            helpText={i18next.t('second_s')}
-          >
-            <Input
-              name='period'
-              data-testid='smoke-temperature-period'
-              readOnly={readOnly}
-              type='number'
-              value={values.period || ''}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              invalid={ShowError('period', touched, errors)}
-            />
-          </FormField>
-
-          <FormField
-            label={i18next.t('status')}
-            error={ShowError('enable', touched, errors) ? ErrorMessage(errors, 'enable') : undefined}
-          >
-            <BooleanFormSelect
-              name='enable'
-              disabled={readOnly}
-              value={values.enable}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              invalid={ShowError('enable', touched, errors)}
-            >
-              <option value='true'>{i18next.t('enabled')}</option>
-              <option value='false'>{i18next.t('disabled')}</option>
-            </BooleanFormSelect>
-          </FormField>
-        </div>
-
-        <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
-          <FormField
-            label={i18next.t('one_shot')}
-            error={ShowError('one_shot', touched, errors) ? ErrorMessage(errors, 'one_shot') : undefined}
-          >
-            <BooleanFormSelect
-              name='one_shot'
-              disabled={readOnly}
-              value={values.one_shot}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              invalid={ShowError('one_shot', touched, errors)}
-            >
-              <option value='true'>{i18next.t('enabled')}</option>
-              <option value='false'>{i18next.t('disabled')}</option>
-            </BooleanFormSelect>
-          </FormField>
-
-        </div>
+          </div>
         </section>
 
         <section className='reefpi-section-card' aria-label={i18next.t('temperature:visualization_alerts', { defaultValue: 'Visualization & alerts' })}>
@@ -257,99 +257,99 @@ const EditTemperature = ({
             <h3>{i18next.t('temperature:visualization_alerts', { defaultValue: 'Visualization & alerts' })}</h3>
             <p>{i18next.t('temperature:helper_visualization', { defaultValue: 'Set the chart range and optional notification thresholds.' })}</p>
           </div>
-        <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
-          <FormField
-            label={i18next.t('temperature:chart_ymin')}
-            error={ShowError('chart.ymin', touched, errors) ? ErrorMessage(errors, 'chart.ymin') : undefined}
-          >
-            <Input
-              name='chart.ymin'
-              readOnly={readOnly}
-              type='number'
-              value={values.chart ? values.chart.ymin : ''}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              invalid={ShowError('chart.ymin', touched, errors)}
-            />
-          </FormField>
-          <FormField
-            label={i18next.t('temperature:chart_ymax')}
-            error={ShowError('chart.ymax', touched, errors) ? ErrorMessage(errors, 'chart.ymax') : undefined}
-          >
-            <Input
-              name='chart.ymax'
-              readOnly={readOnly}
-              type='number'
-              value={values.chart ? values.chart.ymax : ''}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              invalid={ShowError('chart.ymax', touched, errors)}
-            />
-          </FormField>
-          <FormField label={i18next.t('temperature:chart_color')}>
-            <ColorPicker
-              name={NameFor(values.name, 'chart.color')}
-              readOnly={readOnly}
-              color={values.chart ? values.chart.color : ''}
-              onChangeHandler={updateChartColor}
-            />
-          </FormField>
-        </div>
-
-        <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
-          <FormField
-            label={i18next.t('alerts')}
-            error={ShowError('alerts', touched, errors) ? ErrorMessage(errors, 'alerts') : undefined}
-          >
-            <BooleanFormSelect
-              name='alerts'
-              disabled={readOnly}
-              value={values.alerts}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              invalid={ShowError('alerts', touched, errors)}
-            >
-              <option value='true'>{i18next.t('enabled')}</option>
-              <option value='false'>{i18next.t('disabled')}</option>
-            </BooleanFormSelect>
-          </FormField>
-
-          {values.alerts !== false && (
+          <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
             <FormField
-              label={i18next.t('temperature:alert_below')}
-              error={ShowError('minAlert', touched, errors) ? ErrorMessage(errors, 'minAlert') : undefined}
-              helpText={temperatureUnit()}
+              label={i18next.t('temperature:chart_ymin')}
+              error={ShowError('chart.ymin', touched, errors) ? ErrorMessage(errors, 'chart.ymin') : undefined}
             >
               <Input
-                name='minAlert'
+                name='chart.ymin'
+                readOnly={readOnly}
                 type='number'
-                readOnly={readOnly || values.alerts === false}
-                value={values.minAlert || ''}
+                value={values.chart ? values.chart.ymin : ''}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                invalid={ShowError('minAlert', touched, errors)}
+                invalid={ShowError('chart.ymin', touched, errors)}
               />
             </FormField>
-          )}
-
-          {values.alerts !== false && (
             <FormField
-              label={i18next.t('temperature:alert_above')}
-              error={ShowError('maxAlert', touched, errors) ? ErrorMessage(errors, 'maxAlert') : undefined}
-              helpText={temperatureUnit()}
+              label={i18next.t('temperature:chart_ymax')}
+              error={ShowError('chart.ymax', touched, errors) ? ErrorMessage(errors, 'chart.ymax') : undefined}
             >
               <Input
-                name='maxAlert'
+                name='chart.ymax'
+                readOnly={readOnly}
                 type='number'
-                readOnly={readOnly || values.alerts === false}
-                value={values.maxAlert || ''}
+                value={values.chart ? values.chart.ymax : ''}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                invalid={ShowError('maxAlert', touched, errors)}
+                invalid={ShowError('chart.ymax', touched, errors)}
               />
             </FormField>
-          )}
-        </div>
+            <FormField label={i18next.t('temperature:chart_color')}>
+              <ColorPicker
+                name={NameFor(values.name, 'chart.color')}
+                readOnly={readOnly}
+                color={values.chart ? values.chart.color : ''}
+                onChangeHandler={updateChartColor}
+              />
+            </FormField>
+          </div>
+
+          <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
+            <FormField
+              label={i18next.t('alerts')}
+              error={ShowError('alerts', touched, errors) ? ErrorMessage(errors, 'alerts') : undefined}
+            >
+              <BooleanFormSelect
+                name='alerts'
+                disabled={readOnly}
+                value={values.alerts}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                invalid={ShowError('alerts', touched, errors)}
+              >
+                <option value='true'>{i18next.t('enabled')}</option>
+                <option value='false'>{i18next.t('disabled')}</option>
+              </BooleanFormSelect>
+            </FormField>
+
+            {values.alerts !== false && (
+              <FormField
+                label={i18next.t('temperature:alert_below')}
+                error={ShowError('minAlert', touched, errors) ? ErrorMessage(errors, 'minAlert') : undefined}
+                helpText={temperatureUnit()}
+              >
+                <Input
+                  name='minAlert'
+                  type='number'
+                  readOnly={readOnly || values.alerts === false}
+                  value={values.minAlert || ''}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  invalid={ShowError('minAlert', touched, errors)}
+                />
+              </FormField>
+            )}
+
+            {values.alerts !== false && (
+              <FormField
+                label={i18next.t('temperature:alert_above')}
+                error={ShowError('maxAlert', touched, errors) ? ErrorMessage(errors, 'maxAlert') : undefined}
+                helpText={temperatureUnit()}
+              >
+                <Input
+                  name='maxAlert'
+                  type='number'
+                  readOnly={readOnly || values.alerts === false}
+                  value={values.maxAlert || ''}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  invalid={ShowError('maxAlert', touched, errors)}
+                />
+              </FormField>
+            )}
+          </div>
         </section>
 
         <section className='reefpi-section-card' aria-label={i18next.t('temperature:control_safety', { defaultValue: 'Control & safety' })}>
@@ -357,130 +357,130 @@ const EditTemperature = ({
             <h3>{i18next.t('temperature:control_safety', { defaultValue: 'Control & safety' })}</h3>
             <p>{i18next.t('temperature:helper_control', { defaultValue: 'Choose a control target before setting heater or chiller thresholds. Fail-safe disables heater control when the sensor reports an error.' })}</p>
           </div>
-        <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
-          <FormField
-            label={i18next.t('temperature:control')}
-            error={ShowError('control', touched, errors) ? ErrorMessage(errors, 'control') : undefined}
-          >
-            <Select
-              name='control'
-              data-testid='smoke-temperature-control'
-              disabled={readOnly}
-              value={values.control || ''}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              invalid={ShowError('control', touched, errors)}
+          <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
+            <FormField
+              label={i18next.t('temperature:control')}
+              error={ShowError('control', touched, errors) ? ErrorMessage(errors, 'control') : undefined}
             >
-              <option value=''>{i18next.t('temperature:controlnothing')}</option>
-              <option value='macro'>{i18next.t('temperature:controlmacro')}</option>
-              <option value='equipment'>{i18next.t('temperature:controlequipment')}</option>
-            </Select>
-          </FormField>
+              <Select
+                name='control'
+                data-testid='smoke-temperature-control'
+                disabled={readOnly}
+                value={values.control || ''}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                invalid={ShowError('control', touched, errors)}
+              >
+                <option value=''>{i18next.t('temperature:controlnothing')}</option>
+                <option value='macro'>{i18next.t('temperature:controlmacro')}</option>
+                <option value='equipment'>{i18next.t('temperature:controlequipment')}</option>
+              </Select>
+            </FormField>
 
-          <FormField
-            label={i18next.t('temperature:lower_function')}
-            error={ShowError('heater', touched, errors) ? ErrorMessage(errors, 'heater') : undefined}
-          >
-            <Select
-              name='heater'
-              data-testid='smoke-temperature-heater'
-              disabled={readOnly || values.control === ''}
-              value={values.heater || ''}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              invalid={ShowError('heater', touched, errors)}
+            <FormField
+              label={i18next.t('temperature:lower_function')}
+              error={ShowError('heater', touched, errors) ? ErrorMessage(errors, 'heater') : undefined}
             >
-              <option value=''>{i18next.t('temperature:controlnothing')}</option>
-              {controlOptions()}
-            </Select>
-          </FormField>
+              <Select
+                name='heater'
+                data-testid='smoke-temperature-heater'
+                disabled={readOnly || values.control === ''}
+                value={values.heater || ''}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                invalid={ShowError('heater', touched, errors)}
+              >
+                <option value=''>{i18next.t('temperature:controlnothing')}</option>
+                {controlOptions()}
+              </Select>
+            </FormField>
 
-          <FormField
-            label={i18next.t('temperature:lower_threshold')}
-            error={ShowError('min', touched, errors) ? ErrorMessage(errors, 'min') : undefined}
-            helpText={temperatureUnit()}
-          >
-            <Input
-              name='min'
-              data-testid='smoke-temperature-min'
-              readOnly={readOnly || values.control === '' || values.heater === undefined || values.heater === ''}
-              value={values.min || ''}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              invalid={ShowError('min', touched, errors)}
-            />
-          </FormField>
-        </div>
-
-        <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
-          <FormField
-            label={i18next.t('temperature:upper_function')}
-            error={ShowError('cooler', touched, errors) ? ErrorMessage(errors, 'cooler') : undefined}
-          >
-            <Select
-              name='cooler'
-              data-testid='smoke-temperature-cooler'
-              disabled={readOnly || values.control === ''}
-              value={values.cooler || ''}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              invalid={ShowError('cooler', touched, errors)}
+            <FormField
+              label={i18next.t('temperature:lower_threshold')}
+              error={ShowError('min', touched, errors) ? ErrorMessage(errors, 'min') : undefined}
+              helpText={temperatureUnit()}
             >
-              <option value=''>{i18next.t('temperature:controlnothing')}</option>
-              {controlOptions()}
-            </Select>
-          </FormField>
+              <Input
+                name='min'
+                data-testid='smoke-temperature-min'
+                readOnly={readOnly || values.control === '' || values.heater === undefined || values.heater === ''}
+                value={values.min || ''}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                invalid={ShowError('min', touched, errors)}
+              />
+            </FormField>
+          </div>
 
-          <FormField
-            label={i18next.t('temperature:upper_threshold')}
-            error={ShowError('max', touched, errors) ? ErrorMessage(errors, 'max') : undefined}
-            helpText={temperatureUnit()}
-          >
-            <Input
-              name='max'
-              data-testid='smoke-temperature-max'
-              readOnly={readOnly || values.control === '' || values.cooler === undefined || values.cooler === ''}
-              value={values.max || ''}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              invalid={ShowError('max', touched, errors)}
-            />
-          </FormField>
-        </div>
-
-        <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
-          <FormField
-            label={i18next.t('temperature:hysteresis')}
-            error={ShowError('hysteresis', touched, errors) ? ErrorMessage(errors, 'hysteresis') : undefined}
-            helpText={temperatureUnit()}
-          >
-            <Input
-              name='hysteresis'
-              readOnly={readOnly || values.control === ''}
-              value={values.hysteresis || ''}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              invalid={ShowError('hysteresis', touched, errors)}
-            />
-          </FormField>
-
-          <FormField
-            label={i18next.t('temperature:fail_safe')}
-            error={ShowError('fail_safe', touched, errors) ? ErrorMessage(errors, 'fail_safe') : undefined}
-          >
-            <BooleanFormSelect
-              name='fail_safe'
-              disabled={readOnly}
-              value={values.fail_safe}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              invalid={ShowError('fail_safe', touched, errors)}
+          <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
+            <FormField
+              label={i18next.t('temperature:upper_function')}
+              error={ShowError('cooler', touched, errors) ? ErrorMessage(errors, 'cooler') : undefined}
             >
-              <option value='true'>{i18next.t('enabled')}</option>
-              <option value='false'>{i18next.t('disabled')}</option>
-            </BooleanFormSelect>
-          </FormField>
-        </div>
+              <Select
+                name='cooler'
+                data-testid='smoke-temperature-cooler'
+                disabled={readOnly || values.control === ''}
+                value={values.cooler || ''}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                invalid={ShowError('cooler', touched, errors)}
+              >
+                <option value=''>{i18next.t('temperature:controlnothing')}</option>
+                {controlOptions()}
+              </Select>
+            </FormField>
+
+            <FormField
+              label={i18next.t('temperature:upper_threshold')}
+              error={ShowError('max', touched, errors) ? ErrorMessage(errors, 'max') : undefined}
+              helpText={temperatureUnit()}
+            >
+              <Input
+                name='max'
+                data-testid='smoke-temperature-max'
+                readOnly={readOnly || values.control === '' || values.cooler === undefined || values.cooler === ''}
+                value={values.max || ''}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                invalid={ShowError('max', touched, errors)}
+              />
+            </FormField>
+          </div>
+
+          <div style={{ ...gridStyle, marginTop: 'var(--reefpi-space-md)' }}>
+            <FormField
+              label={i18next.t('temperature:hysteresis')}
+              error={ShowError('hysteresis', touched, errors) ? ErrorMessage(errors, 'hysteresis') : undefined}
+              helpText={temperatureUnit()}
+            >
+              <Input
+                name='hysteresis'
+                readOnly={readOnly || values.control === ''}
+                value={values.hysteresis || ''}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                invalid={ShowError('hysteresis', touched, errors)}
+              />
+            </FormField>
+
+            <FormField
+              label={i18next.t('temperature:fail_safe')}
+              error={ShowError('fail_safe', touched, errors) ? ErrorMessage(errors, 'fail_safe') : undefined}
+            >
+              <BooleanFormSelect
+                name='fail_safe'
+                disabled={readOnly}
+                value={values.fail_safe}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                invalid={ShowError('fail_safe', touched, errors)}
+              >
+                <option value='true'>{i18next.t('enabled')}</option>
+                <option value='false'>{i18next.t('disabled')}</option>
+              </BooleanFormSelect>
+            </FormField>
+          </div>
         </section>
 
         {charts()}

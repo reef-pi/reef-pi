@@ -72,28 +72,30 @@ class Collapsible extends React.Component {
         ]}
       />
     )
-    const trailing = this.props.separateEdit && !readOnly ? null : (
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end', gap: 'var(--reefpi-space-xxs)', alignItems: 'center' }}>
-        {this.props.buttons}
-        {readOnly ? toggleStateButton : null}
-        {this.props.overflowActions && readOnly
-          ? overflowMenu
-          : (
-            <>
-              {readOnly ? editButton : null}
-              <Button
-                variant='ghost'
-                onClick={this.handleDelete}
-                id={'delete-' + name}
-                icon={<FaTrashAlt />}
-                iconOnly
-                aria-label='Delete'
-                title='Delete'
-              />
-            </>
-            )}
-      </div>
-    )
+    const trailing = this.props.separateEdit && !readOnly
+      ? null
+      : (
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end', gap: 'var(--reefpi-space-xxs)', alignItems: 'center' }}>
+          {this.props.buttons}
+          {readOnly ? toggleStateButton : null}
+          {this.props.overflowActions && readOnly
+            ? overflowMenu
+            : (
+              <>
+                {readOnly ? editButton : null}
+                <Button
+                  variant='ghost'
+                  onClick={this.handleDelete}
+                  id={'delete-' + name}
+                  icon={<FaTrashAlt />}
+                  iconOnly
+                  aria-label='Delete'
+                  title='Delete'
+                />
+              </>
+              )}
+        </div>
+        )
 
     const visibleElements = this.props.separateEdit
       ? (readOnly ? elements.slice(0, -1) : [form])
