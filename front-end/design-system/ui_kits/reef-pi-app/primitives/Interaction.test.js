@@ -81,6 +81,24 @@ describe('design-system interaction primitives', () => {
     expect(document.activeElement).toBe(trigger)
   })
 
+  it('leaves focus in a dialog that the selected item opened (#3314)', () => {
+    const open = () => {
+      const dialog = document.createElement('div')
+      dialog.setAttribute('role', 'dialog')
+      dialog.innerHTML = '<button id="confirm">Ok</button>'
+      document.body.appendChild(dialog)
+      dialog.querySelector('#confirm').focus()
+    }
+    render(<Menu buttonLabel='More' items={[{ label: 'Delete', onSelect: open }]} />)
+    const trigger = document.querySelector('button')
+
+    act(() => trigger.click())
+    act(() => document.querySelector('[role="menuitem"]').click())
+
+    expect(document.querySelector('[role="menu"]')).toBeNull()
+    expect(document.activeElement).toBe(document.getElementById('confirm'))
+  })
+
   it('gives an icon-only Menu trigger an explicit accessible name', () => {
     render(
       <Menu

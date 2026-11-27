@@ -490,54 +490,6 @@ textarea:focus,
   }
 }
 
-.modal-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 1040;
-  background: color-mix(in srgb, var(--reefpi-color-text) 50%, transparent);
-}
-
-.modal {
-  position: fixed;
-  inset: 0;
-  z-index: 1050;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--reefpi-space-md);
-  overflow-y: auto;
-}
-
-.modal-dialog {
-  width: min(28rem, 100%);
-  margin: auto;
-}
-
-.modal-content {
-  padding: var(--reefpi-space-md);
-  background: var(--reefpi-color-surface-elevated);
-  color: var(--reefpi-color-text);
-  border: 1px solid var(--reefpi-color-border);
-  border-radius: var(--reefpi-radius-md);
-}
-
-.modal-title {
-  margin: 0 0 var(--reefpi-space-xs);
-  font-size: 1.125rem;
-  font-weight: var(--reefpi-weight-bold);
-}
-
-.modal-body {
-  margin-bottom: var(--reefpi-space-md);
-  overflow-wrap: anywhere;
-}
-
-.modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: var(--reefpi-space-sm);
-}
-
 .connectors-shell {
   display: flex;
   flex-direction: column;
