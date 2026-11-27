@@ -410,6 +410,7 @@ log:emitter,Emissor
 log:time,Tempo
 log:type,Tipo
 macro:action,Acção
+macro:actions,
 macro:add_macro,
 macro:alert:message,Mensagem
 macro:alert:title,Titulo
@@ -425,6 +426,7 @@ macro:reverting,Revertendo
 macro:run,Correr
 macro:running,A Correr
 macro:steps,Passo
+macro:summary_section,
 macro:system,Sistema
 macro:title_delete,Apagar
 macro:turn_off,Desligar
