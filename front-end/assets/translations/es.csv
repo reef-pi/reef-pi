@@ -75,6 +75,7 @@ upgrade_reef_pi,Actualizar reef-pi a version
 width,Anchura
 yes,
 ato:actions,
+ato:add_ato,
 ato:alert_after,Alerta despues de
 ato:alert_summary,
 ato:ato_usage,Uso del ATO
@@ -86,6 +87,8 @@ ato:controlmacro,Macro
 ato:controlnothing,Nada
 ato:debounce,Debounce
 ato:disable_on_alert,Desactivar si ocurre la alerta
+ato:empty_body,
+ato:empty_title,
 ato:empty_usage,
 ato:helper_pump,
 ato:helper_safety,
@@ -100,6 +103,8 @@ ato:total_seconds_pump_on,Tiempo en segundos que el ATO tenga encendido
 ato:warn_delete,Esta acción eliminará
 ato:warn_reset,
 camera:capture_flags,
+camera:empty_body,
+camera:empty_title,
 camera:enable,
 camera:take_photo,
 camera:target_dir,
@@ -211,6 +216,7 @@ dashboard:setup_ph_description,
 dashboard:setup_temperature,
 dashboard:setup_temperature_description,
 doser:actions,
+doser:add_pump,
 doser:calibrate,
 doser:calibration:current_rate,
 doser:calibration:dispensing,
@@ -249,6 +255,8 @@ doser:direction_pin,
 doser:doser_usage,
 doser:dosing_section,
 doser:duration,
+doser:empty_body,
+doser:empty_title,
 doser:microstep:1/16,
 doser:microstep:1/2,
 doser:microstep:1/32,
@@ -275,6 +283,7 @@ doser:vpr,
 doser:warn_delete,
 doser:warn_reset,
 equipment:actions,
+equipment:add,
 equipment:boot_delay,
 equipment:chart:barchart,Equipo(Gráfica de Barras)
 equipment:chart:ctrlpanel,Equipo(Panel de Interruptores)
@@ -283,6 +292,8 @@ equipment:command_pending,
 equipment:command_state_unknown,
 equipment:commanded_off,
 equipment:commanded_on,
+equipment:no_equipment,
+equipment:no_equipment_body,
 equipment:sort,Sort
 equipment:sort_name_az,Name (A→Z)
 equipment:sort_name_za,Name (Z→A)
@@ -315,6 +326,8 @@ instances:warn_delete,
 journal:add_entry,
 journal:comment,
 journal:description,
+journal:empty_body,
+journal:empty_title,
 journal:timestamp,
 journal:title_delete,
 journal:unit,Unidad
@@ -333,6 +346,7 @@ language:pt,
 language:pt-BR,Português (Brasil)
 language:zh,
 lighting:actions,
+lighting:add_light,
 lighting:add_point,
 lighting:change_mode,
 lighting:channel,
@@ -340,6 +354,8 @@ lighting:channel_name,Nombre del Canal
 lighting:chart_color,Color
 lighting:cyclic_period,
 lighting:cyclic_phase_shift,
+lighting:empty_body,
+lighting:empty_title,
 lighting:fixture_help,
 lighting:fixture_settings,
 lighting:intensity_at,
@@ -394,9 +410,12 @@ log:emitter,Emisor
 log:time,Hora
 log:type,Tipo
 macro:action,
+macro:add_macro,
 macro:alert:message,
 macro:alert:title,
 macro:drag_to_reorder,Drag to reorder
+macro:empty_body,
+macro:empty_title,
 macro:one_step_required,
 macro:pwm:jack,Jack
 macro:pwm:value,Value (%)
@@ -436,6 +455,7 @@ page:ph,
 page:temperature,
 page:timers,
 ph:actions,
+ph:add_probe,
 ph:alert_above,Alerta Sobre
 ph:alert_below,Alerta Bajo
 ph:alert_range,
@@ -460,7 +480,9 @@ ph:controlequipment,Equipo
 ph:controlmacro,Macro
 ph:controlnothing,Nada
 ph:current_reading,Lectura Actual
+ph:empty_body,
 ph:empty_readings,
+ph:empty_title,
 ph:helper_chart,
 ph:helper_control,
 ph:helper_probe,
@@ -556,9 +578,12 @@ temperature:visualization_alerts,
 temperature:warn_delete,Esta accion ser à eliminada
 temperature:warn_reset,
 timers:action,
+timers:add_timer,
 timers:after,Despues
 timers:and_then,Luego
 timers:duration,
+timers:empty_body,
+timers:empty_title,
 timers:function,Funcion
 timers:message,Mensaje
 timers:reverse,

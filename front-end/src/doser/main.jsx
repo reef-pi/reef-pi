@@ -216,9 +216,9 @@ export class RawDoser extends React.Component {
       return (
         <EmptyState
           icon={<DoserIcon />}
-          title='No dosing pumps yet'
-          body='Add a pump to automate two-part, calcium, or kalkwasser dosing.'
-          action={{ label: 'Add dosing pump', onClick: this.handleToggleAddDoserDiv, testId: 'smoke-doser-add-toggle' }}
+          title={i18n.t('doser:empty_title', { defaultValue: 'No dosing pumps yet' })}
+          body={i18n.t('doser:empty_body', { defaultValue: 'Add a pump to automate two-part, calcium, or kalkwasser dosing.' })}
+          action={{ label: i18n.t('doser:add_pump', { defaultValue: 'Add dosing pump' }), onClick: this.handleToggleAddDoserDiv, testId: 'smoke-doser-add-toggle' }}
         />
       )
     }

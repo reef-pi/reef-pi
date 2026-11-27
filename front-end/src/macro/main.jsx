@@ -176,9 +176,9 @@ export class RawMacroMain extends React.Component {
     if (this.props.macros.length === 0 && !this.state.addMacro) {
       return (
         <EmptyState
-          title='No macros yet'
-          body='Create a macro to run multiple equipment actions in sequence.'
-          action={{ label: 'Add macro', onClick: this.handleToggleAddMacroDiv, testId: 'smoke-macro-add-toggle' }}
+          title={i18n.t('macro:empty_title', { defaultValue: 'No macros yet' })}
+          body={i18n.t('macro:empty_body', { defaultValue: 'Create a macro to run multiple equipment actions in sequence.' })}
+          action={{ label: i18n.t('macro:add_macro', { defaultValue: 'Add macro' }), onClick: this.handleToggleAddMacroDiv, testId: 'smoke-macro-add-toggle' }}
         />
       )
     }

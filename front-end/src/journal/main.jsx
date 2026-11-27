@@ -64,9 +64,9 @@ export class RawJournalMain extends React.Component {
       return (
         <EmptyState
           testId='smoke-journal-empty'
-          title='No journal entries'
-          body='Log observations, parameter changes, and livestock additions.'
-          action={{ label: 'Add entry', onClick: this.handleAddFirstJournal, testId: 'smoke-journal-add-toggle' }}
+          title={i18next.t('journal:empty_title', { defaultValue: 'No journal entries' })}
+          body={i18next.t('journal:empty_body', { defaultValue: 'Log observations, parameter changes, and livestock additions.' })}
+          action={{ label: i18next.t('journal:add_entry', { defaultValue: 'Add entry' }), onClick: this.handleAddFirstJournal, testId: 'smoke-journal-add-toggle' }}
         />
       )
     }

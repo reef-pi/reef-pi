@@ -75,6 +75,7 @@ upgrade_reef_pi,Aktualisiere reef-pi auf Version
 width,Breite
 yes,Ja
 ato:actions,
+ato:add_ato,
 ato:alert_after,Alarm nach Laufzeit von
 ato:alert_summary,
 ato:ato_usage,ATO Nutzung
@@ -86,6 +87,8 @@ ato:controlmacro,Makro ausführen
 ato:controlnothing,-keine Steuerung-
 ato:debounce,Debounce
 ato:disable_on_alert,ATO nach Alarm ausschalten
+ato:empty_body,
+ato:empty_title,
 ato:empty_usage,
 ato:helper_pump,
 ato:helper_safety,
@@ -100,6 +103,8 @@ ato:total_seconds_pump_on,gesamte Laufzeit der Pumpe
 ato:warn_delete,Wollen Sie ATO {{name}} wirklich löschen?
 ato:warn_reset,Wollen Sie den Verlauf von {{name}} wirklich löschen?
 camera:capture_flags,Aufnahmeoptionen
+camera:empty_body,
+camera:empty_title,
 camera:enable,Aktiv
 camera:take_photo,Aufnahme!
 camera:target_dir,Zielverzeichnis
@@ -211,6 +216,7 @@ dashboard:setup_ph_description,
 dashboard:setup_temperature,
 dashboard:setup_temperature_description,
 doser:actions,
+doser:add_pump,
 doser:calibrate,Kalibrieren
 doser:calibration:current_rate,
 doser:calibration:dispensing,
@@ -249,6 +255,8 @@ doser:direction_pin,
 doser:doser_usage,Pumpennutzung
 doser:dosing_section,
 doser:duration,Dauer
+doser:empty_body,
+doser:empty_title,
 doser:microstep:1/16,
 doser:microstep:1/2,
 doser:microstep:1/32,
@@ -275,6 +283,7 @@ doser:vpr,
 doser:warn_delete,Wollen Sie die Dosierpumpe {{name}} wirklich löschen?
 doser:warn_reset,Wollen Sie den Verlauf von {{name}} wirklich löschen?
 equipment:actions,
+equipment:add,
 equipment:boot_delay,
 equipment:chart:barchart,Geräte (Balken)
 equipment:chart:ctrlpanel,Geräte (Schalter)
@@ -283,6 +292,8 @@ equipment:command_pending,
 equipment:command_state_unknown,
 equipment:commanded_off,
 equipment:commanded_on,
+equipment:no_equipment,
+equipment:no_equipment_body,
 equipment:sort,Sort
 equipment:sort_name_az,Name (A→Z)
 equipment:sort_name_za,Name (Z→A)
@@ -315,6 +326,8 @@ instances:warn_delete,Wollen Sie die Instanz {{name}} wirklich löschen?
 journal:add_entry,Neuer Eintrag
 journal:comment,Kommentar
 journal:description,Beschreibung
+journal:empty_body,
+journal:empty_title,
 journal:timestamp,Datum
 journal:title_delete,Notiz {{name}} löschen?
 journal:unit,Einheit
@@ -333,6 +346,7 @@ language:pt,Portuguesa
 language:pt-BR,Português (Brasil)
 language:zh,中文
 lighting:actions,
+lighting:add_light,
 lighting:add_point,Neuer Punkt
 lighting:change_mode,Modus ändern
 lighting:channel,
@@ -340,6 +354,8 @@ lighting:channel_name,Kanalname
 lighting:chart_color,Diagrammfarbe
 lighting:cyclic_period,
 lighting:cyclic_phase_shift,
+lighting:empty_body,
+lighting:empty_title,
 lighting:fixture_help,
 lighting:fixture_settings,
 lighting:intensity_at,
@@ -394,9 +410,12 @@ log:emitter,Sender
 log:time,Zeit
 log:type,Typ
 macro:action,Aktion
+macro:add_macro,
 macro:alert:message,Nachricht
 macro:alert:title,Titel
 macro:drag_to_reorder,Drag to reorder
+macro:empty_body,
+macro:empty_title,
 macro:one_step_required,Mindestens ein Schritt ist erforderlich!
 macro:pwm:jack,Jack
 macro:pwm:value,Value (%)
@@ -436,6 +455,7 @@ page:ph,
 page:temperature,
 page:timers,
 ph:actions,
+ph:add_probe,
 ph:alert_above,obere Warnschwelle
 ph:alert_below,untere Warnschwelle
 ph:alert_range,
@@ -460,7 +480,9 @@ ph:controlequipment,Gerät schalten
 ph:controlmacro,Makro ausführen
 ph:controlnothing,-keine Steuerung-
 ph:current_reading,aktueller Wert
+ph:empty_body,
 ph:empty_readings,
+ph:empty_title,
 ph:helper_chart,
 ph:helper_control,
 ph:helper_probe,
@@ -556,9 +578,12 @@ temperature:visualization_alerts,
 temperature:warn_delete,Wollen Sie die Regelung {{name}} wirklich löschen?
 temperature:warn_reset,Wollen Sie den Verlauf von {{name}} wirklich löschen?
 timers:action,Aktion
+timers:add_timer,
 timers:after,... nach
 timers:and_then,... danach
 timers:duration,Dauer
+timers:empty_body,
+timers:empty_title,
 timers:function,Funktion
 timers:message,Nachricht
 timers:reverse,

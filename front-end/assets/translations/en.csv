@@ -75,6 +75,7 @@ upgrade_reef_pi,Upgrade reef-pi to version
 width,Width
 yes,Yes
 ato:actions,Actions for {{name}}
+ato:add_ato,Add ATO
 ato:alert_after,Alert After
 ato:alert_summary,After {{seconds}} s pump-on time
 ato:ato_usage,ATO Usage
@@ -86,6 +87,8 @@ ato:controlmacro,Macro
 ato:controlnothing,Nothing
 ato:debounce,Debounce
 ato:disable_on_alert,Disable on alert
+ato:empty_body,Connect a water level sensor to automate top-off dosing.
+ato:empty_title,No ATO configured
 ato:empty_usage,No top-off usage yet. Usage appears after reef-pi commands the configured target.
 ato:helper_pump,Choose what reef-pi commands when the inlet requests top-off. The target stays unavailable until a control type is selected.
 ato:helper_safety,Alerts use accumulated pump-on time. Disable on alert stops this controller after that alert threshold is reached.
@@ -100,6 +103,8 @@ ato:total_seconds_pump_on,Total number of seconds ato pump is on
 ato:warn_delete,This action will delete ATO {{name}}
 ato:warn_reset,This action will reset usage data for ATO {{name}}
 camera:capture_flags,Capture flags
+camera:empty_body,Capture an image to get started.
+camera:empty_title,No images yet
 camera:enable,Enable
 camera:take_photo,Take Photo!
 camera:target_dir,Image Directory
@@ -211,6 +216,7 @@ dashboard:setup_ph_description,Add and calibrate a pH probe.
 dashboard:setup_temperature,Set up temperature
 dashboard:setup_temperature_description,Add a temperature probe for live readings.
 doser:actions,Actions for {{name}}
+doser:add_pump,Add dosing pump
 doser:calibrate,Calibrate
 doser:calibration:current_rate,Calibrated rate
 doser:calibration:dispensing,Dispensing {{volume}} mL. Check the cylinder once the pump stops.
@@ -249,6 +255,8 @@ doser:direction_pin,Direction Pin
 doser:doser_usage,Pump Usage
 doser:dosing_section,Dosing
 doser:duration,Duration
+doser:empty_body,"Add a pump to automate two-part, calcium, or kalkwasser dosing."
+doser:empty_title,No dosing pumps yet
 doser:microstep:1/16,1/16
 doser:microstep:1/2,Half
 doser:microstep:1/32,1/32
@@ -275,6 +283,7 @@ doser:vpr,Volume Per Rotation
 doser:warn_delete,This action will delete doser {{name}}
 doser:warn_reset,This action will reset usage data for doser {{name}}
 equipment:actions,Equipment actions
+equipment:add,Add equipment
 equipment:boot_delay,Boot Delay (seconds)
 equipment:chart:barchart,Equipment(Bar Chart)
 equipment:chart:ctrlpanel,Equipment(Switch Panel)
@@ -283,6 +292,8 @@ equipment:command_pending,Command pending
 equipment:command_state_unknown,Command state unknown
 equipment:commanded_off,Commanded off
 equipment:commanded_on,Commanded on
+equipment:no_equipment,No equipment yet
+equipment:no_equipment_body,"Add your first pump, heater, or skimmer."
 equipment:sort,Sort
 equipment:sort_name_az,Name (A→Z)
 equipment:sort_name_za,Name (Z→A)
@@ -315,6 +326,8 @@ instances:warn_delete,This action will delete instance {{name}}
 journal:add_entry,Add entry
 journal:comment,Comment
 journal:description,Description
+journal:empty_body,"Log observations, parameter changes, and livestock additions."
+journal:empty_title,No journal entries
 journal:timestamp,Date
 journal:title_delete,Delete journal {{name}} ?
 journal:unit,Unit
@@ -333,6 +346,7 @@ language:pt,Portuguesa
 language:pt-BR,Português (Brasil)
 language:zh,中文
 lighting:actions,Actions
+lighting:add_light,Add light
 lighting:add_point,Add point
 lighting:change_mode,Change Mode
 lighting:channel,Light channel
@@ -340,6 +354,8 @@ lighting:channel_name,Channel Name
 lighting:chart_color,Color
 lighting:cyclic_period,Period
 lighting:cyclic_phase_shift,Phase Shift
+lighting:empty_body,Add an LED fixture or light channel to automate your reef lighting schedule.
+lighting:empty_title,No lights configured
 lighting:fixture_help,"Name the fixture, choose its jack, and configure each PWM channel below."
 lighting:fixture_settings,Light settings
 lighting:intensity_at,Intensity at {{time}} (%)
@@ -394,9 +410,12 @@ log:emitter,Emitter
 log:time,Time
 log:type,Type
 macro:action,Action
+macro:add_macro,Add macro
 macro:alert:message,message
 macro:alert:title,title
 macro:drag_to_reorder,Drag to reorder
+macro:empty_body,Create a macro to run multiple equipment actions in sequence.
+macro:empty_title,No macros yet
 macro:one_step_required,At least one step is required!
 macro:pwm:jack,Jack
 macro:pwm:value,Value (%)
@@ -436,6 +455,7 @@ page:ph,pH probes and their calibration
 page:temperature,Temperature probes with heater and chiller control
 page:timers,Scheduled actions for equipment and macros
 ph:actions,Actions for {{name}}
+ph:add_probe,Add pH probe
 ph:alert_above,Alert Above
 ph:alert_below,Alert Below
 ph:alert_range,Alert range
@@ -460,7 +480,9 @@ ph:controlequipment,Equipment
 ph:controlmacro,Macro
 ph:controlnothing,Nothing
 ph:current_reading,Current Reading
+ph:empty_body,Add a probe to monitor and control reef pH.
 ph:empty_readings,No pH readings yet. Data appears after the first successful sample.
+ph:empty_title,No pH probes yet
 ph:helper_chart,How readings are charted and the range outside which reef-pi sends an alert.
 ph:helper_control,Equipment or a macro that raises or lowers pH when a reading crosses a threshold. Hysteresis stops it switching back and forth near a threshold.
 ph:helper_probe,The analog input the probe is wired to and how often reef-pi reads it.
@@ -556,9 +578,12 @@ temperature:visualization_alerts,Visualization & alerts
 temperature:warn_delete,This action will delete controller {{name}}
 temperature:warn_reset,This action will reset usage data for {{name}}
 timers:action,Action
+timers:add_timer,Add timer
 timers:after,After
 timers:and_then,And Then
 timers:duration,Duration
+timers:empty_body,Schedule equipment on/off events by creating a timer.
+timers:empty_title,No timers yet
 timers:function,Function
 timers:message,Message
 timers:reverse,Reverse
