@@ -89,14 +89,14 @@ export class RawEquipmentMain extends React.Component {
             onClick={this.handleToggleAddEquipmentDiv}
           />
           <div style={sortStyle}>
-          <Field id='equipment-sort' label={i18next.t('equipment:sort')}>
-            <Select
-              id='equipment-sort'
-              value={this.state.sortMode}
-              onChange={this.handleSortChange}
-              options={sortOptions.map(option => ({ value: option.value, label: i18next.t(option.label) }))}
-            />
-          </Field>
+            <Field id='equipment-sort' label={i18next.t('equipment:sort')}>
+              <Select
+                id='equipment-sort'
+                value={this.state.sortMode}
+                onChange={this.handleSortChange}
+                options={sortOptions.map(option => ({ value: option.value, label: i18next.t(option.label) }))}
+              />
+            </Field>
           </div>
         </div>
         {newEquipmentForm && <section className='reefpi-section-card'>{newEquipmentForm}</section>}
