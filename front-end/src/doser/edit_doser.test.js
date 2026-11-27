@@ -115,4 +115,16 @@ describe('<EditPh />', () => {
     const message = Alert.showError.mock.calls[Alert.showError.mock.calls.length - 1][0]
     expect(message).not.toMatch(/null|undefined/)
   })
+
+  it('<EditDoser /> offers Cancel next to Save when editing an existing pump (#3305)', () => {
+    const onCancel = jest.fn()
+    const props = { values: { type: 'dcpump' }, jacks, doser, errors: {}, touched: {}, handleBlur: fn, handleChange: fn, submitForm: fn, setFieldValue: fn }
+    const tree = EditDoser({ ...props, onCancel })
+    const cancel = findAll(tree, node => node.props?.['data-testid'] === 'doser-cancel')
+    expect(cancel).toHaveLength(1)
+    cancel[0].props.onClick()
+    expect(onCancel).toHaveBeenCalled()
+    expect(findAll(tree, node => node.props?.className === 'reefpi-controller-form__actions')).toHaveLength(1)
+    expect(findAll(EditDoser(props), node => node.props?.['data-testid'] === 'doser-cancel')).toHaveLength(0)
+  })
 })

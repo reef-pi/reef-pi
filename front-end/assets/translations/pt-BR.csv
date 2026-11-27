@@ -210,6 +210,7 @@ dashboard:setup_ph,
 dashboard:setup_ph_description,
 dashboard:setup_temperature,
 dashboard:setup_temperature_description,
+doser:actions,
 doser:calibrate,calibrar
 doser:calibration:current_rate,
 doser:calibration:dispensing,
@@ -237,11 +238,16 @@ doser:calibration:step_dispense,
 doser:calibration:step_measure,
 doser:calibration:step_run,
 doser:calibration:volume_help,
+doser:connection,
 doser:continuous,
+doser:continuous_mode,
+doser:daily_at,
+doser:daily_fields,
 doser:delay,espera
 doser:direction,direção
 doser:direction_pin,pino de direção
 doser:doser_usage,Uso do dosador
+doser:dosing_section,
 doser:duration,duração
 doser:microstep:1/16,1/16
 doser:microstep:1/2,1/2
@@ -253,12 +259,16 @@ doser:microstepping,micropasso
 doser:ms_pin_a,Pino A
 doser:ms_pin_b,Pino B
 doser:ms_pin_c,Pino C
+doser:pump_section,
+doser:schedule_fields,
 doser:soft_start,
 doser:speed,Velocidade
 doser:spr,spr
 doser:step_pin,Pino de passo
 doser:title_delete,Excluir
 doser:type,Tipo
+doser:type_dcpump,
+doser:type_stepper,
 doser:volume,Volume
 doser:volume_ml,
 doser:vpr,vpr

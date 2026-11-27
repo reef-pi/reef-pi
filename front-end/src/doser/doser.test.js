@@ -2,6 +2,7 @@ import React from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import Main, { RawDoser } from './main'
 import 'isomorphic-fetch'
+import DoserSummary from './doser_summary'
 import DoserForm, { mapDoserPropsToValues, submitDoserForm } from './doser_form'
 
 jest.mock('utils/confirm', () => ({
@@ -236,6 +237,17 @@ describe('Doser ui', () => {
     expect(dosers.map(item => item.name)).toEqual(['doser B', 'doser A'])
   })
 
+  it('<Main /> doserList shows a read-only summary with edit and delete behind the actions menu (#3305)', () => {
+    const component = makeComponent()
+    const [item] = component.doserList()
+    expect(item.props.separateEdit).toBe(true)
+    expect(item.props.overflowActions).toBe(true)
+    expect(item.props.actionsLabel).toBe('Actions for doser')
+    const children = React.Children.toArray(item.props.children)
+    expect(children[0].type).toBe(DoserSummary)
+    expect(children[children.length - 1].type).toBe(DoserForm)
+  })
+
   it('<Main /> doserList toggle enable calls update', () => {
     const update = jest.fn()
     const component = makeComponent({ update })
@@ -330,7 +342,7 @@ describe('Doser ui', () => {
       doserUsage: { 1: {} },
       fetchDoserUsage: jest.fn()
     })
-    const primitives = component.doserList()[0].props.children[0]
+    const primitives = component.doserList()[0].props.children[0].props.children
     expect(renderToStaticMarkup(primitives)).toBe('')
   })
 })

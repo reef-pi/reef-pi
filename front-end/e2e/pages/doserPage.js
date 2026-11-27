@@ -69,9 +69,14 @@ class DoserPage {
     return doser
   }
 
+  // Edit and delete live in the pump's actions menu (#3305).
+  async openAction (name, action) {
+    await this.page.getByRole('button', { name: `Actions for ${name}` }).click()
+    await this.page.getByRole('menuitem', { name: action }).click()
+  }
+
   async editSchedule (name, updates) {
-    const doser = await this.findDoser(name)
-    await this.page.locator(`#edit-panel-doser-${doser.id}`).click()
+    await this.openAction(name, 'Edit')
     await this.page.getByTestId('smoke-doser-name').fill(updates.name)
     await this.page.getByTestId('smoke-cron-hour').fill(updates.hour)
     await this.page.getByTestId('smoke-cron-minute').fill(updates.minute)
@@ -96,10 +101,9 @@ class DoserPage {
   }
 
   async remove (name) {
-    const doser = await this.findDoser(name)
-    await this.page.locator(`#delete-panel-doser-${doser.id}`).click()
+    await this.openAction(name, 'Delete')
     await confirmDialog(this.page)
-    await expect(this.page.locator(`#delete-panel-doser-${doser.id}`)).toHaveCount(0)
+    await expect(this.page.getByRole('button', { name: `Actions for ${name}` })).toHaveCount(0)
   }
 
   async expectStepperValidation () {

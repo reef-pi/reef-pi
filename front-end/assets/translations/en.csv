@@ -210,6 +210,7 @@ dashboard:setup_ph,Set up pH
 dashboard:setup_ph_description,Add and calibrate a pH probe.
 dashboard:setup_temperature,Set up temperature
 dashboard:setup_temperature_description,Add a temperature probe for live readings.
+doser:actions,Actions for {{name}}
 doser:calibrate,Calibrate
 doser:calibration:current_rate,Calibrated rate
 doser:calibration:dispensing,Dispensing {{volume}} mL. Check the cylinder once the pump stops.
@@ -237,11 +238,16 @@ doser:calibration:step_dispense,Dispense a volume
 doser:calibration:step_measure,Enter the measured volume
 doser:calibration:step_run,Run the pump
 doser:calibration:volume_help,"Volume to dispense, in mL"
+doser:connection,Connection
 doser:continuous,Continuous (run indefinitely)
+doser:continuous_mode,Continuous
+doser:daily_at,Every day at {{time}}
+doser:daily_fields,"Every day: hour {{hour}}, minute {{minute}}, second {{second}}"
 doser:delay,Delay
 doser:direction, Direction
 doser:direction_pin,Direction Pin
 doser:doser_usage,Pump Usage
+doser:dosing_section,Dosing
 doser:duration,Duration
 doser:microstep:1/16,1/16
 doser:microstep:1/2,Half
@@ -253,12 +259,16 @@ doser:microstepping,Microstepping
 doser:ms_pin_a,MicroStepping Pin A
 doser:ms_pin_b,MicroStepping Pin B
 doser:ms_pin_c,MicroStepping Pin C 
+doser:pump_section,Pump
+doser:schedule_fields,"Day {{day}}, month {{month}}, weekday {{week}}: hour {{hour}}, minute {{minute}}, second {{second}}"
 doser:soft_start,Soft Start (ramp up/down)
 doser:speed,Speed
 doser:spr,Steps Per Rotation
 doser:step_pin,Step Pin
 doser:title_delete,Delete {{name}} ?
 doser:type,Type
+doser:type_dcpump,DC motor
+doser:type_stepper,Stepper
 doser:volume,Volume
 doser:volume_ml,Volume (mL per dose)
 doser:vpr,Volume Per Rotation
