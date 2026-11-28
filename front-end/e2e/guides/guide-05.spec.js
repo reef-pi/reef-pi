@@ -82,7 +82,8 @@ test('Guide 5: Configuration & Testing', async ({ page, baseURL }, testInfo) => 
     for (const [index, name, profile, what] of [[5, LIGHTS[0].name, 'fixed', 'light-fixed-profile'], [6, LIGHTS[1].name, 'interval', 'light-auto-profile']]) {
       const light = lights.find(item => item.name === name)
       const form = page.locator(`#form-light-${light.id}`)
-      await page.locator(`#edit-light-${light.id}`).click()
+      await page.getByRole('button', { name: `Actions for ${name}` }).click()
+      await page.getByRole('menuitem', { name: 'Edit' }).click()
       await expect(form).toBeVisible()
       // One profile selector per channel: apply the profile to each of the light's channels.
       const selectors = form.getByTestId('lighting-profile-selector')
