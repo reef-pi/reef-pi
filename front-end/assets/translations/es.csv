@@ -410,6 +410,7 @@ log:emitter,Emisor
 log:time,Hora
 log:type,Tipo
 macro:action,
+macro:actions,
 macro:add_macro,
 macro:alert:message,
 macro:alert:title,
@@ -425,6 +426,7 @@ macro:reverting,
 macro:run,
 macro:running,
 macro:steps,
+macro:summary_section,
 macro:system,
 macro:title_delete,
 macro:turn_off,Apagar

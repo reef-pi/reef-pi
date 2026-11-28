@@ -26,7 +26,8 @@ const EditMacro = ({
   handleChange,
   setFieldValue,
   dirty,
-  readOnly
+  readOnly,
+  onCancel
 }) => {
   const dragIndex = useRef(null)
 
@@ -53,7 +54,7 @@ const EditMacro = ({
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className='reefpi-controller-form' onSubmit={handleSubmit}>
       <div style={formGridStyle}>
         <FormField label={i18n.t('name')} error={ShowError('name', touched, errors) ? <ErrorFor errors={errors} touched={touched} name='name' /> : undefined}>
           <Input
@@ -167,7 +168,17 @@ const EditMacro = ({
       />
 
       {!readOnly && (
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 'var(--reefpi-space-xxs)' }}>
+        <div className='reefpi-controller-form__actions'>
+          {onCancel && (
+            <Button
+              type='button'
+              variant='secondary'
+              data-testid='macro-cancel'
+              onClick={onCancel}
+            >
+              {i18n.t('cancel')}
+            </Button>
+          )}
           <Button
             type='submit'
             variant={dirty ? 'primary' : 'secondary'}
@@ -188,6 +199,7 @@ EditMacro.propTypes = {
   touched: PropTypes.object,
   handleBlur: PropTypes.func.isRequired,
   submitForm: PropTypes.func.isRequired,
+  onCancel: PropTypes.func,
   onDelete: PropTypes.func,
   handleChange: PropTypes.func
 }

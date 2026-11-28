@@ -181,4 +181,32 @@ describe('<EditMacro />', () => {
     expect(container.querySelector('[name="steps.0.type"]').value).toBe('equipment')
     unmount()
   })
+
+  it('<EditMacro /> groups Cancel and Save actions and invokes Cancel without submitting', () => {
+    const onCancel = jest.fn()
+    const submitForm = jest.fn()
+    const { container, unmount } = renderMacro({
+      values,
+      onBlur: fn,
+      handleChange: fn,
+      submitForm,
+      onCancel,
+      errors: {},
+      touched: {},
+      dirty: true,
+      isValid: true
+    })
+    const actions = container.querySelector('.reefpi-controller-form__actions')
+    const cancel = container.querySelector('[data-testid="macro-cancel"]')
+    const save = container.querySelector('[data-testid="smoke-macro-submit"]')
+
+    expect(actions).not.toBeNull()
+    expect(actions.contains(cancel)).toBe(true)
+    expect(actions.contains(save)).toBe(true)
+
+    act(() => cancel.dispatchEvent(new MouseEvent('click', { bubbles: true })))
+    expect(onCancel).toHaveBeenCalledTimes(1)
+    expect(submitForm).not.toHaveBeenCalled()
+    unmount()
+  })
 })

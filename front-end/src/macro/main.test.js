@@ -1,9 +1,11 @@
 import React from 'react'
 import { act } from 'react'
-import Main, { RawMacroMain } from './main'
+import { renderToStaticMarkup } from 'react-dom/server'
+import Main, { RawMacroMain, mapStateToProps } from './main'
 import 'isomorphic-fetch'
 import fetchMock from 'fetch-mock'
 import MacroForm, { mapMacroPropsToValues, submitMacroForm } from './macro_form'
+import MacroSummary from './macro_summary'
 import Collapsible from '../ui_components/collapsible'
 import { List } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
 
@@ -296,5 +298,56 @@ describe('Macro UI', () => {
     expect(panels.map(panel => panel.props.name)).toEqual(['panel-macro-1', 'panel-macro-3', 'panel-macro-20'])
     expect(panels.map(panel => panel.props.item.name)).toEqual(['Macro 1', 'Macro 3', 'Macro 20'])
     expect(macros.map(item => item.name)).toEqual(['Macro 20', 'Macro 3', 'Macro 1'])
+  })
+
+  it('<Main /> wires summary and separate edit while retaining run and revert actions', () => {
+    const targetProps = {
+      equipment: [{ id: 'eq1', name: 'Return Pump' }],
+      timers: [{ id: 'timer1', name: 'Feed timer' }],
+      atos: [{ id: 'ato1', name: 'ATO' }],
+      tcs: [{ id: 'tc1', name: 'Temperature' }],
+      phprobes: [{ id: 'ph1', name: 'pH' }],
+      dosers: [{ id: 'doser1', name: 'Doser' }],
+      lights: [{ id: 'light1', name: 'Lights' }],
+      jacks: [{ id: 'jack1', name: 'PWM Jack' }]
+    }
+    const reversibleMacro = { ...macro, enable: false, reversible: true }
+    const main = makeMain({ macros: [reversibleMacro], ...targetProps })
+    const panel = main.macroList()[0]
+    const summary = findAll(panel, node => node.type === MacroSummary)[0]
+    const form = findAll(panel, node => node.type === MacroForm)[0]
+    const title = renderToStaticMarkup(panel.props.title)
+
+    expect(panel.props.separateEdit).toBe(true)
+    expect(panel.props.overflowActions).toBe(true)
+    expect(panel.props.actionsLabel).toBe('Actions for Foo')
+    expect(title).toContain('Foo')
+    expect(title).toContain('disabled')
+    expect(panel.props.buttons.map(button => button.props.name)).toEqual(['run-macro-1', 'reverse-macro-1'])
+    expect(summary.props.macro).toBe(reversibleMacro)
+    expect(summary.props.equipment).toBe(targetProps.equipment)
+    expect(summary.props.jacks).toBe(targetProps.jacks)
+    expect(form.props.macro).toBe(reversibleMacro)
+  })
+
+  it('<Main /> normalizes a false string in the macro title state', () => {
+    const main = makeMain({ macros: [{ ...macro, enable: 'false' }] })
+    expect(renderToStaticMarkup(main.macroList()[0].props.title)).toContain('disabled')
+  })
+
+  it('maps every macro-summary target collection from Redux state', () => {
+    const state = {
+      macros: [],
+      equipment: [],
+      timers: [],
+      atos: [],
+      tcs: [],
+      phprobes: [],
+      dosers: [],
+      lights: [],
+      jacks: []
+    }
+
+    expect(mapStateToProps(state)).toEqual(state)
   })
 })

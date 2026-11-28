@@ -18,6 +18,9 @@ import i18n from 'utils/i18n'
 import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
 import { List, ListItem } from '../../design-system/ui_kits/reef-pi-app/primitives/List'
 import AddToggle from '../ui_components/add_toggle'
+import MacroSummary from './macro_summary'
+
+const isTrue = value => value === true || value === 'true'
 
 export class RawMacroMain extends React.Component {
   constructor (props) {
@@ -58,6 +61,7 @@ export class RawMacroMain extends React.Component {
     return (
       this.props.macros.slice().sort((a, b) => SortByName(a, b))
         .map(macro => {
+          const active = isTrue(macro.enable)
           const buttons = []
           buttons.push(
             <Button
@@ -66,11 +70,11 @@ export class RawMacroMain extends React.Component {
               data-testid={'smoke-macro-run-' + macro.id}
               variant='secondary'
               style={{ marginLeft: 'auto' }}
-              disabled={macro.enable}
+              disabled={active}
               onClick={(e) => this.runMacro(e, macro)}
               key='run'
             >
-              {macro.enable ? i18n.t('macro:running') : i18n.t('macro:run')}
+              {active ? i18n.t('macro:running') : i18n.t('macro:run')}
             </Button>
           )
           if (macro.reversible) {
@@ -80,11 +84,11 @@ export class RawMacroMain extends React.Component {
                 name={'reverse-macro-' + macro.id}
                 variant='secondary'
                 style={{ marginLeft: 'auto' }}
-                disabled={macro.enable}
+                disabled={active}
                 onClick={(e) => this.revertMacro(e, macro)}
                 key='revert'
               >
-                {macro.enable ? i18n.t('macro:reverting') : i18n.t('macro:revert')}
+                {active ? i18n.t('macro:reverting') : i18n.t('macro:revert')}
               </Button>
             )
           }
@@ -95,9 +99,29 @@ export class RawMacroMain extends React.Component {
               name={'panel-macro-' + macro.id}
               item={macro}
               buttons={buttons}
-              title={<b style={{ marginLeft: 'var(--reefpi-space-xs)', verticalAlign: 'middle' }}>{macro.name}</b>}
+              title={(
+                <span className='reefpi-controller-title'>
+                  <span>{macro.name}</span>
+                  <span className='reefpi-controller-title__state'>{i18n.t(active ? 'enabled' : 'disabled')}</span>
+                </span>
+              )}
               onDelete={this.handleDeleteMacro}
+              separateEdit
+              overflowActions
+              actionsLabel={i18n.t('macro:actions', { name: macro.name, defaultValue: `Actions for ${macro.name}` })}
             >
+              <MacroSummary
+                macro={macro}
+                equipment={this.props.equipment}
+                timers={this.props.timers}
+                atos={this.props.atos}
+                tcs={this.props.tcs}
+                phprobes={this.props.phprobes}
+                dosers={this.props.dosers}
+                macros={this.props.macros}
+                lights={this.props.lights}
+                jacks={this.props.jacks}
+              />
               <MacroForm
                 onSubmit={this.handleUpdateMacro}
                 macro={macro}
@@ -197,9 +221,17 @@ export class RawMacroMain extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+export const mapStateToProps = state => {
   return {
-    macros: state.macros
+    macros: state.macros,
+    equipment: state.equipment,
+    timers: state.timers,
+    atos: state.atos,
+    tcs: state.tcs,
+    phprobes: state.phprobes,
+    dosers: state.dosers,
+    lights: state.lights,
+    jacks: state.jacks
   }
 }
 

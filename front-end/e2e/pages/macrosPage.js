@@ -93,19 +93,22 @@ class MacrosPage {
     await this.page.getByTestId(`smoke-macro-run-${macro.id}`).click()
   }
 
+  async openAction (name, action) {
+    await this.page.getByRole('button', { name: `Actions for ${name}` }).click()
+    await this.page.getByRole('menuitem', { name: action }).click()
+  }
+
   async rename (name, newName) {
-    const macro = await this.findMacro(name)
-    await this.page.locator(`#edit-panel-macro-${macro.id}`).click()
+    await this.openAction(name, 'Edit')
     await this.page.getByTestId('smoke-macro-name').fill(newName)
     await this.page.getByTestId('smoke-macro-submit').click()
     await expect(this.page.locator('body')).toContainText(newName)
   }
 
   async remove (name) {
-    const macro = await this.findMacro(name)
-    await this.page.locator(`#delete-panel-macro-${macro.id}`).click()
+    await this.openAction(name, 'Delete')
     await confirmDialog(this.page)
-    await expect(this.page.locator(`#delete-panel-macro-${macro.id}`)).toHaveCount(0)
+    await expect(this.page.getByRole('button', { name: `Actions for ${name}` })).toHaveCount(0)
   }
 
   async expectMissingStepValidation () {
