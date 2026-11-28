@@ -20,6 +20,7 @@ const EditLight = ({
   dirty,
   readOnly,
   jacks,
+  onCancel,
   ...props
 }) => {
   const handleFormSubmit = event => {
@@ -102,6 +103,14 @@ const EditLight = ({
       {!readOnly && (
         <div className='reefpi-controller-form__actions'>
           <Button
+            type='button'
+            variant='secondary'
+            data-testid='lighting-cancel'
+            onClick={onCancel}
+          >
+            {i18next.t('cancel', { defaultValue: 'Cancel' })}
+          </Button>
+          <Button
             type='submit'
             disabled={readOnly}
             id={'save-light-' + config.id}
@@ -126,7 +135,8 @@ EditLight.propTypes = {
   readOnly: PropTypes.bool,
   touched: PropTypes.object,
   errors: PropTypes.object,
-  jacks: PropTypes.array
+  jacks: PropTypes.array,
+  onCancel: PropTypes.func
 }
 
 export default EditLight

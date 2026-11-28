@@ -355,6 +355,7 @@ lighting:channels_summary,
 lighting:chart_color,Color
 lighting:configured_intensity,
 lighting:control_mode,
+lighting:controller_actions,
 lighting:current_intensity,
 lighting:cyclic_period,
 lighting:cyclic_phase_shift,

@@ -6,6 +6,8 @@ import { RawLightingChart } from './chart'
 import { TestMain } from './main'
 import LightForm from './light_form'
 import Light from './light'
+import LightSummary from './light_summary'
+import ManualLight from './manual_light'
 import ProfileSelector from './profile_selector'
 import AutoProfile from './auto_profile'
 import DiurnalProfile from './diurnal_profile'
@@ -138,6 +140,55 @@ describe('Lighting ui', () => {
     expect(items).toHaveLength(2)
     expect(items[0].props.name).toBe('light-2')
     expect(lights.map(item => item.name)).toEqual(['light B', 'light A'])
+  })
+
+  it('<Main /> shows a read-only summary with separate edit actions (#3309)', () => {
+    const m = createMain({ lights: [{ ...light, name: 'Reef bar', enable: 'false' }] })
+    const [item] = m.lightsList()
+    const children = React.Children.toArray(item.props.children)
+    const title = renderToStaticMarkup(item.props.title)
+
+    expect(title).toContain('Reef bar')
+    expect(title).toContain('Disabled')
+    expect(item.props.separateEdit).toBe(true)
+    expect(item.props.overflowActions).toBe(true)
+    expect(item.props.actionsLabel).toBe('Actions for Reef bar')
+    expect(renderToStaticMarkup(item.props.buttons)).toContain('Auto')
+    expect(children[0].type).toBe(LightSummary)
+    expect(children[0].props).toEqual(expect.objectContaining({
+      light: expect.objectContaining({ name: 'Reef bar' }),
+      jacks: m.props.jacks,
+      mode: 'auto'
+    }))
+    expect(children[children.length - 1].type).toBe(LightForm)
+  })
+
+  it('<Main /> normalizes enabled strings in the row title', () => {
+    const m = createMain({ lights: [{ ...light, enable: 'true' }] })
+    const [item] = m.lightsList()
+
+    expect(renderToStaticMarkup(item.props.title)).toContain('Enabled')
+  })
+
+  it('<Main /> keeps Manual controls below the summary and the editor last', () => {
+    light.channels[1].manual = true
+    const m = createMain({ lights: [light] })
+    const [item] = m.lightsList()
+    const children = React.Children.toArray(item.props.children)
+    const summaryChildren = React.Children.toArray(children[0].props.children)
+
+    expect(children[0].type).toBe(LightSummary)
+    expect(children[0].props.mode).toBe('manual')
+    expect(summaryChildren).toHaveLength(1)
+    expect(summaryChildren[0].type).toBe(ManualLight)
+    expect(children[children.length - 1].type).toBe(LightForm)
+  })
+
+  it('<Main /> handles lights without channel data', () => {
+    const m = createMain({ lights: [{ ...light, channels: undefined }] })
+
+    expect(() => m.lightsList()).not.toThrow()
+    expect(m.getLightMode({ ...light, channels: undefined })).toBe('auto')
   })
 
   it('<Main /> should change mode from auto to manual', () => {
@@ -318,6 +369,32 @@ describe('Lighting ui', () => {
     form.props.onSubmit({ preventDefault: () => {} })
     expect(fn).toHaveBeenCalled()
     expect(Alert.showError).toHaveBeenCalled()
+  })
+
+  it('<Light /> cancels editing without submitting', () => {
+    const submitForm = jest.fn()
+    const onCancel = jest.fn()
+    const form = Light({
+      values: { config: light },
+      config: light,
+      submitForm,
+      onCancel,
+      isValid: true,
+      dirty: true,
+      jacks: [{ id: '1', name: 'foo' }],
+      touched: {},
+      errors: {},
+      handleBlur: jest.fn(),
+      handleChange: jest.fn()
+    })
+    const cancel = findNode(form, node => node.props?.['data-testid'] === 'lighting-cancel')
+
+    expect(cancel).toBeTruthy()
+    expect(cancel.props.type).toBe('button')
+    expect(cancel.props.variant).toBe('secondary')
+    cancel.props.onClick()
+    expect(onCancel).toHaveBeenCalledTimes(1)
+    expect(submitForm).not.toHaveBeenCalled()
   })
 
   it('<Chart />', () => {
