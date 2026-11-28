@@ -8,6 +8,7 @@ Resolve GitHub issue #3309 by making saved lights readable without presenting th
 
 - Show the light name with an explicit Enabled or Disabled state.
 - Preserve the explicit Auto/Manual mode action and its existing confirmation and update behavior.
+- Preserve Manual mode's live channel-intensity controls as operational controls beneath the read-only summary.
 - Show a read-only fixture summary with the configured jack name and Auto, Manual, or Mixed mode.
 - Show channels in stable pin order with channel name, pin, translated profile type, and the current percentage when the API supplies `channel.value`.
 - For fixed profiles, show the configured fixed percentage separately from the current value.
@@ -19,7 +20,7 @@ Resolve GitHub issue #3309 by making saved lights readable without presenting th
 
 - Do not change backend APIs, profile evaluation, lighting execution, or hardware behavior.
 - Do not calculate or infer a next channel value. The current API exposes `channel.value` but no next-value field.
-- Do not redesign the #3300 editor, profile configuration, add-light flow, or mode confirmation dialog.
+- Do not redesign the #3300 editor, Manual mode intensity controls, profile configuration, add-light flow, or mode confirmation dialog.
 - Do not introduce a feature flag; the issue specifies an incremental route update.
 - Do not rework the EmptyState copy already translated by #3327.
 - Do not present disabled editor controls as a summary or expose raw jack IDs when a jack name is available.
@@ -39,7 +40,7 @@ Resolve GitHub issue #3309 by making saved lights readable without presenting th
 
 ## Approved interaction and content design
 
-Each saved-light row keeps the current mode-change button and shows the light name plus Enabled or Disabled state. Opening the row in view mode shows a read-only summary with a Fixture section containing the resolved jack name and current Auto, Manual, or Mixed mode. A Channels section lists channels by numeric pin, using the channel name or a stable fallback, the pin, translated profile type, and `channel.value` as Current when present. Fixed profiles additionally show their configured fixed percentage. Missing jacks fall back to their stored ID, missing values render through the existing summary dash, and malformed or empty channel collections do not throw.
+Each saved-light row keeps the current mode-change button and shows the light name plus Enabled or Disabled state. Opening the row in view mode shows a read-only summary with a Fixture section containing the resolved jack name and current Auto, Manual, or Mixed mode. A Channels section lists channels by numeric pin, using the channel name or a stable fallback, the pin, translated profile type, and `channel.value` as Current when present. Fixed profiles additionally show their configured fixed percentage. Missing jacks fall back to their stored ID, missing values render through the existing summary dash, and malformed or empty channel collections do not throw. In Manual mode, the existing live intensity controls render beneath this summary as operational controls; they are not the edit form.
 
 Edit and Delete live in the row's accessible `Actions for <name>` menu. Edit opens the existing #3300 form; Cancel returns to the summary without submission, and Save retains the current submission path. Existing mode switching remains outside the overflow menu because it is an operational action, not record management.
 
