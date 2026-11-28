@@ -26,11 +26,20 @@ async function expectMinTapTarget (locator) {
   expect(box.width).toBeGreaterThanOrEqual(44)
 }
 
-async function openSeededLight (page) {
+async function openSeededSummary (page) {
   await page.goto('/lighting')
-  await page.getByText('Kessil A360', { exact: true }).click()
-  await expect(page.getByTestId('lighting-interval-preview')).toBeVisible()
-  return page.locator('form[id^="form-light-"]').first()
+  const row = page.locator('[data-controller-row="true"]').filter({ hasText: 'Kessil A360' })
+  await row.getByText('Kessil A360', { exact: true }).click()
+  await expect(row.getByRole('heading', { name: 'Fixture' })).toBeVisible()
+  return row
+}
+
+async function openSeededEditor (page, row) {
+  await row.getByRole('button', { name: 'Actions for Kessil A360' }).click()
+  await page.getByRole('menuitem', { name: 'Edit' }).click()
+  const form = row.locator('form[id^="form-light-"]')
+  await expect(form).toBeVisible()
+  return form
 }
 
 test.beforeEach(async ({ page, baseURL }) => {
@@ -45,13 +54,29 @@ test.beforeEach(async ({ page, baseURL }) => {
 })
 
 test('lighting exposes an exact schedule alternative and keyboard profile selection', async ({ page }) => {
-  const form = await openSeededLight(page)
+  const row = await openSeededSummary(page)
+
+  await expect(row).toContainText('Enabled')
+  await expect(row).toContainText('J0')
+  await expect(row).toContainText('Channel-1 · Pin 0')
+  await expect(row).toContainText('Interval · Current 0%')
+  await expect(row.locator('form')).toHaveCount(0)
+  await expectMinTapTarget(row.getByRole('button', { name: /Auto/ }))
+
+  const actions = row.getByRole('button', { name: 'Actions for Kessil A360' })
+  await expectMinTapTarget(actions)
+  await actions.focus()
+  await page.keyboard.press('Enter')
+  await expect(page.getByRole('menuitem', { name: 'Edit' })).toBeFocused()
+  await page.keyboard.press('Escape')
+  await expect(actions).toBeFocused()
+
+  const form = await openSeededEditor(page, row)
 
   await expect(page.getByRole('img', { name: /24-hour intensity preview/i })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Schedule points' })).toBeVisible()
   await expect(page.getByTestId('lighting-schedule-point')).toHaveCount(2)
 
-  await page.getByRole('button', { name: 'Edit' }).click()
   const selector = form.getByTestId('lighting-profile-selector')
   await expect(selector).toBeEnabled()
   await expectMinTapTarget(form.getByRole('button', { name: 'Add point' }))
@@ -75,7 +100,13 @@ test('lighting fits every supported theme and target width', async ({ page }) =>
 
     for (const viewport of VIEWPORTS) {
       await page.setViewportSize(viewport)
-      await openSeededLight(page)
+      const row = await openSeededSummary(page)
+      await expect(row).toContainText('Interval · Current 0%')
+      await expectMinTapTarget(row.getByRole('button', { name: /Auto/ }))
+      await expectMinTapTarget(row.getByRole('button', { name: 'Actions for Kessil A360' }))
+      await expectNoHorizontalOverflow(page, viewport.width)
+
+      await openSeededEditor(page, row)
       await expect(page.getByTestId('lighting-schedule-list')).toBeVisible()
       await expectNoHorizontalOverflow(page, viewport.width)
     }

@@ -351,13 +351,19 @@ lighting:add_point,Adicionar Ponto
 lighting:change_mode,Mudar Modo
 lighting:channel,
 lighting:channel_name,Nome do Canal
+lighting:channels_summary,
 lighting:chart_color,Cor
+lighting:configured_intensity,
+lighting:control_mode,
+lighting:controller_actions,
+lighting:current_intensity,
 lighting:cyclic_period,
 lighting:cyclic_phase_shift,
 lighting:empty_body,
 lighting:empty_title,
 lighting:fixture_help,
 lighting:fixture_settings,
+lighting:fixture_summary,
 lighting:intensity_at,
 lighting:intensity_limit,
 lighting:intensity_percent,

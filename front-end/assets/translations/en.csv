@@ -351,13 +351,19 @@ lighting:add_point,Add point
 lighting:change_mode,Change Mode
 lighting:channel,Light channel
 lighting:channel_name,Channel Name
+lighting:channels_summary,Channels
 lighting:chart_color,Color
+lighting:configured_intensity,Configured
+lighting:control_mode,Control mode
+lighting:controller_actions,Actions for {{name}}
+lighting:current_intensity,Current
 lighting:cyclic_period,Period
 lighting:cyclic_phase_shift,Phase Shift
 lighting:empty_body,Add an LED fixture or light channel to automate your reef lighting schedule.
 lighting:empty_title,No lights configured
 lighting:fixture_help,"Name the fixture, choose its jack, and configure each PWM channel below."
 lighting:fixture_settings,Light settings
+lighting:fixture_summary,Fixture
 lighting:intensity_at,Intensity at {{time}} (%)
 lighting:intensity_limit,Intensity range: 0–100%
 lighting:intensity_percent,Intensity (%)

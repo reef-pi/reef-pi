@@ -39,7 +39,7 @@ class LightingPage {
     const channelKey = Object.keys(savedLight.channels)[0]
     const form = this.page.locator(`#form-light-${savedLight.id}`)
 
-    await this.page.locator(`#edit-light-${savedLight.id}`).click()
+    await this.openAction(light.name, 'Edit')
     await expect(form).toBeVisible()
     // Multi-pin jacks have one selector per channel; configure the first channel.
     await form.getByTestId('lighting-profile-selector').first().selectOption(light.profile)
@@ -77,11 +77,17 @@ class LightingPage {
     return light
   }
 
+  // Edit and delete live in the light's actions menu (#3309).
+  async openAction (name, action) {
+    await this.page.getByRole('button', { name: `Actions for ${name}` }).click()
+    await this.page.getByRole('menuitem', { name: action }).click()
+  }
+
   async setFixedValue (name, value) {
     const light = await this.findLight(name)
     const channelKey = Object.keys(light.channels)[0]
     const form = this.page.locator(`#form-light-${light.id}`)
-    await this.page.locator(`#edit-light-${light.id}`).click()
+    await this.openAction(name, 'Edit')
     await expect(form).toBeVisible()
     await form.locator(`[name="config.channels.${channelKey}.profile.config.value"]`).first().fill(value)
     const saved = this.page.waitForResponse(response => (
@@ -92,10 +98,9 @@ class LightingPage {
   }
 
   async remove (name) {
-    const light = await this.findLight(name)
-    await this.page.locator(`#delete-light-${light.id}`).click()
+    await this.openAction(name, 'Delete')
     await confirmDialog(this.page)
-    await expect(this.page.locator(`#delete-light-${light.id}`)).toHaveCount(0)
+    await expect(this.page.getByRole('button', { name: `Actions for ${name}` })).toHaveCount(0)
   }
 }
 

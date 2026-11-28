@@ -10,6 +10,7 @@ import CollapsibleList from '../ui_components/collapsible_list'
 import Collapsible from '../ui_components/collapsible'
 import { IoMdSwitch } from 'react-icons/io'
 import ManualLight from './manual_light'
+import LightSummary from './light_summary'
 import { SortByName } from 'utils/sort_by_name'
 import i18n from 'utils/i18n'
 import Button from '../../design-system/ui_kits/reef-pi-app/primitives/Button'
@@ -17,6 +18,11 @@ import { Menu } from '../../design-system/ui_kits/reef-pi-app/primitives/Interac
 import AddToggle from '../ui_components/add_toggle'
 
 export const DEFAULT_CHANNEL_COLOR = '#000000'
+
+const isEnabled = value => value === true || value === 'true'
+const enabledLabel = value => isEnabled(value)
+  ? i18n.t('enabled', { defaultValue: 'Enabled' })
+  : i18n.t('disabled', { defaultValue: 'Disabled' })
 
 class main extends React.Component {
   constructor (props) {
@@ -148,18 +154,7 @@ class main extends React.Component {
     return (
       this.props.lights.slice().sort((a, b) => SortByName(a, b))
         .map(light => {
-          let panelContent = (
-            <Light
-              config={light}
-              jacks={this.props.jacks}
-              onSubmit={this.handleUpdateLight}
-              remove={this.props.deleteLight}
-            />
-          )
           const mode = this.getLightMode(light)
-          if (mode === 'manual') {
-            panelContent = (<ManualLight light={light} handleChange={this.props.updateLight} />)
-          }
 
           const modeButton = (
             <Button
@@ -178,11 +173,26 @@ class main extends React.Component {
               name={'light-' + light.id}
               item={light}
               buttons={modeButton}
-              title={<b style={{ marginLeft: 'var(--reefpi-space-xs)', verticalAlign: 'middle' }}>{light.name}</b>}
+              title={(
+                <span className='reefpi-controller-title'>
+                  <span>{light.name}</span>
+                  <span className='reefpi-controller-title__state'>{enabledLabel(light.enable)}</span>
+                </span>
+              )}
               onDelete={this.handleDeleteLight}
-              disableEdit={mode === 'manual'}
+              separateEdit
+              overflowActions
+              actionsLabel={i18n.t('lighting:controller_actions', { name: light.name, defaultValue: `Actions for ${light.name}` })}
             >
-              {panelContent}
+              <LightSummary light={light} jacks={this.props.jacks} mode={mode}>
+                {mode === 'manual' && <ManualLight light={light} handleChange={this.props.updateLight} />}
+              </LightSummary>
+              <Light
+                config={light}
+                jacks={this.props.jacks}
+                onSubmit={this.handleUpdateLight}
+                remove={this.props.deleteLight}
+              />
             </Collapsible>
           )
         })
@@ -190,9 +200,10 @@ class main extends React.Component {
   }
 
   getLightMode (light) {
-    if (Object.values(light.channels).every(x => { return x.manual === false })) {
+    const channels = Object.values(light.channels || {})
+    if (channels.every(x => { return x.manual === false })) {
       return 'auto'
-    } else if (Object.values(light.channels).every(x => { return x.manual === true })) {
+    } else if (channels.every(x => { return x.manual === true })) {
       return 'manual'
     } else {
       return 'mixed'
@@ -202,11 +213,11 @@ class main extends React.Component {
   getModeLabel (mode) {
     switch (mode) {
       case 'auto':
-        return i18n.t('lighting:mode_auto')
+        return i18n.t('lighting:mode_auto', { defaultValue: 'Auto' })
       case 'manual':
-        return i18n.t('lighting:mode_manual')
+        return i18n.t('lighting:mode_manual', { defaultValue: 'Manual' })
       default:
-        return i18n.t('lighting:mode_mixed')
+        return i18n.t('lighting:mode_mixed', { defaultValue: 'Mixed' })
     }
   }
 
